@@ -6,13 +6,13 @@
   
   <title>OpenGL | Hugo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="[TOC] OpenGL全流程1、简介OpenGL（Open Graphics Library）是一个跨编程语言、跨平台的编程图形程序接口，它将计算机的资源抽象称为一个个 OpenGL 的对象，对这些资源的操作抽象为一个个的 OpenGL 指令。 OpenGL ES（OpenGL for Embedded Systems）是 OpenGL 三维图形 API 的子集，针对手机、PDA 和游戏主机等嵌">
+  <meta name="description" content="OpenGL全流程1、简介OpenGL（Open Graphics Library）是一个跨编程语言、跨平台的编程图形程序接口，它将计算机的资源抽象称为一个个 OpenGL 的对象，对这些资源的操作抽象为一个个的 OpenGL 指令。 OpenGL ES（OpenGL for Embedded Systems）是 OpenGL 三维图形 API 的子集，针对手机、PDA 和游戏主机等嵌入式设备而设">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OpenGL">
 <meta property="og:url" content="https://hjzts.github.io/2023/04/05/post-title/index.html">
 <meta property="og:site_name" content="Hugo">
-<meta property="og:description" content="[TOC] OpenGL全流程1、简介OpenGL（Open Graphics Library）是一个跨编程语言、跨平台的编程图形程序接口，它将计算机的资源抽象称为一个个 OpenGL 的对象，对这些资源的操作抽象为一个个的 OpenGL 指令。 OpenGL ES（OpenGL for Embedded Systems）是 OpenGL 三维图形 API 的子集，针对手机、PDA 和游戏主机等嵌">
-<meta property="og:locale">
+<meta property="og:description" content="OpenGL全流程1、简介OpenGL（Open Graphics Library）是一个跨编程语言、跨平台的编程图形程序接口，它将计算机的资源抽象称为一个个 OpenGL 的对象，对这些资源的操作抽象为一个个的 OpenGL 指令。 OpenGL ES（OpenGL for Embedded Systems）是 OpenGL 三维图形 API 的子集，针对手机、PDA 和游戏主机等嵌入式设备而设">
+<meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-10b0501e08f34ea61123e57c3ffa318c_1440w.webp">
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-518ff2c9807baad703bbc66cc4dd1f2c_1440w.webp">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-83751a8fefa838f1b3af7d3b3169339f_1440w.webp">
@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-9c632bf829727003f0b8e2cb478b68ac_1440w.webp">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-f7e7e5320cd83623f37f78d9af92ff6b_1440w.webp">
 <meta property="article:published_time" content="2023-04-05T07:40:49.000Z">
-<meta property="article:modified_time" content="2023-04-06T01:45:21.811Z">
+<meta property="article:modified_time" content="2023-04-06T01:55:42.514Z">
 <meta property="article:author" content="Hugo">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://pic1.zhimg.com/80/v2-10b0501e08f34ea61123e57c3ffa318c_1440w.webp">
@@ -70,10 +70,10 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://hjzts.github.io"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://hjzts.github.io"></form>
       </div>
     </div>
   </div>
@@ -102,8 +102,7 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>[TOC]</p>
-<h1 id="OpenGL全流程"><a href="#OpenGL全流程" class="headerlink" title="OpenGL全流程"></a>OpenGL全流程</h1><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><p>OpenGL（Open Graphics Library）是一个跨编程语言、跨平台的编程图形程序接口，它将计算机的资源抽象称为一个个 OpenGL 的对象，对这些资源的操作抽象为一个个的 OpenGL 指令。</p>
+        <h1 id="OpenGL全流程"><a href="#OpenGL全流程" class="headerlink" title="OpenGL全流程"></a>OpenGL全流程</h1><h2 id="1、简介"><a href="#1、简介" class="headerlink" title="1、简介"></a>1、简介</h2><p>OpenGL（Open Graphics Library）是一个跨编程语言、跨平台的编程图形程序接口，它将计算机的资源抽象称为一个个 OpenGL 的对象，对这些资源的操作抽象为一个个的 OpenGL 指令。</p>
 <p>OpenGL ES（OpenGL for Embedded Systems）是 OpenGL 三维图形 API 的子集，针对手机、PDA 和游戏主机等嵌入式设备而设计，去除了许多不必要和性能较低的 API 接口。</p>
 <h2 id="2、OpenGL-上下文（Context）"><a href="#2、OpenGL-上下文（Context）" class="headerlink" title="2、OpenGL 上下文（Context）"></a>2、OpenGL 上下文（Context）</h2><p>在应用程序调用任何 OpenGL 的指令之前，需要安排首先创建一个 OpenGL 的上下文。这个上下文是一个非常庞大的状态机，保存了 OpenGL 中的各种状态，这也是 OpenGL 指令执行的基础。</p>
 <p>OpenGL 的函数不管在哪个语言中，都是类似 C 语言一样的面向过程的函数，本质上都是对 OpenGL 上下文这个庞大的状态机中的某个状态或者对象进行操作，当然你得首先把这个对象设置为当前对象。因此，通过对 OpenGL 指令的封装，是可以将 OpenGL 的相关调用封装成为一个面向对象的图形 API 的。</p>
@@ -163,7 +162,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://hjzts.github.io/2023/04/05/post-title/" data-id="clg4gost90000jozib7ku9j2n" data-title="OpenGL" class="article-share-link">Teilen</a>
+      <a data-url="https://hjzts.github.io/2023/04/05/post-title/" data-id="clg4gw9in0003pwzidw6mbpjd" data-title="OpenGL" class="article-share-link">Share</a>
       
       
       
@@ -174,7 +173,7 @@
 <nav id="article-nav">
   
     <a href="/2023/04/05/page/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Neuer</strong>
+      <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
           page
@@ -184,7 +183,7 @@
   
   
     <a href="/2023/04/05/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Älter</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Hello World</div>
     </a>
   
@@ -200,7 +199,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Kategorien</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/1-2/">-1 -2</a></li></ul>
     </div>
@@ -215,7 +214,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/04/">April 2023</a></li></ul>
     </div>
@@ -225,7 +224,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
