@@ -163,76 +163,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>hammingDistance</title>
-    <url>/2023/05/25/hammingDistance/</url>
-    <content><![CDATA[<p>[toc]</p>
-<h1><span id="__uint128_t_"><code>__uint128_t_</code></span></h1>
-<p>最近越来越多的协议会定义 16 字节长的整形，gcc 在 4.6 以上版本就可以使用 __int128_t &amp; __uint128_t 了。</p>
-<p>但需要注意的是，_uint128_t &amp; __int128_t 仅对 64 位程序才有定义，因此如果编译选项中加入了 -m32，会出现找不到定义的编译错误。</p>
-<p>另外 _uint128_t &amp; __int128_t  并非 c/c++ 标准，所以 gcc 目前只支持基本运算符的操作，printf 这些都需要另外实现。</p>
-<h1><span id="快速计算汉明距离">快速计算汉明距离</span></h1>
-<blockquote>
-<p>在信息论中，两个等长字符串之间的汉明距离（英语：Hamming distance）是两个字符串对应位置的不同字符的个数。换句话说，它就是将一个字符串变换成另外一个字符串所需要替换的字符个数。</p>
-<p>汉明距离是以<strong>理查德・卫斯里・汉明</strong>的名字命名的。在通信传输过程中，累计定长二进制字中发生翻转的错误数据位，所以它也被称为信号距离。汉明距离在包括信息论、编码理论、密码学等领域都有应用。</p>
-</blockquote>
-<p>对于两个字符串计算汉明距离，那肯定也就只能是逐位比较</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//s1,s2为两个字符串，M为这两个字符串的长度</span>
-<span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span><span class="token keyword">char</span> s1<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">char</span> s2<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span> M<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> l1 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">,</span> l2 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> M <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l1 <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l2<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        dist <span class="token operator">+=</span> s1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> s2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>那么这样肯定是很慢的，如果可以转化两个整型的数，我们很容易想到利用到异或运算。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">__uint128_t fingerprint <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> l <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> l <span class="token operator">&lt;</span> M<span class="token punctuation">;</span> <span class="token operator">++</span>l<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span>sumsignedweight <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
-        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>这样可以转换最高128位的两个01字符串。</p>
-<p>那么就可以利用<code>^</code>运算来就算汉明距离了,由于异或运算的性质，得到的c的数位上为1说明ab的对应位不相同，反之则相同，那么我们就之需要计算c的二进制表示中数位为1的数目。这里可以按位采取<code>&amp;</code>运算。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>c <span class="token operator">&amp;</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-            dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        c <span class="token operator">=</span> c <span class="token operator">&gt;&gt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>布莱恩·克尼根算法</strong></p>
-<p>我们先观察如下一个现象：对于任意一个非零的二进制数 <code>a</code>（将其看作无符号数），考虑 <code>a</code> 和 <code>a-1</code> 的关系。由于 <code>a</code> 非零，那么 <code>a</code> 中总有一些位为 <code>1</code>。假设 <code>a</code> 中最低位的 <code>1</code> 处于从右向左数的第 <code>N</code> 位。那么，<code>a</code> 的第 <code>N</code> 位以及第 <code>N</code> 位以后的每一位的值和 <code>a-1</code> 的第 <code>N</code> 位及第 <code>N</code> 位以后的每一位的值均不同。</p>
-<p>举个例子就很容易理解了。我们以 8 位数来描述。假设 <code>a=10010000</code>，根据上述描述，从右往左数的第一个 <code>1</code> 出现在第 <code>5</code> 位，那么有 <code>N=5</code>。同时可以计算出 <code>a-1=10001111</code>，可以看到，从第 <code>N</code> 位开始，<code>a</code> 的后缀是 <code>10000</code>，而 <code>a-1</code> 的后缀是 <code>01111</code>。满足上述描述的现象。</p>
-<p>进一步地，我们可以发现，如果对 <code>a</code> 和 <code>a-1</code> 进行与操作，就会直接消去位于最后一位，也就是第 <code>N</code> 位的 <code>1</code>。还以上面的 <code>a</code> 为例，<code>a &amp; (a-1)=10000000</code>。可以看到，我们不需要遍历，而是通过一次运算，就可以把 <code>a</code> 中的最后一个 <code>1</code> 消掉。如果我们一直重复这项操作，那么 <code>a</code> 里有多少个 <code>1</code>，我们就仅需要多少次 <code>a &amp; (a-1)</code> 的操作，就能把 <code>a</code> 化为 <code>0</code> 了。而这个操作的次数正是我们所要求的。</p>
-<p>那么计算汉明距离就可以改进为：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        c <span class="token operator">=</span> c <span class="token operator">&amp;</span> <span class="token punctuation">(</span>c <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>大一下数据结构大作业</title>
-    <url>/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/</url>
-    <content><![CDATA[<blockquote>
-<p>暂时嘛，啥也没有</p>
-<p>蒟蒻博主啥也不会捏</p>
-</blockquote>
-]]></content>
-  </entry>
-  <entry>
     <title>字典序</title>
     <url>/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/</url>
     <content><![CDATA[<h1><span id="字典序">字典序</span></h1>
@@ -300,6 +230,76 @@
 <ol>
 <li><a href="https://blog.csdn.net/qq_37050329/article/details/86637183">https://blog.csdn.net/qq_37050329/article/details/86637183</a></li>
 </ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>hammingDistance</title>
+    <url>/2023/05/25/hammingDistance/</url>
+    <content><![CDATA[<p>[toc]</p>
+<h1><span id="__uint128_t_"><code>__uint128_t_</code></span></h1>
+<p>最近越来越多的协议会定义 16 字节长的整形，gcc 在 4.6 以上版本就可以使用 __int128_t &amp; __uint128_t 了。</p>
+<p>但需要注意的是，_uint128_t &amp; __int128_t 仅对 64 位程序才有定义，因此如果编译选项中加入了 -m32，会出现找不到定义的编译错误。</p>
+<p>另外 _uint128_t &amp; __int128_t  并非 c/c++ 标准，所以 gcc 目前只支持基本运算符的操作，printf 这些都需要另外实现。</p>
+<h1><span id="快速计算汉明距离">快速计算汉明距离</span></h1>
+<blockquote>
+<p>在信息论中，两个等长字符串之间的汉明距离（英语：Hamming distance）是两个字符串对应位置的不同字符的个数。换句话说，它就是将一个字符串变换成另外一个字符串所需要替换的字符个数。</p>
+<p>汉明距离是以<strong>理查德・卫斯里・汉明</strong>的名字命名的。在通信传输过程中，累计定长二进制字中发生翻转的错误数据位，所以它也被称为信号距离。汉明距离在包括信息论、编码理论、密码学等领域都有应用。</p>
+</blockquote>
+<p>对于两个字符串计算汉明距离，那肯定也就只能是逐位比较</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//s1,s2为两个字符串，M为这两个字符串的长度</span>
+<span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span><span class="token keyword">char</span> s1<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">char</span> s2<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span> M<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> l1 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">,</span> l2 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> M <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l1 <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l2<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        dist <span class="token operator">+=</span> s1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> s2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>那么这样肯定是很慢的，如果可以转化两个整型的数，我们很容易想到利用到异或运算。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">__uint128_t fingerprint <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> l <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> l <span class="token operator">&lt;</span> M<span class="token punctuation">;</span> <span class="token operator">++</span>l<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>sumsignedweight <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样可以转换最高128位的两个01字符串。</p>
+<p>那么就可以利用<code>^</code>运算来就算汉明距离了,由于异或运算的性质，得到的c的数位上为1说明ab的对应位不相同，反之则相同，那么我们就之需要计算c的二进制表示中数位为1的数目。这里可以按位采取<code>&amp;</code>运算。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>c <span class="token operator">&amp;</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        c <span class="token operator">=</span> c <span class="token operator">&gt;&gt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>布莱恩·克尼根算法</strong></p>
+<p>我们先观察如下一个现象：对于任意一个非零的二进制数 <code>a</code>（将其看作无符号数），考虑 <code>a</code> 和 <code>a-1</code> 的关系。由于 <code>a</code> 非零，那么 <code>a</code> 中总有一些位为 <code>1</code>。假设 <code>a</code> 中最低位的 <code>1</code> 处于从右向左数的第 <code>N</code> 位。那么，<code>a</code> 的第 <code>N</code> 位以及第 <code>N</code> 位以后的每一位的值和 <code>a-1</code> 的第 <code>N</code> 位及第 <code>N</code> 位以后的每一位的值均不同。</p>
+<p>举个例子就很容易理解了。我们以 8 位数来描述。假设 <code>a=10010000</code>，根据上述描述，从右往左数的第一个 <code>1</code> 出现在第 <code>5</code> 位，那么有 <code>N=5</code>。同时可以计算出 <code>a-1=10001111</code>，可以看到，从第 <code>N</code> 位开始，<code>a</code> 的后缀是 <code>10000</code>，而 <code>a-1</code> 的后缀是 <code>01111</code>。满足上述描述的现象。</p>
+<p>进一步地，我们可以发现，如果对 <code>a</code> 和 <code>a-1</code> 进行与操作，就会直接消去位于最后一位，也就是第 <code>N</code> 位的 <code>1</code>。还以上面的 <code>a</code> 为例，<code>a &amp; (a-1)=10000000</code>。可以看到，我们不需要遍历，而是通过一次运算，就可以把 <code>a</code> 中的最后一个 <code>1</code> 消掉。如果我们一直重复这项操作，那么 <code>a</code> 里有多少个 <code>1</code>，我们就仅需要多少次 <code>a &amp; (a-1)</code> 的操作，就能把 <code>a</code> 化为 <code>0</code> 了。而这个操作的次数正是我们所要求的。</p>
+<p>那么计算汉明距离就可以改进为：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        c <span class="token operator">=</span> c <span class="token operator">&amp;</span> <span class="token punctuation">(</span>c <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>大一下数据结构大作业</title>
+    <url>/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/</url>
+    <content><![CDATA[<blockquote>
+<p>暂时嘛，啥也没有</p>
+<p>蒟蒻博主啥也不会捏</p>
+</blockquote>
 ]]></content>
   </entry>
   <entry>
