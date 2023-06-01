@@ -5,7 +5,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="栈和队列, C,Python,数分，高代，离散等">
-    <meta name="description" content="">
+    <meta name="description" content="使用两个栈实现一个队列，两个队列实现一个栈
+
+总感觉这像是一个面试题		——hugo
+
+栈式一种后入先出(Last In First Out, LIFO)的数据结构，队列是一种先进先出(First In First Out, FIFO)的数">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -385,7 +389,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    501
                 </div>
                 
 
@@ -420,7 +424,73 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1><span id="使用两个栈实现一个队列两个队列实现一个栈">使用两个栈实现一个队列，两个队列实现一个栈</span></h1>
+<blockquote>
+<p>总感觉这像是一个面试题		——hugo</p>
+</blockquote>
+<p>栈式一种后入先出(Last In First Out, LIFO)的数据结构，队列是一种先进先出(First In First Out, FIFO)的数据结构。</p>
+<h2><span id="两个栈实现一个队列">两个栈实现一个队列</span></h2>
+<p>思路一：<code>s1</code>进行入队操作,<code>s2</code>进行出队操作</p>
+<p>入队：</p>
+<p><code>push_s1(item)</code></p>
+<p>出队：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">while</span><span class="token punctuation">(</span>top_s1 <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    tmp <span class="token operator">=</span> <span class="token function">pop_s1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">push_s2</span><span class="token punctuation">(</span>tmp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">pop_s2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">while</span><span class="token punctuation">(</span>top_s2 <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    tmp <span class="token operator">=</span> <span class="token function">pop_s2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">push_s1</span><span class="token punctuation">(</span>tmp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>即<code>s1</code>式负责元素的存储，<code>s2</code>作为过渡栈，每次元素出队矩利用到<code>s2</code>;</p>
+<p>但是整个过程中出队入队显然太麻烦了，那么对此进行优化有：</p>
+<p>我们其实可以发现对<code>s2</code>中的<code>top</code>元素<code>pop</code>后其实不一定需要再全部倒回<code>s1</code>，</p>
+<p>那么就有：</p>
+<p>思路二：<code>s1</code>进行入队操作,<code>s2</code>进行出队操作</p>
+<p>入队：</p>
+<p><code>push_s1(item)</code></p>
+<p>出队：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span><span class="token punctuation">(</span>top_s2 <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>top_s1 <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    	tmp <span class="token operator">=</span> <span class="token function">pop_s1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    	<span class="token function">push_s2</span><span class="token punctuation">(</span>tmp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	<span class="token function">pop_s2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+    <span class="token function">pop_s2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>思路二主要就是减少了两个栈之间元素的转移。</p>
+<h2><span id="两个队列实现一个栈">两个队列实现一个栈</span></h2>
+<p>思路一：<code>q1</code>负责出栈，<code>q2</code>只是一个中转</p>
+<p>入栈：</p>
+<p><code>q1[rear1++]=item</code></p>
+<p>出栈：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">while</span><span class="token punctuation">(</span>front1 <span class="token operator">&lt;</span> rear1 <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    tmp <span class="token operator">=</span> q1<span class="token punctuation">[</span><span class="token operator">++</span>front1<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    q2<span class="token punctuation">[</span>rear2<span class="token operator">++</span><span class="token punctuation">]</span> <span class="token operator">=</span> tmp<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+item <span class="token operator">=</span> q1<span class="token punctuation">[</span><span class="token operator">++</span>front1<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">while</span><span class="token punctuation">(</span>front2 <span class="token operator">&lt;</span> rear2<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    tmp <span class="token operator">=</span> q2<span class="token punctuation">[</span><span class="token operator">++</span>front2<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    q1<span class="token punctuation">[</span>rear1<span class="token operator">++</span><span class="token punctuation">]</span> <span class="token operator">=</span> tmp<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>思路二：<code>q1</code>和<code>q2</code>都负责进出栈</p>
+<p>入栈：</p>
+<p>如果<code>q1</code>和<code>q2</code>都为空，随便入一个队即可，这里选择入<code>q1</code>；</p>
+<p>如果一个队列为空，另一个队列非空，则入非空队；</p>
+<p>如果都非空，则入<code>q1</code>即可。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span><span class="token punctuation">(</span>rear1 <span class="token operator">==</span> front <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span> rear2 <span class="token operator">==</span> front2 <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    q1<span class="token punctuation">[</span><span class="token operator">++</span>rear1<span class="token punctuation">]</span> <span class="token operator">=</span> item<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>rear2 <span class="token operator">==</span> front2 <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    q2<span class="token punctuation">[</span><span class="token operator">++</span>rear2<span class="token punctuation">]</span> <span class="token operator">=</span> item<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+    q1<span class="token punctuation">[</span><span class="token operator">++</span>rear1<span class="token punctuation">]</span> <span class="token operator">=</span> item<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>出栈：</p>
+<p>如果一个队列为空，另一个队列非空，则仿造思路1将非空队列的队尾元素出队；</p>
+<p>如果两个队列都非空，则将<code>q1</code>的队尾元素出队，其他元素入队<code>q2</code>。即把不为空的队列中除最后一个元素外的所有元素移动到另一个队列中，然后出队最后一个元素。</p>
+
                 
             </div>
             <hr/>
@@ -815,7 +885,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">9.1k</span>
+                        class="white-color">9.6k</span>
             
             
             
