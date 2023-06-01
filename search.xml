@@ -329,265 +329,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>高数应用</title>
-    <url>/2023/04/14/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<div align="center"><font size="24" face="宋体">高等数学不等式问题探讨</font></div>
-<span id="more"></span>
-<div align="center"><font size="6" face="仿宋">hugo</font></div>
-<p>​				<font size="4.5" face="楷体">[<b>摘要</b>]</font>:本文将介绍大学高等数学中遇到的相关不等式问题，介绍一些著名的不等式，如算术几何平均不等式、$\text{Bernoulli}$不等式、$\text{Jensen}$不等式、$\text{Cauchy}$不等式、$\text{Young}$不等式、$\text{Holder}$不等式、$\text{Minkowski}$不等式，以及在遇到不等式问题的常用处理办法，利用构造函数，求导分析单调性等方法，最后再结合一些例题进行具体分析讨论。</p>
-<p>​				<font size="4.5" face="楷体">[<b>关键词</b>]</font>:算术几何平均不等式；$\text{Jensen}$不等式；$\text{Cauchy}$不等式；$\text{Young}$不等式；$\text{Bernoulli}$不等式；$\text{Holder}$不等式；$\text{Minkowski}$不等式；构造函数；变上限积分</p>
-<h1><span id="1-引言">1   引言</span></h1>
-<p>​	在第五届全国大学生数学竞赛非数学类决赛第三题是一道与常微分方程有关的不等式问题：<br>
-$$<br>
-设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
-f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
-试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
-$$<br>
-​	在第八届全国大学生数学竞赛非数学类决赛第二题是一道不等式的综合问题：<br>
-$$<br>
-设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
-$$<br>
-​	在第八届全国大学生数学竞赛非数学类初赛第二题是一道构造变上限积分的题目：<br>
-$$<br>
-设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\<br>
-有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
-$$<br>
-​	在第十届全国大学生数学竞赛非数学类第三题是一道典型的运用到了积分形式的$Cauchy$不等式的题目：<br>
-$$<br>
-设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
-1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
-$$<br>
-​	可以看到不等式问题在考试中的考察还是比较多的，特别是近年有增多的趋势，其次在课后练习及相关研究中，不等式问题具有其独特的数学魅力。不等式问题是许多证明题的重要内容，涵盖的知识点丰富，有许多重要的不等式，这些经典的不等式的处理方法多种多样，在这里我将介绍其中个别方法，并对其在n维度量空间的推广加以介绍。同时将就大学高等数学中出现的不等式问题常用到的方法进行分析，如在导数部分常常用到的构造函数求导分析单调性，在积分部分通过构造变上限积分来证明不等式的问题，同时部分不等式证明题还可以用到$\text{Taylor}$展开、微分中值定理和积分中值定理进行证明。</p>
-<h1><span id="2-几个重要不等式">2   几个重要不等式</span></h1>
-<h4><span id="算术几何平均不等式">算术几何平均不等式</span></h4>
-<p>设$n\in N^*,a_i&gt;0(i=1,2,3\dots n)$,则有<br>
-$$<br>
-{n\over\frac1{a_1}+\frac1{a_2}+\dots +\frac1{a_n}}\le\sqrt[n]{a_1a_2\dots a_n}\le{a_1+a_2+\dots+a_n\over n}\le\sqrt{a_1^2+a_2^2+\dots+a_n^2\over n}\<br>
-$$<br>
-当且仅当$a_1=a_2=\dots=a_n$时等号成立</p>
-<p>**证明：**由归纳法易证</p>
-<h4><span id="textbernoulli不等式">$\text{Bernoulli}$不等式</span></h4>
-<p>当$x\ge -1$时，有<br>
-$$<br>
-\begin{align}<br>
-&amp;(1)若\alpha&gt;1,则有(1+x)^\alpha\ge1+\alpha x;\<br>
-&amp;(2)若0&lt;\alpha&lt;1,则有(1+x)^\alpha\le1+\alpha x.<br>
-\end{align}<br>
-$$<br>
-**证明：**构造函数求导分析单调性易证</p>
-<h4><span id="textjensen不等式">$\text{Jensen}$不等式</span></h4>
-<p>设f(x)是区间$I$上的凸函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
-$$<br>
-f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\le\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).\<br>
-$$<br>
-如果f(x)是区间I上的凹函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
-$$<br>
-f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\ge\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).<br>
-$$</p>
-<p><strong>证明</strong>：由归纳法易证</p>
-<h4><span id="textyoung不等式">$\text{Young}$不等式</span></h4>
-<p>设$a,b\ge0,p,q&gt;1,\frac1p+\frac1q=1$,则有<br>
-$$<br>
-ab\le\frac{a^p}p+\frac{b^q}q<br>
-$$<br>
-当且仅当$a^{\frac1q}=b^{\frac1p}$时等号成立</p>
-<p><strong>证明：</strong></p>
-<p>若$a=b=0$，则有不等式成立，否则不妨设$b&gt;0$。</p>
-<p>考虑证明$\text{Young}$不等式的等价形式<br>
-$$<br>
-\begin{align}<br>
-&amp;a^{\frac1p}b^{\frac1q}\le\frac ap+\frac bq\<br>
-&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab\right)+1-\frac1p\<br>
-&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab -1\right)+1<br>
-\end{align}<br>
-$$<br>
-作换元$x=\frac ab$，则等价于<br>
-$$<br>
-\left(x\right)^{\frac1p}\le\frac1p\cdot\left(x -1\right)+1<br>
-$$<br>
-构造函数，结合函数的上凸性易证</p>
-<h5><span id="n度量空间的textyoung不等式">n度量空间的$\text{Young}$不等式</span></h5>
-<p>设$x_i\ge0,p_i\ge1(i=1,2,\dots,n),\sum_{i=1}^n\frac1{p_i}=1$,则有<br>
-$$<br>
-\prod_{i=1}^n\le\sum_{i=1}^n\frac{x_i^{p_i}}{p_i}<br>
-$$<br>
-当且仅当$\frac{x_1^{p_1}}{p_1}=\frac{x_2^{p_2}}{p_2}=\dots=\frac{x_n^{p_n}}{p_n}$时等式成立</p>
-<p><strong>证明：</strong></p>
-<p>与证明2度量空间的$\text{Young}$不等式的方法类似，只不过需要利用$n-1$维函数$f(x_1,x_2,\dots,x_{n-1})$的上凸性<br>
-$$<br>
-f(x_1,x_2,\dots,x_{n-1})=\prod_{i=1}^{n-1}x_i^{\frac1{p_i}}<br>
-$$<br>
-易证</p>
-<h4><span id="textcauchy不等式">$\text{Cauchy}$不等式</span></h4>
-<p>设$a_i,b_i\in R,i=1,2,\dots,n$,有<br>
-$$<br>
-\left(\sum_{i=1}^na_ib_i\right)^2\le\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)<br>
-$$<br>
-当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立<br>
-$$<br>
-\frac{a_1}{b_1}=\frac{a_2}{b_2}=\dots=\frac{a_n}{b_n}<br>
-$$</p>
-<p><strong>证明：</strong><br>
-法一:由归纳法易证<br>
-法二:构造二次函数证明<br>
-做二次函数<br>
-$$<br>
-\begin{align}<br>
-f(x)&amp;=\left(\sum_{i=1}^na_i^2\right)x^2+2\left(\sum_{i=1}^na_ib_i\right)x+\left(\sum_{i=1}^nb_i^2\right)\<br>
-&amp;=\sum_{i=1}^n(a_ix+b_i)^2\<br>
-&amp;\ge0<br>
-\end{align}<br>
-$$<br>
-由于<br>
-$$<br>
-\left(\sum_{i=1}^na_i^2\right)&gt;0<br>
-$$<br>
-则有<br>
-$$<br>
-\Delta=4\left(\sum_{i=1}^na_ib_i\right)^2-4\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)\le 0<br>
-$$<br>
-即证</p>
-<h4><span id="textholder不等式">$\text{Holder}$不等式</span></h4>
-<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q&gt;1,\frac1p+\frac1q=1$，则有<br>
-$$<br>
-\sum_{i=1}^na_ib_i\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
-$$<br>
-当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
-<p>易见$\text{Cauchy}$不等式是$\text{Holder}$不等式的特例。</p>
-<p><strong>证明：</strong></p>
-<p>若$a_1=\dots=a_n=0$或$b_1=\dots=b_n=0$则显然结论成立，否则不妨设$a_1,b_1&gt;0$。</p>
-<p>令<br>
-$$<br>
-t=\left(\sum_{i=1}^na_i^p\over\sum_{i=1}^nb_i^q\right)^{\frac1{pq}}<br>
-$$<br>
-于是有<br>
-$$<br>
-\begin{align}<br>
-&amp;\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)=\frac1p\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}\<br>
-&amp;\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)=\frac1q\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
-\end{align}<br>
-$$<br>
-由$\text{Young}$不等式易知该不等式成立<br>
-$$<br>
-\begin{align}<br>
-\sum_{i=1}^na_ib_i&amp;=\sum_{i=1}^n(t\cdot a_i)(\frac{b_i}t)\<br>
-&amp;\le\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)+\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)<br>
-\end{align}<br>
-$$<br>
-由$\text{Young}$不等式成立的条件易知该不等式成立的条件即为当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时。</p>
-<p>即证</p>
-<p>$\text{Holder}$不等式还可以做一个小推广</p>
-<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q,r&gt;1,\frac1p+\frac1q=\frac1r$，则有<br>
-$$<br>
-\left(\sum_{i=1}^na_ib_i\right)^{\frac1r}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
-$$<br>
-当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
-<p><strong>证明：</strong></p>
-<p>考虑到$r&lt;p,r&lt;q,\frac rp+\frac rq=1$，然后应用$\text{Holder}$不等式即可得证。</p>
-<h5><span id="n度量空间的textholder不等式">n度量空间的$\text{Holder}$不等式</span></h5>
-<p>设$x_{i,j}\ge0,r&gt;1,p_i&gt;1,\sum_{i=1}^n\frac1{p_i}=\frac1r$，其中$(1\le i\le n,1\le j\le m)$，则有<br>
-$$<br>
-\left(\sum_{j=1}^m\left(\prod_{i=1}^nx_{i,j}\right)^r\right)^{\frac1r}\le\prod_{i=1}^n\left(\sum_{j=1}^mx_{i,j}^{p_i}\right)^{\frac1{p_i}}<br>
-$$<br>
-定义一组向量$\vec {x_i}=(x_{i,1}^{p_i},x_{i,2}^{p_i},\dots,x_{i,m}^{p_i}),i=1,2,\dots,n$,当且仅当$\vec {x_i}$相互平行时等式成立。</p>
-<p><strong>证明：</strong></p>
-<p>用$\text{Holder}$不等式和归纳法进行证明即可。</p>
-<h4><span id="textminkowski不等式">$\text{Minkowski}$不等式</span></h4>
-<p>设$a_i,b_i\ge0,p&gt;1$，则有<br>
-$$<br>
-\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1p}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}+\left(\sum_{i=1}^nb_i^p\right)^{\frac1p}<br>
-$$<br>
-当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立</p>
-<p><strong>证明：</strong></p>
-<p>由$\text{Holder}$不等式有<br>
-$$<br>
-\begin{align}<br>
-\left(\sum_{i=1}^n(a_i+b_i)^p\right)&amp;=\sum_{i=1}^n(a_i+b_i)^{p-1}a_i+\sum_{i=1}^n(a_i+b_i)^{p-1}b_i\<br>
-&amp;\le\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum a_i^p\right)^{\frac1p}+\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum b_i^p\right)^{\frac1p}\<br>
-&amp;=\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)\<br>
-&amp;=\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)<br>
-\end{align}<br>
-$$<br>
-由$\text{Holder}$不等式易知不等式的成立当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时。</p>
-<p>即证。</p>
-<h1><span id="3-不等式证明常用方法">3   不等式证明常用方法</span></h1>
-<h3><span id="放缩法">放缩法</span></h3>
-<p>如第五届全国大学生数学竞赛非数学类决赛第三题<br>
-$$<br>
-设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
-f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
-试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
-$$<br>
-<strong>解：</strong></p>
-<p>在求导和利用分离变量法求得<br>
-$$<br>
-\begin{align}<br>
-&amp;f’(x)=-\frac{e^{-x}}{1+x}\<br>
-&amp;f’(x)&lt;0且f(0)=1\<br>
-&amp;有f(x)\le1\<br>
-&amp;另一方面\<br>
-&amp;f(x)=f(0)-\int_0^x\frac{e^{-t}}{1+t}dt\ge1-\int_0^xe^{-t}dt=e^{-x}.<br>
-\end{align}<br>
-$$<br>
-此题就是典型的利用放缩法求证不等式</p>
-<h3><span id="求导法">求导法</span></h3>
-<p>如第八届全国大学生数学竞赛非数学类决赛第二题<br>
-$$<br>
-设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
-$$<br>
-<strong>解：</strong><br>
-$$<br>
-\begin{align}<br>
-&amp;f(x)=\frac1{x^2}-\frac1{\tan^2 x}\left(0&lt;x&lt;\frac\pi2\right),则\<br>
-&amp;f’(x)={2(x^3\cos x-\sin^3x)\over x^3\sin^3x}\<br>
-&amp;令g(x)={six\over \sqrt[3]{\cos x}}-x\left(0&lt;x&lt;\frac\pi2\right)\<br>
-&amp;g’(x)=\frac23\cos^{\frac23}x+\frac13\cos^{-\frac43}x-1\<br>
-&amp;结合均值不等式可得g’(x)&gt;0,又g(0)=0\<br>
-&amp;则有g(x)&gt;0\<br>
-&amp;故f’(x)&lt;0,从而f(x)单调递减\<br>
-&amp;又\lim\limits_{x\rightarrow \frac\pi2-}=\frac4{\pi^2};\lim\limits_{x\rightarrow0+}=\frac23\<br>
-&amp;故即可得证<br>
-\end{align}<br>
-$$</p>
-<h3><span id="构造函数变上限积分">构造函数（变上限积分）</span></h3>
-<p>如第八届全国大学生数学竞赛非数学类初赛第二题：<br>
-$$<br>
-设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
-$$<br>
-<strong>解：</strong></p>
-<p>构造<br>
-$$<br>
-\begin{align}<br>
-&amp;令F(x)=\left(\int_0^xf(t)dt\right)^2-\int_0^xf^3(t)dt\<br>
-&amp;求导有，F’(x)=f(x)\left(2\int_0^xf(t)dt-f^2(x)\right)\<br>
-&amp;令G(x)=2\int_0^xf(t)dt-f^2(x)\<br>
-&amp;G’(x)=2f(x)(1-f’(x))\<br>
-&amp;有G’(x)&gt;0,则G(x)单调递增\<br>
-&amp;又G(0)=0,则G(x)&gt;0\<br>
-&amp;有F’(X)&gt;0,则F(x)单调递增\<br>
-&amp;又F(0)=0\<br>
-&amp;即可得证<br>
-\end{align}<br>
-$$</p>
-<h3><span id="利用重要不等式">利用重要不等式</span></h3>
-<p>如第十届全国大学生数学竞赛非数学类第三题<br>
-$$<br>
-设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
-1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
-$$<br>
-<strong>解：</strong></p>
-<p>所证式子的左式由$\text{Cauchy}$不等式即证</p>
-<p>右式由于由基本不等式（算术几何平均不等式的二阶形式）<br>
-$$<br>
-\begin{align}<br>
-\int_0^1f(x)dx\int_0^1\frac3{f(x)}dx&amp;\le\frac14\left(\int_0^1f(x)dx+\int_0^1\frac3{f(x)}dx\right)^2\<br>
-&amp;\le4<br>
-\end{align}<br>
-$$<br>
-即证</p>
-]]></content>
-  </entry>
-  <entry>
     <title>离散1</title>
     <url>/2023/05/04/%E7%A6%BB%E6%95%A31/</url>
     <content><![CDATA[<p>这里记录了大一下学期的离散作业与答案，我会在每次作业截止后马上把我的答案放上来<span class="github-emoji"><span>🐶</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><span class="github-emoji"><span>🐶</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><span class="github-emoji"><span>🐶</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
@@ -1080,6 +821,265 @@ $$</p>
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
     main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/31.png" alt></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>高数应用</title>
+    <url>/2023/04/14/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<div align="center"><font size="24" face="宋体">高等数学不等式问题探讨</font></div>
+<span id="more"></span>
+<div align="center"><font size="6" face="仿宋">hugo</font></div>
+<p>​				<font size="4.5" face="楷体">[<b>摘要</b>]</font>:本文将介绍大学高等数学中遇到的相关不等式问题，介绍一些著名的不等式，如算术几何平均不等式、$\text{Bernoulli}$不等式、$\text{Jensen}$不等式、$\text{Cauchy}$不等式、$\text{Young}$不等式、$\text{Holder}$不等式、$\text{Minkowski}$不等式，以及在遇到不等式问题的常用处理办法，利用构造函数，求导分析单调性等方法，最后再结合一些例题进行具体分析讨论。</p>
+<p>​				<font size="4.5" face="楷体">[<b>关键词</b>]</font>:算术几何平均不等式；$\text{Jensen}$不等式；$\text{Cauchy}$不等式；$\text{Young}$不等式；$\text{Bernoulli}$不等式；$\text{Holder}$不等式；$\text{Minkowski}$不等式；构造函数；变上限积分</p>
+<h1><span id="1-引言">1   引言</span></h1>
+<p>​	在第五届全国大学生数学竞赛非数学类决赛第三题是一道与常微分方程有关的不等式问题：<br>
+$$<br>
+设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
+f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
+试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
+$$<br>
+​	在第八届全国大学生数学竞赛非数学类决赛第二题是一道不等式的综合问题：<br>
+$$<br>
+设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
+$$<br>
+​	在第八届全国大学生数学竞赛非数学类初赛第二题是一道构造变上限积分的题目：<br>
+$$<br>
+设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\<br>
+有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
+$$<br>
+​	在第十届全国大学生数学竞赛非数学类第三题是一道典型的运用到了积分形式的$Cauchy$不等式的题目：<br>
+$$<br>
+设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
+1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
+$$<br>
+​	可以看到不等式问题在考试中的考察还是比较多的，特别是近年有增多的趋势，其次在课后练习及相关研究中，不等式问题具有其独特的数学魅力。不等式问题是许多证明题的重要内容，涵盖的知识点丰富，有许多重要的不等式，这些经典的不等式的处理方法多种多样，在这里我将介绍其中个别方法，并对其在n维度量空间的推广加以介绍。同时将就大学高等数学中出现的不等式问题常用到的方法进行分析，如在导数部分常常用到的构造函数求导分析单调性，在积分部分通过构造变上限积分来证明不等式的问题，同时部分不等式证明题还可以用到$\text{Taylor}$展开、微分中值定理和积分中值定理进行证明。</p>
+<h1><span id="2-几个重要不等式">2   几个重要不等式</span></h1>
+<h4><span id="算术几何平均不等式">算术几何平均不等式</span></h4>
+<p>设$n\in N^*,a_i&gt;0(i=1,2,3\dots n)$,则有<br>
+$$<br>
+{n\over\frac1{a_1}+\frac1{a_2}+\dots +\frac1{a_n}}\le\sqrt[n]{a_1a_2\dots a_n}\le{a_1+a_2+\dots+a_n\over n}\le\sqrt{a_1^2+a_2^2+\dots+a_n^2\over n}\<br>
+$$<br>
+当且仅当$a_1=a_2=\dots=a_n$时等号成立</p>
+<p>**证明：**由归纳法易证</p>
+<h4><span id="textbernoulli不等式">$\text{Bernoulli}$不等式</span></h4>
+<p>当$x\ge -1$时，有<br>
+$$<br>
+\begin{align}<br>
+&amp;(1)若\alpha&gt;1,则有(1+x)^\alpha\ge1+\alpha x;\<br>
+&amp;(2)若0&lt;\alpha&lt;1,则有(1+x)^\alpha\le1+\alpha x.<br>
+\end{align}<br>
+$$<br>
+**证明：**构造函数求导分析单调性易证</p>
+<h4><span id="textjensen不等式">$\text{Jensen}$不等式</span></h4>
+<p>设f(x)是区间$I$上的凸函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
+$$<br>
+f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\le\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).\<br>
+$$<br>
+如果f(x)是区间I上的凹函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
+$$<br>
+f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\ge\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).<br>
+$$</p>
+<p><strong>证明</strong>：由归纳法易证</p>
+<h4><span id="textyoung不等式">$\text{Young}$不等式</span></h4>
+<p>设$a,b\ge0,p,q&gt;1,\frac1p+\frac1q=1$,则有<br>
+$$<br>
+ab\le\frac{a^p}p+\frac{b^q}q<br>
+$$<br>
+当且仅当$a^{\frac1q}=b^{\frac1p}$时等号成立</p>
+<p><strong>证明：</strong></p>
+<p>若$a=b=0$，则有不等式成立，否则不妨设$b&gt;0$。</p>
+<p>考虑证明$\text{Young}$不等式的等价形式<br>
+$$<br>
+\begin{align}<br>
+&amp;a^{\frac1p}b^{\frac1q}\le\frac ap+\frac bq\<br>
+&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab\right)+1-\frac1p\<br>
+&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab -1\right)+1<br>
+\end{align}<br>
+$$<br>
+作换元$x=\frac ab$，则等价于<br>
+$$<br>
+\left(x\right)^{\frac1p}\le\frac1p\cdot\left(x -1\right)+1<br>
+$$<br>
+构造函数，结合函数的上凸性易证</p>
+<h5><span id="n度量空间的textyoung不等式">n度量空间的$\text{Young}$不等式</span></h5>
+<p>设$x_i\ge0,p_i\ge1(i=1,2,\dots,n),\sum_{i=1}^n\frac1{p_i}=1$,则有<br>
+$$<br>
+\prod_{i=1}^n\le\sum_{i=1}^n\frac{x_i^{p_i}}{p_i}<br>
+$$<br>
+当且仅当$\frac{x_1^{p_1}}{p_1}=\frac{x_2^{p_2}}{p_2}=\dots=\frac{x_n^{p_n}}{p_n}$时等式成立</p>
+<p><strong>证明：</strong></p>
+<p>与证明2度量空间的$\text{Young}$不等式的方法类似，只不过需要利用$n-1$维函数$f(x_1,x_2,\dots,x_{n-1})$的上凸性<br>
+$$<br>
+f(x_1,x_2,\dots,x_{n-1})=\prod_{i=1}^{n-1}x_i^{\frac1{p_i}}<br>
+$$<br>
+易证</p>
+<h4><span id="textcauchy不等式">$\text{Cauchy}$不等式</span></h4>
+<p>设$a_i,b_i\in R,i=1,2,\dots,n$,有<br>
+$$<br>
+\left(\sum_{i=1}^na_ib_i\right)^2\le\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)<br>
+$$<br>
+当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立<br>
+$$<br>
+\frac{a_1}{b_1}=\frac{a_2}{b_2}=\dots=\frac{a_n}{b_n}<br>
+$$</p>
+<p><strong>证明：</strong><br>
+法一:由归纳法易证<br>
+法二:构造二次函数证明<br>
+做二次函数<br>
+$$<br>
+\begin{align}<br>
+f(x)&amp;=\left(\sum_{i=1}^na_i^2\right)x^2+2\left(\sum_{i=1}^na_ib_i\right)x+\left(\sum_{i=1}^nb_i^2\right)\<br>
+&amp;=\sum_{i=1}^n(a_ix+b_i)^2\<br>
+&amp;\ge0<br>
+\end{align}<br>
+$$<br>
+由于<br>
+$$<br>
+\left(\sum_{i=1}^na_i^2\right)&gt;0<br>
+$$<br>
+则有<br>
+$$<br>
+\Delta=4\left(\sum_{i=1}^na_ib_i\right)^2-4\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)\le 0<br>
+$$<br>
+即证</p>
+<h4><span id="textholder不等式">$\text{Holder}$不等式</span></h4>
+<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q&gt;1,\frac1p+\frac1q=1$，则有<br>
+$$<br>
+\sum_{i=1}^na_ib_i\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
+$$<br>
+当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
+<p>易见$\text{Cauchy}$不等式是$\text{Holder}$不等式的特例。</p>
+<p><strong>证明：</strong></p>
+<p>若$a_1=\dots=a_n=0$或$b_1=\dots=b_n=0$则显然结论成立，否则不妨设$a_1,b_1&gt;0$。</p>
+<p>令<br>
+$$<br>
+t=\left(\sum_{i=1}^na_i^p\over\sum_{i=1}^nb_i^q\right)^{\frac1{pq}}<br>
+$$<br>
+于是有<br>
+$$<br>
+\begin{align}<br>
+&amp;\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)=\frac1p\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}\<br>
+&amp;\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)=\frac1q\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
+\end{align}<br>
+$$<br>
+由$\text{Young}$不等式易知该不等式成立<br>
+$$<br>
+\begin{align}<br>
+\sum_{i=1}^na_ib_i&amp;=\sum_{i=1}^n(t\cdot a_i)(\frac{b_i}t)\<br>
+&amp;\le\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)+\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)<br>
+\end{align}<br>
+$$<br>
+由$\text{Young}$不等式成立的条件易知该不等式成立的条件即为当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时。</p>
+<p>即证</p>
+<p>$\text{Holder}$不等式还可以做一个小推广</p>
+<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q,r&gt;1,\frac1p+\frac1q=\frac1r$，则有<br>
+$$<br>
+\left(\sum_{i=1}^na_ib_i\right)^{\frac1r}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
+$$<br>
+当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
+<p><strong>证明：</strong></p>
+<p>考虑到$r&lt;p,r&lt;q,\frac rp+\frac rq=1$，然后应用$\text{Holder}$不等式即可得证。</p>
+<h5><span id="n度量空间的textholder不等式">n度量空间的$\text{Holder}$不等式</span></h5>
+<p>设$x_{i,j}\ge0,r&gt;1,p_i&gt;1,\sum_{i=1}^n\frac1{p_i}=\frac1r$，其中$(1\le i\le n,1\le j\le m)$，则有<br>
+$$<br>
+\left(\sum_{j=1}^m\left(\prod_{i=1}^nx_{i,j}\right)^r\right)^{\frac1r}\le\prod_{i=1}^n\left(\sum_{j=1}^mx_{i,j}^{p_i}\right)^{\frac1{p_i}}<br>
+$$<br>
+定义一组向量$\vec {x_i}=(x_{i,1}^{p_i},x_{i,2}^{p_i},\dots,x_{i,m}^{p_i}),i=1,2,\dots,n$,当且仅当$\vec {x_i}$相互平行时等式成立。</p>
+<p><strong>证明：</strong></p>
+<p>用$\text{Holder}$不等式和归纳法进行证明即可。</p>
+<h4><span id="textminkowski不等式">$\text{Minkowski}$不等式</span></h4>
+<p>设$a_i,b_i\ge0,p&gt;1$，则有<br>
+$$<br>
+\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1p}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}+\left(\sum_{i=1}^nb_i^p\right)^{\frac1p}<br>
+$$<br>
+当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立</p>
+<p><strong>证明：</strong></p>
+<p>由$\text{Holder}$不等式有<br>
+$$<br>
+\begin{align}<br>
+\left(\sum_{i=1}^n(a_i+b_i)^p\right)&amp;=\sum_{i=1}^n(a_i+b_i)^{p-1}a_i+\sum_{i=1}^n(a_i+b_i)^{p-1}b_i\<br>
+&amp;\le\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum a_i^p\right)^{\frac1p}+\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum b_i^p\right)^{\frac1p}\<br>
+&amp;=\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)\<br>
+&amp;=\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)<br>
+\end{align}<br>
+$$<br>
+由$\text{Holder}$不等式易知不等式的成立当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时。</p>
+<p>即证。</p>
+<h1><span id="3-不等式证明常用方法">3   不等式证明常用方法</span></h1>
+<h3><span id="放缩法">放缩法</span></h3>
+<p>如第五届全国大学生数学竞赛非数学类决赛第三题<br>
+$$<br>
+设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
+f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
+试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
+$$<br>
+<strong>解：</strong></p>
+<p>在求导和利用分离变量法求得<br>
+$$<br>
+\begin{align}<br>
+&amp;f’(x)=-\frac{e^{-x}}{1+x}\<br>
+&amp;f’(x)&lt;0且f(0)=1\<br>
+&amp;有f(x)\le1\<br>
+&amp;另一方面\<br>
+&amp;f(x)=f(0)-\int_0^x\frac{e^{-t}}{1+t}dt\ge1-\int_0^xe^{-t}dt=e^{-x}.<br>
+\end{align}<br>
+$$<br>
+此题就是典型的利用放缩法求证不等式</p>
+<h3><span id="求导法">求导法</span></h3>
+<p>如第八届全国大学生数学竞赛非数学类决赛第二题<br>
+$$<br>
+设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
+$$<br>
+<strong>解：</strong><br>
+$$<br>
+\begin{align}<br>
+&amp;f(x)=\frac1{x^2}-\frac1{\tan^2 x}\left(0&lt;x&lt;\frac\pi2\right),则\<br>
+&amp;f’(x)={2(x^3\cos x-\sin^3x)\over x^3\sin^3x}\<br>
+&amp;令g(x)={six\over \sqrt[3]{\cos x}}-x\left(0&lt;x&lt;\frac\pi2\right)\<br>
+&amp;g’(x)=\frac23\cos^{\frac23}x+\frac13\cos^{-\frac43}x-1\<br>
+&amp;结合均值不等式可得g’(x)&gt;0,又g(0)=0\<br>
+&amp;则有g(x)&gt;0\<br>
+&amp;故f’(x)&lt;0,从而f(x)单调递减\<br>
+&amp;又\lim\limits_{x\rightarrow \frac\pi2-}=\frac4{\pi^2};\lim\limits_{x\rightarrow0+}=\frac23\<br>
+&amp;故即可得证<br>
+\end{align}<br>
+$$</p>
+<h3><span id="构造函数变上限积分">构造函数（变上限积分）</span></h3>
+<p>如第八届全国大学生数学竞赛非数学类初赛第二题：<br>
+$$<br>
+设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
+$$<br>
+<strong>解：</strong></p>
+<p>构造<br>
+$$<br>
+\begin{align}<br>
+&amp;令F(x)=\left(\int_0^xf(t)dt\right)^2-\int_0^xf^3(t)dt\<br>
+&amp;求导有，F’(x)=f(x)\left(2\int_0^xf(t)dt-f^2(x)\right)\<br>
+&amp;令G(x)=2\int_0^xf(t)dt-f^2(x)\<br>
+&amp;G’(x)=2f(x)(1-f’(x))\<br>
+&amp;有G’(x)&gt;0,则G(x)单调递增\<br>
+&amp;又G(0)=0,则G(x)&gt;0\<br>
+&amp;有F’(X)&gt;0,则F(x)单调递增\<br>
+&amp;又F(0)=0\<br>
+&amp;即可得证<br>
+\end{align}<br>
+$$</p>
+<h3><span id="利用重要不等式">利用重要不等式</span></h3>
+<p>如第十届全国大学生数学竞赛非数学类第三题<br>
+$$<br>
+设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
+1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
+$$<br>
+<strong>解：</strong></p>
+<p>所证式子的左式由$\text{Cauchy}$不等式即证</p>
+<p>右式由于由基本不等式（算术几何平均不等式的二阶形式）<br>
+$$<br>
+\begin{align}<br>
+\int_0^1f(x)dx\int_0^1\frac3{f(x)}dx&amp;\le\frac14\left(\int_0^1f(x)dx+\int_0^1\frac3{f(x)}dx\right)^2\<br>
+&amp;\le4<br>
+\end{align}<br>
+$$<br>
+即证</p>
 ]]></content>
   </entry>
   <entry>
