@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>hugo</title>
+  
+  <subtitle>今天阳光正好</subtitle>
+  <link href="https://hjzts.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://hjzts.github.io/"/>
+  <updated>2023-05-25T12:10:19.085Z</updated>
+  <id>https://hjzts.github.io/</id>
+  
+  <author>
+    <name>hugo</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hammingDistance</title>
+    <link href="https://hjzts.github.io/2023/05/25/hammingDistance/"/>
+    <id>https://hjzts.github.io/2023/05/25/hammingDistance/</id>
+    <published>2023-05-25T12:10:08.000Z</published>
+    <updated>2023-05-25T12:10:19.085Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[toc]&lt;/p&gt;
+&lt;h1&gt;&lt;span id=&quot;__uint128_t_&quot;&gt;&lt;code&gt;__uint128_t_&lt;/code&gt;&lt;/span&gt;&lt;/h1&gt;
+&lt;p&gt;最近越来越多的协议会定义 16 字节长的整形，gcc 在 4.6 以上版本就可以使用 __int128_t</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>字典序</title>
+    <link href="https://hjzts.github.io/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/"/>
+    <id>https://hjzts.github.io/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/</id>
+    <published>2023-05-25T12:08:17.000Z</published>
+    <updated>2023-05-25T12:08:24.175Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;字典序&quot;&gt;字典序&lt;/span&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;span id=&quot;说在前面&quot;&gt;说在前面&lt;/span&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;字典序(dictionary order)，又称字母序(alphabetical</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Trie</title>
+    <link href="https://hjzts.github.io/2023/05/25/Trie/"/>
+    <id>https://hjzts.github.io/2023/05/25/Trie/</id>
+    <published>2023-05-25T11:57:38.000Z</published>
+    <updated>2023-05-25T12:06:47.019Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h1&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>大一下数据结构大作业</title>
+    <link href="https://hjzts.github.io/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/"/>
+    <id>https://hjzts.github.io/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/</id>
+    <published>2023-05-25T11:52:24.000Z</published>
+    <updated>2023-05-25T12:11:09.203Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;暂时嘛，啥也没有&lt;/p&gt;
+&lt;p&gt;蒟蒻博主啥也不会捏&lt;/p&gt;
+&lt;/blockquote&gt;
+</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>栈和队列</title>
+    <link href="https://hjzts.github.io/2023/05/25/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/"/>
+    <id>https://hjzts.github.io/2023/05/25/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/</id>
+    <published>2023-05-25T11:51:01.000Z</published>
+    <updated>2023-05-25T12:08:02.198Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>离散1</title>
+    <link href="https://hjzts.github.io/2023/05/04/%E7%A6%BB%E6%95%A31/"/>
+    <id>https://hjzts.github.io/2023/05/04/%E7%A6%BB%E6%95%A31/</id>
+    <published>2023-05-04T10:52:30.000Z</published>
+    <updated>2023-05-15T12:47:30.499Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;这里记录了大一下学期的离散作业与答案，我会在每次作业截止后马上把我的答案放上来&lt;span class=&quot;github-emoji&quot;&gt;&lt;span&gt;🐶&lt;/span&gt;&lt;img src=&quot;https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8&quot; aria-hidden=&quot;true&quot; onerror=&quot;this.parent.classList.add(&#39;github-emoji-fallback&#39;)&quot;&gt;&lt;/span&gt;&lt;span class=&quot;github-emoji&quot;&gt;&lt;span&gt;🐶&lt;/span&gt;&lt;img src=&quot;https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8&quot; aria-hidden=&quot;true&quot; onerror=&quot;this.parent.classList.add(&#39;github-emoji-fallback&#39;)&quot;&gt;&lt;/span&gt;&lt;span class=&quot;github-emoji&quot;&gt;&lt;span&gt;🐶&lt;/span&gt;&lt;img src=&quot;https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8&quot; aria-hidden=&quot;true&quot; onerror=&quot;this.parent.classList.add(&#39;github-emoji-fallback&#39;)&quot;&gt;&lt;/span&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>高数应用</title>
+    <link href="https://hjzts.github.io/2023/04/14/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/"/>
+    <id>https://hjzts.github.io/2023/04/14/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</id>
+    <published>2023-04-14T13:24:07.133Z</published>
+    <updated>2023-05-02T12:05:26.098Z</updated>
+    
+    
+    <summary type="html">&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;24&quot; face=&quot;宋体&quot;&gt;高等数学不等式问题探讨&lt;/font&gt;&lt;/div&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>阿巴的诗</title>
+    <link href="https://hjzts.github.io/2023/04/13/@%E9%98%BF%E5%B7%B4%20%E7%9A%84%E8%AF%97/"/>
+    <id>https://hjzts.github.io/2023/04/13/@%E9%98%BF%E5%B7%B4%20%E7%9A%84%E8%AF%97/</id>
+    <published>2023-04-13T15:15:54.094Z</published>
+    <updated>2023-04-14T13:57:59.355Z</updated>
+    
+    
+    <summary type="html">&lt;h1&gt;阿巴的诗&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;特此鸣谢本文诗篇作者zwy&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+</feed>

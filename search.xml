@@ -1,0 +1,1064 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>阿巴的诗</title>
+    <url>/2023/04/13/@%E9%98%BF%E5%B7%B4%20%E7%9A%84%E8%AF%97/</url>
+    <content><![CDATA[<h1><span id="阿巴的诗">阿巴的诗</span></h1>
+<blockquote>
+<p>特此鸣谢本文诗篇作者zwy</p>
+</blockquote>
+<span id="more"></span>
+<h2><span id="verse-13">VERSE 13</span></h2>
+<p>你说<br>
+爱过<br>
+即使如转瞬即逝的烟火<br>
+也为你抵挡了几载蹉跎<br>
+带来更多落寞</p>
+<p>他说<br>
+断隔<br>
+曾经的璀璨星河<br>
+而今都付与佛陀<br>
+灯光闪烁<br>
+恍惚中泪眼婆娑<br>
+错 错 错<br>
+千次新帆过</p>
+<p>她说<br>
+美得难以言说<br>
+一刹那的开落<br>
+绚烂的漫天银河<br>
+幽阔<br>
+种在心里的一隅<br>
+某个角落</p>
+<p>众生说<br>
+生命的意义在于探索<br>
+束缚自己的是意义的绳索<br>
+鸡飞狗跳的生活<br>
+细微繁琐<br>
+都是生命不可或缺的<br>
+章节段落</p>
+<p>宇宙说<br>
+潮汐涨落<br>
+弦的高歌<br>
+都是源头上犯下的一次次错<br>
+探索<br>
+在每个时刻<br>
+生命是潘多拉的魔盒</p>
+<p>我说<br>
+爱过<br>
+至少我们见过没有错过</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Trie</title>
+    <url>/2023/05/25/Trie/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1><span id="字典树tire">字典树Tire</span></h1>
+<blockquote>
+<p>Tire树，即字典树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。</p>
+</blockquote>
+<p>说白了，就是一棵大树，这棵树的每个除了根节点的结点都存储了一个字符。</p>
+<h2><span id="说在前面">说在前面</span></h2>
+<p>字典树有两种实现方式，一种是利用指针实现，也就是一个实实在在的二十六叉树；另一种就是利用数组实现。（在这里分别称之为指针版字典树和数组版字典树）</p>
+<p>两种实现方式各有优劣，指针版本的清晰明了，空间占用率相对较小（空间占用小就可以用剩下的空间干其他很多事）；而数组版字典树就是一次性把空间开好了，比较方便。</p>
+<h2><span id="指针版字典树">指针版字典树</span></h2>
+<p>结构体定义：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">datatype</span> <span class="token expression"><span class="token keyword">int</span></span></span>
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">node</span><span class="token punctuation">{</span>
+    bool isEnd<span class="token punctuation">;</span>
+    datatype data<span class="token punctuation">;</span>		<span class="token comment">//一般是计数</span>
+    <span class="token keyword">struct</span> <span class="token class-name">node</span> <span class="token operator">*</span>letter<span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>Node<span class="token punctuation">,</span><span class="token operator">*</span>List<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>新建一个结点的初始化：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    p<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> false<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当然，一种更加推荐的方式是使用<code>calloc()</code>函数，<code>malloc()</code>有更多自己操控的空间</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">calloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>创建一棵<code>Trie</code>:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MAXSIZE</span> <span class="token expression"><span class="token number">1000</span></span></span>
+<span class="token keyword">void</span> <span class="token function">createStopTrie</span><span class="token punctuation">(</span>List <span class="token operator">*</span>root<span class="token punctuation">,</span> FILE <span class="token operator">*</span>in<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> pos <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">fread</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> MAXSIZE<span class="token punctuation">,</span> in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">char</span> ch<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    List end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>pos <span class="token operator">&lt;</span> len<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        ch <span class="token operator">=</span> <span class="token function">tolower</span><span class="token punctuation">(</span>buffer<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">islower</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            end <span class="token operator">=</span> end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            pos<span class="token operator">++</span><span class="token punctuation">;</span>
+            depth<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            end<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> true<span class="token punctuation">;</span>
+            pos<span class="token operator">++</span><span class="token punctuation">;</span>
+            end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>depth <span class="token operator">&gt;</span> Depth<span class="token punctuation">)</span> Depth <span class="token operator">=</span> depth<span class="token punctuation">;</span>
+            depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>调用前需要</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">Root <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">createArticleTrie</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Root<span class="token punctuation">,</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><strong>三个基本性质：</strong></p>
+<ul>
+<li>根节点不包含字符，除根节点的每一个节点都只包含一个字符。</li>
+<li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。</li>
+<li>每个节点的所有子节点包含的字符都不相同</li>
+</ul>
+<p>我觉得这个像是一个26叉树，也有一点想26进制的一个东西。</p>
+<p>我们这里存储的都是小写字母，如果包含又大写字母的话可能就是一个52叉树了。一般不会出现这种情况吧，<s>出现了也不怪我</s></p>
+<blockquote>
+<p>主要实现单词的高效存储与高效查找</p>
+</blockquote>
+<p>利用<code>cout[i]</code>来记录以<code>i</code>为编号的字符结尾的字符串的个数。</p>
+<p>就有两个基本操作</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token keyword">const</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">1e5</span> <span class="token operator">+</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> tr<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cou<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">,</span> idx<span class="token punctuation">;</span>
+<span class="token keyword">char</span> str<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">insert</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
+      tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">++</span>idx<span class="token punctuation">;</span>
+    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">query</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
+      <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://blog.csdn.net/forever_dreams/article/details/81009580">https://blog.csdn.net/forever_dreams/article/details/81009580</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/28891541">https://zhuanlan.zhihu.com/p/28891541</a></li>
+<li><a href="https://blog.csdn.net/weixin_42815609/article/details/102692411">https://blog.csdn.net/weixin_42815609/article/details/102692411</a></li>
+<li>用C++讲得很清楚：<a href="https://blog.csdn.net/weixin_44176696/article/details/104716191">https://blog.csdn.net/weixin_44176696/article/details/104716191</a></li>
+<li>这个有头文件诶，高级！：<a href="https://blog.csdn.net/A951860555/article/details/108716487">https://blog.csdn.net/A951860555/article/details/108716487</a></li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>hammingDistance</title>
+    <url>/2023/05/25/hammingDistance/</url>
+    <content><![CDATA[<p>[toc]</p>
+<h1><span id="__uint128_t_"><code>__uint128_t_</code></span></h1>
+<p>最近越来越多的协议会定义 16 字节长的整形，gcc 在 4.6 以上版本就可以使用 __int128_t &amp; __uint128_t 了。</p>
+<p>但需要注意的是，_uint128_t &amp; __int128_t 仅对 64 位程序才有定义，因此如果编译选项中加入了 -m32，会出现找不到定义的编译错误。</p>
+<p>另外 _uint128_t &amp; __int128_t  并非 c/c++ 标准，所以 gcc 目前只支持基本运算符的操作，printf 这些都需要另外实现。</p>
+<h1><span id="快速计算汉明距离">快速计算汉明距离</span></h1>
+<blockquote>
+<p>在信息论中，两个等长字符串之间的汉明距离（英语：Hamming distance）是两个字符串对应位置的不同字符的个数。换句话说，它就是将一个字符串变换成另外一个字符串所需要替换的字符个数。</p>
+<p>汉明距离是以<strong>理查德・卫斯里・汉明</strong>的名字命名的。在通信传输过程中，累计定长二进制字中发生翻转的错误数据位，所以它也被称为信号距离。汉明距离在包括信息论、编码理论、密码学等领域都有应用。</p>
+</blockquote>
+<p>对于两个字符串计算汉明距离，那肯定也就只能是逐位比较</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//s1,s2为两个字符串，M为这两个字符串的长度</span>
+<span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span><span class="token keyword">char</span> s1<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">char</span> s2<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span> M<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> l1 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">,</span> l2 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> M <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l1 <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l2<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        dist <span class="token operator">+=</span> s1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> s2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>那么这样肯定是很慢的，如果可以转化两个整型的数，我们很容易想到利用到异或运算。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">__uint128_t fingerprint <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> l <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> l <span class="token operator">&lt;</span> M<span class="token punctuation">;</span> <span class="token operator">++</span>l<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>sumsignedweight <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样可以转换最高128位的两个01字符串。</p>
+<p>那么就可以利用<code>^</code>运算来就算汉明距离了,由于异或运算的性质，得到的c的数位上为1说明ab的对应位不相同，反之则相同，那么我们就之需要计算c的二进制表示中数位为1的数目。这里可以按位采取<code>&amp;</code>运算。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>c <span class="token operator">&amp;</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        c <span class="token operator">=</span> c <span class="token operator">&gt;&gt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>布莱恩·克尼根算法</strong></p>
+<p>我们先观察如下一个现象：对于任意一个非零的二进制数 <code>a</code>（将其看作无符号数），考虑 <code>a</code> 和 <code>a-1</code> 的关系。由于 <code>a</code> 非零，那么 <code>a</code> 中总有一些位为 <code>1</code>。假设 <code>a</code> 中最低位的 <code>1</code> 处于从右向左数的第 <code>N</code> 位。那么，<code>a</code> 的第 <code>N</code> 位以及第 <code>N</code> 位以后的每一位的值和 <code>a-1</code> 的第 <code>N</code> 位及第 <code>N</code> 位以后的每一位的值均不同。</p>
+<p>举个例子就很容易理解了。我们以 8 位数来描述。假设 <code>a=10010000</code>，根据上述描述，从右往左数的第一个 <code>1</code> 出现在第 <code>5</code> 位，那么有 <code>N=5</code>。同时可以计算出 <code>a-1=10001111</code>，可以看到，从第 <code>N</code> 位开始，<code>a</code> 的后缀是 <code>10000</code>，而 <code>a-1</code> 的后缀是 <code>01111</code>。满足上述描述的现象。</p>
+<p>进一步地，我们可以发现，如果对 <code>a</code> 和 <code>a-1</code> 进行与操作，就会直接消去位于最后一位，也就是第 <code>N</code> 位的 <code>1</code>。还以上面的 <code>a</code> 为例，<code>a &amp; (a-1)=10000000</code>。可以看到，我们不需要遍历，而是通过一次运算，就可以把 <code>a</code> 中的最后一个 <code>1</code> 消掉。如果我们一直重复这项操作，那么 <code>a</code> 里有多少个 <code>1</code>，我们就仅需要多少次 <code>a &amp; (a-1)</code> 的操作，就能把 <code>a</code> 化为 <code>0</code> 了。而这个操作的次数正是我们所要求的。</p>
+<p>那么计算汉明距离就可以改进为：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        c <span class="token operator">=</span> c <span class="token operator">&amp;</span> <span class="token punctuation">(</span>c <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>大一下数据结构大作业</title>
+    <url>/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/</url>
+    <content><![CDATA[<blockquote>
+<p>暂时嘛，啥也没有</p>
+<p>蒟蒻博主啥也不会捏</p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>字典序</title>
+    <url>/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/</url>
+    <content><![CDATA[<h1><span id="字典序">字典序</span></h1>
+<h2><span id="说在前面">说在前面</span></h2>
+<blockquote>
+<p>字典序(dictionary order)，又称字母序(alphabetical order)，原意是表示英文单词在字典中的先后顺序，后引申为任意两个字符串的大小关系</p>
+</blockquote>
+<p>那么大家就清楚了这指的是一种大小关系，一种序，正如我们数学分析中的有序集的序有类似的概念，这里大家需要与字典树(Tire)区分开来，字典树实质上是一种数据结构中的用于存储和查找单词的一种树状结构，详情可以看这个<a href>tire</a>。(在我的另一篇blog可以看到哦)</p>
+<h2><span id="字典序算法相关">字典序算法相关</span></h2>
+<h3><span id="字典序全排列问题">字典序全排列问题</span></h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h&gt;</span></span>
+<span class="token comment">//交换两个字符，注意这里传过去的是地址，改变的是地址对应的值</span>
+<span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>a<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">char</span> temp <span class="token operator">=</span> <span class="token operator">*</span>a<span class="token punctuation">;</span>
+    <span class="token operator">*</span>a <span class="token operator">=</span> <span class="token operator">*</span>b<span class="token punctuation">;</span>
+    <span class="token operator">*</span>b <span class="token operator">=</span> temp<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment">//将一个字符串begin到end的部分逆序</span>
+<span class="token keyword">void</span> <span class="token function">reverse</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>str<span class="token punctuation">,</span> <span class="token keyword">int</span> begin<span class="token punctuation">,</span> <span class="token keyword">int</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>begin <span class="token operator">&lt;</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">swap</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>str<span class="token punctuation">[</span>begin<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>str<span class="token punctuation">[</span>end<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        begin<span class="token operator">++</span><span class="token punctuation">;</span>
+        end<span class="token operator">--</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">next_permutation</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>str<span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">;</span> i <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&lt;</span> str<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token comment">//从后往前找到第一个正序的</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>		<span class="token comment">//表示找完了，已经全部是逆序了</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token comment">//从i开始找到前面的第一个比str[i]大的，那么就进行交换</span>
+<span class="token comment">//再把i+1以后的逆序一遍</span>
+    <span class="token keyword">int</span> j<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&gt;</span> i<span class="token punctuation">;</span> j<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">&gt;</span> str<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">swap</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>str<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>str<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">reverse</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"abd"</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">do</span> <span class="token punctuation">{</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%s\n"</span><span class="token punctuation">,</span> str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">next_permutation</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>该代码可以实现一个<strong>顺序的字符串</strong>的所有字母的按字典序输出的全排列。</p>
+<p>否则的话就是输出比改字符串的字典序大于等于的字符串。</p>
+<p>当然简单调整当然可以是任意顺序的一个字符串的操作。</p>
+<h3><span id="字典序排序">字典序排序</span></h3>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://blog.csdn.net/qq_37050329/article/details/86637183">https://blog.csdn.net/qq_37050329/article/details/86637183</a></li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>栈和队列</title>
+    <url>/2023/05/25/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>离散1</title>
+    <url>/2023/05/04/%E7%A6%BB%E6%95%A31/</url>
+    <content><![CDATA[<p>这里记录了大一下学期的离散作业与答案，我会在每次作业截止后马上把我的答案放上来<span class="github-emoji"><span>🐶</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><span class="github-emoji"><span>🐶</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><span class="github-emoji"><span>🐶</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+<span id="more"></span>
+<p>$$<br>
+\newcommand{\lfa}[0]{\leftrightarrow}\<br>
+\newcommand{\w}[0]{\wedge}\<br>
+\newcommand{\v}[0]{\vee}\<br>
+\newcommand{\an}[0]{\wedge}\<br>
+\newcommand{\o}[0]{\vee}\<br>
+\newcommand{\n}[0]{\neg}\<br>
+\newcommand{\a}[0]{\forall}\<br>
+\newcommand{\e}[0]{\exists}\<br>
+$$</p>
+<h1><span id="第一次作业">第一次作业</span></h1>
+<h2><span id="11">$1.1$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/1.png" alt></p>
+<blockquote>
+<p>a</p>
+</blockquote>
+<h2><span id="21">$2.1$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/2.png" alt></p>
+<ol>
+<li>
+<p>不是命题；</p>
+</li>
+<li>
+<p>不是命题；</p>
+</li>
+<li>
+<p>是命题，真值为0；</p>
+</li>
+<li>
+<p>不是命题；</p>
+</li>
+<li>
+<p>不是命题；</p>
+</li>
+<li>
+<p>是命题，真值为0；</p>
+</li>
+<li>
+<p>是命题，真值为0；</p>
+</li>
+</ol>
+<h2><span id="22">$2.2$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/3.png" alt><br>
+$$<br>
+\begin{align}<br>
+&amp;1.\neg p\<br>
+&amp;2.(\neg p)\wedge (\neg q)\<br>
+&amp;3.p\oplus q\<br>
+&amp;4.p\to q\<br>
+&amp;5.p\to q\<br>
+&amp;6.(p\wedge q)\to (r\vee s)\<br>
+&amp;7.p\leftrightarrow (q \oplus r)\<br>
+&amp;8.p\to q\<br>
+&amp;9.p\to q\<br>
+&amp;10.p\leftrightarrow q\<br>
+&amp;11.\neg(p\vee q)\to r<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/4.png" alt></p>
+<h2><span id="23">$2.3$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/5.png" alt></p>
+<ol>
+<li>永真式</li>
+<li>可满足式</li>
+<li>可满足式</li>
+<li>永真式</li>
+<li>永真式</li>
+<li>永假式</li>
+<li>永真式</li>
+</ol>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/6.png" alt></p>
+<h2><span id="24">$2.4$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/7.png" alt><br>
+$$<br>
+\begin{align}<br>
+(1)\<br>
+&amp;p\to (q\to r)\<br>
+\iff &amp;\neg p\vee(\neg q\vee r)\<br>
+\iff &amp;(\neg p \vee \neg q)\vee r\<br>
+\iff &amp;(\neg q \vee \neg p)\vee r\<br>
+\iff &amp;\neg q \vee (\neg p\vee r)\<br>
+\iff &amp;\neg q \vee (p\to r)\<br>
+\iff &amp;q\to(p\to r)\<br>
+(2)\<br>
+&amp;(p\to q)\wedge(p\to r)\<br>
+\iff&amp;(\neg p\vee q)\wedge(\neg p\vee r)\<br>
+\iff&amp;\neg p \vee (q\wedge r)\<br>
+\iff&amp;p\to q\wedge r\<br>
+(3)\<br>
+&amp;(p\to q)\vee(r\to q)\<br>
+\iff&amp;(\neg p\vee q)\vee(\neg r \vee q)\<br>
+\iff&amp;\neg  p\vee\neg r\vee (q\vee q)\<br>
+\iff&amp;\neg  p\vee\neg r\vee q\<br>
+\iff&amp;\neg(p\wedge r)\vee q\<br>
+\iff&amp;p\wedge r \to q\<br>
+(4)\<br>
+&amp;p\to (q \to p)\<br>
+\iff&amp;\neg p \vee (\neg q \vee p)\<br>
+\iff&amp;(\neg p\vee p)\vee \neg q\<br>
+\iff&amp;1\vee \neg q\<br>
+\iff&amp;1\<br>
+同时又有&amp;\neg p \to (p\to q)\<br>
+\iff&amp;\neg \neg p \vee (\neg p \vee q)\<br>
+\iff&amp;(p\vee \neg p)\vee q\<br>
+\iff&amp;1\vee q\<br>
+\iff&amp;1\<br>
+&amp;二者均为永真式，且等值与1，故有二者等值<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/8.png" alt></p>
+<h2><span id="25">$2.5$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/32.png" alt><br>
+$$<br>
+\begin{align}<br>
+(1)\<br>
+&amp;易知(q\to r)\iff (\neg r\to\neg q)\<br>
+&amp;由替换实例进行替换\<br>
+&amp;有(Q\to R)\iff (\neg R\to\neg Q)\<br>
+(2)\<br>
+&amp;(p\wedge q)\to r\<br>
+\iff&amp;\neg(p\wedge q)\vee r\<br>
+\iff&amp;\neg p\vee \neg q\vee r\<br>
+\iff&amp;\neg p\vee(\neg q\vee r)\<br>
+\iff&amp;\neg p\vee(q\to r)\<br>
+\iff&amp;p\to(q\to r)\<br>
+&amp;由替换实例进行替换\<br>
+&amp;有(P\wedge Q)\to R\iff P\to(Q\to R)<br>
+\end{align}<br>
+$$</p>
+<h2><span id="26">$2.6$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/33.png" alt><br>
+$$<br>
+\begin{align}<br>
+(1)\<br>
+&amp;\neg(Q\wedge R)\wedge (\neg Q \vee \neg R)\<br>
+(2)\<br>
+&amp;(p\vee(Q\vee R))\wedge((P\vee Q)\vee R)\wedge 1<br>
+\end{align}<br>
+$$</p>
+<h2><span id="27">$2.7$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/9.png" alt><br>
+$$<br>
+\begin{align}<br>
+&amp;由对偶定理\<br>
+(1)\<br>
+&amp;A是永真式，则取R为1，R^<em>为0\<br>
+&amp;有A\iff R&amp;\<br>
+&amp;故A^</em>\iff R^<em>\<br>
+&amp;即A^</em> \iff 0\<br>
+&amp;故A为永假式\<br>
+(2)\<br>
+(1)\<br>
+&amp;A是永假式，则取R为0，R^<em>为1\<br>
+&amp;有A\iff R&amp;\<br>
+&amp;故A^</em>\iff R^<em>\<br>
+&amp;即A^</em> \iff 1\<br>
+&amp;故A为永真式\<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/10.png" alt></p>
+<h1><span id="第二次作业">第二次作业</span></h1>
+<h2><span id="text11">$\text{1.1}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/11.png" alt><br>
+$$<br>
+\begin{align}<br>
+(1)\<br>
+&amp;(q\to p)\wedge(\neg p \to q)\leftrightarrow \neg p\<br>
+\iff&amp;(\neg q \vee p)\wedge(\neg(\neg p) \vee q)\leftrightarrow\neg p\<br>
+\iff&amp;(\neg q \vee p)\wedge(q\vee p)\leftrightarrow\neg p\<br>
+\iff&amp;(\neg q \wedge q)\vee p \leftrightarrow\neg p\<br>
+\iff&amp;p\leftrightarrow \neg p\<br>
+\iff &amp;0\<br>
+&amp;该公式通过真值演算等值于0，故该公式为永假式\<br>
+(2)\<br>
+&amp;(p\to q)\wedge(q\to r)\wedge\neg(p\to r)\<br>
+\iff&amp;(\neg p \vee q)\wedge(\neg q \vee r)\wedge\neg(\neg p \vee r)\<br>
+\iff&amp;(\neg p \vee q)\wedge(\neg q \vee r)\wedge(p\wedge \neg r)\<br>
+\iff&amp;((\neg p \vee q)\wedge p)\wedge((\neg q \vee r)\wedge \neg r)\<br>
+\iff&amp;((\neg p \wedge p ) \vee(q \wedge p))\wedge((\neg q \wedge r)\vee (r \wedge \neg r)) \<br>
+\iff&amp;(0 \vee(q \wedge p))\wedge((\neg q \wedge r)\vee 0)\<br>
+\iff&amp;(q\wedge p)\wedge (\neg q \wedge r)\<br>
+\iff&amp;p \wedge (q\wedge \neg q)\wedge r\<br>
+\iff&amp;p\wedge 0 \wedge r\<br>
+\iff&amp;0\<br>
+&amp;该公式通过真值演算等值于0，故该公式为永假式\<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/12.png" alt></p>
+<h2><span id="text12">$\text{1.2}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/13.png" alt><br>
+$$<br>
+\begin{align}<br>
+(1)<br>
+&amp;\neg(\neg p \wedge \neg q)\vee \neg (\neg p \vee q)\<br>
+\iff&amp;(p\wedge q)\vee (p\wedge \neg q)\<br>
+\iff&amp;p\wedge (q\vee \neg q)\<br>
+\iff&amp;p\<br>
+&amp;故即证该等值式，由对偶定理有\<br>
+&amp;\neg (\neg p\wedge \neg q)\wedge \neg (\neg p\wedge  q)\iff  p\<br>
+(2)<br>
+&amp;(p\vee \neg q)\wedge(p\vee q)\wedge(\neg p \vee \neg q)\<br>
+\iff&amp;p\vee (\neg q \wedge q)\wedge (\neg p \vee \neg q)\<br>
+\iff&amp;(p\wedge \neg p)\vee(p \wedge \neg q)\<br>
+\iff&amp;\neg (\neg p \vee q)\<br>
+&amp;故即证该等值式，由对偶定理有\<br>
+&amp;(p\wedge \neg q)\vee (p\wedge q)\vee(\neg p \wedge \neg q)\iff\neg (\neg p \wedge q)<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/14.png" alt></p>
+<h2><span id="text13">$\text{1.3}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/15.png" alt><br>
+$$<br>
+\begin{align}<br>
+&amp;1.{0,\to}\<br>
+&amp;首先我们有{\neg ,\to }为极小完全集\<br>
+&amp;又由于\neg p \iff p\to 0\<br>
+&amp;故{\neg ,\to }是完全集\<br>
+&amp;同时只含0的集合，无法表示真值赋值v(A) = 1\<br>
+&amp;(其中A为只含命题变元p而不含其他命题变元的公式，取v(p/0)),而v(\neg p) = 1,即此时无法表示\neg\<br>
+&amp;而只含\to 的集合，无法表示真值赋值v(A) = 0\<br>
+&amp;(其中A为只含命题变元p而不含其他命题变元的公式，取v(p/1)),而v(\neg p) = 0,即此时无法表示\neg\<br>
+&amp;即任意去掉一个后均不能构成完全集，故该集合为极小完全集\</p>
+<p>&amp;2.{\oplus ,\to}\<br>
+&amp;首先我们有{\neg ,\to }为极小完全集\<br>
+&amp;又由于\neg p \iff p\oplus (p\to p)\<br>
+&amp;故{\oplus,\to}是完全集\<br>
+&amp;又同时只含\oplus的集合，无法表示真值赋值v(A) = 1\<br>
+&amp;(其中A为只含命题变元p而不含其他命题变元的公式，取v(p/0)),而v(\neg p) = 1,即此时无法表示\neg\<br>
+&amp;而只含\to 的集合，无法表示真值赋值v(A) = 0\<br>
+&amp;(其中A为只含命题变元p而不含其他命题变元的公式，取v(p/1)),而v(\neg p) = 0,即此时无法表示\neg\<br>
+&amp;即任意去掉一个后均不能构成完全集，故该集合为极小完全集\</p>
+<p>&amp;3.{\oplus,\wedge,\leftrightarrow}\<br>
+&amp;首先我们有{\neg ,\wedge }为极小完全集,而且{\oplus,\leftrightarrow}不是完全集(书上的例题应该可以用吧）\<br>
+&amp;又由于\neg p \iff p\oplus (p\leftrightarrow p)\<br>
+&amp;故{\oplus,\wedge,\leftrightarrow}是完全集\<br>
+&amp;又同时只含{\oplus，\wedge}的集合，无法表示真值赋值v(A) = 1\<br>
+&amp;(其中A为只含命题变元p而不含其他命题变元的公式，取v(p/0)),而v(\neg p) = 1,即此时无法表示\neg\<br>
+&amp;只含{\wedge,\leftrightarrow} 的集合，无法表示真值赋值v(A) = 0\<br>
+&amp;(其中A为只含命题变元p而不含其他命题变元的公式，取v(p/1)),而v(\neg p) = 0,即此时无法表示\neg\<br>
+&amp;即任意去掉一个后均不能构成完全集，故该集合为极小完全集\</p>
+<p>&amp;4.{\oplus,\vee,\leftrightarrow}\<br>
+&amp;首先我们有{\neg ,\vee }为极小完全集,而且{\oplus,\leftrightarrow}不是完全集\<br>
+&amp;又由于\neg p \iff p\oplus (p\leftrightarrow p)\<br>
+&amp;故{\oplus,\vee,\leftrightarrow}是完全集\<br>
+&amp;又同时只含{\oplus，\vee}的集合，无法表示真值赋值v(A) = 1\<br>
+&amp;(其中A为只含命题变元p而不含其他命题变元的公式，取v(p/0)),而v(\neg p) = ,即此时无法表示\neg\<br>
+&amp;只含{\vee,\leftrightarrow} 的集合，无法表示真值赋值v(A) = 0\<br>
+&amp;(其中A为只含命题变元p而不含其他命题变元的公式，取v(p/1)),而v(\neg p) = 0,即此时无法表示\neg\<br>
+&amp;即任意去掉一个后均不能构成完全集，故该集合为极小完全集\<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/16.png" alt></p>
+<h2><span id="text14">$\text{1.4}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/17.png" alt><br>
+$$<br>
+\begin{align}<br>
+&amp;1.{\wedge, \vee, \to ,\leftrightarrow}\<br>
+&amp;该集合无法表示真值赋值v(A) = 0\<br>
+&amp;(其中A为只含命题变元p而不含其他命题变元的公式，取v(p/1)),而v(\neg p) = 0,即此时无法表示\neg\<br>
+&amp;故该集合不是完全集\<br>
+&amp;2.{\wedge,\vee,\oplus}\<br>
+&amp;该集合无法表示真值赋值v(A) = 1\<br>
+&amp;(其中A为只含命题变元p而不含其他命题变元的公式，取v(p/0)),而v(\neg p) = 1,即此时无法表示\neg\<br>
+&amp;故该集合不是完全集\<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/18.png" alt></p>
+<h2><span id="text15">$\text{1.5}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/19.png" alt><br>
+$$<br>
+\begin{align}<br>
+1.\<br>
+&amp;{\uparrow}是完全集\<br>
+&amp;首先我们知道{\neg,\wedge}是完全集\<br>
+&amp;且有\neg p \iff p \uparrow p\<br>
+&amp;p \wedge q\iff \neg(p \uparrow q)\iff(p \uparrow q)\uparrow(p \uparrow q)\<br>
+&amp;故即证该集合为完全集\<br>
+2.\<br>
+&amp;{\downarrow}是完全集\<br>
+&amp;首先我们知道{\neg,\vee}是完全集\<br>
+&amp;且有\neg p \iff p \downarrow p\<br>
+&amp;p \vee q\iff \neg(p \downarrow q)\iff(p \downarrow q)\downarrow(p \downarrow q)\<br>
+&amp;故即证该集合为完全集\<br>
+3.\<br>
+&amp;{\Delta}为完全集\<br>
+&amp;首先若有0 \Delta 0 = 0,或者1 \Delta 1 = 1\<br>
+&amp;即0 \Delta 0 = 1,且1 \Delta 1 =0\<br>
+&amp;那么\Delta无法表示\neg \<br>
+&amp;又类似{\oplus,\leftrightarrow},若1\Delta0\neq 0\Delta 1\<br>
+&amp;则仅含p,q两个命题变元而不含其他命题变元的公式A的真值情况中1的个数一定是偶数个\<br>
+&amp;故该集合无法表示\wedge,\vee\<br>
+&amp;于是\<br>
+&amp;若1\Delta0=0\Delta1=0,则此时\Delta 即为\downarrow\<br>
+&amp;若1\Delta0=0\Delta1=1,故此时\Delta即为\uparrow\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/20.png" alt></p>
+<h2><span id="text16">$\text{1.6}$</span></h2>
+<img src="/2023/05/04/%E7%A6%BB%E6%95%A31/Pictures\Screenshots\image-20230416203036176.png" width="800" height="200" alt="图片名称" align="left">
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">solve_formula</span><span class="token punctuation">(</span>exp<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    variables <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    var_list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    operations <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'or'</span><span class="token punctuation">,</span> <span class="token string">'and'</span><span class="token punctuation">,</span> <span class="token string">'not'</span><span class="token punctuation">,</span> <span class="token string">'('</span><span class="token punctuation">,</span> <span class="token string">')'</span><span class="token punctuation">,</span> <span class="token string">'True'</span><span class="token punctuation">,</span> <span class="token string">"False"</span><span class="token punctuation">}</span>
+
+    exp <span class="token operator">=</span> <span class="token string">' ( '</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>exp<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'('</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    exp <span class="token operator">=</span> <span class="token string">' ) '</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>exp<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">')'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    tokens <span class="token operator">=</span> exp<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> t <span class="token keyword">in</span> tokens<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> t <span class="token keyword">not</span> <span class="token keyword">in</span> operations <span class="token keyword">and</span> t <span class="token keyword">not</span> <span class="token keyword">in</span> variables<span class="token punctuation">:</span>
+            variables<span class="token punctuation">[</span>t<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">None</span>
+            var_list<span class="token punctuation">.</span>append<span class="token punctuation">(</span>t<span class="token punctuation">)</span>
+
+    has_true <span class="token operator">=</span> <span class="token boolean">False</span>
+    has_false <span class="token operator">=</span> <span class="token boolean">False</span>
+    lim <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>var_list<span class="token punctuation">)</span>
+
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>lim<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> b <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>var_list<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> i <span class="token operator">&amp;</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> b<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+                variables<span class="token punctuation">[</span>var_list<span class="token punctuation">[</span>b<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'True'</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                variables<span class="token punctuation">[</span>var_list<span class="token punctuation">[</span>b<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'False'</span>
+        const_exp <span class="token operator">=</span> <span class="token string">" "</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> variables<span class="token punctuation">[</span>x<span class="token punctuation">]</span> <span class="token keyword">if</span> x <span class="token keyword">in</span> variables <span class="token keyword">else</span> x<span class="token punctuation">,</span> tokens<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token builtin">eval</span><span class="token punctuation">(</span>const_exp<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            has_true <span class="token operator">=</span> <span class="token boolean">True</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            has_false <span class="token operator">=</span> <span class="token boolean">True</span>
+
+    <span class="token keyword">if</span> <span class="token keyword">not</span> has_false<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">'永真式'</span>
+    <span class="token keyword">elif</span> <span class="token keyword">not</span> has_true<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">'永假式'</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">'可满足式'</span>
+
+s <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入一个合式公式，命题变元最多有p,q,r三个，仅包含与、或、非三种运算，用and,or,not来表示: "</span><span class="token punctuation">)</span>
+result <span class="token operator">=</span> solve_formula<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/21.png" alt></p>
+<h1><span id="第三次作业">第三次作业</span></h1>
+<h2><span id="draft">draft</span></h2>
+<p>$$<br>
+\begin{align}<br>
+&amp;p \lfa q\<br>
+\iff&amp;(p\to q)\w(q\to p)\<br>
+\iff&amp;(\n p \v q)\w(\n q \v  p)\<br>
+\iff&amp;((\n p \v q) \w \n q)\v((\n p  \v q) \w p)\<br>
+\iff&amp;(\n p\w \n q)\v(q \w \n q)\v (\n p \w p)\v(q\w p)\<br>
+\iff&amp;(p\w q)\v(\n p\w \n q)\<br>
+&amp;( p\v q\v r)\w( p\v q\v\n r)\w( p\v\n q\v r)\w( p\v\n q\v\n r)\<br>
+&amp;\w( p\v q\v r)\w(\n p\v q\v\n r)\w(\n p\v\n q\v r)\w(\n p\v\n q\v\n r)\<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/22.png" alt></p>
+<h2><span id="text11">$\text{1.1}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/23.png" alt><br>
+$$<br>
+\begin{align}<br>
+&amp;析取范式:\<br>
+&amp;p,p\vee q,p\wedge \neg r,p\vee \neg p;\<br>
+&amp;合取范式:\<br>
+&amp;p,(p\vee q)\wedge r,p\wedge \neg r.p\vee \neg p;<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/24.png" alt></p>
+<p>$p \vee q也是合取范式$</p>
+<h2><span id="text12">$\text{1.2}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/25.png" alt></p>
+<p>$$<br>
+\begin{align}<br>
+&amp;1.析取范式有:\<br>
+&amp;(1),(2),(3),(5)\<br>
+&amp;2.合取范式有:\<br>
+&amp;(1),(2),(4)\<br>
+&amp;3.主析取范式有:\<br>
+&amp;(1),(5)\<br>
+&amp;4.主合取范式有:\<br>
+&amp;(1)<br>
+\end{align}<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/26.png" alt></p>
+<h2><span id="text13">$\text{1.3}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/27.png" alt></p>
+<p>$$<br>
+\begin{align}<br>
+(1)&amp;\neg p \wedge q \to r\<br>
+\iff&amp;\neg(\neg p \wedge q)\vee r\<br>
+\iff&amp;p\vee \neg q\vee r\<br>
+&amp;可知主合取范式为:p\vee \neg q\vee r\<br>
+&amp;主析取范式为:(\neg p\wedge\neg q\wedge\neg r )\vee(\neg p\wedge\neg q\wedge r )\vee(\neg p\wedge q\wedge r )\vee( p\wedge\neg q\wedge\neg r )\<br>
+&amp;\vee( p\wedge\neg q\wedge r )\vee( p\wedge q\wedge\neg r )\vee(p\wedge q\wedge r)\<br>
+&amp;且该合式公式为可满足式\<br>
+(2)&amp;(p\to q)\to r\<br>
+\iff&amp;\neg(\neg p \vee q)\vee r\<br>
+\iff&amp;(p\wedge q)\vee r\<br>
+\iff&amp;(p\vee r)\wedge(q\vee r)\<br>
+\iff&amp;(p\wedge(q\vee \neg q)\vee r)\wedge((p\vee \neg p)\wedge q\vee r)\<br>
+\iff&amp;(p\vee q\vee r)\wedge(p \vee \neg q \vee r)\wedge (\neg p \vee q\vee r)\<br>
+&amp;可知主合取范式为:(p\vee q\vee r)\wedge(p \vee \neg q \vee r)\wedge (\neg p \vee q\vee r)\<br>
+&amp;主析取范式为:(\neg p \wedge \neg q \wedge r)\vee(\neg p \wedge q\wedge r)\vee(p \wedge \neg q \wedge r)\vee(p\wedge q\wedge \neg r)\v(p\w q\w r)\<br>
+&amp;且该合式公式为可满足式\<br>
+(3)&amp;\n p\v \n q\to (p\lfa \n q)\<br>
+\iff&amp;\n (\n p \v \n q)\v (p \w \n q)\v(\n p \w q)\<br>
+\iff&amp;(p \w q)\v (p \w \n q)\v(\n p \w q)\<br>
+&amp;可知主析取范式为:(p \w q)\v (p \w \n q)\v(\n p \w q)\<br>
+&amp;主合取范式:p\v q\<br>
+&amp;且该合式公式为可满足式\<br>
+(4)&amp;p\v(p\to q\v(\n q \to r))\<br>
+\iff&amp;p \v(\n p \v q\v (\n(\n q)\v r))\<br>
+\iff&amp;p \v(\n p \v q\v q\v r)\<br>
+\iff&amp;1\<br>
+&amp;可知主合取范式为:1\<br>
+&amp;主析取范式为:(\n p\w\n q\w\n r)\v(\n p \w \n q \w r)\v(\n p \w q \w \n r)\v(\n p\w q\w r)\<br>
+&amp;\v(p\w \n q \w \n r)\v(p\w \n q \w  r)\v(p\w q\w \n r)\v(p\w q\w r)\<br>
+&amp;且该合式公式为永真式\<br>
+(5)&amp;(p\to q \w r)\w(\n p\to \n q\w \n r)\<br>
+\iff&amp;(\n p\v(q\w r))\w(\n(\n p)\v(\n q\w \n r))\<br>
+\iff&amp;(\n p \v q)\w(\n p \v r)\w(p\v \n q)\w(p\v \n r)\<br>
+\iff&amp;((\n p \v q)\v(r\w \n r))\w(\n p \v(q\w \n q)\v r)\w((p\v \n q)\v(r\w \n r))\w(p\v(q\w \n q)\v \n r)\<br>
+\iff&amp;(\n p \v q\v r)\w(\n p\v q\v \n r)\w(\n p\v q\v r)\w(\n p\v\n q\v r)\w(p\v\n q\v r)\<br>
+&amp;\w(p\v \n q\v\n r)\w(p\v q\v \n r)\w(p\v \n q\v \n r)\<br>
+\iff&amp;(\n p \v q\v r)\w(\n p\v q\v \n r)\w(\n p\v\n q\v r)\w(p\v\n q\v r)\w(p\v \n q\v\n r)\w(p\v q\v \n r)\<br>
+&amp;可知主合取范式为:(\n p \v q\v r)\w(\n p\v q\v \n r)\w(\n p\v\n q\v r)\w(p\v\n q\v r)\w(p\v \n q\v\n r)\w(p\v q\v \n r)\<br>
+&amp;主析取范式为:(p \w q \w r)\v(\n p\w \n q\w \n r)\<br>
+&amp;且该合式公式为可满足式\<br>
+(6)&amp;p\w q\w (\n p\v \n q)\<br>
+\iff&amp;(p\w q\w \n p)\v(p\w q\w \n q)\<br>
+\iff&amp;0\<br>
+&amp;可知主析取范式为:0\<br>
+&amp;主合取范式为:(p\v q)\w(p\v\n q)\w(\n p\v q)\w(\n p\v\n q)\<br>
+&amp;且该合式公式为永假式\<br>
+\end{align}<br>
+$$</p>
+<h2><span id="text14">$\text{1.4}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/34.png" alt></p>
+<p>有，<code>p</code>既是关于<code>p</code>的主析取范式，又是关于<code>p</code>的主合取范式</p>
+<h2><span id="text15">$\text{1.5}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/28.png" alt><br>
+$$<br>
+Q\v R,\n Q\vDash R<br>
+$$</p>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/29.png" alt></p>
+<h2><span id="text16">$\text{1.6}$</span></h2>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/30.png" alt></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">terms</span><span class="token punctuation">(</span>exp<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">int</span><span class="token punctuation">:</span>
+    variables <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    var_list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    operations <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'or'</span><span class="token punctuation">,</span> <span class="token string">'and'</span><span class="token punctuation">,</span> <span class="token string">'not'</span><span class="token punctuation">,</span> <span class="token string">'('</span><span class="token punctuation">,</span> <span class="token string">')'</span><span class="token punctuation">}</span>
+
+    exp <span class="token operator">=</span> <span class="token string">' ( '</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>exp<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'('</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    exp <span class="token operator">=</span> <span class="token string">' ) '</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>exp<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">')'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    tokens <span class="token operator">=</span> exp<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> t <span class="token keyword">in</span> tokens<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> t <span class="token keyword">not</span> <span class="token keyword">in</span> operations <span class="token keyword">and</span> t <span class="token keyword">not</span> <span class="token keyword">in</span> variables<span class="token punctuation">:</span>
+            variables<span class="token punctuation">[</span>t<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">None</span>
+            var_list<span class="token punctuation">.</span>append<span class="token punctuation">(</span>t<span class="token punctuation">)</span>
+
+    cnt_true <span class="token operator">=</span> <span class="token number">0</span>
+    cnt_false <span class="token operator">=</span> <span class="token number">0</span>
+    lim <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>var_list<span class="token punctuation">)</span>
+
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>lim<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> b <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>var_list<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> i <span class="token operator">&amp;</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> b<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+                variables<span class="token punctuation">[</span>var_list<span class="token punctuation">[</span>b<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'True'</span>
+            <span class="token keyword">else</span><span class="token punctuation">:</span>
+                variables<span class="token punctuation">[</span>var_list<span class="token punctuation">[</span>b<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'False'</span>
+        const_exp <span class="token operator">=</span> exp
+        <span class="token keyword">for</span> v <span class="token keyword">in</span> variables<span class="token punctuation">:</span>
+            const_exp <span class="token operator">=</span> const_exp<span class="token punctuation">.</span>replace<span class="token punctuation">(</span>v<span class="token punctuation">,</span> variables<span class="token punctuation">[</span>v<span class="token punctuation">]</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token builtin">eval</span><span class="token punctuation">(</span>const_exp<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            cnt_true <span class="token operator">+=</span> <span class="token number">1</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            cnt_false <span class="token operator">+=</span> <span class="token number">1</span>
+            
+    <span class="token keyword">return</span> cnt_false
+
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>terms<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/31.png" alt></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>高数应用</title>
+    <url>/2023/04/14/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<div align="center"><font size="24" face="宋体">高等数学不等式问题探讨</font></div>
+<span id="more"></span>
+<div align="center"><font size="6" face="仿宋">hugo</font></div>
+<p>​				<font size="4.5" face="楷体">[<b>摘要</b>]</font>:本文将介绍大学高等数学中遇到的相关不等式问题，介绍一些著名的不等式，如算术几何平均不等式、$\text{Bernoulli}$不等式、$\text{Jensen}$不等式、$\text{Cauchy}$不等式、$\text{Young}$不等式、$\text{Holder}$不等式、$\text{Minkowski}$不等式，以及在遇到不等式问题的常用处理办法，利用构造函数，求导分析单调性等方法，最后再结合一些例题进行具体分析讨论。</p>
+<p>​				<font size="4.5" face="楷体">[<b>关键词</b>]</font>:算术几何平均不等式；$\text{Jensen}$不等式；$\text{Cauchy}$不等式；$\text{Young}$不等式；$\text{Bernoulli}$不等式；$\text{Holder}$不等式；$\text{Minkowski}$不等式；构造函数；变上限积分</p>
+<h1><span id="1-引言">1   引言</span></h1>
+<p>​	在第五届全国大学生数学竞赛非数学类决赛第三题是一道与常微分方程有关的不等式问题：<br>
+$$<br>
+设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
+f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
+试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
+$$<br>
+​	在第八届全国大学生数学竞赛非数学类决赛第二题是一道不等式的综合问题：<br>
+$$<br>
+设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
+$$<br>
+​	在第八届全国大学生数学竞赛非数学类初赛第二题是一道构造变上限积分的题目：<br>
+$$<br>
+设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\<br>
+有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
+$$<br>
+​	在第十届全国大学生数学竞赛非数学类第三题是一道典型的运用到了积分形式的$Cauchy$不等式的题目：<br>
+$$<br>
+设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
+1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
+$$<br>
+​	可以看到不等式问题在考试中的考察还是比较多的，特别是近年有增多的趋势，其次在课后练习及相关研究中，不等式问题具有其独特的数学魅力。不等式问题是许多证明题的重要内容，涵盖的知识点丰富，有许多重要的不等式，这些经典的不等式的处理方法多种多样，在这里我将介绍其中个别方法，并对其在n维度量空间的推广加以介绍。同时将就大学高等数学中出现的不等式问题常用到的方法进行分析，如在导数部分常常用到的构造函数求导分析单调性，在积分部分通过构造变上限积分来证明不等式的问题，同时部分不等式证明题还可以用到$\text{Taylor}$展开、微分中值定理和积分中值定理进行证明。</p>
+<h1><span id="2-几个重要不等式">2   几个重要不等式</span></h1>
+<h4><span id="算术几何平均不等式">算术几何平均不等式</span></h4>
+<p>设$n\in N^*,a_i&gt;0(i=1,2,3\dots n)$,则有<br>
+$$<br>
+{n\over\frac1{a_1}+\frac1{a_2}+\dots +\frac1{a_n}}\le\sqrt[n]{a_1a_2\dots a_n}\le{a_1+a_2+\dots+a_n\over n}\le\sqrt{a_1^2+a_2^2+\dots+a_n^2\over n}\<br>
+$$<br>
+当且仅当$a_1=a_2=\dots=a_n$时等号成立</p>
+<p>**证明：**由归纳法易证</p>
+<h4><span id="textbernoulli不等式">$\text{Bernoulli}$不等式</span></h4>
+<p>当$x\ge -1$时，有<br>
+$$<br>
+\begin{align}<br>
+&amp;(1)若\alpha&gt;1,则有(1+x)^\alpha\ge1+\alpha x;\<br>
+&amp;(2)若0&lt;\alpha&lt;1,则有(1+x)^\alpha\le1+\alpha x.<br>
+\end{align}<br>
+$$<br>
+**证明：**构造函数求导分析单调性易证</p>
+<h4><span id="textjensen不等式">$\text{Jensen}$不等式</span></h4>
+<p>设f(x)是区间$I$上的凸函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
+$$<br>
+f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\le\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).\<br>
+$$<br>
+如果f(x)是区间I上的凹函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
+$$<br>
+f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\ge\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).<br>
+$$</p>
+<p><strong>证明</strong>：由归纳法易证</p>
+<h4><span id="textyoung不等式">$\text{Young}$不等式</span></h4>
+<p>设$a,b\ge0,p,q&gt;1,\frac1p+\frac1q=1$,则有<br>
+$$<br>
+ab\le\frac{a^p}p+\frac{b^q}q<br>
+$$<br>
+当且仅当$a^{\frac1q}=b^{\frac1p}$时等号成立</p>
+<p><strong>证明：</strong></p>
+<p>若$a=b=0$，则有不等式成立，否则不妨设$b&gt;0$。</p>
+<p>考虑证明$\text{Young}$不等式的等价形式<br>
+$$<br>
+\begin{align}<br>
+&amp;a^{\frac1p}b^{\frac1q}\le\frac ap+\frac bq\<br>
+&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab\right)+1-\frac1p\<br>
+&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab -1\right)+1<br>
+\end{align}<br>
+$$<br>
+作换元$x=\frac ab$，则等价于<br>
+$$<br>
+\left(x\right)^{\frac1p}\le\frac1p\cdot\left(x -1\right)+1<br>
+$$<br>
+构造函数，结合函数的上凸性易证</p>
+<h5><span id="n度量空间的textyoung不等式">n度量空间的$\text{Young}$不等式</span></h5>
+<p>设$x_i\ge0,p_i\ge1(i=1,2,\dots,n),\sum_{i=1}^n\frac1{p_i}=1$,则有<br>
+$$<br>
+\prod_{i=1}^n\le\sum_{i=1}^n\frac{x_i^{p_i}}{p_i}<br>
+$$<br>
+当且仅当$\frac{x_1^{p_1}}{p_1}=\frac{x_2^{p_2}}{p_2}=\dots=\frac{x_n^{p_n}}{p_n}$时等式成立</p>
+<p><strong>证明：</strong></p>
+<p>与证明2度量空间的$\text{Young}$不等式的方法类似，只不过需要利用$n-1$维函数$f(x_1,x_2,\dots,x_{n-1})$的上凸性<br>
+$$<br>
+f(x_1,x_2,\dots,x_{n-1})=\prod_{i=1}^{n-1}x_i^{\frac1{p_i}}<br>
+$$<br>
+易证</p>
+<h4><span id="textcauchy不等式">$\text{Cauchy}$不等式</span></h4>
+<p>设$a_i,b_i\in R,i=1,2,\dots,n$,有<br>
+$$<br>
+\left(\sum_{i=1}^na_ib_i\right)^2\le\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)<br>
+$$<br>
+当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立<br>
+$$<br>
+\frac{a_1}{b_1}=\frac{a_2}{b_2}=\dots=\frac{a_n}{b_n}<br>
+$$</p>
+<p><strong>证明：</strong><br>
+法一:由归纳法易证<br>
+法二:构造二次函数证明<br>
+做二次函数<br>
+$$<br>
+\begin{align}<br>
+f(x)&amp;=\left(\sum_{i=1}^na_i^2\right)x^2+2\left(\sum_{i=1}^na_ib_i\right)x+\left(\sum_{i=1}^nb_i^2\right)\<br>
+&amp;=\sum_{i=1}^n(a_ix+b_i)^2\<br>
+&amp;\ge0<br>
+\end{align}<br>
+$$<br>
+由于<br>
+$$<br>
+\left(\sum_{i=1}^na_i^2\right)&gt;0<br>
+$$<br>
+则有<br>
+$$<br>
+\Delta=4\left(\sum_{i=1}^na_ib_i\right)^2-4\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)\le 0<br>
+$$<br>
+即证</p>
+<h4><span id="textholder不等式">$\text{Holder}$不等式</span></h4>
+<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q&gt;1,\frac1p+\frac1q=1$，则有<br>
+$$<br>
+\sum_{i=1}^na_ib_i\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
+$$<br>
+当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
+<p>易见$\text{Cauchy}$不等式是$\text{Holder}$不等式的特例。</p>
+<p><strong>证明：</strong></p>
+<p>若$a_1=\dots=a_n=0$或$b_1=\dots=b_n=0$则显然结论成立，否则不妨设$a_1,b_1&gt;0$。</p>
+<p>令<br>
+$$<br>
+t=\left(\sum_{i=1}^na_i^p\over\sum_{i=1}^nb_i^q\right)^{\frac1{pq}}<br>
+$$<br>
+于是有<br>
+$$<br>
+\begin{align}<br>
+&amp;\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)=\frac1p\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}\<br>
+&amp;\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)=\frac1q\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
+\end{align}<br>
+$$<br>
+由$\text{Young}$不等式易知该不等式成立<br>
+$$<br>
+\begin{align}<br>
+\sum_{i=1}^na_ib_i&amp;=\sum_{i=1}^n(t\cdot a_i)(\frac{b_i}t)\<br>
+&amp;\le\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)+\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)<br>
+\end{align}<br>
+$$<br>
+由$\text{Young}$不等式成立的条件易知该不等式成立的条件即为当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时。</p>
+<p>即证</p>
+<p>$\text{Holder}$不等式还可以做一个小推广</p>
+<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q,r&gt;1,\frac1p+\frac1q=\frac1r$，则有<br>
+$$<br>
+\left(\sum_{i=1}^na_ib_i\right)^{\frac1r}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
+$$<br>
+当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
+<p><strong>证明：</strong></p>
+<p>考虑到$r&lt;p,r&lt;q,\frac rp+\frac rq=1$，然后应用$\text{Holder}$不等式即可得证。</p>
+<h5><span id="n度量空间的textholder不等式">n度量空间的$\text{Holder}$不等式</span></h5>
+<p>设$x_{i,j}\ge0,r&gt;1,p_i&gt;1,\sum_{i=1}^n\frac1{p_i}=\frac1r$，其中$(1\le i\le n,1\le j\le m)$，则有<br>
+$$<br>
+\left(\sum_{j=1}^m\left(\prod_{i=1}^nx_{i,j}\right)^r\right)^{\frac1r}\le\prod_{i=1}^n\left(\sum_{j=1}^mx_{i,j}^{p_i}\right)^{\frac1{p_i}}<br>
+$$<br>
+定义一组向量$\vec {x_i}=(x_{i,1}^{p_i},x_{i,2}^{p_i},\dots,x_{i,m}^{p_i}),i=1,2,\dots,n$,当且仅当$\vec {x_i}$相互平行时等式成立。</p>
+<p><strong>证明：</strong></p>
+<p>用$\text{Holder}$不等式和归纳法进行证明即可。</p>
+<h4><span id="textminkowski不等式">$\text{Minkowski}$不等式</span></h4>
+<p>设$a_i,b_i\ge0,p&gt;1$，则有<br>
+$$<br>
+\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1p}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}+\left(\sum_{i=1}^nb_i^p\right)^{\frac1p}<br>
+$$<br>
+当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立</p>
+<p><strong>证明：</strong></p>
+<p>由$\text{Holder}$不等式有<br>
+$$<br>
+\begin{align}<br>
+\left(\sum_{i=1}^n(a_i+b_i)^p\right)&amp;=\sum_{i=1}^n(a_i+b_i)^{p-1}a_i+\sum_{i=1}^n(a_i+b_i)^{p-1}b_i\<br>
+&amp;\le\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum a_i^p\right)^{\frac1p}+\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum b_i^p\right)^{\frac1p}\<br>
+&amp;=\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)\<br>
+&amp;=\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)<br>
+\end{align}<br>
+$$<br>
+由$\text{Holder}$不等式易知不等式的成立当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时。</p>
+<p>即证。</p>
+<h1><span id="3-不等式证明常用方法">3   不等式证明常用方法</span></h1>
+<h3><span id="放缩法">放缩法</span></h3>
+<p>如第五届全国大学生数学竞赛非数学类决赛第三题<br>
+$$<br>
+设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
+f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
+试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
+$$<br>
+<strong>解：</strong></p>
+<p>在求导和利用分离变量法求得<br>
+$$<br>
+\begin{align}<br>
+&amp;f’(x)=-\frac{e^{-x}}{1+x}\<br>
+&amp;f’(x)&lt;0且f(0)=1\<br>
+&amp;有f(x)\le1\<br>
+&amp;另一方面\<br>
+&amp;f(x)=f(0)-\int_0^x\frac{e^{-t}}{1+t}dt\ge1-\int_0^xe^{-t}dt=e^{-x}.<br>
+\end{align}<br>
+$$<br>
+此题就是典型的利用放缩法求证不等式</p>
+<h3><span id="求导法">求导法</span></h3>
+<p>如第八届全国大学生数学竞赛非数学类决赛第二题<br>
+$$<br>
+设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
+$$<br>
+<strong>解：</strong><br>
+$$<br>
+\begin{align}<br>
+&amp;f(x)=\frac1{x^2}-\frac1{\tan^2 x}\left(0&lt;x&lt;\frac\pi2\right),则\<br>
+&amp;f’(x)={2(x^3\cos x-\sin^3x)\over x^3\sin^3x}\<br>
+&amp;令g(x)={six\over \sqrt[3]{\cos x}}-x\left(0&lt;x&lt;\frac\pi2\right)\<br>
+&amp;g’(x)=\frac23\cos^{\frac23}x+\frac13\cos^{-\frac43}x-1\<br>
+&amp;结合均值不等式可得g’(x)&gt;0,又g(0)=0\<br>
+&amp;则有g(x)&gt;0\<br>
+&amp;故f’(x)&lt;0,从而f(x)单调递减\<br>
+&amp;又\lim\limits_{x\rightarrow \frac\pi2-}=\frac4{\pi^2};\lim\limits_{x\rightarrow0+}=\frac23\<br>
+&amp;故即可得证<br>
+\end{align}<br>
+$$</p>
+<h3><span id="构造函数变上限积分">构造函数（变上限积分）</span></h3>
+<p>如第八届全国大学生数学竞赛非数学类初赛第二题：<br>
+$$<br>
+设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
+$$<br>
+<strong>解：</strong></p>
+<p>构造<br>
+$$<br>
+\begin{align}<br>
+&amp;令F(x)=\left(\int_0^xf(t)dt\right)^2-\int_0^xf^3(t)dt\<br>
+&amp;求导有，F’(x)=f(x)\left(2\int_0^xf(t)dt-f^2(x)\right)\<br>
+&amp;令G(x)=2\int_0^xf(t)dt-f^2(x)\<br>
+&amp;G’(x)=2f(x)(1-f’(x))\<br>
+&amp;有G’(x)&gt;0,则G(x)单调递增\<br>
+&amp;又G(0)=0,则G(x)&gt;0\<br>
+&amp;有F’(X)&gt;0,则F(x)单调递增\<br>
+&amp;又F(0)=0\<br>
+&amp;即可得证<br>
+\end{align}<br>
+$$</p>
+<h3><span id="利用重要不等式">利用重要不等式</span></h3>
+<p>如第十届全国大学生数学竞赛非数学类第三题<br>
+$$<br>
+设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
+1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
+$$<br>
+<strong>解：</strong></p>
+<p>所证式子的左式由$\text{Cauchy}$不等式即证</p>
+<p>右式由于由基本不等式（算术几何平均不等式的二阶形式）<br>
+$$<br>
+\begin{align}<br>
+\int_0^1f(x)dx\int_0^1\frac3{f(x)}dx&amp;\le\frac14\left(\int_0^1f(x)dx+\int_0^1\frac3{f(x)}dx\right)^2\<br>
+&amp;\le4<br>
+\end{align}<br>
+$$<br>
+即证</p>
+]]></content>
+  </entry>
+</search>
