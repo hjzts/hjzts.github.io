@@ -4,13 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="字典序, C,Python,数分，高代，离散等">
-    <meta name="description" content="字典序
-说在前面
-
-字典序(dictionary order)，又称字母序(alphabetical order)，原意是表示英文单词在字典中的先后顺序，后引申为任意两个字符串的大小关系
-
-那么大家就清楚了这指的是一种大小关系，一种序，正如">
+    <meta name="keywords" content="标签, C,Python,数分，高代，离散等">
+    <meta name="description" content="今天阳光正好">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -22,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>字典序 | hugo</title>
+    <title>标签 | hugo</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -340,12 +335,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/007.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/008.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">字典序</h1>
+                    <h1 class="description center-align post-title">tags</h1>
                 </div>
             </div>
         </div>
@@ -381,7 +376,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-05-25
+                    2023-09-29
                 </div>
                 
 
@@ -390,14 +385,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    503
+                    0
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    1 分
                 </div>
                 
 
@@ -425,72 +420,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1><span id="字典序">字典序</span></h1>
-<h2><span id="说在前面">说在前面</span></h2>
-<blockquote>
-<p>字典序(dictionary order)，又称字母序(alphabetical order)，原意是表示英文单词在字典中的先后顺序，后引申为任意两个字符串的大小关系</p>
-</blockquote>
-<p>那么大家就清楚了这指的是一种大小关系，一种序，正如我们数学分析中的有序集的序有类似的概念，这里大家需要与字典树(Tire)区分开来，字典树实质上是一种数据结构中的用于存储和查找单词的一种树状结构，详情可以看这个<a target="_blank" rel="noopener" href="https://www.hugohealthy.top/2023/05/25/Trie/">tire</a>。(在我的另一篇blog可以看到哦)</p>
-<h2><span id="字典序算法相关">字典序算法相关</span></h2>
-<h3><span id="字典序全排列问题">字典序全排列问题</span></h3>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h&gt;</span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h&gt;</span></span>
-<span class="token comment">//交换两个字符，注意这里传过去的是地址，改变的是地址对应的值</span>
-<span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>a<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">char</span> temp <span class="token operator">=</span> <span class="token operator">*</span>a<span class="token punctuation">;</span>
-    <span class="token operator">*</span>a <span class="token operator">=</span> <span class="token operator">*</span>b<span class="token punctuation">;</span>
-    <span class="token operator">*</span>b <span class="token operator">=</span> temp<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token comment">//将一个字符串begin到end的部分逆序</span>
-<span class="token keyword">void</span> <span class="token function">reverse</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>str<span class="token punctuation">,</span> <span class="token keyword">int</span> begin<span class="token punctuation">,</span> <span class="token keyword">int</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">while</span> <span class="token punctuation">(</span>begin <span class="token operator">&lt;</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token function">swap</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>str<span class="token punctuation">[</span>begin<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>str<span class="token punctuation">[</span>end<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        begin<span class="token operator">++</span><span class="token punctuation">;</span>
-        end<span class="token operator">--</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">int</span> <span class="token function">next_permutation</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>str<span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">;</span> i <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&lt;</span> str<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">break</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token comment">//从后往前找到第一个正序的</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>		<span class="token comment">//表示找完了，已经全部是逆序了</span>
-        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token comment">//从i开始找到前面的第一个比str[i]大的，那么就进行交换</span>
-<span class="token comment">//再把i+1以后的逆序一遍</span>
-    <span class="token keyword">int</span> j<span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&gt;</span> i<span class="token punctuation">;</span> j<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">&gt;</span> str<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">break</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-    <span class="token function">swap</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>str<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>str<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">reverse</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"abd"</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">do</span> <span class="token punctuation">{</span>
-        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%s\n"</span><span class="token punctuation">,</span> str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span> <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">next_permutation</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>该代码可以实现一个<strong>顺序的字符串</strong>的所有字母的按字典序输出的全排列。</p>
-<p>否则的话就是输出比改字符串的字典序大于等于的字符串。</p>
-<p>当然简单调整当然可以是任意顺序的一个字符串的操作。</p>
-<h3><span id="字典序排序">字典序排序</span></h3>
-<p>参考资料：</p>
-<ol>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37050329/article/details/86637183">https://blog.csdn.net/qq_37050329/article/details/86637183</a></li>
-</ol>
-
+                
                 
             </div>
             <hr/>
@@ -516,7 +446,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hjzts.github.io/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/">https://hjzts.github.io/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/</a>
+                    <a href="https://hjzts.github.io/tags/index-1.html">https://hjzts.github.io/tags/index-1.html</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -591,9 +521,9 @@
 
 <script type="text/javascript">
     disqus_config = function () {
-        this.page.url = 'https://hjzts.github.io/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/';
-        this.page.identifier = '/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/';
-        this.page.title = '字典序';
+        this.page.url = 'https://hjzts.github.io/tags/index-1.html';
+        this.page.identifier = '/tags/index-1.html';
+        this.page.title = 'tags';
     };
     let disqus_shortname = '';
 
@@ -623,66 +553,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/05/25/hammingDistance/">
+                <a href="/tags/index-1.html">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/013.jpg" class="responsive-img" alt="hammingDistance">
+                        <img src="/medias/featureimages/008.jpg" class="responsive-img" alt="tags">
                         
-                        <span class="card-title">hammingDistance</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-05-25
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-category">
-                                    数据结构
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E5%A4%A7%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%8C%96/">
-                        <span class="chip bg-color">大作业优化</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2023/05/25/Trie/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/017.jpg" class="responsive-img" alt="Trie">
-                        
-                        <span class="card-title">Trie</span>
+                        <span class="card-title">tags</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -693,7 +575,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-25
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-09-29
                             </span>
                         <span class="publish-author">
                             
@@ -703,6 +585,45 @@
                         </span>
                     </div>
                 </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                本篇&nbsp;<i class="far fa-dot-circle"></i>
+            </div>
+            <div class="card">
+                <a href="/tags/index-1.html">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/008.jpg" class="responsive-img" alt="tags">
+                        
+                        <span class="card-title">tags</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-09-29
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            hugo
+                            
+                        </span>
+                    </div>
+                </div>
+
                 
             </div>
         </div>
