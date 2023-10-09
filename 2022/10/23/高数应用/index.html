@@ -53,9 +53,9 @@ hugo
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="hugo" type="application/atom+xml">
+
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="hugo" type="application/atom+xml">
 </head>
 
 
@@ -444,9 +444,9 @@ hugo
 <h1><span id="1-引言">1   引言</span></h1>
 <p>​	在第五届全国大学生数学竞赛非数学类决赛第三题是一道与常微分方程有关的不等式问题：<br>
 $$<br>
-设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
-f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
-试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
+设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\</p>
+<p>f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\</p>
+<p>试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
 $$<br>
 ​	在第八届全国大学生数学竞赛非数学类决赛第二题是一道不等式的综合问题：<br>
 $$<br>
@@ -471,7 +471,7 @@ $$<br>
 $$<br>
 当且仅当$a_1=a_2=\dots=a_n$时等号成立</p>
 <p>**证明：**由归纳法易证</p>
-<h4><span id="textbernoulli不等式">$\text{Bernoulli}$不等式</span></h4>
+<h4><span id="bernoulli不等式">Bernoulli不等式</span></h4>
 <p>当$x\ge -1$时，有<br>
 $$<br>
 \begin{align}<br>
@@ -480,7 +480,7 @@ $$<br>
 \end{align}<br>
 $$<br>
 **证明：**构造函数求导分析单调性易证</p>
-<h4><span id="textjensen不等式">$\text{Jensen}$不等式</span></h4>
+<h4><span id="jensen不等式">Jensen不等式</span></h4>
 <p>设f(x)是区间$I$上的凸函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
 $$<br>
 f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\le\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).\<br>
@@ -490,7 +490,7 @@ $$<br>
 f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\ge\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).<br>
 $$</p>
 <p><strong>证明</strong>：由归纳法易证</p>
-<h4><span id="textyoung不等式">$\text{Young}$不等式</span></h4>
+<h4><span id="young不等式">Young不等式</span></h4>
 <p>设$a,b\ge0,p,q&gt;1,\frac1p+\frac1q=1$,则有<br>
 $$<br>
 ab\le\frac{a^p}p+\frac{b^q}q<br>
@@ -511,7 +511,7 @@ $$<br>
 \left(x\right)^{\frac1p}\le\frac1p\cdot\left(x -1\right)+1<br>
 $$<br>
 构造函数，结合函数的上凸性易证</p>
-<h5><span id="n度量空间的textyoung不等式">n度量空间的$\text{Young}$不等式</span></h5>
+<h5><span id="n度量空间的young不等式">n度量空间的Young不等式</span></h5>
 <p>设$x_i\ge0,p_i\ge1(i=1,2,\dots,n),\sum_{i=1}^n\frac1{p_i}=1$,则有<br>
 $$<br>
 \prod_{i=1}^n\le\sum_{i=1}^n\frac{x_i^{p_i}}{p_i}<br>
@@ -523,7 +523,7 @@ $$<br>
 f(x_1,x_2,\dots,x_{n-1})=\prod_{i=1}^{n-1}x_i^{\frac1{p_i}}<br>
 $$<br>
 易证</p>
-<h4><span id="textcauchy不等式">$\text{Cauchy}$不等式</span></h4>
+<h4><span id="cauchy不等式">Cauchy不等式</span></h4>
 <p>设$a_i,b_i\in R,i=1,2,\dots,n$,有<br>
 $$<br>
 \left(\sum_{i=1}^na_ib_i\right)^2\le\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)<br>
@@ -552,7 +552,7 @@ $$<br>
 \Delta=4\left(\sum_{i=1}^na_ib_i\right)^2-4\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)\le 0<br>
 $$<br>
 即证</p>
-<h4><span id="textholder不等式">$\text{Holder}$不等式</span></h4>
+<h4><span id="holder不等式">Holder不等式</span></h4>
 <p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q&gt;1,\frac1p+\frac1q=1$，则有<br>
 $$<br>
 \sum_{i=1}^na_ib_i\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
@@ -589,7 +589,7 @@ $$<br>
 当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
 <p><strong>证明：</strong></p>
 <p>考虑到$r&lt;p,r&lt;q,\frac rp+\frac rq=1$，然后应用$\text{Holder}$不等式即可得证。</p>
-<h5><span id="n度量空间的textholder不等式">n度量空间的$\text{Holder}$不等式</span></h5>
+<h5><span id="n度量空间的holder不等式">n度量空间的Holder不等式</span></h5>
 <p>设$x_{i,j}\ge0,r&gt;1,p_i&gt;1,\sum_{i=1}^n\frac1{p_i}=\frac1r$，其中$(1\le i\le n,1\le j\le m)$，则有<br>
 $$<br>
 \left(\sum_{j=1}^m\left(\prod_{i=1}^nx_{i,j}\right)^r\right)^{\frac1r}\le\prod_{i=1}^n\left(\sum_{j=1}^mx_{i,j}^{p_i}\right)^{\frac1{p_i}}<br>
@@ -597,7 +597,7 @@ $$<br>
 定义一组向量$\vec {x_i}=(x_{i,1}^{p_i},x_{i,2}^{p_i},\dots,x_{i,m}^{p_i}),i=1,2,\dots,n$,当且仅当$\vec {x_i}$相互平行时等式成立。</p>
 <p><strong>证明：</strong></p>
 <p>用$\text{Holder}$不等式和归纳法进行证明即可。</p>
-<h4><span id="textminkowski不等式">$\text{Minkowski}$不等式</span></h4>
+<h4><span id="minkowski不等式">Minkowski不等式</span></h4>
 <p>设$a_i,b_i\ge0,p&gt;1$，则有<br>
 $$<br>
 \left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1p}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}+\left(\sum_{i=1}^nb_i^p\right)^{\frac1p}<br>
@@ -1154,7 +1154,7 @@ $$<br>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">10.7k</span>
+                        class="white-color">11.8k</span>
             
             
             

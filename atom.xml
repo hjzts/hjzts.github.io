@@ -49,16 +49,15 @@
     <link href="https://hjzts.github.io/2023/05/25/hammingDistance/"/>
     <id>https://hjzts.github.io/2023/05/25/hammingDistance/</id>
     <published>2023-05-25T12:10:08.000Z</published>
-    <updated>2023-10-09T16:14:58.107Z</updated>
+    <updated>2023-10-09T17:12:52.558Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;[toc]&lt;/p&gt;
-&lt;h1&gt;&lt;span id=&quot;__uint128_t_&quot;&gt;&lt;code&gt;__uint128_t_&lt;/code&gt;&lt;/span&gt;&lt;/h1&gt;
-&lt;p&gt;最近越来越多的协议会定义 16 字节长的整形，gcc 在 4.6 以上版本就可以使用 __int128_t</summary>
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;__uint128_t_&quot;&gt;&lt;code&gt;__uint128_t_&lt;/code&gt;&lt;/span&gt;&lt;/h1&gt;
+&lt;p&gt;最近越来越多的协议会定义 16 字节长的整形，gcc 在 4.6 以上版本就可以使用 __int128_t &amp;amp;</summary>
         
       
     
@@ -100,15 +99,18 @@
     <link href="https://hjzts.github.io/2023/05/25/Trie/"/>
     <id>https://hjzts.github.io/2023/05/25/Trie/</id>
     <published>2023-05-25T11:57:38.000Z</published>
-    <updated>2023-10-09T16:15:03.656Z</updated>
+    <updated>2023-10-09T17:12:46.396Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
-&lt;h1&gt;&lt;span</summary>
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;Tire树，即字典树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;说白了，就是一棵大树，这棵树的每个除了根节点的结点都存储了一个字符。&lt;/p&gt;
+&lt;h2&gt;&lt;span</summary>
         
       
     
@@ -126,7 +128,7 @@
     <link href="https://hjzts.github.io/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/"/>
     <id>https://hjzts.github.io/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/</id>
     <published>2023-05-25T11:52:24.000Z</published>
-    <updated>2023-10-09T16:16:10.377Z</updated>
+    <updated>2023-10-09T17:17:24.205Z</updated>
     
     
       
@@ -198,7 +200,7 @@
     <link href="https://hjzts.github.io/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/"/>
     <id>https://hjzts.github.io/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</id>
     <published>2022-10-22T16:00:00.000Z</published>
-    <updated>2023-10-09T16:07:03.113Z</updated>
+    <updated>2023-10-09T17:15:23.875Z</updated>
     
     
     <summary type="html">&lt;div align=&quot;center&quot;&gt;&lt;font size=&quot;24&quot; face=&quot;宋体&quot;&gt;高等数学不等式问题探讨&lt;/font&gt;&lt;/div&gt;</summary>
