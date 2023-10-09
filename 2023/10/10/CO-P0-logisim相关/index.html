@@ -448,25 +448,25 @@
 <p>这里首先考虑到这里必然最大的输出也只是6（因为只有5个数），那么这思路就来了。利用一个6bit的中间量<code>hot</code>(有点独热码的那个意思，因为只会有一项为1，其余为0）来处理。</p>
 <p>如果某一个数小于等于5，那就将这个<code>hot</code>的对应位置为1。然后将每个输入的<code>hot</code><strong>或</strong>起来，那么就得到了个6bit 2进制数，其中有1的位置代表存在该数（由于计数是从0开始，所以最终得到结果的时候需要加个1）</p>
 <p><strong>电路图如图所示：</strong></p>
-<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009213429807.png" alt="image-20231009213429807"></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/1.png" alt></p>
 <p>把这个作为一个子电路，对每一个input进行处理，再将得到的<code>hot</code><strong>或</strong>起来。</p>
 <p>最后利用一个bit finder找最低位的0就可以了。这里因为引入的是6位，就能够解决输入为1 2 3 4 5的问题。如果使用5位就需要特判。</p>
-<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009213952876.png" alt="image-20231009213952876"></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/2.png" alt></p>
 <h2><span id="第二题">第二题</span></h2>
 <p><strong>题目描述：</strong></p>
-<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009214659761.png" alt="image-20231009214659761"></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/3.png" alt></p>
 <p>输入为2bit方向信号，1bit clk，1bit reset(异步复位，直接接在寄存器reset端即可)。</p>
 <p>类似课下的navigation的题目，这里题目要求使用mealy状态机。最开始位于1处，根据输入的2bit方向信息前往下一个位置，如果没有（或者撞墙）则停留在当前位置。输出为下一步的位置标号。</p>
 <p>输出4bit位置信号</p>
 <p>**状态转移图：**直接根据题目信息即可得到状态转移图。这里直接使用4bit二进制码或者3bit二进制码来表示状态即可。</p>
 <p>**打真值表：**略</p>
 <p>Mealy型状态机：</p>
-<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009220410792.png" alt="image-20231009220410792"></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/4.png" alt></p>
 <p>补充好status状态转移部分和output输出逻辑即可。</p>
 <p><strong>需要注意的是：</strong></p>
 <p>这里可以直接在寄存器前面接输出（如上图红线部分，当然这里是使用状态的编码从1开始而且为4bit的情况，其他状态也可以进行修改），在计组讨论区中也有讨论，其实也就是Mealy机的实现模式~~，具体可参见这篇<a target="_blank" rel="noopener" href="https://www.hugohealthy.top">博客</a>~~（还没写）。</p>
 <p><strong>还有一些打表的小细节：</strong></p>
-<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009221422958.png" alt="image-20231009221422958"></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/5.png" alt></p>
 <blockquote>
 <p>第三题</p>
 </blockquote>
@@ -502,12 +502,12 @@
 <p>输出：2bit output</p>
 <p>题目要求使用<code>moore机</code>实现</p>
 <p><strong>状态转移图：</strong></p>
-<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009233512944.png" alt="image-20231009233512944"></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/6.png" alt></p>
 <p>**打真值表：**略</p>
 <p><strong><code>moore机</code></strong>：</p>
-<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009222643962.png" alt="image-20231009222643962"></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/7.png" alt></p>
 <p>当然这里还有更加偷巧的办法，比如：</p>
-<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231010002215554.png" alt="image-20231010002215554"></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/8.png" alt></p>
 <p>然后对每个state进行判断就睡简单的组合逻辑了(这里我并没有测试过，不知道具体实施能否行得通，欢迎批评指正)</p>
 
                 
