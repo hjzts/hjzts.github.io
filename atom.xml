@@ -6,7 +6,7 @@
   <link href="https://hjzts.github.io/atom.xml" rel="self"/>
   
   <link href="https://hjzts.github.io/"/>
-  <updated>2023-10-09T16:14:58.107Z</updated>
+  <updated>2023-10-09T16:25:58.991Z</updated>
   <id>https://hjzts.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CO-P0-logisim相关</title>
+    <link href="https://hjzts.github.io/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/"/>
+    <id>https://hjzts.github.io/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/</id>
+    <published>2023-10-09T16:24:33.000Z</published>
+    <updated>2023-10-09T16:25:58.991Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;关于本次P0,提供我个人的一点拙见&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="CO" scheme="https://hjzts.github.io/categories/CO/"/>
+    
+    
+    <category term="CO" scheme="https://hjzts.github.io/tags/CO/"/>
+    
+  </entry>
   
   <entry>
     <title>hammingDistance</title>

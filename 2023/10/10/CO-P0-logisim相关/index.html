@@ -4,11 +4,14 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="高数应用, C,Python,数分，高代，离散等">
-    <meta name="description" content="高等数学不等式问题探讨
+    <meta name="keywords" content="CO-P0-logisim相关, C,Python,数分，高代，离散等">
+    <meta name="description" content="
+关于本次P0,提供我个人的一点拙见
 
-hugo
-​				[摘要]:本文将介绍大学高等数学中遇到的相关不等式问题，介绍一些著名的不等式，如算术几何平均不等式、$\text{Bernoulli}$不等式、$\text{Jensen}$不等式、$\text">
+第一题
+题目描述：
+给定五个8bit输入，输出一个8bit的在五个输入中没出现的最小正整数。
+这里首先考虑到这里必然最大的输出也只是6（因为只有5个数），那么这思路就来了。利用一个6bit的中间量ho">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -20,7 +23,7 @@ hugo
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>高数应用 | hugo</title>
+    <title>CO-P0-logisim相关 | hugo</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -338,12 +341,12 @@ hugo
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/003.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/022.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">高数应用</h1>
+                    <h1 class="description center-align post-title">CO-P0-logisim相关</h1>
                 </div>
             </div>
         </div>
@@ -367,8 +370,8 @@ hugo
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/">
-                                <span class="chip bg-color">数学分析</span>
+                            <a href="/tags/CO/">
+                                <span class="chip bg-color">CO</span>
                             </a>
                         
                     </div>
@@ -379,8 +382,8 @@ hugo
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/" class="post-category">
-                                数学分析
+                            <a href="/categories/CO/" class="post-category">
+                                CO
                             </a>
                         
                     </div>
@@ -392,7 +395,7 @@ hugo
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-10-23
+                    2023-10-10
                 </div>
                 
 
@@ -401,14 +404,14 @@ hugo
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.9k
+                    736
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    14 分
+                    2 分
                 </div>
                 
 
@@ -436,260 +439,76 @@ hugo
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <div align="center"><font size="24" face="宋体">高等数学不等式问题探讨</font></div>
-<span id="more"></span>
-<div align="center"><font size="6" face="仿宋">hugo</font></div>
-<p>​				<font size="4.5" face="楷体">[<b>摘要</b>]</font>:本文将介绍大学高等数学中遇到的相关不等式问题，介绍一些著名的不等式，如算术几何平均不等式、$\text{Bernoulli}$不等式、$\text{Jensen}$不等式、$\text{Cauchy}$不等式、$\text{Young}$不等式、$\text{Holder}$不等式、$\text{Minkowski}$不等式，以及在遇到不等式问题的常用处理办法，利用构造函数，求导分析单调性等方法，最后再结合一些例题进行具体分析讨论。</p>
-<p>​				<font size="4.5" face="楷体">[<b>关键词</b>]</font>:算术几何平均不等式；$\text{Jensen}$不等式；$\text{Cauchy}$不等式；$\text{Young}$不等式；$\text{Bernoulli}$不等式；$\text{Holder}$不等式；$\text{Minkowski}$不等式；构造函数；变上限积分</p>
-<h1><span id="1-引言">1   引言</span></h1>
-<p>​	在第五届全国大学生数学竞赛非数学类决赛第三题是一道与常微分方程有关的不等式问题：<br>
-$$<br>
-设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
-f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
-试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
-$$<br>
-​	在第八届全国大学生数学竞赛非数学类决赛第二题是一道不等式的综合问题：<br>
-$$<br>
-设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
-$$<br>
-​	在第八届全国大学生数学竞赛非数学类初赛第二题是一道构造变上限积分的题目：<br>
-$$<br>
-设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\<br>
-有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
-$$<br>
-​	在第十届全国大学生数学竞赛非数学类第三题是一道典型的运用到了积分形式的$Cauchy$不等式的题目：<br>
-$$<br>
-设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
-1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
-$$<br>
-​	可以看到不等式问题在考试中的考察还是比较多的，特别是近年有增多的趋势，其次在课后练习及相关研究中，不等式问题具有其独特的数学魅力。不等式问题是许多证明题的重要内容，涵盖的知识点丰富，有许多重要的不等式，这些经典的不等式的处理方法多种多样，在这里我将介绍其中个别方法，并对其在n维度量空间的推广加以介绍。同时将就大学高等数学中出现的不等式问题常用到的方法进行分析，如在导数部分常常用到的构造函数求导分析单调性，在积分部分通过构造变上限积分来证明不等式的问题，同时部分不等式证明题还可以用到$\text{Taylor}$展开、微分中值定理和积分中值定理进行证明。</p>
-<h1><span id="2-几个重要不等式">2   几个重要不等式</span></h1>
-<h4><span id="算术几何平均不等式">算术几何平均不等式</span></h4>
-<p>设$n\in N^*,a_i&gt;0(i=1,2,3\dots n)$,则有<br>
-$$<br>
-{n\over\frac1{a_1}+\frac1{a_2}+\dots +\frac1{a_n}}\le\sqrt[n]{a_1a_2\dots a_n}\le{a_1+a_2+\dots+a_n\over n}\le\sqrt{a_1^2+a_2^2+\dots+a_n^2\over n}\<br>
-$$<br>
-当且仅当$a_1=a_2=\dots=a_n$时等号成立</p>
-<p>**证明：**由归纳法易证</p>
-<h4><span id="textbernoulli不等式">$\text{Bernoulli}$不等式</span></h4>
-<p>当$x\ge -1$时，有<br>
-$$<br>
-\begin{align}<br>
-&amp;(1)若\alpha&gt;1,则有(1+x)^\alpha\ge1+\alpha x;\<br>
-&amp;(2)若0&lt;\alpha&lt;1,则有(1+x)^\alpha\le1+\alpha x.<br>
-\end{align}<br>
-$$<br>
-**证明：**构造函数求导分析单调性易证</p>
-<h4><span id="textjensen不等式">$\text{Jensen}$不等式</span></h4>
-<p>设f(x)是区间$I$上的凸函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
-$$<br>
-f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\le\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).\<br>
-$$<br>
-如果f(x)是区间I上的凹函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
-$$<br>
-f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\ge\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).<br>
-$$</p>
-<p><strong>证明</strong>：由归纳法易证</p>
-<h4><span id="textyoung不等式">$\text{Young}$不等式</span></h4>
-<p>设$a,b\ge0,p,q&gt;1,\frac1p+\frac1q=1$,则有<br>
-$$<br>
-ab\le\frac{a^p}p+\frac{b^q}q<br>
-$$<br>
-当且仅当$a^{\frac1q}=b^{\frac1p}$时等号成立</p>
-<p><strong>证明：</strong></p>
-<p>若$a=b=0$，则有不等式成立，否则不妨设$b&gt;0$。</p>
-<p>考虑证明$\text{Young}$不等式的等价形式<br>
-$$<br>
-\begin{align}<br>
-&amp;a^{\frac1p}b^{\frac1q}\le\frac ap+\frac bq\<br>
-&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab\right)+1-\frac1p\<br>
-&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab -1\right)+1<br>
-\end{align}<br>
-$$<br>
-作换元$x=\frac ab$，则等价于<br>
-$$<br>
-\left(x\right)^{\frac1p}\le\frac1p\cdot\left(x -1\right)+1<br>
-$$<br>
-构造函数，结合函数的上凸性易证</p>
-<h5><span id="n度量空间的textyoung不等式">n度量空间的$\text{Young}$不等式</span></h5>
-<p>设$x_i\ge0,p_i\ge1(i=1,2,\dots,n),\sum_{i=1}^n\frac1{p_i}=1$,则有<br>
-$$<br>
-\prod_{i=1}^n\le\sum_{i=1}^n\frac{x_i^{p_i}}{p_i}<br>
-$$<br>
-当且仅当$\frac{x_1^{p_1}}{p_1}=\frac{x_2^{p_2}}{p_2}=\dots=\frac{x_n^{p_n}}{p_n}$时等式成立</p>
-<p><strong>证明：</strong></p>
-<p>与证明2度量空间的$\text{Young}$不等式的方法类似，只不过需要利用$n-1$维函数$f(x_1,x_2,\dots,x_{n-1})$的上凸性<br>
-$$<br>
-f(x_1,x_2,\dots,x_{n-1})=\prod_{i=1}^{n-1}x_i^{\frac1{p_i}}<br>
-$$<br>
-易证</p>
-<h4><span id="textcauchy不等式">$\text{Cauchy}$不等式</span></h4>
-<p>设$a_i,b_i\in R,i=1,2,\dots,n$,有<br>
-$$<br>
-\left(\sum_{i=1}^na_ib_i\right)^2\le\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)<br>
-$$<br>
-当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立<br>
-$$<br>
-\frac{a_1}{b_1}=\frac{a_2}{b_2}=\dots=\frac{a_n}{b_n}<br>
-$$</p>
-<p><strong>证明：</strong><br>
-法一:由归纳法易证<br>
-法二:构造二次函数证明<br>
-做二次函数<br>
-$$<br>
-\begin{align}<br>
-f(x)&amp;=\left(\sum_{i=1}^na_i^2\right)x^2+2\left(\sum_{i=1}^na_ib_i\right)x+\left(\sum_{i=1}^nb_i^2\right)\<br>
-&amp;=\sum_{i=1}^n(a_ix+b_i)^2\<br>
-&amp;\ge0<br>
-\end{align}<br>
-$$<br>
-由于<br>
-$$<br>
-\left(\sum_{i=1}^na_i^2\right)&gt;0<br>
-$$<br>
-则有<br>
-$$<br>
-\Delta=4\left(\sum_{i=1}^na_ib_i\right)^2-4\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)\le 0<br>
-$$<br>
-即证</p>
-<h4><span id="textholder不等式">$\text{Holder}$不等式</span></h4>
-<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q&gt;1,\frac1p+\frac1q=1$，则有<br>
-$$<br>
-\sum_{i=1}^na_ib_i\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
-$$<br>
-当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
-<p>易见$\text{Cauchy}$不等式是$\text{Holder}$不等式的特例。</p>
-<p><strong>证明：</strong></p>
-<p>若$a_1=\dots=a_n=0$或$b_1=\dots=b_n=0$则显然结论成立，否则不妨设$a_1,b_1&gt;0$。</p>
-<p>令<br>
-$$<br>
-t=\left(\sum_{i=1}^na_i^p\over\sum_{i=1}^nb_i^q\right)^{\frac1{pq}}<br>
-$$<br>
-于是有<br>
-$$<br>
-\begin{align}<br>
-&amp;\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)=\frac1p\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}\<br>
-&amp;\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)=\frac1q\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
-\end{align}<br>
-$$<br>
-由$\text{Young}$不等式易知该不等式成立<br>
-$$<br>
-\begin{align}<br>
-\sum_{i=1}^na_ib_i&amp;=\sum_{i=1}^n(t\cdot a_i)(\frac{b_i}t)\<br>
-&amp;\le\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)+\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)<br>
-\end{align}<br>
-$$<br>
-由$\text{Young}$不等式成立的条件易知该不等式成立的条件即为当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时。</p>
-<p>即证</p>
-<p>$\text{Holder}$不等式还可以做一个小推广</p>
-<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q,r&gt;1,\frac1p+\frac1q=\frac1r$，则有<br>
-$$<br>
-\left(\sum_{i=1}^na_ib_i\right)^{\frac1r}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
-$$<br>
-当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
-<p><strong>证明：</strong></p>
-<p>考虑到$r&lt;p,r&lt;q,\frac rp+\frac rq=1$，然后应用$\text{Holder}$不等式即可得证。</p>
-<h5><span id="n度量空间的textholder不等式">n度量空间的$\text{Holder}$不等式</span></h5>
-<p>设$x_{i,j}\ge0,r&gt;1,p_i&gt;1,\sum_{i=1}^n\frac1{p_i}=\frac1r$，其中$(1\le i\le n,1\le j\le m)$，则有<br>
-$$<br>
-\left(\sum_{j=1}^m\left(\prod_{i=1}^nx_{i,j}\right)^r\right)^{\frac1r}\le\prod_{i=1}^n\left(\sum_{j=1}^mx_{i,j}^{p_i}\right)^{\frac1{p_i}}<br>
-$$<br>
-定义一组向量$\vec {x_i}=(x_{i,1}^{p_i},x_{i,2}^{p_i},\dots,x_{i,m}^{p_i}),i=1,2,\dots,n$,当且仅当$\vec {x_i}$相互平行时等式成立。</p>
-<p><strong>证明：</strong></p>
-<p>用$\text{Holder}$不等式和归纳法进行证明即可。</p>
-<h4><span id="textminkowski不等式">$\text{Minkowski}$不等式</span></h4>
-<p>设$a_i,b_i\ge0,p&gt;1$，则有<br>
-$$<br>
-\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1p}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}+\left(\sum_{i=1}^nb_i^p\right)^{\frac1p}<br>
-$$<br>
-当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立</p>
-<p><strong>证明：</strong></p>
-<p>由$\text{Holder}$不等式有<br>
-$$<br>
-\begin{align}<br>
-\left(\sum_{i=1}^n(a_i+b_i)^p\right)&amp;=\sum_{i=1}^n(a_i+b_i)^{p-1}a_i+\sum_{i=1}^n(a_i+b_i)^{p-1}b_i\<br>
-&amp;\le\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum a_i^p\right)^{\frac1p}+\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum b_i^p\right)^{\frac1p}\<br>
-&amp;=\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)\<br>
-&amp;=\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)<br>
-\end{align}<br>
-$$<br>
-由$\text{Holder}$不等式易知不等式的成立当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时。</p>
-<p>即证。</p>
-<h1><span id="3-不等式证明常用方法">3   不等式证明常用方法</span></h1>
-<h3><span id="放缩法">放缩法</span></h3>
-<p>如第五届全国大学生数学竞赛非数学类决赛第三题<br>
-$$<br>
-设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
-f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
-试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
-$$<br>
-<strong>解：</strong></p>
-<p>在求导和利用分离变量法求得<br>
-$$<br>
-\begin{align}<br>
-&amp;f’(x)=-\frac{e^{-x}}{1+x}\<br>
-&amp;f’(x)&lt;0且f(0)=1\<br>
-&amp;有f(x)\le1\<br>
-&amp;另一方面\<br>
-&amp;f(x)=f(0)-\int_0^x\frac{e^{-t}}{1+t}dt\ge1-\int_0^xe^{-t}dt=e^{-x}.<br>
-\end{align}<br>
-$$<br>
-此题就是典型的利用放缩法求证不等式</p>
-<h3><span id="求导法">求导法</span></h3>
-<p>如第八届全国大学生数学竞赛非数学类决赛第二题<br>
-$$<br>
-设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
-$$<br>
-<strong>解：</strong><br>
-$$<br>
-\begin{align}<br>
-&amp;f(x)=\frac1{x^2}-\frac1{\tan^2 x}\left(0&lt;x&lt;\frac\pi2\right),则\<br>
-&amp;f’(x)={2(x^3\cos x-\sin^3x)\over x^3\sin^3x}\<br>
-&amp;令g(x)={six\over \sqrt[3]{\cos x}}-x\left(0&lt;x&lt;\frac\pi2\right)\<br>
-&amp;g’(x)=\frac23\cos^{\frac23}x+\frac13\cos^{-\frac43}x-1\<br>
-&amp;结合均值不等式可得g’(x)&gt;0,又g(0)=0\<br>
-&amp;则有g(x)&gt;0\<br>
-&amp;故f’(x)&lt;0,从而f(x)单调递减\<br>
-&amp;又\lim\limits_{x\rightarrow \frac\pi2-}=\frac4{\pi^2};\lim\limits_{x\rightarrow0+}=\frac23\<br>
-&amp;故即可得证<br>
-\end{align}<br>
-$$</p>
-<h3><span id="构造函数变上限积分">构造函数（变上限积分）</span></h3>
-<p>如第八届全国大学生数学竞赛非数学类初赛第二题：<br>
-$$<br>
-设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
-$$<br>
-<strong>解：</strong></p>
-<p>构造<br>
-$$<br>
-\begin{align}<br>
-&amp;令F(x)=\left(\int_0^xf(t)dt\right)^2-\int_0^xf^3(t)dt\<br>
-&amp;求导有，F’(x)=f(x)\left(2\int_0^xf(t)dt-f^2(x)\right)\<br>
-&amp;令G(x)=2\int_0^xf(t)dt-f^2(x)\<br>
-&amp;G’(x)=2f(x)(1-f’(x))\<br>
-&amp;有G’(x)&gt;0,则G(x)单调递增\<br>
-&amp;又G(0)=0,则G(x)&gt;0\<br>
-&amp;有F’(X)&gt;0,则F(x)单调递增\<br>
-&amp;又F(0)=0\<br>
-&amp;即可得证<br>
-\end{align}<br>
-$$</p>
-<h3><span id="利用重要不等式">利用重要不等式</span></h3>
-<p>如第十届全国大学生数学竞赛非数学类第三题<br>
-$$<br>
-设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
-1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
-$$<br>
-<strong>解：</strong></p>
-<p>所证式子的左式由$\text{Cauchy}$不等式即证</p>
-<p>右式由于由基本不等式（算术几何平均不等式的二阶形式）<br>
-$$<br>
-\begin{align}<br>
-\int_0^1f(x)dx\int_0^1\frac3{f(x)}dx&amp;\le\frac14\left(\int_0^1f(x)dx+\int_0^1\frac3{f(x)}dx\right)^2\<br>
-&amp;\le4<br>
-\end{align}<br>
-$$<br>
-即证</p>
+                <blockquote>
+<p>关于本次P0,提供我个人的一点拙见</p>
+</blockquote>
+<h2><span id="第一题">第一题</span></h2>
+<p><strong>题目描述：</strong></p>
+<p>给定五个8bit输入，输出一个8bit的在五个输入中没出现的最小正整数。</p>
+<p>这里首先考虑到这里必然最大的输出也只是6（因为只有5个数），那么这思路就来了。利用一个6bit的中间量<code>hot</code>(有点独热码的那个意思，因为只会有一项为1，其余为0）来处理。</p>
+<p>如果某一个数小于等于5，那就将这个<code>hot</code>的对应位置为1。然后将每个输入的<code>hot</code><strong>或</strong>起来，那么就得到了个6bit 2进制数，其中有1的位置代表存在该数（由于计数是从0开始，所以最终得到结果的时候需要加个1）</p>
+<p><strong>电路图如图所示：</strong></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009213429807.png" alt="image-20231009213429807"></p>
+<p>把这个作为一个子电路，对每一个input进行处理，再将得到的<code>hot</code><strong>或</strong>起来。</p>
+<p>最后利用一个bit finder找最低位的0就可以了。这里因为引入的是6位，就能够解决输入为1 2 3 4 5的问题。如果使用5位就需要特判。</p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009213952876.png" alt="image-20231009213952876"></p>
+<h2><span id="第二题">第二题</span></h2>
+<p><strong>题目描述：</strong></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009214659761.png" alt="image-20231009214659761"></p>
+<p>输入为2bit方向信号，1bit clk，1bit reset(异步复位，直接接在寄存器reset端即可)。</p>
+<p>类似课下的navigation的题目，这里题目要求使用mealy状态机。最开始位于1处，根据输入的2bit方向信息前往下一个位置，如果没有（或者撞墙）则停留在当前位置。输出为下一步的位置标号。</p>
+<p>输出4bit位置信号</p>
+<p>**状态转移图：**直接根据题目信息即可得到状态转移图。这里直接使用4bit二进制码或者3bit二进制码来表示状态即可。</p>
+<p>**打真值表：**略</p>
+<p>Mealy型状态机：</p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009220410792.png" alt="image-20231009220410792"></p>
+<p>补充好status状态转移部分和output输出逻辑即可。</p>
+<p><strong>需要注意的是：</strong></p>
+<p>这里可以直接在寄存器前面接输出（如上图红线部分，当然这里是使用状态的编码从1开始而且为4bit的情况，其他状态也可以进行修改），在计组讨论区中也有讨论，其实也就是Mealy机的实现模式~~，具体可参见这篇<a target="_blank" rel="noopener" href="https://www.hugohealthy.top">博客</a>~~（还没写）。</p>
+<p><strong>还有一些打表的小细节：</strong></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009221422958.png" alt="image-20231009221422958"></p>
+<blockquote>
+<p>第三题</p>
+</blockquote>
+<p><strong>题目描述：</strong></p>
+<p>输入：多个4bit二进制数作为一个16进制数</p>
+<p>判断输入的序列中是否存在指定的序列，并得到对应输出。</p>
+<table>
+<thead>
+<tr>
+<th>输入序列</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EEE</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A0E</td>
+<td>2</td>
+</tr>
+<tr>
+<td>0A0</td>
+<td>3</td>
+</tr>
+<tr>
+<td>其他</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>输出：2bit output</p>
+<p>题目要求使用<code>moore机</code>实现</p>
+<p><strong>状态转移图：</strong></p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009233512944.png" alt="image-20231009233512944"></p>
+<p>**打真值表：**略</p>
+<p><strong><code>moore机</code></strong>：</p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231009222643962.png" alt="image-20231009222643962"></p>
+<p>当然这里还有更加偷巧的办法，比如：</p>
+<p><img src="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/E:%5CPictures%5Ctypora%5Cimage-20231010002215554.png" alt="image-20231010002215554"></p>
+<p>然后对每个state进行判断就睡简单的组合逻辑了(这里我并没有测试过，不知道具体实施能否行得通，欢迎批评指正)</p>
 
                 
             </div>
@@ -716,7 +535,7 @@ $$<br>
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://hjzts.github.io/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/">https://hjzts.github.io/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</a>
+                    <a href="https://hjzts.github.io/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/">https://hjzts.github.io/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -754,8 +573,8 @@ $$<br>
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/">
-                                    <span class="chip bg-color">数学分析</span>
+                                <a href="/tags/CO/">
+                                    <span class="chip bg-color">CO</span>
                                 </a>
                             
                         </div>
@@ -795,9 +614,9 @@ $$<br>
 
 <script type="text/javascript">
     disqus_config = function () {
-        this.page.url = 'https://hjzts.github.io/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/';
-        this.page.identifier = '/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/';
-        this.page.title = '高数应用';
+        this.page.url = 'https://hjzts.github.io/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/';
+        this.page.identifier = '/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/';
+        this.page.title = 'CO-P0-logisim相关';
     };
     let disqus_shortname = '';
 
@@ -827,80 +646,36 @@ $$<br>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/05/04/%E7%A6%BB%E6%95%A31/">
+                <a href="/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/016.jpg" class="responsive-img" alt="离散1">
+                        <img src="/medias/featureimages/022.jpg" class="responsive-img" alt="CO-P0-logisim相关">
                         
-                        <span class="card-title">离散1</span>
+                        <span class="card-title">CO-P0-logisim相关</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            这里记录了大一下学期的离散作业与答案，我会在每次作业截止后马上把我的答案放上来🐶🐶🐶
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-05-04
-                        </span>
-                        <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            hugo
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E7%A6%BB%E6%95%A3/">
-                        <span class="chip bg-color">离散</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
-            </div>
-            <div class="card">
-                <a href="/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/003.jpg" class="responsive-img" alt="高数应用">
-                        
-                        <span class="card-title">高数应用</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            高等数学不等式问题探讨
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-23
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-10-10
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/" class="post-category">
-                                    数学分析
+                            <a href="/categories/CO/" class="post-category">
+                                    CO
                                 </a>
                             
                             
@@ -911,8 +686,57 @@ $$<br>
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/">
-                        <span class="chip bg-color">数学分析</span>
+                    <a href="/tags/CO/">
+                        <span class="chip bg-color">CO</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/05/25/hammingDistance/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/013.jpg" class="responsive-img" alt="hammingDistance">
+                        
+                        <span class="card-title">hammingDistance</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-25
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-category">
+                                    数据结构
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%A4%A7%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%8C%96/">
+                        <span class="chip bg-color">大作业优化</span>
                     </a>
                     
                 </div>
@@ -1073,13 +897,6 @@ $$<br>
 
 </main>
 
-
-<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script>
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
-    });
-</script>
 
 
 
