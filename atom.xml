@@ -3,11 +3,11 @@
   <title>hugo</title>
   
   <subtitle>今天阳光正好</subtitle>
-  <link href="https://hjzts.github.io/atom.xml" rel="self"/>
+  <link href="https://hugohealthy.top/atom.xml" rel="self"/>
   
-  <link href="https://hjzts.github.io/"/>
+  <link href="https://hugohealthy.top/"/>
   <updated>2023-10-09T16:31:32.014Z</updated>
-  <id>https://hjzts.github.io/</id>
+  <id>https://hugohealthy.top/</id>
   
   <author>
     <name>hugo</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>CO-P0-logisim相关</title>
-    <link href="https://hjzts.github.io/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/"/>
-    <id>https://hjzts.github.io/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/</id>
+    <link href="https://hugohealthy.top/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/"/>
+    <id>https://hugohealthy.top/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/</id>
     <published>2023-10-09T16:24:33.000Z</published>
     <updated>2023-10-09T16:31:32.014Z</updated>
     
@@ -37,17 +37,17 @@
     
     
     
-    <category term="CO" scheme="https://hjzts.github.io/categories/CO/"/>
+    <category term="CO" scheme="https://hugohealthy.top/categories/CO/"/>
     
     
-    <category term="CO" scheme="https://hjzts.github.io/tags/CO/"/>
+    <category term="CO" scheme="https://hugohealthy.top/tags/CO/"/>
     
   </entry>
   
   <entry>
     <title>hammingDistance</title>
-    <link href="https://hjzts.github.io/2023/05/25/hammingDistance/"/>
-    <id>https://hjzts.github.io/2023/05/25/hammingDistance/</id>
+    <link href="https://hugohealthy.top/2023/05/25/hammingDistance/"/>
+    <id>https://hugohealthy.top/2023/05/25/hammingDistance/</id>
     <published>2023-05-25T12:10:08.000Z</published>
     <updated>2023-10-09T17:12:52.558Z</updated>
     
@@ -63,17 +63,17 @@
     
     
     
-    <category term="数据结构" scheme="https://hjzts.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    <category term="数据结构" scheme="https://hugohealthy.top/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
     
     
-    <category term="大作业优化" scheme="https://hjzts.github.io/tags/%E5%A4%A7%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%8C%96/"/>
+    <category term="大作业优化" scheme="https://hugohealthy.top/tags/%E5%A4%A7%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%8C%96/"/>
     
   </entry>
   
   <entry>
     <title>字典序</title>
-    <link href="https://hjzts.github.io/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/"/>
-    <id>https://hjzts.github.io/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/</id>
+    <link href="https://hugohealthy.top/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/"/>
+    <id>https://hugohealthy.top/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/</id>
     <published>2023-05-25T12:08:17.000Z</published>
     <updated>2023-10-09T16:12:09.337Z</updated>
     
@@ -96,8 +96,8 @@
   
   <entry>
     <title>Trie</title>
-    <link href="https://hjzts.github.io/2023/05/25/Trie/"/>
-    <id>https://hjzts.github.io/2023/05/25/Trie/</id>
+    <link href="https://hugohealthy.top/2023/05/25/Trie/"/>
+    <id>https://hugohealthy.top/2023/05/25/Trie/</id>
     <published>2023-05-25T11:57:38.000Z</published>
     <updated>2023-10-09T17:12:46.396Z</updated>
     
@@ -117,16 +117,16 @@
     
     
     
-    <category term="数据结构" scheme="https://hjzts.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    <category term="数据结构" scheme="https://hugohealthy.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
     
-    <category term="算法" scheme="https://hjzts.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    <category term="算法" scheme="https://hugohealthy.top/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
   <entry>
     <title>大一下数据结构大作业</title>
-    <link href="https://hjzts.github.io/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/"/>
-    <id>https://hjzts.github.io/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/</id>
+    <link href="https://hugohealthy.top/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/"/>
+    <id>https://hugohealthy.top/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/</id>
     <published>2023-05-25T11:52:24.000Z</published>
     <updated>2023-10-09T17:20:19.532Z</updated>
     
@@ -146,17 +146,17 @@
     
     
     
-    <category term="数据结构" scheme="https://hjzts.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    <category term="数据结构" scheme="https://hugohealthy.top/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
     
     
-    <category term="大作业优化" scheme="https://hjzts.github.io/tags/%E5%A4%A7%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%8C%96/"/>
+    <category term="大作业优化" scheme="https://hugohealthy.top/tags/%E5%A4%A7%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%8C%96/"/>
     
   </entry>
   
   <entry>
     <title>栈和队列</title>
-    <link href="https://hjzts.github.io/2023/05/25/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/"/>
-    <id>https://hjzts.github.io/2023/05/25/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/</id>
+    <link href="https://hugohealthy.top/2023/05/25/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/"/>
+    <id>https://hugohealthy.top/2023/05/25/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/</id>
     <published>2023-05-25T11:51:01.000Z</published>
     <updated>2023-10-09T16:15:20.754Z</updated>
     
@@ -171,17 +171,17 @@
     
     
     
-    <category term="数据结构" scheme="https://hjzts.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    <category term="数据结构" scheme="https://hugohealthy.top/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
     
     
-    <category term="数据结构" scheme="https://hjzts.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    <category term="数据结构" scheme="https://hugohealthy.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
     
   </entry>
   
   <entry>
     <title>离散1</title>
-    <link href="https://hjzts.github.io/2023/05/04/%E7%A6%BB%E6%95%A31/"/>
-    <id>https://hjzts.github.io/2023/05/04/%E7%A6%BB%E6%95%A31/</id>
+    <link href="https://hugohealthy.top/2023/05/04/%E7%A6%BB%E6%95%A31/"/>
+    <id>https://hugohealthy.top/2023/05/04/%E7%A6%BB%E6%95%A31/</id>
     <published>2023-05-04T10:52:30.000Z</published>
     <updated>2023-10-09T16:11:52.869Z</updated>
     
@@ -191,14 +191,14 @@
     
     
     
-    <category term="离散" scheme="https://hjzts.github.io/tags/%E7%A6%BB%E6%95%A3/"/>
+    <category term="离散" scheme="https://hugohealthy.top/tags/%E7%A6%BB%E6%95%A3/"/>
     
   </entry>
   
   <entry>
     <title>高数应用</title>
-    <link href="https://hjzts.github.io/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/"/>
-    <id>https://hjzts.github.io/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</id>
+    <link href="https://hugohealthy.top/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/"/>
+    <id>https://hugohealthy.top/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</id>
     <published>2022-10-22T16:00:00.000Z</published>
     <updated>2023-10-09T17:15:23.875Z</updated>
     
@@ -207,10 +207,10 @@
     
     
     
-    <category term="数学分析" scheme="https://hjzts.github.io/categories/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/"/>
+    <category term="数学分析" scheme="https://hugohealthy.top/categories/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/"/>
     
     
-    <category term="数学分析" scheme="https://hjzts.github.io/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/"/>
+    <category term="数学分析" scheme="https://hugohealthy.top/tags/%E6%95%B0%E5%AD%A6%E5%88%86%E6%9E%90/"/>
     
   </entry>
   
