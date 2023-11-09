@@ -82,122 +82,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Trie</title>
-    <url>/2023/05/25/Trie/</url>
-    <content><![CDATA[<blockquote>
-<p>Tire树，即字典树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。</p>
-</blockquote>
-<p>说白了，就是一棵大树，这棵树的每个除了根节点的结点都存储了一个字符。</p>
-<h2><span id="说在前面">说在前面</span></h2>
-<p>字典树有两种实现方式，一种是利用指针实现，也就是一个实实在在的二十六叉树；另一种就是利用数组实现。（在这里分别称之为指针版字典树和数组版字典树）</p>
-<p>两种实现方式各有优劣，指针版本的清晰明了，空间占用率相对较小（空间占用小就可以用剩下的空间干其他很多事）；而数组版字典树就是一次性把空间开好了，比较方便。</p>
-<h2><span id="指针版字典树">指针版字典树</span></h2>
-<p>结构体定义：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">datatype</span> <span class="token expression"><span class="token keyword">int</span></span></span>
-<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">node</span><span class="token punctuation">{</span>
-    bool isEnd<span class="token punctuation">;</span>
-    datatype data<span class="token punctuation">;</span>		<span class="token comment">//一般是计数</span>
-    <span class="token keyword">struct</span> <span class="token class-name">node</span> <span class="token operator">*</span>letter<span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>Node<span class="token punctuation">,</span><span class="token operator">*</span>List<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>新建一个结点的初始化：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">memset</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    p<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> false<span class="token punctuation">;</span>
-    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>当然，一种更加推荐的方式是使用<code>calloc()</code>函数，<code>malloc()</code>有更多自己操控的空间</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">calloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>创建一棵<code>Trie</code>:</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MAXSIZE</span> <span class="token expression"><span class="token number">1000</span></span></span>
-<span class="token keyword">void</span> <span class="token function">createStopTrie</span><span class="token punctuation">(</span>List <span class="token operator">*</span>root<span class="token punctuation">,</span> FILE <span class="token operator">*</span>in<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> pos <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">fread</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> MAXSIZE<span class="token punctuation">,</span> in<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">char</span> ch<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    List end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
-    <span class="token keyword">while</span> <span class="token punctuation">(</span>pos <span class="token operator">&lt;</span> len<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        ch <span class="token operator">=</span> <span class="token function">tolower</span><span class="token punctuation">(</span>buffer<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">islower</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-            end <span class="token operator">=</span> end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-            pos<span class="token operator">++</span><span class="token punctuation">;</span>
-            depth<span class="token operator">++</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            end<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> true<span class="token punctuation">;</span>
-            pos<span class="token operator">++</span><span class="token punctuation">;</span>
-            end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>depth <span class="token operator">&gt;</span> Depth<span class="token punctuation">)</span> Depth <span class="token operator">=</span> depth<span class="token punctuation">;</span>
-            depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>调用前需要</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">Root <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">createArticleTrie</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Root<span class="token punctuation">,</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p><strong>三个基本性质：</strong></p>
-<ul>
-<li>根节点不包含字符，除根节点的每一个节点都只包含一个字符。</li>
-<li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。</li>
-<li>每个节点的所有子节点包含的字符都不相同</li>
-</ul>
-<p>我觉得这个像是一个26叉树，也有一点想26进制的一个东西。</p>
-<p>我们这里存储的都是小写字母，如果包含又大写字母的话可能就是一个52叉树了。一般不会出现这种情况吧，<s>出现了也不怪我</s></p>
-<blockquote>
-<p>主要实现单词的高效存储与高效查找</p>
-</blockquote>
-<p>利用<code>cout[i]</code>来记录以<code>i</code>为编号的字符结尾的字符串的个数。</p>
-<p>就有两个基本操作</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
-<span class="token keyword">const</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">1e5</span> <span class="token operator">+</span> <span class="token number">5</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> tr<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cou<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">,</span> idx<span class="token punctuation">;</span>
-<span class="token keyword">char</span> str<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
-
-<span class="token keyword">void</span> <span class="token function">insert</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
-  <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
-      tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">++</span>idx<span class="token punctuation">;</span>
-    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-  cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">int</span> <span class="token function">query</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
-  <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
-      <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-  <span class="token keyword">return</span> cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>参考资料：</p>
-<ol>
-<li><a href="https://blog.csdn.net/forever_dreams/article/details/81009580">https://blog.csdn.net/forever_dreams/article/details/81009580</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/28891541">https://zhuanlan.zhihu.com/p/28891541</a></li>
-<li><a href="https://blog.csdn.net/weixin_42815609/article/details/102692411">https://blog.csdn.net/weixin_42815609/article/details/102692411</a></li>
-<li>用C++讲得很清楚：<a href="https://blog.csdn.net/weixin_44176696/article/details/104716191">https://blog.csdn.net/weixin_44176696/article/details/104716191</a></li>
-<li>这个有头文件诶，高级！：<a href="https://blog.csdn.net/A951860555/article/details/108716487">https://blog.csdn.net/A951860555/article/details/108716487</a></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>数据结构</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>OOpre</title>
     <url>/2023/11/10/OOpre/</url>
     <content><![CDATA[<h1><span id="buaa-oopre总结">BUAA-OOpre总结</span></h1>
@@ -329,6 +213,188 @@
 ]]></content>
       <tags>
         <tag>OOpre</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hammingDistance</title>
+    <url>/2023/05/25/hammingDistance/</url>
+    <content><![CDATA[<h1><span id="__uint128_t_"><code>__uint128_t_</code></span></h1>
+<p>最近越来越多的协议会定义 16 字节长的整形，gcc 在 4.6 以上版本就可以使用 __int128_t &amp; __uint128_t 了。</p>
+<p>但需要注意的是，_uint128_t &amp; __int128_t 仅对 64 位程序才有定义，因此如果编译选项中加入了 -m32，会出现找不到定义的编译错误。</p>
+<p>另外 _uint128_t &amp; __int128_t  并非 c/c++ 标准，所以 gcc 目前只支持基本运算符的操作，printf 这些都需要另外实现。</p>
+<h1><span id="快速计算汉明距离">快速计算汉明距离</span></h1>
+<blockquote>
+<p>在信息论中，两个等长字符串之间的汉明距离（英语：Hamming distance）是两个字符串对应位置的不同字符的个数。换句话说，它就是将一个字符串变换成另外一个字符串所需要替换的字符个数。</p>
+<p>汉明距离是以<strong>理查德・卫斯里・汉明</strong>的名字命名的。在通信传输过程中，累计定长二进制字中发生翻转的错误数据位，所以它也被称为信号距离。汉明距离在包括信息论、编码理论、密码学等领域都有应用。</p>
+</blockquote>
+<p>对于两个字符串计算汉明距离，那肯定也就只能是逐位比较</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//s1,s2为两个字符串，M为这两个字符串的长度</span>
+<span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span><span class="token keyword">char</span> s1<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">char</span> s2<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span> M<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> l1 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">,</span> l2 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> M <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l1 <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l2<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        dist <span class="token operator">+=</span> s1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> s2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>那么这样肯定是很慢的，如果可以转化两个整型的数，我们很容易想到利用到异或运算。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">__uint128_t fingerprint <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> l <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> l <span class="token operator">&lt;</span> M<span class="token punctuation">;</span> <span class="token operator">++</span>l<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>sumsignedweight <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样可以转换最高128位的两个01字符串。</p>
+<p>那么就可以利用<code>^</code>运算来就算汉明距离了,由于异或运算的性质，得到的c的数位上为1说明ab的对应位不相同，反之则相同，那么我们就之需要计算c的二进制表示中数位为1的数目。这里可以按位采取<code>&amp;</code>运算。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>c <span class="token operator">&amp;</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        c <span class="token operator">=</span> c <span class="token operator">&gt;&gt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>布莱恩·克尼根算法</strong></p>
+<p>我们先观察如下一个现象：对于任意一个非零的二进制数 <code>a</code>（将其看作无符号数），考虑 <code>a</code> 和 <code>a-1</code> 的关系。由于 <code>a</code> 非零，那么 <code>a</code> 中总有一些位为 <code>1</code>。假设 <code>a</code> 中最低位的 <code>1</code> 处于从右向左数的第 <code>N</code> 位。那么，<code>a</code> 的第 <code>N</code> 位以及第 <code>N</code> 位以后的每一位的值和 <code>a-1</code> 的第 <code>N</code> 位及第 <code>N</code> 位以后的每一位的值均不同。</p>
+<p>举个例子就很容易理解了。我们以 8 位数来描述。假设 <code>a=10010000</code>，根据上述描述，从右往左数的第一个 <code>1</code> 出现在第 <code>5</code> 位，那么有 <code>N=5</code>。同时可以计算出 <code>a-1=10001111</code>，可以看到，从第 <code>N</code> 位开始，<code>a</code> 的后缀是 <code>10000</code>，而 <code>a-1</code> 的后缀是 <code>01111</code>。满足上述描述的现象。</p>
+<p>进一步地，我们可以发现，如果对 <code>a</code> 和 <code>a-1</code> 进行与操作，就会直接消去位于最后一位，也就是第 <code>N</code> 位的 <code>1</code>。还以上面的 <code>a</code> 为例，<code>a &amp; (a-1)=10000000</code>。可以看到，我们不需要遍历，而是通过一次运算，就可以把 <code>a</code> 中的最后一个 <code>1</code> 消掉。如果我们一直重复这项操作，那么 <code>a</code> 里有多少个 <code>1</code>，我们就仅需要多少次 <code>a &amp; (a-1)</code> 的操作，就能把 <code>a</code> 化为 <code>0</code> 了。而这个操作的次数正是我们所要求的。</p>
+<p>那么计算汉明距离就可以改进为：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        c <span class="token operator">=</span> c <span class="token operator">&amp;</span> <span class="token punctuation">(</span>c <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>大作业优化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Trie</title>
+    <url>/2023/05/25/Trie/</url>
+    <content><![CDATA[<blockquote>
+<p>Tire树，即字典树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。</p>
+</blockquote>
+<p>说白了，就是一棵大树，这棵树的每个除了根节点的结点都存储了一个字符。</p>
+<h2><span id="说在前面">说在前面</span></h2>
+<p>字典树有两种实现方式，一种是利用指针实现，也就是一个实实在在的二十六叉树；另一种就是利用数组实现。（在这里分别称之为指针版字典树和数组版字典树）</p>
+<p>两种实现方式各有优劣，指针版本的清晰明了，空间占用率相对较小（空间占用小就可以用剩下的空间干其他很多事）；而数组版字典树就是一次性把空间开好了，比较方便。</p>
+<h2><span id="指针版字典树">指针版字典树</span></h2>
+<p>结构体定义：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">datatype</span> <span class="token expression"><span class="token keyword">int</span></span></span>
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">node</span><span class="token punctuation">{</span>
+    bool isEnd<span class="token punctuation">;</span>
+    datatype data<span class="token punctuation">;</span>		<span class="token comment">//一般是计数</span>
+    <span class="token keyword">struct</span> <span class="token class-name">node</span> <span class="token operator">*</span>letter<span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>Node<span class="token punctuation">,</span><span class="token operator">*</span>List<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>新建一个结点的初始化：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    p<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> false<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当然，一种更加推荐的方式是使用<code>calloc()</code>函数，<code>malloc()</code>有更多自己操控的空间</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">calloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>创建一棵<code>Trie</code>:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MAXSIZE</span> <span class="token expression"><span class="token number">1000</span></span></span>
+<span class="token keyword">void</span> <span class="token function">createStopTrie</span><span class="token punctuation">(</span>List <span class="token operator">*</span>root<span class="token punctuation">,</span> FILE <span class="token operator">*</span>in<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> pos <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">fread</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> MAXSIZE<span class="token punctuation">,</span> in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">char</span> ch<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    List end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>pos <span class="token operator">&lt;</span> len<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        ch <span class="token operator">=</span> <span class="token function">tolower</span><span class="token punctuation">(</span>buffer<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">islower</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            end <span class="token operator">=</span> end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            pos<span class="token operator">++</span><span class="token punctuation">;</span>
+            depth<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            end<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> true<span class="token punctuation">;</span>
+            pos<span class="token operator">++</span><span class="token punctuation">;</span>
+            end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>depth <span class="token operator">&gt;</span> Depth<span class="token punctuation">)</span> Depth <span class="token operator">=</span> depth<span class="token punctuation">;</span>
+            depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>调用前需要</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">Root <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">createArticleTrie</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Root<span class="token punctuation">,</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><strong>三个基本性质：</strong></p>
+<ul>
+<li>根节点不包含字符，除根节点的每一个节点都只包含一个字符。</li>
+<li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。</li>
+<li>每个节点的所有子节点包含的字符都不相同</li>
+</ul>
+<p>我觉得这个像是一个26叉树，也有一点想26进制的一个东西。</p>
+<p>我们这里存储的都是小写字母，如果包含又大写字母的话可能就是一个52叉树了。一般不会出现这种情况吧，<s>出现了也不怪我</s></p>
+<blockquote>
+<p>主要实现单词的高效存储与高效查找</p>
+</blockquote>
+<p>利用<code>cout[i]</code>来记录以<code>i</code>为编号的字符结尾的字符串的个数。</p>
+<p>就有两个基本操作</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token keyword">const</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">1e5</span> <span class="token operator">+</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> tr<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cou<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">,</span> idx<span class="token punctuation">;</span>
+<span class="token keyword">char</span> str<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">insert</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
+      tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">++</span>idx<span class="token punctuation">;</span>
+    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">query</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
+      <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://blog.csdn.net/forever_dreams/article/details/81009580">https://blog.csdn.net/forever_dreams/article/details/81009580</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/28891541">https://zhuanlan.zhihu.com/p/28891541</a></li>
+<li><a href="https://blog.csdn.net/weixin_42815609/article/details/102692411">https://blog.csdn.net/weixin_42815609/article/details/102692411</a></li>
+<li>用C++讲得很清楚：<a href="https://blog.csdn.net/weixin_44176696/article/details/104716191">https://blog.csdn.net/weixin_44176696/article/details/104716191</a></li>
+<li>这个有头文件诶，高级！：<a href="https://blog.csdn.net/A951860555/article/details/108716487">https://blog.csdn.net/A951860555/article/details/108716487</a></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -782,70 +848,74 @@ __uint128_t fingerprintSample <span class="token operator">=</span> <span class=
       </tags>
   </entry>
   <entry>
-    <title>hammingDistance</title>
-    <url>/2023/05/25/hammingDistance/</url>
-    <content><![CDATA[<h1><span id="__uint128_t_"><code>__uint128_t_</code></span></h1>
-<p>最近越来越多的协议会定义 16 字节长的整形，gcc 在 4.6 以上版本就可以使用 __int128_t &amp; __uint128_t 了。</p>
-<p>但需要注意的是，_uint128_t &amp; __int128_t 仅对 64 位程序才有定义，因此如果编译选项中加入了 -m32，会出现找不到定义的编译错误。</p>
-<p>另外 _uint128_t &amp; __int128_t  并非 c/c++ 标准，所以 gcc 目前只支持基本运算符的操作，printf 这些都需要另外实现。</p>
-<h1><span id="快速计算汉明距离">快速计算汉明距离</span></h1>
+    <title>字典序</title>
+    <url>/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/</url>
+    <content><![CDATA[<h1><span id="字典序">字典序</span></h1>
+<h2><span id="说在前面">说在前面</span></h2>
 <blockquote>
-<p>在信息论中，两个等长字符串之间的汉明距离（英语：Hamming distance）是两个字符串对应位置的不同字符的个数。换句话说，它就是将一个字符串变换成另外一个字符串所需要替换的字符个数。</p>
-<p>汉明距离是以<strong>理查德・卫斯里・汉明</strong>的名字命名的。在通信传输过程中，累计定长二进制字中发生翻转的错误数据位，所以它也被称为信号距离。汉明距离在包括信息论、编码理论、密码学等领域都有应用。</p>
+<p>字典序(dictionary order)，又称字母序(alphabetical order)，原意是表示英文单词在字典中的先后顺序，后引申为任意两个字符串的大小关系</p>
 </blockquote>
-<p>对于两个字符串计算汉明距离，那肯定也就只能是逐位比较</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//s1,s2为两个字符串，M为这两个字符串的长度</span>
-<span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span><span class="token keyword">char</span> s1<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">char</span> s2<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span> M<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> l1 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">,</span> l2 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> M <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l1 <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l2<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        dist <span class="token operator">+=</span> s1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> s2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<p>那么大家就清楚了这指的是一种大小关系，一种序，正如我们数学分析中的有序集的序有类似的概念，这里大家需要与字典树(Tire)区分开来，字典树实质上是一种数据结构中的用于存储和查找单词的一种树状结构，详情可以看这个<a href="https://www.hugohealthy.top/2023/05/25/Trie/">tire</a>。(在我的另一篇blog可以看到哦)</p>
+<h2><span id="字典序算法相关">字典序算法相关</span></h2>
+<h3><span id="字典序全排列问题">字典序全排列问题</span></h3>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h&gt;</span></span>
+<span class="token comment">//交换两个字符，注意这里传过去的是地址，改变的是地址对应的值</span>
+<span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>a<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">char</span> temp <span class="token operator">=</span> <span class="token operator">*</span>a<span class="token punctuation">;</span>
+    <span class="token operator">*</span>a <span class="token operator">=</span> <span class="token operator">*</span>b<span class="token punctuation">;</span>
+    <span class="token operator">*</span>b <span class="token operator">=</span> temp<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment">//将一个字符串begin到end的部分逆序</span>
+<span class="token keyword">void</span> <span class="token function">reverse</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>str<span class="token punctuation">,</span> <span class="token keyword">int</span> begin<span class="token punctuation">,</span> <span class="token keyword">int</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>begin <span class="token operator">&lt;</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">swap</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>str<span class="token punctuation">[</span>begin<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>str<span class="token punctuation">[</span>end<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        begin<span class="token operator">++</span><span class="token punctuation">;</span>
+        end<span class="token operator">--</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>那么这样肯定是很慢的，如果可以转化两个整型的数，我们很容易想到利用到异或运算。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">__uint128_t fingerprint <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> l <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> l <span class="token operator">&lt;</span> M<span class="token punctuation">;</span> <span class="token operator">++</span>l<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span>sumsignedweight <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
-        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>这样可以转换最高128位的两个01字符串。</p>
-<p>那么就可以利用<code>^</code>运算来就算汉明距离了,由于异或运算的性质，得到的c的数位上为1说明ab的对应位不相同，反之则相同，那么我们就之需要计算c的二进制表示中数位为1的数目。这里可以按位采取<code>&amp;</code>运算。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>c <span class="token operator">&amp;</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-            dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">next_permutation</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>str<span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">;</span> i <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&lt;</span> str<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-        c <span class="token operator">=</span> c <span class="token operator">&gt;&gt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>布莱恩·克尼根算法</strong></p>
-<p>我们先观察如下一个现象：对于任意一个非零的二进制数 <code>a</code>（将其看作无符号数），考虑 <code>a</code> 和 <code>a-1</code> 的关系。由于 <code>a</code> 非零，那么 <code>a</code> 中总有一些位为 <code>1</code>。假设 <code>a</code> 中最低位的 <code>1</code> 处于从右向左数的第 <code>N</code> 位。那么，<code>a</code> 的第 <code>N</code> 位以及第 <code>N</code> 位以后的每一位的值和 <code>a-1</code> 的第 <code>N</code> 位及第 <code>N</code> 位以后的每一位的值均不同。</p>
-<p>举个例子就很容易理解了。我们以 8 位数来描述。假设 <code>a=10010000</code>，根据上述描述，从右往左数的第一个 <code>1</code> 出现在第 <code>5</code> 位，那么有 <code>N=5</code>。同时可以计算出 <code>a-1=10001111</code>，可以看到，从第 <code>N</code> 位开始，<code>a</code> 的后缀是 <code>10000</code>，而 <code>a-1</code> 的后缀是 <code>01111</code>。满足上述描述的现象。</p>
-<p>进一步地，我们可以发现，如果对 <code>a</code> 和 <code>a-1</code> 进行与操作，就会直接消去位于最后一位，也就是第 <code>N</code> 位的 <code>1</code>。还以上面的 <code>a</code> 为例，<code>a &amp; (a-1)=10000000</code>。可以看到，我们不需要遍历，而是通过一次运算，就可以把 <code>a</code> 中的最后一个 <code>1</code> 消掉。如果我们一直重复这项操作，那么 <code>a</code> 里有多少个 <code>1</code>，我们就仅需要多少次 <code>a &amp; (a-1)</code> 的操作，就能把 <code>a</code> 化为 <code>0</code> 了。而这个操作的次数正是我们所要求的。</p>
-<p>那么计算汉明距离就可以改进为：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        c <span class="token operator">=</span> c <span class="token operator">&amp;</span> <span class="token punctuation">(</span>c <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//从后往前找到第一个正序的</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>		<span class="token comment">//表示找完了，已经全部是逆序了</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">//从i开始找到前面的第一个比str[i]大的，那么就进行交换</span>
+<span class="token comment">//再把i+1以后的逆序一遍</span>
+    <span class="token keyword">int</span> j<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&gt;</span> i<span class="token punctuation">;</span> j<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">&gt;</span> str<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">swap</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>str<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>str<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">reverse</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"abd"</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">do</span> <span class="token punctuation">{</span>
+        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%s\n"</span><span class="token punctuation">,</span> str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">next_permutation</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>该代码可以实现一个<strong>顺序的字符串</strong>的所有字母的按字典序输出的全排列。</p>
+<p>否则的话就是输出比改字符串的字典序大于等于的字符串。</p>
+<p>当然简单调整当然可以是任意顺序的一个字符串的操作。</p>
+<h3><span id="字典序排序">字典序排序</span></h3>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://blog.csdn.net/qq_37050329/article/details/86637183">https://blog.csdn.net/qq_37050329/article/details/86637183</a></li>
+</ol>
 ]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>大作业优化</tag>
-      </tags>
   </entry>
   <entry>
     <title>栈和队列</title>
@@ -923,76 +993,6 @@ item <span class="token operator">=</span> q1<span class="token punctuation">[</
       <tags>
         <tag>数据结构</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>字典序</title>
-    <url>/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/</url>
-    <content><![CDATA[<h1><span id="字典序">字典序</span></h1>
-<h2><span id="说在前面">说在前面</span></h2>
-<blockquote>
-<p>字典序(dictionary order)，又称字母序(alphabetical order)，原意是表示英文单词在字典中的先后顺序，后引申为任意两个字符串的大小关系</p>
-</blockquote>
-<p>那么大家就清楚了这指的是一种大小关系，一种序，正如我们数学分析中的有序集的序有类似的概念，这里大家需要与字典树(Tire)区分开来，字典树实质上是一种数据结构中的用于存储和查找单词的一种树状结构，详情可以看这个<a href="https://www.hugohealthy.top/2023/05/25/Trie/">tire</a>。(在我的另一篇blog可以看到哦)</p>
-<h2><span id="字典序算法相关">字典序算法相关</span></h2>
-<h3><span id="字典序全排列问题">字典序全排列问题</span></h3>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h&gt;</span></span>
-<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h&gt;</span></span>
-<span class="token comment">//交换两个字符，注意这里传过去的是地址，改变的是地址对应的值</span>
-<span class="token keyword">void</span> <span class="token function">swap</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>a<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span>b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">char</span> temp <span class="token operator">=</span> <span class="token operator">*</span>a<span class="token punctuation">;</span>
-    <span class="token operator">*</span>a <span class="token operator">=</span> <span class="token operator">*</span>b<span class="token punctuation">;</span>
-    <span class="token operator">*</span>b <span class="token operator">=</span> temp<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token comment">//将一个字符串begin到end的部分逆序</span>
-<span class="token keyword">void</span> <span class="token function">reverse</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>str<span class="token punctuation">,</span> <span class="token keyword">int</span> begin<span class="token punctuation">,</span> <span class="token keyword">int</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">while</span> <span class="token punctuation">(</span>begin <span class="token operator">&lt;</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token function">swap</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>str<span class="token punctuation">[</span>begin<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>str<span class="token punctuation">[</span>end<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        begin<span class="token operator">++</span><span class="token punctuation">;</span>
-        end<span class="token operator">--</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">int</span> <span class="token function">next_permutation</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>str<span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">;</span> i <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&lt;</span> str<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">break</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token comment">//从后往前找到第一个正序的</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>		<span class="token comment">//表示找完了，已经全部是逆序了</span>
-        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token comment">//从i开始找到前面的第一个比str[i]大的，那么就进行交换</span>
-<span class="token comment">//再把i+1以后的逆序一遍</span>
-    <span class="token keyword">int</span> j<span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&gt;</span> i<span class="token punctuation">;</span> j<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>str<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">&gt;</span> str<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">break</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-    <span class="token function">swap</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>str<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>str<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">reverse</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> n <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">char</span> str<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"abd"</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">do</span> <span class="token punctuation">{</span>
-        <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%s\n"</span><span class="token punctuation">,</span> str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span> <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">next_permutation</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>该代码可以实现一个<strong>顺序的字符串</strong>的所有字母的按字典序输出的全排列。</p>
-<p>否则的话就是输出比改字符串的字典序大于等于的字符串。</p>
-<p>当然简单调整当然可以是任意顺序的一个字符串的操作。</p>
-<h3><span id="字典序排序">字典序排序</span></h3>
-<p>参考资料：</p>
-<ol>
-<li><a href="https://blog.csdn.net/qq_37050329/article/details/86637183">https://blog.csdn.net/qq_37050329/article/details/86637183</a></li>
-</ol>
-]]></content>
   </entry>
   <entry>
     <title>离散1</title>
@@ -1487,6 +1487,249 @@ $$</p>
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
     main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2023/05/04/%E7%A6%BB%E6%95%A31/31.png" alt></p>
+]]></content>
+      <tags>
+        <tag>离散</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>离散2</title>
+    <url>/2023/11/10/%E7%A6%BB%E6%95%A32/</url>
+    <content><![CDATA[<h1><span id="离散2">离散2</span></h1>
+<h2><span id="作业5">作业5</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(1)不是\<br>
+&amp;A = {1, 2, 3}\<br>
+&amp;R_1 = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;,&lt;1,2&gt;,&lt;2,1&gt;, &lt;1,3&gt;,&lt;3,1&gt;,&lt;2,3&gt;,&lt;3,2&gt;}\<br>
+&amp;R_2 = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;1,2&gt;,&lt;2,1&gt;}\<br>
+&amp;则r(R_1 - R_2) = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;,&lt;2,3&gt;,&lt;3,2&gt;,&lt;1,3&gt;,&lt;3,1&gt;}\<br>
+&amp;而有&lt;1,3&gt;,&lt;3,2&gt;\in r(R_1 - R_2) 但是&lt;1,2&gt; \notin r(R_1 - R_2),故r(R_1-R_2)不是传递的，因而不是等价关系\<br>
+&amp;(2)不是\<br>
+&amp; 上课已经讲过，R_1 , R_2是对称时，R_1 \circ R_2 不一定对称\<br>
+&amp; 比如取A = {1, 2, 3}\<br>
+&amp;R_1 = {&lt;1,1&gt;, &lt;2,2&gt;,&lt;1,2&gt;,&lt;2,1&gt;,}\<br>
+&amp;R_2 = {&lt;2,2&gt;, &lt;3,3&gt;, &lt;2,3&gt;,&lt;3,2&gt;}\<br>
+&amp;则R_1\circ R_2 = {&lt;2,2&gt;,&lt;2,3&gt;,&lt;1,3&gt;,&lt;1,2&gt;}显然不是等价关系\<br>
+&amp;(3)是\<br>
+&amp;R_1,R_2都是等价关系，那么都是自反，对称，传递的\<br>
+&amp;就有R_1\cup R_2是自反的，对称的\<br>
+&amp;同时如果R_1 \cup R_2 是自反的，对称的，那么t(R_1,R_2)仍然是自反、对称的，同时还是传递的\<br>
+&amp;由等价关系的定义可知t(R_1, R_2)是等价关系<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(a)\<br>
+&amp;左到右:\<br>
+&amp;S_1 \in A/R1,则\forall s_1 \in S_1\<br>
+&amp;s_1 = [x]<em>{R_1} = {y|y\in A \wedge x R_1y},x为A中元素\<br>
+&amp;又R_1\subseteq R_2,及&lt;x,y&gt; \in R_1 有&lt;x,y&gt; \in R_2，即xR_2y\<br>
+&amp;故s_1 \in S_2 = [x]</em>{R_2} = {y|y \in A \wedge xR_2y}\<br>
+&amp;即S_1 \subseteq S_2,由加细的定义有A/R_1 \le A/R_2\<br>
+&amp;右到左:\<br>
+&amp;A/R_1 \le A/R_2\<br>
+&amp;有\forall S_1 \in A/R_1 , \exist S_2 \in A/R_2 , s.t. S_1 \subseteq S_2\<br>
+&amp;\forall s_1 \in S_1\<br>
+&amp;s_1 = [x]<em>{R_1} = {y|y\in A \wedge x R_1y},x为A中元素\<br>
+&amp;故\exist s_2 = [x]</em>{R_2} = {y|y \in A \wedge xR_2y},s_1 \subseteq s_2 \<br>
+&amp;即\forall xR_1y,有xR_2y,即R_1 \subseteq R_2\<br>
+&amp;综上即可得证\<br>
+&amp;(b)\<br>
+&amp;左到右:\<br>
+&amp;R_1 \subset R_2 必然有R_1 \subseteq R_2，则A/R_1 \le A/R_2\<br>
+&amp;又R_1\ne R_2,即\exist &lt;x_0,y&gt; \in R_2,&lt;x_0,y&gt;\notin R_1\<br>
+&amp;取s_2 = [x_0]<em>{R_2} = {y|y \in A \wedge x_0R_2y},s_2 \in S_2，其中S_2 \in A/R_2\<br>
+&amp;且由于&lt;x_0,y&gt;\notin R_1 ,s_2 \notin S_1,故S_1 \ne S_2,其中S_1 \in A/R_1\<br>
+&amp;即A/R_1 \ne A/R_2\<br>
+&amp;右到左:\<br>
+&amp;A/R_1 \subset A/R_2,则同样易有R_1\subseteq R_2\<br>
+&amp;A/R_1 \ne A/R_2\<br>
+&amp;则存在S_2 \in A/R_2,找不到S_1 \in A/R_1,s.t. S_2 \subseteq S_1,\<br>
+&amp;同样取s_2 = [x_0]</em>{R_2} = {y|y \in A \wedge x_0R_2y},s_2\in S_2，且s_2 \notin S_1\<br>
+&amp;即\exist &lt;x_0,y_0&gt;,s.t. x_0R_2y_0,x_0\overline{R_1}y_0\<br>
+&amp;即R_1 \ne R_2\<br>
+&amp;故R_1 \subset R_2\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;看法不对,证明就不可能对了嘛。\<br>
+&amp;若R是非空集合A的空关系，由于前件为0，R是对称和传递的，但是\forall x \in A, &lt;x,x&gt;\notin R\<br>
+&amp;R不是自反的\<br>
+&amp;故即可完成论证\<br>
+\end{align}<br>
+$$</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;必要性:\<br>
+&amp;(显然bushi)R是等价关系，且&lt;a,b&gt;\in R,&lt;a,c&gt; \in R\<br>
+&amp;由于R是对称的，有&lt;b,a&gt;\in R\<br>
+&amp;由于R是传递的，有&lt;b,c&gt;\in R\<br>
+&amp;必要性即证\<br>
+&amp;充分性:\<br>
+&amp;若&lt;a,b&gt;\in R,&lt;a,c&gt;\in R,则&lt;b,c&gt;\in R\<br>
+&amp;同时R是自反的\<br>
+&amp;\forall &lt;a,b&gt;\in R, 且由自反性有&lt;a,a&gt; \in R \<br>
+&amp;由条件可得，&lt;b,a&gt; \in R，故R是对称的\<br>
+&amp;\forall &lt;a,b&gt; \in R , &lt;b,c&gt; \in R\<br>
+&amp;证明了对称性，有&lt;b,a&gt;\in R,则结合条件可得\<br>
+&amp;&lt;a,c&gt;\in R，故R是传递的\<br>
+&amp;由等价关系的定义可知R是等价关系\<br>
+&amp;充分性得证\<br>
+&amp;综上即可得证\<br>
+\end{align}<br>
+$$</p>
+<ol start="5">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;必要性:\<br>
+&amp;(也挺显然的)&lt;x,y&gt;\in R,&lt;y,z&gt;\in R\<br>
+&amp;则由传递性，&lt;x,z&gt;\in R\<br>
+&amp;再由对称性，&lt;z,x&gt;\in R\<br>
+&amp;必要性即证\<br>
+&amp;充分性:\<br>
+&amp;R是自反的，且R是循环的\<br>
+&amp;\forall &lt;x,y&gt; \in R, 由自反性&lt;y,y&gt;\in R\<br>
+&amp;再有循环性，有&lt;y,x&gt;\in R，即R是对称的\<br>
+&amp;\forall &lt;x,y&gt;\in R,&lt;y,z&gt;\in R\<br>
+&amp;由循环性,&lt;z,x&gt;\in R,又已经证明R是对称的\<br>
+&amp;则有&lt;x,z&gt;\in R，故R是传递的\<br>
+&amp;必要性得证\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<h2><span id="作业六">作业六</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(1)能够\<br>
+&amp;dom = {1,2,3,4}\<br>
+&amp;ran = {&lt;2,3&gt;,&lt;3,4&gt;,&lt;1,4&gt;}\<br>
+&amp;(2)能够\<br>
+&amp;dom = {1,2,3}\<br>
+&amp;ran = {&lt;2,3&gt;,&lt;3,4&gt;,&lt;3,2&gt;}\<br>
+&amp;(3)不能够\<br>
+&amp;(4)能够\<br>
+&amp;dom = {1,2,3}\<br>
+&amp;ran = {&lt;2,3&gt;}\<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp; (1)\forall y \in f[A] - f[B]\<br>
+&amp;\Rightarrow y \in f[A] \wedge y \notin f[B]\<br>
+&amp;\exist x\in A \quad s.t. \quad y = f(x)\<br>
+&amp;若x\in B,则与y\notin f[B]矛盾,故x\in A - B\<br>
+&amp;即y \in f[A- B]\<br>
+&amp;反例:\<br>
+&amp;X= {1,2},Y = {0}\<br>
+&amp;f = {&lt;1,0&gt;,&lt;2,0&gt;}\<br>
+&amp;A = {1,2}, B = {1}\<br>
+&amp;此时f[A] = {0},f[B] = {0},f[A] - f[B] = \varnothing\<br>
+&amp;f[A-B] = {0}，等号不成立\<br>
+&amp;(2)\forall x \in f^{-1}[C-D]\<br>
+&amp;\exist y \in C- D , y = f(x)\<br>
+&amp;\Rightarrow y\in C\wedge y\notin D\<br>
+&amp;\Rightarrow x\in f^{-1}[C] \wedge x \notin f^{-1}[D]\<br>
+&amp;\Rightarrow x \in f^{-1}[C]-f^{-1}[D]\<br>
+&amp;因此有f^{-1}[C-D]\subseteq f^{-1}[C]-f^{-1}[D]\<br>
+&amp;\forall x \in f^{-1}[C]-f^{-1}[D]\<br>
+&amp;\exist y \in C ,y = f(x)\<br>
+&amp;若y\in D,则x\in f^{-1}[D],矛盾，因此y\notin D\<br>
+&amp;\Rightarrow y\in C-D\<br>
+&amp;即x \in f^{-1}[C-D]\<br>
+&amp;因此有f^{-1}[C]-f^{-a}[D] \subseteq f^{-a}[C-D]\<br>
+&amp;故综上有f^{-1}[C-D] = f^{-1}[C]- f^{-1}[D]\<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;单射：(1),(2)\<br>
+&amp;满射：(2),(3)\<br>
+&amp;双射：(2)\<br>
+\end{align}<br>
+$$</p>
+<h2><span id="作业七">作业七</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;由上课讲的定理显然可得：\<br>
+&amp;(定理如下，课上证明了，课下就不证了了吧)\<br>
+&amp;f:X ⟶ Y 和 g: Y ⟶ Z，则\<br>
+&amp;(1) 若 f 和 g 都是满射，则 g\circ ƒ 也是满射\<br>
+&amp;(2) 若 f 和 g 都是单射，则 g\circ ƒ 也是单射\<br>
+&amp;(3) 若 f 和 g 都是双射，则 g\circ ƒ 也是双射\<br>
+&amp;用数学归纳法显然可证\<br>
+&amp;n = 1时，结论成立 \<br>
+&amp;若n时结论成立，则n+1时\<br>
+&amp;f^{n+1} = f^n \circ f\<br>
+&amp;f^n和f都是满射，单射或双射，则f^{n+1}时满射，单射或双射\<br>
+&amp;由数学归纳法即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(1)g\circ f为满射，g为单射\<br>
+&amp;则ran(g\circ f) = Z\<br>
+&amp;且由课上结论,g为满射，故g为1-1映射\<br>
+&amp;dom(g) = Y,g^{-1}[Z] = Y \<br>
+&amp;又g[ran(f)] = Z\<br>
+&amp;即ran(f) = Y\<br>
+&amp;故f为满射\<br>
+&amp;综上即可得证\<br>
+&amp;(2)g\circ f为单射,f为满射\<br>
+&amp;且由课上结论，f为单射，故f为1-1映射\<br>
+&amp;\forall y_1 ,y_2\in Y,且y_1 \ne y_2\<br>
+&amp;由于f为1-1映射,故存在唯一x_1,x_2,s.t.y_1 = f(x_1),y_2 = f(x_2)\<br>
+&amp;若x_1 = x_2 ,则显然y_1 = y_2，故有x_1 \ne x_2\<br>
+&amp;则g\circ f(x_1) = g(y_1)  = z_1,g\circ f(x_2) = g(y_2) = z_2\<br>
+&amp;由g\circ f为单射,故z_1\ne z_2\<br>
+&amp;故可得g也为单射\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$</p>
+<p>\begin{align}<br>
+&amp;dom(f\circ f) = {x | x\in \R \wedge x \ne 0}\<br>
+&amp;ran(f\circ f) = {x | x\in \R \wedge x \ne 0}\<br>
+&amp;dom(h\circ g) = {x | x\in \R}\<br>
+&amp;ran(h\circ g) = {x | x\in \R_+ | x = 0}\<br>
+&amp;dom(g\circ h) = {x|x \in \R_+ | x = 0}\<br>
+&amp;ran(g\circ h) = {x|x \in \R_+ | x = 0}\</p>
+<p>\end{align}<br>
+$$</p>
 ]]></content>
       <tags>
         <tag>离散</tag>
