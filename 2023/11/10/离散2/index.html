@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="离散2, C,Python,数分，高代，离散等">
+    <meta name="keywords" content="C,Python,数分，高代，离散等">
     <meta name="description" content="离散2
 作业5
 
@@ -26,7 +26,7 @@ $$
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>离散2 | hugo</title>
+    <title>hugo</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -59,9 +59,9 @@ $$
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="hugo" type="application/atom+xml">
-
+<meta name="generator" content="Hexo 6.3.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="hugo" type="application/atom+xml">
 </head>
 
 
@@ -344,12 +344,12 @@ $$
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/017.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/001.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">离散2</h1>
+                    <h1 class="description center-align post-title"></h1>
                 </div>
             </div>
         </div>
@@ -371,13 +371,9 @@ $$
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/%E7%A6%BB%E6%95%A3/">
-                                <span class="chip bg-color">离散</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -398,14 +394,14 @@ $$
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.9k
+                    3.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    10 分
+                    15 分
                 </div>
                 
 
@@ -668,6 +664,144 @@ $$</p>
 &amp;ran(g\circ h) = {x|x \in \R_+ | x = 0}\</p>
 <p>\end{align}<br>
 $$</p>
+<h2><span id="作业7">作业7</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;左推右\<br>
+&amp;显然!!f可逆等价于f有唯一的左逆和右逆\<br>
+&amp;右推左\<br>
+&amp;若f有唯一的左逆(右逆证明类似)\<br>
+&amp;那么可以推出f是单射\<br>
+&amp;需要证明f是可逆的，那么只需要证明f是右可逆的\<br>
+&amp;这里采用反证法，假设f不是右可逆的，那么等价于f不是满射\<br>
+&amp;设A中至少有的两个元素为a_1, a_2,由于f是单射\<br>
+&amp;设f(a_1) = b_1, f(a_2) = b_2,且有b_1 \ne b_2，同时由于不是满射\<br>
+&amp;B中至少存在一个元素，设为b_3,A中没有元素映射到b_3\<br>
+&amp;接下来我们构造g_1,g_2,使得g_1 \circ f = I_A,g_2\circ f_2 = I_A，且g_1 \ne g_2\<br>
+&amp;g_1(x) = \begin{cases}<br>
+a_i, &amp; if, x = b_i,i=1,2\<br>
+a_1, &amp; if, x = b_3\<br>
+f^{-1}(x), &amp; if, x \in ran(f) \wedge x \notin{b_1, b_2}<br>
+\end{cases}\<br>
+&amp;g_2(x) = \begin{cases}<br>
+a_i, &amp; if, x = b_i,i=1,2\<br>
+a_2, &amp; if, x = b_3\<br>
+f^{-1}(x), &amp; if, x \in ran(f) \wedge x \notin{b_1, b_2}<br>
+\end{cases}\<br>
+&amp;那么就有g_1 \circ f = I_A,g_2\circ f_2 = I_A，且g_1 \ne g_2成立，与f有唯一的左逆矛盾\<br>
+&amp;故有上面的反证法可以得到f是右可逆的，那么f是可逆，即可得证\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+(1)&amp;f是左可逆，右可逆，可逆的\<br>
+&amp;显然f是单射，满射，因此是可逆的。同时求出f的逆即为f的左逆和右逆\<br>
+&amp;构造g(x) = \begin{cases}<br>
+4,&amp; if, x= 0\<br>
+x-1,&amp; if, x = 1,2,3,4\<br>
+x,&amp; if, x &gt; 5<br>
+\end{cases}\<br>
+&amp;可以验证f\circ g = I_N, g\circ f = I_N\<br>
+&amp;即为所求\<br>
+(2)&amp;f是右可逆，不是左可逆，不是可逆\<br>
+&amp;由于f(1)  = f(3) =  3,因此f不是单射，f不是左可逆\<br>
+&amp;f是满射，\forall x \in N,\exist f(2x) = x,2x \in N;<br>
+&amp;下面构造f的右逆g\<br>
+&amp;g(x) = 2x, x \in N;即为右逆之一<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;\chi_{A-B\cap C}\<br>
+&amp;= \chi_A - \chi_A <em>\chi_{B\cap C}\<br>
+&amp;= \chi_A - \chi_A</em>\chi_B*\chi_C\<br>
+&amp;\chi_{(A-B)\cup (A-C)}\<br>
+&amp;=\chi_{A-B} + \chi_{A-C}-\chi_{A-B}<em>\chi_{A-C}\<br>
+&amp;=\chi_A-\chi_A</em>\chi_B+\chi_A-\chi_A*\chi_C - (\chi_A-\chi_A*\chi_B)<em>(\chi_A-\chi_A</em>\chi_C)\<br>
+&amp;=\chi_A-\chi_A*\chi_B+\chi_A-\chi_A*\chi_C-(\chi_A-\chi_A*\chi_A*\chi_C-\chi_A*\chi_B*\chi_A+\chi_A*\chi_B*\chi_A*\chi_C)\<br>
+&amp;=\chi_A-\chi_A*\chi_B+\chi_A-\chi_A*\chi_C-(\chi_A-\chi_A*\chi_C-\chi_A*\chi_B+\chi_A*\chi_B*\chi_C)\<br>
+&amp;=\chi_A - \chi_A*\chi_B*\chi_C\<br>
+&amp;于是显然有\chi_{A-B\cap C} = \chi_{(A-B)\cup (A-C)}\<br>
+&amp;于是可以证明A-B\cap C = (A-B)\cup(A-C)\<br>
+\end{align}<br>
+$$</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;\chi_{A\oplus B}\<br>
+&amp;=\chi_{A} - \chi_{A\cap B} + \chi_{B}-\chi_{A\cap B}\<br>
+&amp;=\chi_{A} + \chi_{B} - 2*\chi_{A}<em>\chi_{B}\<br>
+&amp;=0\<br>
+&amp;那么有\chi_{A}</em>(1-\chi_{B}) = \chi_B*(1-\chi_{A})\<br>
+&amp;\iff \chi_{A}<em>\chi_{\sim B} = \chi_{B}</em>\chi_{\sim A}\<br>
+&amp;\iff \chi_{A\cap \sim B} = \chi_{B\cap \sim A}\<br>
+&amp;\iff A\cap \sim B = B \cap \sim A\<br>
+&amp;即为所求<br>
+\end{align}<br>
+$$</p>
+<h2><span id="作业8">作业8</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;利用第一数学归纳法进行证明\<br>
+&amp;(1)由于为自然数序列，所以显然有0\le a_0\<br>
+&amp;(2)\forall n\ge 0,若n \le a_n,下面证明n^+\le a_{n^+}\<br>
+&amp;由于为单调递增序列，因此显然有a_n &lt;a_{n^+}\<br>
+&amp;同时为正整数序列，由于正整数是不稠密的\<br>
+&amp;有a_n + 1 \le a_{n^+}\<br>
+&amp;n^+ = n + 1 \le a_n + 1\le a_{n^+}\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;对于本题我们先证明如下结论:\<br>
+&amp;\forall i \in n, 有i \subseteq n\<br>
+&amp;使用第一数学归纳法进行证明\<br>
+&amp;(1)n = 0时显然成立。\<br>
+&amp;(2)\forall n \ge 0,若结论成立，即\forall i \in n, 有i\subseteq n\<br>
+&amp;那么对于n^+,有n^+ = {n,{n}}\<br>
+&amp;\forall i \in n^+, 有i = n 或者i \in n(由三歧性可得)\<br>
+&amp;若i = n,显然有i\subseteq n^+\<br>
+&amp;若i\in n,由归纳假设，i\in n\<br>
+&amp;又n\in n^=,则又i\in n^+\<br>
+&amp;故该结论得证\<br>
+&amp;对于本题,\forall a \in n,\forall x \in a\<br>
+&amp;由于可推出a \in n, 于是显然有x \in n\<br>
+&amp;故综上即可得证\forall n \in N 是传递的<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;本题应该是想用二重归纳法做，但是太麻烦了，我就直接用构造法哈(goutou)\<br>
+&amp;设n = k(m+1) + t,(t &lt; m+1)\<br>
+&amp;由于n &gt; m 且(m+1)\nmid n\<br>
+&amp;可得k \ge 1, t \ne 0\<br>
+&amp;那么甲第一次取t个球，然后每次乙取x个球\<br>
+&amp;甲取(m+1-x)个球，一轮取球数维m+1，故经过k轮\<br>
+&amp;恰好甲取完最后的球，获胜<br>
+\end{align}<br>
+$$</p>
 
                 
             </div>
@@ -731,11 +865,7 @@ $$</p>
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/%E7%A6%BB%E6%95%A3/">
-                                    <span class="chip bg-color">离散</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -775,7 +905,7 @@ $$</p>
     disqus_config = function () {
         this.page.url = 'https://hugohealthy.top/2023/11/10/%E7%A6%BB%E6%95%A32/';
         this.page.identifier = '/2023/11/10/%E7%A6%BB%E6%95%A32/';
-        this.page.title = '离散2';
+        this.page.title = '';
     };
     let disqus_shortname = '';
 
@@ -814,9 +944,9 @@ $$</p>
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/017.jpg" class="responsive-img" alt="离散2">
+                        <img src="/medias/featureimages/001.jpg" class="responsive-img" alt="">
                         
-                        <span class="card-title">离散2</span>
+                        <span class="card-title"></span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -838,14 +968,6 @@ $$</p>
                     </div>
                 </div>
 
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E7%A6%BB%E6%95%A3/">
-                        <span class="chip bg-color">离散</span>
-                    </a>
-                    
-                </div>
                 
             </div>
         </div>
@@ -1049,13 +1171,6 @@ $$</p>
 </main>
 
 
-<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script>
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
-    });
-</script>
-
 
 
     <footer class="page-footer bg-color">
@@ -1129,7 +1244,7 @@ $$</p>
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">15.5k</span>
+                        class="white-color">16.6k</span>
             
             
             

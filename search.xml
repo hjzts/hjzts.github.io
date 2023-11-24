@@ -82,122 +82,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Trie</title>
-    <url>/2023/05/25/Trie/</url>
-    <content><![CDATA[<blockquote>
-<p>Tire树，即字典树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。</p>
-</blockquote>
-<p>说白了，就是一棵大树，这棵树的每个除了根节点的结点都存储了一个字符。</p>
-<h2><span id="说在前面">说在前面</span></h2>
-<p>字典树有两种实现方式，一种是利用指针实现，也就是一个实实在在的二十六叉树；另一种就是利用数组实现。（在这里分别称之为指针版字典树和数组版字典树）</p>
-<p>两种实现方式各有优劣，指针版本的清晰明了，空间占用率相对较小（空间占用小就可以用剩下的空间干其他很多事）；而数组版字典树就是一次性把空间开好了，比较方便。</p>
-<h2><span id="指针版字典树">指针版字典树</span></h2>
-<p>结构体定义：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">datatype</span> <span class="token expression"><span class="token keyword">int</span></span></span>
-<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">node</span><span class="token punctuation">{</span>
-    bool isEnd<span class="token punctuation">;</span>
-    datatype data<span class="token punctuation">;</span>		<span class="token comment">//一般是计数</span>
-    <span class="token keyword">struct</span> <span class="token class-name">node</span> <span class="token operator">*</span>letter<span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>Node<span class="token punctuation">,</span><span class="token operator">*</span>List<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>新建一个结点的初始化：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">memset</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    p<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> false<span class="token punctuation">;</span>
-    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>当然，一种更加推荐的方式是使用<code>calloc()</code>函数，<code>malloc()</code>有更多自己操控的空间</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">calloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>创建一棵<code>Trie</code>:</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MAXSIZE</span> <span class="token expression"><span class="token number">1000</span></span></span>
-<span class="token keyword">void</span> <span class="token function">createStopTrie</span><span class="token punctuation">(</span>List <span class="token operator">*</span>root<span class="token punctuation">,</span> FILE <span class="token operator">*</span>in<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> pos <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">fread</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> MAXSIZE<span class="token punctuation">,</span> in<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">char</span> ch<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    List end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
-    <span class="token keyword">while</span> <span class="token punctuation">(</span>pos <span class="token operator">&lt;</span> len<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        ch <span class="token operator">=</span> <span class="token function">tolower</span><span class="token punctuation">(</span>buffer<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">islower</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-            end <span class="token operator">=</span> end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-            pos<span class="token operator">++</span><span class="token punctuation">;</span>
-            depth<span class="token operator">++</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            end<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> true<span class="token punctuation">;</span>
-            pos<span class="token operator">++</span><span class="token punctuation">;</span>
-            end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>depth <span class="token operator">&gt;</span> Depth<span class="token punctuation">)</span> Depth <span class="token operator">=</span> depth<span class="token punctuation">;</span>
-            depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>调用前需要</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">Root <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">createArticleTrie</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Root<span class="token punctuation">,</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p><strong>三个基本性质：</strong></p>
-<ul>
-<li>根节点不包含字符，除根节点的每一个节点都只包含一个字符。</li>
-<li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。</li>
-<li>每个节点的所有子节点包含的字符都不相同</li>
-</ul>
-<p>我觉得这个像是一个26叉树，也有一点想26进制的一个东西。</p>
-<p>我们这里存储的都是小写字母，如果包含又大写字母的话可能就是一个52叉树了。一般不会出现这种情况吧，<s>出现了也不怪我</s></p>
-<blockquote>
-<p>主要实现单词的高效存储与高效查找</p>
-</blockquote>
-<p>利用<code>cout[i]</code>来记录以<code>i</code>为编号的字符结尾的字符串的个数。</p>
-<p>就有两个基本操作</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
-<span class="token keyword">const</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">1e5</span> <span class="token operator">+</span> <span class="token number">5</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> tr<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cou<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">,</span> idx<span class="token punctuation">;</span>
-<span class="token keyword">char</span> str<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
-
-<span class="token keyword">void</span> <span class="token function">insert</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
-  <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
-      tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">++</span>idx<span class="token punctuation">;</span>
-    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-  cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">int</span> <span class="token function">query</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
-  <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
-      <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-  <span class="token keyword">return</span> cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>参考资料：</p>
-<ol>
-<li><a href="https://blog.csdn.net/forever_dreams/article/details/81009580">https://blog.csdn.net/forever_dreams/article/details/81009580</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/28891541">https://zhuanlan.zhihu.com/p/28891541</a></li>
-<li><a href="https://blog.csdn.net/weixin_42815609/article/details/102692411">https://blog.csdn.net/weixin_42815609/article/details/102692411</a></li>
-<li>用C++讲得很清楚：<a href="https://blog.csdn.net/weixin_44176696/article/details/104716191">https://blog.csdn.net/weixin_44176696/article/details/104716191</a></li>
-<li>这个有头文件诶，高级！：<a href="https://blog.csdn.net/A951860555/article/details/108716487">https://blog.csdn.net/A951860555/article/details/108716487</a></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>数据结构</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>OOpre</title>
     <url>/2023/11/10/OOpre/</url>
     <content><![CDATA[<h1><span id="buaa-oopre总结">BUAA-OOpre总结</span></h1>
@@ -329,6 +213,122 @@
 ]]></content>
       <tags>
         <tag>OOpre</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Trie</title>
+    <url>/2023/05/25/Trie/</url>
+    <content><![CDATA[<blockquote>
+<p>Tire树，即字典树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。</p>
+</blockquote>
+<p>说白了，就是一棵大树，这棵树的每个除了根节点的结点都存储了一个字符。</p>
+<h2><span id="说在前面">说在前面</span></h2>
+<p>字典树有两种实现方式，一种是利用指针实现，也就是一个实实在在的二十六叉树；另一种就是利用数组实现。（在这里分别称之为指针版字典树和数组版字典树）</p>
+<p>两种实现方式各有优劣，指针版本的清晰明了，空间占用率相对较小（空间占用小就可以用剩下的空间干其他很多事）；而数组版字典树就是一次性把空间开好了，比较方便。</p>
+<h2><span id="指针版字典树">指针版字典树</span></h2>
+<p>结构体定义：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">datatype</span> <span class="token expression"><span class="token keyword">int</span></span></span>
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">node</span><span class="token punctuation">{</span>
+    bool isEnd<span class="token punctuation">;</span>
+    datatype data<span class="token punctuation">;</span>		<span class="token comment">//一般是计数</span>
+    <span class="token keyword">struct</span> <span class="token class-name">node</span> <span class="token operator">*</span>letter<span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>Node<span class="token punctuation">,</span><span class="token operator">*</span>List<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>新建一个结点的初始化：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    p<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> false<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当然，一种更加推荐的方式是使用<code>calloc()</code>函数，<code>malloc()</code>有更多自己操控的空间</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">calloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>创建一棵<code>Trie</code>:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MAXSIZE</span> <span class="token expression"><span class="token number">1000</span></span></span>
+<span class="token keyword">void</span> <span class="token function">createStopTrie</span><span class="token punctuation">(</span>List <span class="token operator">*</span>root<span class="token punctuation">,</span> FILE <span class="token operator">*</span>in<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> pos <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">fread</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> MAXSIZE<span class="token punctuation">,</span> in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">char</span> ch<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    List end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>pos <span class="token operator">&lt;</span> len<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        ch <span class="token operator">=</span> <span class="token function">tolower</span><span class="token punctuation">(</span>buffer<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">islower</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            end <span class="token operator">=</span> end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            pos<span class="token operator">++</span><span class="token punctuation">;</span>
+            depth<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            end<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> true<span class="token punctuation">;</span>
+            pos<span class="token operator">++</span><span class="token punctuation">;</span>
+            end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>depth <span class="token operator">&gt;</span> Depth<span class="token punctuation">)</span> Depth <span class="token operator">=</span> depth<span class="token punctuation">;</span>
+            depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>调用前需要</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">Root <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">createArticleTrie</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Root<span class="token punctuation">,</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><strong>三个基本性质：</strong></p>
+<ul>
+<li>根节点不包含字符，除根节点的每一个节点都只包含一个字符。</li>
+<li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。</li>
+<li>每个节点的所有子节点包含的字符都不相同</li>
+</ul>
+<p>我觉得这个像是一个26叉树，也有一点想26进制的一个东西。</p>
+<p>我们这里存储的都是小写字母，如果包含又大写字母的话可能就是一个52叉树了。一般不会出现这种情况吧，<s>出现了也不怪我</s></p>
+<blockquote>
+<p>主要实现单词的高效存储与高效查找</p>
+</blockquote>
+<p>利用<code>cout[i]</code>来记录以<code>i</code>为编号的字符结尾的字符串的个数。</p>
+<p>就有两个基本操作</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token keyword">const</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">1e5</span> <span class="token operator">+</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> tr<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cou<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">,</span> idx<span class="token punctuation">;</span>
+<span class="token keyword">char</span> str<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">insert</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
+      tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">++</span>idx<span class="token punctuation">;</span>
+    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">query</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
+      <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://blog.csdn.net/forever_dreams/article/details/81009580">https://blog.csdn.net/forever_dreams/article/details/81009580</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/28891541">https://zhuanlan.zhihu.com/p/28891541</a></li>
+<li><a href="https://blog.csdn.net/weixin_42815609/article/details/102692411">https://blog.csdn.net/weixin_42815609/article/details/102692411</a></li>
+<li>用C++讲得很清楚：<a href="https://blog.csdn.net/weixin_44176696/article/details/104716191">https://blog.csdn.net/weixin_44176696/article/details/104716191</a></li>
+<li>这个有头文件诶，高级！：<a href="https://blog.csdn.net/A951860555/article/details/108716487">https://blog.csdn.net/A951860555/article/details/108716487</a></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -995,514 +995,6 @@ item <span class="token operator">=</span> q1<span class="token punctuation">[</
       </tags>
   </entry>
   <entry>
-    <title>离散2</title>
-    <url>/2023/11/10/%E7%A6%BB%E6%95%A32/</url>
-    <content><![CDATA[<h1><span id="离散2">离散2</span></h1>
-<h2><span id="作业5">作业5</span></h2>
-<ol>
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;(1)不是\<br>
-&amp;A = {1, 2, 3}\<br>
-&amp;R_1 = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;,&lt;1,2&gt;,&lt;2,1&gt;, &lt;1,3&gt;,&lt;3,1&gt;,&lt;2,3&gt;,&lt;3,2&gt;}\<br>
-&amp;R_2 = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;1,2&gt;,&lt;2,1&gt;}\<br>
-&amp;则r(R_1 - R_2) = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;,&lt;2,3&gt;,&lt;3,2&gt;,&lt;1,3&gt;,&lt;3,1&gt;}\<br>
-&amp;而有&lt;1,3&gt;,&lt;3,2&gt;\in r(R_1 - R_2) 但是&lt;1,2&gt; \notin r(R_1 - R_2),故r(R_1-R_2)不是传递的，因而不是等价关系\<br>
-&amp;(2)不是\<br>
-&amp; 上课已经讲过，R_1 , R_2是对称时，R_1 \circ R_2 不一定对称\<br>
-&amp; 比如取A = {1, 2, 3}\<br>
-&amp;R_1 = {&lt;1,1&gt;, &lt;2,2&gt;,&lt;1,2&gt;,&lt;2,1&gt;,}\<br>
-&amp;R_2 = {&lt;2,2&gt;, &lt;3,3&gt;, &lt;2,3&gt;,&lt;3,2&gt;}\<br>
-&amp;则R_1\circ R_2 = {&lt;2,2&gt;,&lt;2,3&gt;,&lt;1,3&gt;,&lt;1,2&gt;}显然不是等价关系\<br>
-&amp;(3)是\<br>
-&amp;R_1,R_2都是等价关系，那么都是自反，对称，传递的\<br>
-&amp;就有R_1\cup R_2是自反的，对称的\<br>
-&amp;同时如果R_1 \cup R_2 是自反的，对称的，那么t(R_1,R_2)仍然是自反、对称的，同时还是传递的\<br>
-&amp;由等价关系的定义可知t(R_1, R_2)是等价关系<br>
-\end{align}<br>
-$$</p>
-<ol start="2">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;(a)\<br>
-&amp;左到右:\<br>
-&amp;S_1 \in A/R1,则\forall s_1 \in S_1\<br>
-&amp;s_1 = [x]<em>{R_1} = {y|y\in A \wedge x R_1y},x为A中元素\<br>
-&amp;又R_1\subseteq R_2,及&lt;x,y&gt; \in R_1 有&lt;x,y&gt; \in R_2，即xR_2y\<br>
-&amp;故s_1 \in S_2 = [x]</em>{R_2} = {y|y \in A \wedge xR_2y}\<br>
-&amp;即S_1 \subseteq S_2,由加细的定义有A/R_1 \le A/R_2\<br>
-&amp;右到左:\<br>
-&amp;A/R_1 \le A/R_2\<br>
-&amp;有\forall S_1 \in A/R_1 , \exist S_2 \in A/R_2 , s.t. S_1 \subseteq S_2\<br>
-&amp;\forall s_1 \in S_1\<br>
-&amp;s_1 = [x]<em>{R_1} = {y|y\in A \wedge x R_1y},x为A中元素\<br>
-&amp;故\exist s_2 = [x]</em>{R_2} = {y|y \in A \wedge xR_2y},s_1 \subseteq s_2 \<br>
-&amp;即\forall xR_1y,有xR_2y,即R_1 \subseteq R_2\<br>
-&amp;综上即可得证\<br>
-&amp;(b)\<br>
-&amp;左到右:\<br>
-&amp;R_1 \subset R_2 必然有R_1 \subseteq R_2，则A/R_1 \le A/R_2\<br>
-&amp;又R_1\ne R_2,即\exist &lt;x_0,y&gt; \in R_2,&lt;x_0,y&gt;\notin R_1\<br>
-&amp;取s_2 = [x_0]<em>{R_2} = {y|y \in A \wedge x_0R_2y},s_2 \in S_2，其中S_2 \in A/R_2\<br>
-&amp;且由于&lt;x_0,y&gt;\notin R_1 ,s_2 \notin S_1,故S_1 \ne S_2,其中S_1 \in A/R_1\<br>
-&amp;即A/R_1 \ne A/R_2\<br>
-&amp;右到左:\<br>
-&amp;A/R_1 \subset A/R_2,则同样易有R_1\subseteq R_2\<br>
-&amp;A/R_1 \ne A/R_2\<br>
-&amp;则存在S_2 \in A/R_2,找不到S_1 \in A/R_1,s.t. S_2 \subseteq S_1,\<br>
-&amp;同样取s_2 = [x_0]</em>{R_2} = {y|y \in A \wedge x_0R_2y},s_2\in S_2，且s_2 \notin S_1\<br>
-&amp;即\exist &lt;x_0,y_0&gt;,s.t. x_0R_2y_0,x_0\overline{R_1}y_0\<br>
-&amp;即R_1 \ne R_2\<br>
-&amp;故R_1 \subset R_2\<br>
-&amp;综上即可得证<br>
-\end{align}<br>
-$$</p>
-<ol start="3">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;看法不对,证明就不可能对了嘛。\<br>
-&amp;若R是非空集合A的空关系，由于前件为0，R是对称和传递的，但是\forall x \in A, &lt;x,x&gt;\notin R\<br>
-&amp;R不是自反的\<br>
-&amp;故即可完成论证\<br>
-\end{align}<br>
-$$</p>
-<ol start="4">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;必要性:\<br>
-&amp;(显然bushi)R是等价关系，且&lt;a,b&gt;\in R,&lt;a,c&gt; \in R\<br>
-&amp;由于R是对称的，有&lt;b,a&gt;\in R\<br>
-&amp;由于R是传递的，有&lt;b,c&gt;\in R\<br>
-&amp;必要性即证\<br>
-&amp;充分性:\<br>
-&amp;若&lt;a,b&gt;\in R,&lt;a,c&gt;\in R,则&lt;b,c&gt;\in R\<br>
-&amp;同时R是自反的\<br>
-&amp;\forall &lt;a,b&gt;\in R, 且由自反性有&lt;a,a&gt; \in R \<br>
-&amp;由条件可得，&lt;b,a&gt; \in R，故R是对称的\<br>
-&amp;\forall &lt;a,b&gt; \in R , &lt;b,c&gt; \in R\<br>
-&amp;证明了对称性，有&lt;b,a&gt;\in R,则结合条件可得\<br>
-&amp;&lt;a,c&gt;\in R，故R是传递的\<br>
-&amp;由等价关系的定义可知R是等价关系\<br>
-&amp;充分性得证\<br>
-&amp;综上即可得证\<br>
-\end{align}<br>
-$$</p>
-<ol start="5">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;必要性:\<br>
-&amp;(也挺显然的)&lt;x,y&gt;\in R,&lt;y,z&gt;\in R\<br>
-&amp;则由传递性，&lt;x,z&gt;\in R\<br>
-&amp;再由对称性，&lt;z,x&gt;\in R\<br>
-&amp;必要性即证\<br>
-&amp;充分性:\<br>
-&amp;R是自反的，且R是循环的\<br>
-&amp;\forall &lt;x,y&gt; \in R, 由自反性&lt;y,y&gt;\in R\<br>
-&amp;再有循环性，有&lt;y,x&gt;\in R，即R是对称的\<br>
-&amp;\forall &lt;x,y&gt;\in R,&lt;y,z&gt;\in R\<br>
-&amp;由循环性,&lt;z,x&gt;\in R,又已经证明R是对称的\<br>
-&amp;则有&lt;x,z&gt;\in R，故R是传递的\<br>
-&amp;必要性得证\<br>
-&amp;综上即可得证<br>
-\end{align}<br>
-$$</p>
-<h2><span id="作业六">作业六</span></h2>
-<ol>
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;(1)能够\<br>
-&amp;dom = {1,2,3,4}\<br>
-&amp;ran = {&lt;2,3&gt;,&lt;3,4&gt;,&lt;1,4&gt;}\<br>
-&amp;(2)能够\<br>
-&amp;dom = {1,2,3}\<br>
-&amp;ran = {&lt;2,3&gt;,&lt;3,4&gt;,&lt;3,2&gt;}\<br>
-&amp;(3)不能够\<br>
-&amp;(4)能够\<br>
-&amp;dom = {1,2,3}\<br>
-&amp;ran = {&lt;2,3&gt;}\<br>
-\end{align}<br>
-$$</p>
-<ol start="2">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp; (1)\forall y \in f[A] - f[B]\<br>
-&amp;\Rightarrow y \in f[A] \wedge y \notin f[B]\<br>
-&amp;\exist x\in A \quad s.t. \quad y = f(x)\<br>
-&amp;若x\in B,则与y\notin f[B]矛盾,故x\in A - B\<br>
-&amp;即y \in f[A- B]\<br>
-&amp;反例:\<br>
-&amp;X= {1,2},Y = {0}\<br>
-&amp;f = {&lt;1,0&gt;,&lt;2,0&gt;}\<br>
-&amp;A = {1,2}, B = {1}\<br>
-&amp;此时f[A] = {0},f[B] = {0},f[A] - f[B] = \varnothing\<br>
-&amp;f[A-B] = {0}，等号不成立\<br>
-&amp;(2)\forall x \in f^{-1}[C-D]\<br>
-&amp;\exist y \in C- D , y = f(x)\<br>
-&amp;\Rightarrow y\in C\wedge y\notin D\<br>
-&amp;\Rightarrow x\in f^{-1}[C] \wedge x \notin f^{-1}[D]\<br>
-&amp;\Rightarrow x \in f^{-1}[C]-f^{-1}[D]\<br>
-&amp;因此有f^{-1}[C-D]\subseteq f^{-1}[C]-f^{-1}[D]\<br>
-&amp;\forall x \in f^{-1}[C]-f^{-1}[D]\<br>
-&amp;\exist y \in C ,y = f(x)\<br>
-&amp;若y\in D,则x\in f^{-1}[D],矛盾，因此y\notin D\<br>
-&amp;\Rightarrow y\in C-D\<br>
-&amp;即x \in f^{-1}[C-D]\<br>
-&amp;因此有f^{-1}[C]-f^{-a}[D] \subseteq f^{-a}[C-D]\<br>
-&amp;故综上有f^{-1}[C-D] = f^{-1}[C]- f^{-1}[D]\<br>
-\end{align}<br>
-$$</p>
-<ol start="3">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;单射：(1),(2)\<br>
-&amp;满射：(2),(3)\<br>
-&amp;双射：(2)\<br>
-\end{align}<br>
-$$</p>
-<h2><span id="作业七">作业七</span></h2>
-<ol>
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;由上课讲的定理显然可得：\<br>
-&amp;(定理如下，课上证明了，课下就不证了了吧)\<br>
-&amp;f:X ⟶ Y 和 g: Y ⟶ Z，则\<br>
-&amp;(1) 若 f 和 g 都是满射，则 g\circ ƒ 也是满射\<br>
-&amp;(2) 若 f 和 g 都是单射，则 g\circ ƒ 也是单射\<br>
-&amp;(3) 若 f 和 g 都是双射，则 g\circ ƒ 也是双射\<br>
-&amp;用数学归纳法显然可证\<br>
-&amp;n = 1时，结论成立 \<br>
-&amp;若n时结论成立，则n+1时\<br>
-&amp;f^{n+1} = f^n \circ f\<br>
-&amp;f^n和f都是满射，单射或双射，则f^{n+1}时满射，单射或双射\<br>
-&amp;由数学归纳法即可得证<br>
-\end{align}<br>
-$$</p>
-<ol start="2">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;(1)g\circ f为满射，g为单射\<br>
-&amp;则ran(g\circ f) = Z\<br>
-&amp;且由课上结论,g为满射，故g为1-1映射\<br>
-&amp;dom(g) = Y,g^{-1}[Z] = Y \<br>
-&amp;又g[ran(f)] = Z\<br>
-&amp;即ran(f) = Y\<br>
-&amp;故f为满射\<br>
-&amp;综上即可得证\<br>
-&amp;(2)g\circ f为单射,f为满射\<br>
-&amp;且由课上结论，f为单射，故f为1-1映射\<br>
-&amp;\forall y_1 ,y_2\in Y,且y_1 \ne y_2\<br>
-&amp;由于f为1-1映射,故存在唯一x_1,x_2,s.t.y_1 = f(x_1),y_2 = f(x_2)\<br>
-&amp;若x_1 = x_2 ,则显然y_1 = y_2，故有x_1 \ne x_2\<br>
-&amp;则g\circ f(x_1) = g(y_1)  = z_1,g\circ f(x_2) = g(y_2) = z_2\<br>
-&amp;由g\circ f为单射,故z_1\ne z_2\<br>
-&amp;故可得g也为单射\<br>
-&amp;综上即可得证<br>
-\end{align}<br>
-$$</p>
-<ol start="3">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;dom(f\circ f) = {x | x\in \R \wedge x \ne 0}\<br>
-&amp;ran(f\circ f) = {x | x\in \R \wedge x \ne 0}\<br>
-&amp;dom(h\circ g) = {x | x\in \R}\<br>
-&amp;ran(h\circ g) = {x | x\in \R_+ | x = 0}\<br>
-&amp;dom(g\circ h) = {x|x \in \R_+ | x = 0}\<br>
-&amp;ran(g\circ h) = {x|x \in \R_+ | x = 0}\</p>
-<p>\end{align}<br>
-$$</p>
-]]></content>
-      <tags>
-        <tag>离散</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>高数应用</title>
-    <url>/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<div align="center"><font size="24" face="宋体">高等数学不等式问题探讨</font></div>
-<span id="more"></span>
-<div align="center"><font size="6" face="仿宋">hugo</font></div>
-<p>​				<font size="4.5" face="楷体">[<b>摘要</b>]</font>:本文将介绍大学高等数学中遇到的相关不等式问题，介绍一些著名的不等式，如算术几何平均不等式、$\text{Bernoulli}$不等式、$\text{Jensen}$不等式、$\text{Cauchy}$不等式、$\text{Young}$不等式、$\text{Holder}$不等式、$\text{Minkowski}$不等式，以及在遇到不等式问题的常用处理办法，利用构造函数，求导分析单调性等方法，最后再结合一些例题进行具体分析讨论。</p>
-<p>​				<font size="4.5" face="楷体">[<b>关键词</b>]</font>:算术几何平均不等式；$\text{Jensen}$不等式；$\text{Cauchy}$不等式；$\text{Young}$不等式；$\text{Bernoulli}$不等式；$\text{Holder}$不等式；$\text{Minkowski}$不等式；构造函数；变上限积分</p>
-<h1><span id="1-引言">1   引言</span></h1>
-<p>​	在第五届全国大学生数学竞赛非数学类决赛第三题是一道与常微分方程有关的不等式问题：<br>
-$$<br>
-设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\</p>
-<p>f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\</p>
-<p>试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
-$$<br>
-​	在第八届全国大学生数学竞赛非数学类决赛第二题是一道不等式的综合问题：<br>
-$$<br>
-设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
-$$<br>
-​	在第八届全国大学生数学竞赛非数学类初赛第二题是一道构造变上限积分的题目：<br>
-$$<br>
-设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\<br>
-有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
-$$<br>
-​	在第十届全国大学生数学竞赛非数学类第三题是一道典型的运用到了积分形式的$Cauchy$不等式的题目：<br>
-$$<br>
-设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
-1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
-$$<br>
-​	可以看到不等式问题在考试中的考察还是比较多的，特别是近年有增多的趋势，其次在课后练习及相关研究中，不等式问题具有其独特的数学魅力。不等式问题是许多证明题的重要内容，涵盖的知识点丰富，有许多重要的不等式，这些经典的不等式的处理方法多种多样，在这里我将介绍其中个别方法，并对其在n维度量空间的推广加以介绍。同时将就大学高等数学中出现的不等式问题常用到的方法进行分析，如在导数部分常常用到的构造函数求导分析单调性，在积分部分通过构造变上限积分来证明不等式的问题，同时部分不等式证明题还可以用到$\text{Taylor}$展开、微分中值定理和积分中值定理进行证明。</p>
-<h1><span id="2-几个重要不等式">2   几个重要不等式</span></h1>
-<h4><span id="算术几何平均不等式">算术几何平均不等式</span></h4>
-<p>设$n\in N^*,a_i&gt;0(i=1,2,3\dots n)$,则有<br>
-$$<br>
-{n\over\frac1{a_1}+\frac1{a_2}+\dots +\frac1{a_n}}\le\sqrt[n]{a_1a_2\dots a_n}\le{a_1+a_2+\dots+a_n\over n}\le\sqrt{a_1^2+a_2^2+\dots+a_n^2\over n}\<br>
-$$<br>
-当且仅当$a_1=a_2=\dots=a_n$时等号成立</p>
-<p>**证明：**由归纳法易证</p>
-<h4><span id="bernoulli不等式">Bernoulli不等式</span></h4>
-<p>当$x\ge -1$时，有<br>
-$$<br>
-\begin{align}<br>
-&amp;(1)若\alpha&gt;1,则有(1+x)^\alpha\ge1+\alpha x;\<br>
-&amp;(2)若0&lt;\alpha&lt;1,则有(1+x)^\alpha\le1+\alpha x.<br>
-\end{align}<br>
-$$<br>
-**证明：**构造函数求导分析单调性易证</p>
-<h4><span id="jensen不等式">Jensen不等式</span></h4>
-<p>设f(x)是区间$I$上的凸函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
-$$<br>
-f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\le\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).\<br>
-$$<br>
-如果f(x)是区间I上的凹函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
-$$<br>
-f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\ge\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).<br>
-$$</p>
-<p><strong>证明</strong>：由归纳法易证</p>
-<h4><span id="young不等式">Young不等式</span></h4>
-<p>设$a,b\ge0,p,q&gt;1,\frac1p+\frac1q=1$,则有<br>
-$$<br>
-ab\le\frac{a^p}p+\frac{b^q}q<br>
-$$<br>
-当且仅当$a^{\frac1q}=b^{\frac1p}$时等号成立</p>
-<p><strong>证明：</strong></p>
-<p>若$a=b=0$，则有不等式成立，否则不妨设$b&gt;0$。</p>
-<p>考虑证明$\text{Young}$不等式的等价形式<br>
-$$<br>
-\begin{align}<br>
-&amp;a^{\frac1p}b^{\frac1q}\le\frac ap+\frac bq\<br>
-&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab\right)+1-\frac1p\<br>
-&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab -1\right)+1<br>
-\end{align}<br>
-$$<br>
-作换元$x=\frac ab$，则等价于<br>
-$$<br>
-\left(x\right)^{\frac1p}\le\frac1p\cdot\left(x -1\right)+1<br>
-$$<br>
-构造函数，结合函数的上凸性易证</p>
-<h5><span id="n度量空间的young不等式">n度量空间的Young不等式</span></h5>
-<p>设$x_i\ge0,p_i\ge1(i=1,2,\dots,n),\sum_{i=1}^n\frac1{p_i}=1$,则有<br>
-$$<br>
-\prod_{i=1}^n\le\sum_{i=1}^n\frac{x_i^{p_i}}{p_i}<br>
-$$<br>
-当且仅当$\frac{x_1^{p_1}}{p_1}=\frac{x_2^{p_2}}{p_2}=\dots=\frac{x_n^{p_n}}{p_n}$时等式成立</p>
-<p><strong>证明：</strong></p>
-<p>与证明2度量空间的$\text{Young}$不等式的方法类似，只不过需要利用$n-1$维函数$f(x_1,x_2,\dots,x_{n-1})$的上凸性<br>
-$$<br>
-f(x_1,x_2,\dots,x_{n-1})=\prod_{i=1}^{n-1}x_i^{\frac1{p_i}}<br>
-$$<br>
-易证</p>
-<h4><span id="cauchy不等式">Cauchy不等式</span></h4>
-<p>设$a_i,b_i\in R,i=1,2,\dots,n$,有<br>
-$$<br>
-\left(\sum_{i=1}^na_ib_i\right)^2\le\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)<br>
-$$<br>
-当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立<br>
-$$<br>
-\frac{a_1}{b_1}=\frac{a_2}{b_2}=\dots=\frac{a_n}{b_n}<br>
-$$</p>
-<p><strong>证明：</strong><br>
-法一:由归纳法易证<br>
-法二:构造二次函数证明<br>
-做二次函数<br>
-$$<br>
-\begin{align}<br>
-f(x)&amp;=\left(\sum_{i=1}^na_i^2\right)x^2+2\left(\sum_{i=1}^na_ib_i\right)x+\left(\sum_{i=1}^nb_i^2\right)\<br>
-&amp;=\sum_{i=1}^n(a_ix+b_i)^2\<br>
-&amp;\ge0<br>
-\end{align}<br>
-$$<br>
-由于<br>
-$$<br>
-\left(\sum_{i=1}^na_i^2\right)&gt;0<br>
-$$<br>
-则有<br>
-$$<br>
-\Delta=4\left(\sum_{i=1}^na_ib_i\right)^2-4\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)\le 0<br>
-$$<br>
-即证</p>
-<h4><span id="holder不等式">Holder不等式</span></h4>
-<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q&gt;1,\frac1p+\frac1q=1$，则有<br>
-$$<br>
-\sum_{i=1}^na_ib_i\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
-$$<br>
-当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
-<p>易见$\text{Cauchy}$不等式是$\text{Holder}$不等式的特例。</p>
-<p><strong>证明：</strong></p>
-<p>若$a_1=\dots=a_n=0$或$b_1=\dots=b_n=0$则显然结论成立，否则不妨设$a_1,b_1&gt;0$。</p>
-<p>令<br>
-$$<br>
-t=\left(\sum_{i=1}^na_i^p\over\sum_{i=1}^nb_i^q\right)^{\frac1{pq}}<br>
-$$<br>
-于是有<br>
-$$<br>
-\begin{align}<br>
-&amp;\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)=\frac1p\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}\<br>
-&amp;\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)=\frac1q\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
-\end{align}<br>
-$$<br>
-由$\text{Young}$不等式易知该不等式成立<br>
-$$<br>
-\begin{align}<br>
-\sum_{i=1}^na_ib_i&amp;=\sum_{i=1}^n(t\cdot a_i)(\frac{b_i}t)\<br>
-&amp;\le\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)+\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)<br>
-\end{align}<br>
-$$<br>
-由$\text{Young}$不等式成立的条件易知该不等式成立的条件即为当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时。</p>
-<p>即证</p>
-<p>$\text{Holder}$不等式还可以做一个小推广</p>
-<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q,r&gt;1,\frac1p+\frac1q=\frac1r$，则有<br>
-$$<br>
-\left(\sum_{i=1}^na_ib_i\right)^{\frac1r}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
-$$<br>
-当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
-<p><strong>证明：</strong></p>
-<p>考虑到$r&lt;p,r&lt;q,\frac rp+\frac rq=1$，然后应用$\text{Holder}$不等式即可得证。</p>
-<h5><span id="n度量空间的holder不等式">n度量空间的Holder不等式</span></h5>
-<p>设$x_{i,j}\ge0,r&gt;1,p_i&gt;1,\sum_{i=1}^n\frac1{p_i}=\frac1r$，其中$(1\le i\le n,1\le j\le m)$，则有<br>
-$$<br>
-\left(\sum_{j=1}^m\left(\prod_{i=1}^nx_{i,j}\right)^r\right)^{\frac1r}\le\prod_{i=1}^n\left(\sum_{j=1}^mx_{i,j}^{p_i}\right)^{\frac1{p_i}}<br>
-$$<br>
-定义一组向量$\vec {x_i}=(x_{i,1}^{p_i},x_{i,2}^{p_i},\dots,x_{i,m}^{p_i}),i=1,2,\dots,n$,当且仅当$\vec {x_i}$相互平行时等式成立。</p>
-<p><strong>证明：</strong></p>
-<p>用$\text{Holder}$不等式和归纳法进行证明即可。</p>
-<h4><span id="minkowski不等式">Minkowski不等式</span></h4>
-<p>设$a_i,b_i\ge0,p&gt;1$，则有<br>
-$$<br>
-\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1p}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}+\left(\sum_{i=1}^nb_i^p\right)^{\frac1p}<br>
-$$<br>
-当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立</p>
-<p><strong>证明：</strong></p>
-<p>由$\text{Holder}$不等式有<br>
-$$<br>
-\begin{align}<br>
-\left(\sum_{i=1}^n(a_i+b_i)^p\right)&amp;=\sum_{i=1}^n(a_i+b_i)^{p-1}a_i+\sum_{i=1}^n(a_i+b_i)^{p-1}b_i\<br>
-&amp;\le\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum a_i^p\right)^{\frac1p}+\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum b_i^p\right)^{\frac1p}\<br>
-&amp;=\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)\<br>
-&amp;=\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)<br>
-\end{align}<br>
-$$<br>
-由$\text{Holder}$不等式易知不等式的成立当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时。</p>
-<p>即证。</p>
-<h1><span id="3-不等式证明常用方法">3   不等式证明常用方法</span></h1>
-<h3><span id="放缩法">放缩法</span></h3>
-<p>如第五届全国大学生数学竞赛非数学类决赛第三题<br>
-$$<br>
-设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
-f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
-试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
-$$<br>
-<strong>解：</strong></p>
-<p>在求导和利用分离变量法求得<br>
-$$<br>
-\begin{align}<br>
-&amp;f’(x)=-\frac{e^{-x}}{1+x}\<br>
-&amp;f’(x)&lt;0且f(0)=1\<br>
-&amp;有f(x)\le1\<br>
-&amp;另一方面\<br>
-&amp;f(x)=f(0)-\int_0^x\frac{e^{-t}}{1+t}dt\ge1-\int_0^xe^{-t}dt=e^{-x}.<br>
-\end{align}<br>
-$$<br>
-此题就是典型的利用放缩法求证不等式</p>
-<h3><span id="求导法">求导法</span></h3>
-<p>如第八届全国大学生数学竞赛非数学类决赛第二题<br>
-$$<br>
-设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
-$$<br>
-<strong>解：</strong><br>
-$$<br>
-\begin{align}<br>
-&amp;f(x)=\frac1{x^2}-\frac1{\tan^2 x}\left(0&lt;x&lt;\frac\pi2\right),则\<br>
-&amp;f’(x)={2(x^3\cos x-\sin^3x)\over x^3\sin^3x}\<br>
-&amp;令g(x)={six\over \sqrt[3]{\cos x}}-x\left(0&lt;x&lt;\frac\pi2\right)\<br>
-&amp;g’(x)=\frac23\cos^{\frac23}x+\frac13\cos^{-\frac43}x-1\<br>
-&amp;结合均值不等式可得g’(x)&gt;0,又g(0)=0\<br>
-&amp;则有g(x)&gt;0\<br>
-&amp;故f’(x)&lt;0,从而f(x)单调递减\<br>
-&amp;又\lim\limits_{x\rightarrow \frac\pi2-}=\frac4{\pi^2};\lim\limits_{x\rightarrow0+}=\frac23\<br>
-&amp;故即可得证<br>
-\end{align}<br>
-$$</p>
-<h3><span id="构造函数变上限积分">构造函数（变上限积分）</span></h3>
-<p>如第八届全国大学生数学竞赛非数学类初赛第二题：<br>
-$$<br>
-设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
-$$<br>
-<strong>解：</strong></p>
-<p>构造<br>
-$$<br>
-\begin{align}<br>
-&amp;令F(x)=\left(\int_0^xf(t)dt\right)^2-\int_0^xf^3(t)dt\<br>
-&amp;求导有，F’(x)=f(x)\left(2\int_0^xf(t)dt-f^2(x)\right)\<br>
-&amp;令G(x)=2\int_0^xf(t)dt-f^2(x)\<br>
-&amp;G’(x)=2f(x)(1-f’(x))\<br>
-&amp;有G’(x)&gt;0,则G(x)单调递增\<br>
-&amp;又G(0)=0,则G(x)&gt;0\<br>
-&amp;有F’(X)&gt;0,则F(x)单调递增\<br>
-&amp;又F(0)=0\<br>
-&amp;即可得证<br>
-\end{align}<br>
-$$</p>
-<h3><span id="利用重要不等式">利用重要不等式</span></h3>
-<p>如第十届全国大学生数学竞赛非数学类第三题<br>
-$$<br>
-设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
-1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
-$$<br>
-<strong>解：</strong></p>
-<p>所证式子的左式由$\text{Cauchy}$不等式即证</p>
-<p>右式由于由基本不等式（算术几何平均不等式的二阶形式）<br>
-$$<br>
-\begin{align}<br>
-\int_0^1f(x)dx\int_0^1\frac3{f(x)}dx&amp;\le\frac14\left(\int_0^1f(x)dx+\int_0^1\frac3{f(x)}dx\right)^2\<br>
-&amp;\le4<br>
-\end{align}<br>
-$$<br>
-即证</p>
-]]></content>
-      <categories>
-        <category>数学分析</category>
-      </categories>
-      <tags>
-        <tag>数学分析</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>离散1</title>
     <url>/2023/05/04/%E7%A6%BB%E6%95%A31/</url>
     <content><![CDATA[<p>这里记录了大一下学期的离散作业与答案，我会在每次作业截止后马上把我的答案放上来<span class="github-emoji"><span>🐶</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><span class="github-emoji"><span>🐶</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span><span class="github-emoji"><span>🐶</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
@@ -1998,6 +1490,649 @@ $$</p>
 ]]></content>
       <tags>
         <tag>离散</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2023/11/10/%E7%A6%BB%E6%95%A32/</url>
+    <content><![CDATA[<h1><span id="离散2">离散2</span></h1>
+<h2><span id="作业5">作业5</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(1)不是\<br>
+&amp;A = {1, 2, 3}\<br>
+&amp;R_1 = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;,&lt;1,2&gt;,&lt;2,1&gt;, &lt;1,3&gt;,&lt;3,1&gt;,&lt;2,3&gt;,&lt;3,2&gt;}\<br>
+&amp;R_2 = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;1,2&gt;,&lt;2,1&gt;}\<br>
+&amp;则r(R_1 - R_2) = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;,&lt;2,3&gt;,&lt;3,2&gt;,&lt;1,3&gt;,&lt;3,1&gt;}\<br>
+&amp;而有&lt;1,3&gt;,&lt;3,2&gt;\in r(R_1 - R_2) 但是&lt;1,2&gt; \notin r(R_1 - R_2),故r(R_1-R_2)不是传递的，因而不是等价关系\<br>
+&amp;(2)不是\<br>
+&amp; 上课已经讲过，R_1 , R_2是对称时，R_1 \circ R_2 不一定对称\<br>
+&amp; 比如取A = {1, 2, 3}\<br>
+&amp;R_1 = {&lt;1,1&gt;, &lt;2,2&gt;,&lt;1,2&gt;,&lt;2,1&gt;,}\<br>
+&amp;R_2 = {&lt;2,2&gt;, &lt;3,3&gt;, &lt;2,3&gt;,&lt;3,2&gt;}\<br>
+&amp;则R_1\circ R_2 = {&lt;2,2&gt;,&lt;2,3&gt;,&lt;1,3&gt;,&lt;1,2&gt;}显然不是等价关系\<br>
+&amp;(3)是\<br>
+&amp;R_1,R_2都是等价关系，那么都是自反，对称，传递的\<br>
+&amp;就有R_1\cup R_2是自反的，对称的\<br>
+&amp;同时如果R_1 \cup R_2 是自反的，对称的，那么t(R_1,R_2)仍然是自反、对称的，同时还是传递的\<br>
+&amp;由等价关系的定义可知t(R_1, R_2)是等价关系<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(a)\<br>
+&amp;左到右:\<br>
+&amp;S_1 \in A/R1,则\forall s_1 \in S_1\<br>
+&amp;s_1 = [x]<em>{R_1} = {y|y\in A \wedge x R_1y},x为A中元素\<br>
+&amp;又R_1\subseteq R_2,及&lt;x,y&gt; \in R_1 有&lt;x,y&gt; \in R_2，即xR_2y\<br>
+&amp;故s_1 \in S_2 = [x]</em>{R_2} = {y|y \in A \wedge xR_2y}\<br>
+&amp;即S_1 \subseteq S_2,由加细的定义有A/R_1 \le A/R_2\<br>
+&amp;右到左:\<br>
+&amp;A/R_1 \le A/R_2\<br>
+&amp;有\forall S_1 \in A/R_1 , \exist S_2 \in A/R_2 , s.t. S_1 \subseteq S_2\<br>
+&amp;\forall s_1 \in S_1\<br>
+&amp;s_1 = [x]<em>{R_1} = {y|y\in A \wedge x R_1y},x为A中元素\<br>
+&amp;故\exist s_2 = [x]</em>{R_2} = {y|y \in A \wedge xR_2y},s_1 \subseteq s_2 \<br>
+&amp;即\forall xR_1y,有xR_2y,即R_1 \subseteq R_2\<br>
+&amp;综上即可得证\<br>
+&amp;(b)\<br>
+&amp;左到右:\<br>
+&amp;R_1 \subset R_2 必然有R_1 \subseteq R_2，则A/R_1 \le A/R_2\<br>
+&amp;又R_1\ne R_2,即\exist &lt;x_0,y&gt; \in R_2,&lt;x_0,y&gt;\notin R_1\<br>
+&amp;取s_2 = [x_0]<em>{R_2} = {y|y \in A \wedge x_0R_2y},s_2 \in S_2，其中S_2 \in A/R_2\<br>
+&amp;且由于&lt;x_0,y&gt;\notin R_1 ,s_2 \notin S_1,故S_1 \ne S_2,其中S_1 \in A/R_1\<br>
+&amp;即A/R_1 \ne A/R_2\<br>
+&amp;右到左:\<br>
+&amp;A/R_1 \subset A/R_2,则同样易有R_1\subseteq R_2\<br>
+&amp;A/R_1 \ne A/R_2\<br>
+&amp;则存在S_2 \in A/R_2,找不到S_1 \in A/R_1,s.t. S_2 \subseteq S_1,\<br>
+&amp;同样取s_2 = [x_0]</em>{R_2} = {y|y \in A \wedge x_0R_2y},s_2\in S_2，且s_2 \notin S_1\<br>
+&amp;即\exist &lt;x_0,y_0&gt;,s.t. x_0R_2y_0,x_0\overline{R_1}y_0\<br>
+&amp;即R_1 \ne R_2\<br>
+&amp;故R_1 \subset R_2\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;看法不对,证明就不可能对了嘛。\<br>
+&amp;若R是非空集合A的空关系，由于前件为0，R是对称和传递的，但是\forall x \in A, &lt;x,x&gt;\notin R\<br>
+&amp;R不是自反的\<br>
+&amp;故即可完成论证\<br>
+\end{align}<br>
+$$</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;必要性:\<br>
+&amp;(显然bushi)R是等价关系，且&lt;a,b&gt;\in R,&lt;a,c&gt; \in R\<br>
+&amp;由于R是对称的，有&lt;b,a&gt;\in R\<br>
+&amp;由于R是传递的，有&lt;b,c&gt;\in R\<br>
+&amp;必要性即证\<br>
+&amp;充分性:\<br>
+&amp;若&lt;a,b&gt;\in R,&lt;a,c&gt;\in R,则&lt;b,c&gt;\in R\<br>
+&amp;同时R是自反的\<br>
+&amp;\forall &lt;a,b&gt;\in R, 且由自反性有&lt;a,a&gt; \in R \<br>
+&amp;由条件可得，&lt;b,a&gt; \in R，故R是对称的\<br>
+&amp;\forall &lt;a,b&gt; \in R , &lt;b,c&gt; \in R\<br>
+&amp;证明了对称性，有&lt;b,a&gt;\in R,则结合条件可得\<br>
+&amp;&lt;a,c&gt;\in R，故R是传递的\<br>
+&amp;由等价关系的定义可知R是等价关系\<br>
+&amp;充分性得证\<br>
+&amp;综上即可得证\<br>
+\end{align}<br>
+$$</p>
+<ol start="5">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;必要性:\<br>
+&amp;(也挺显然的)&lt;x,y&gt;\in R,&lt;y,z&gt;\in R\<br>
+&amp;则由传递性，&lt;x,z&gt;\in R\<br>
+&amp;再由对称性，&lt;z,x&gt;\in R\<br>
+&amp;必要性即证\<br>
+&amp;充分性:\<br>
+&amp;R是自反的，且R是循环的\<br>
+&amp;\forall &lt;x,y&gt; \in R, 由自反性&lt;y,y&gt;\in R\<br>
+&amp;再有循环性，有&lt;y,x&gt;\in R，即R是对称的\<br>
+&amp;\forall &lt;x,y&gt;\in R,&lt;y,z&gt;\in R\<br>
+&amp;由循环性,&lt;z,x&gt;\in R,又已经证明R是对称的\<br>
+&amp;则有&lt;x,z&gt;\in R，故R是传递的\<br>
+&amp;必要性得证\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<h2><span id="作业六">作业六</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(1)能够\<br>
+&amp;dom = {1,2,3,4}\<br>
+&amp;ran = {&lt;2,3&gt;,&lt;3,4&gt;,&lt;1,4&gt;}\<br>
+&amp;(2)能够\<br>
+&amp;dom = {1,2,3}\<br>
+&amp;ran = {&lt;2,3&gt;,&lt;3,4&gt;,&lt;3,2&gt;}\<br>
+&amp;(3)不能够\<br>
+&amp;(4)能够\<br>
+&amp;dom = {1,2,3}\<br>
+&amp;ran = {&lt;2,3&gt;}\<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp; (1)\forall y \in f[A] - f[B]\<br>
+&amp;\Rightarrow y \in f[A] \wedge y \notin f[B]\<br>
+&amp;\exist x\in A \quad s.t. \quad y = f(x)\<br>
+&amp;若x\in B,则与y\notin f[B]矛盾,故x\in A - B\<br>
+&amp;即y \in f[A- B]\<br>
+&amp;反例:\<br>
+&amp;X= {1,2},Y = {0}\<br>
+&amp;f = {&lt;1,0&gt;,&lt;2,0&gt;}\<br>
+&amp;A = {1,2}, B = {1}\<br>
+&amp;此时f[A] = {0},f[B] = {0},f[A] - f[B] = \varnothing\<br>
+&amp;f[A-B] = {0}，等号不成立\<br>
+&amp;(2)\forall x \in f^{-1}[C-D]\<br>
+&amp;\exist y \in C- D , y = f(x)\<br>
+&amp;\Rightarrow y\in C\wedge y\notin D\<br>
+&amp;\Rightarrow x\in f^{-1}[C] \wedge x \notin f^{-1}[D]\<br>
+&amp;\Rightarrow x \in f^{-1}[C]-f^{-1}[D]\<br>
+&amp;因此有f^{-1}[C-D]\subseteq f^{-1}[C]-f^{-1}[D]\<br>
+&amp;\forall x \in f^{-1}[C]-f^{-1}[D]\<br>
+&amp;\exist y \in C ,y = f(x)\<br>
+&amp;若y\in D,则x\in f^{-1}[D],矛盾，因此y\notin D\<br>
+&amp;\Rightarrow y\in C-D\<br>
+&amp;即x \in f^{-1}[C-D]\<br>
+&amp;因此有f^{-1}[C]-f^{-a}[D] \subseteq f^{-a}[C-D]\<br>
+&amp;故综上有f^{-1}[C-D] = f^{-1}[C]- f^{-1}[D]\<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;单射：(1),(2)\<br>
+&amp;满射：(2),(3)\<br>
+&amp;双射：(2)\<br>
+\end{align}<br>
+$$</p>
+<h2><span id="作业七">作业七</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;由上课讲的定理显然可得：\<br>
+&amp;(定理如下，课上证明了，课下就不证了了吧)\<br>
+&amp;f:X ⟶ Y 和 g: Y ⟶ Z，则\<br>
+&amp;(1) 若 f 和 g 都是满射，则 g\circ ƒ 也是满射\<br>
+&amp;(2) 若 f 和 g 都是单射，则 g\circ ƒ 也是单射\<br>
+&amp;(3) 若 f 和 g 都是双射，则 g\circ ƒ 也是双射\<br>
+&amp;用数学归纳法显然可证\<br>
+&amp;n = 1时，结论成立 \<br>
+&amp;若n时结论成立，则n+1时\<br>
+&amp;f^{n+1} = f^n \circ f\<br>
+&amp;f^n和f都是满射，单射或双射，则f^{n+1}时满射，单射或双射\<br>
+&amp;由数学归纳法即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(1)g\circ f为满射，g为单射\<br>
+&amp;则ran(g\circ f) = Z\<br>
+&amp;且由课上结论,g为满射，故g为1-1映射\<br>
+&amp;dom(g) = Y,g^{-1}[Z] = Y \<br>
+&amp;又g[ran(f)] = Z\<br>
+&amp;即ran(f) = Y\<br>
+&amp;故f为满射\<br>
+&amp;综上即可得证\<br>
+&amp;(2)g\circ f为单射,f为满射\<br>
+&amp;且由课上结论，f为单射，故f为1-1映射\<br>
+&amp;\forall y_1 ,y_2\in Y,且y_1 \ne y_2\<br>
+&amp;由于f为1-1映射,故存在唯一x_1,x_2,s.t.y_1 = f(x_1),y_2 = f(x_2)\<br>
+&amp;若x_1 = x_2 ,则显然y_1 = y_2，故有x_1 \ne x_2\<br>
+&amp;则g\circ f(x_1) = g(y_1)  = z_1,g\circ f(x_2) = g(y_2) = z_2\<br>
+&amp;由g\circ f为单射,故z_1\ne z_2\<br>
+&amp;故可得g也为单射\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;dom(f\circ f) = {x | x\in \R \wedge x \ne 0}\<br>
+&amp;ran(f\circ f) = {x | x\in \R \wedge x \ne 0}\<br>
+&amp;dom(h\circ g) = {x | x\in \R}\<br>
+&amp;ran(h\circ g) = {x | x\in \R_+ | x = 0}\<br>
+&amp;dom(g\circ h) = {x|x \in \R_+ | x = 0}\<br>
+&amp;ran(g\circ h) = {x|x \in \R_+ | x = 0}\</p>
+<p>\end{align}<br>
+$$</p>
+<h2><span id="作业7">作业7</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;左推右\<br>
+&amp;显然!!f可逆等价于f有唯一的左逆和右逆\<br>
+&amp;右推左\<br>
+&amp;若f有唯一的左逆(右逆证明类似)\<br>
+&amp;那么可以推出f是单射\<br>
+&amp;需要证明f是可逆的，那么只需要证明f是右可逆的\<br>
+&amp;这里采用反证法，假设f不是右可逆的，那么等价于f不是满射\<br>
+&amp;设A中至少有的两个元素为a_1, a_2,由于f是单射\<br>
+&amp;设f(a_1) = b_1, f(a_2) = b_2,且有b_1 \ne b_2，同时由于不是满射\<br>
+&amp;B中至少存在一个元素，设为b_3,A中没有元素映射到b_3\<br>
+&amp;接下来我们构造g_1,g_2,使得g_1 \circ f = I_A,g_2\circ f_2 = I_A，且g_1 \ne g_2\<br>
+&amp;g_1(x) = \begin{cases}<br>
+a_i, &amp; if, x = b_i,i=1,2\<br>
+a_1, &amp; if, x = b_3\<br>
+f^{-1}(x), &amp; if, x \in ran(f) \wedge x \notin{b_1, b_2}<br>
+\end{cases}\<br>
+&amp;g_2(x) = \begin{cases}<br>
+a_i, &amp; if, x = b_i,i=1,2\<br>
+a_2, &amp; if, x = b_3\<br>
+f^{-1}(x), &amp; if, x \in ran(f) \wedge x \notin{b_1, b_2}<br>
+\end{cases}\<br>
+&amp;那么就有g_1 \circ f = I_A,g_2\circ f_2 = I_A，且g_1 \ne g_2成立，与f有唯一的左逆矛盾\<br>
+&amp;故有上面的反证法可以得到f是右可逆的，那么f是可逆，即可得证\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+(1)&amp;f是左可逆，右可逆，可逆的\<br>
+&amp;显然f是单射，满射，因此是可逆的。同时求出f的逆即为f的左逆和右逆\<br>
+&amp;构造g(x) = \begin{cases}<br>
+4,&amp; if, x= 0\<br>
+x-1,&amp; if, x = 1,2,3,4\<br>
+x,&amp; if, x &gt; 5<br>
+\end{cases}\<br>
+&amp;可以验证f\circ g = I_N, g\circ f = I_N\<br>
+&amp;即为所求\<br>
+(2)&amp;f是右可逆，不是左可逆，不是可逆\<br>
+&amp;由于f(1)  = f(3) =  3,因此f不是单射，f不是左可逆\<br>
+&amp;f是满射，\forall x \in N,\exist f(2x) = x,2x \in N;<br>
+&amp;下面构造f的右逆g\<br>
+&amp;g(x) = 2x, x \in N;即为右逆之一<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;\chi_{A-B\cap C}\<br>
+&amp;= \chi_A - \chi_A <em>\chi_{B\cap C}\<br>
+&amp;= \chi_A - \chi_A</em>\chi_B*\chi_C\<br>
+&amp;\chi_{(A-B)\cup (A-C)}\<br>
+&amp;=\chi_{A-B} + \chi_{A-C}-\chi_{A-B}<em>\chi_{A-C}\<br>
+&amp;=\chi_A-\chi_A</em>\chi_B+\chi_A-\chi_A*\chi_C - (\chi_A-\chi_A*\chi_B)<em>(\chi_A-\chi_A</em>\chi_C)\<br>
+&amp;=\chi_A-\chi_A*\chi_B+\chi_A-\chi_A*\chi_C-(\chi_A-\chi_A*\chi_A*\chi_C-\chi_A*\chi_B*\chi_A+\chi_A*\chi_B*\chi_A*\chi_C)\<br>
+&amp;=\chi_A-\chi_A*\chi_B+\chi_A-\chi_A*\chi_C-(\chi_A-\chi_A*\chi_C-\chi_A*\chi_B+\chi_A*\chi_B*\chi_C)\<br>
+&amp;=\chi_A - \chi_A*\chi_B*\chi_C\<br>
+&amp;于是显然有\chi_{A-B\cap C} = \chi_{(A-B)\cup (A-C)}\<br>
+&amp;于是可以证明A-B\cap C = (A-B)\cup(A-C)\<br>
+\end{align}<br>
+$$</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;\chi_{A\oplus B}\<br>
+&amp;=\chi_{A} - \chi_{A\cap B} + \chi_{B}-\chi_{A\cap B}\<br>
+&amp;=\chi_{A} + \chi_{B} - 2*\chi_{A}<em>\chi_{B}\<br>
+&amp;=0\<br>
+&amp;那么有\chi_{A}</em>(1-\chi_{B}) = \chi_B*(1-\chi_{A})\<br>
+&amp;\iff \chi_{A}<em>\chi_{\sim B} = \chi_{B}</em>\chi_{\sim A}\<br>
+&amp;\iff \chi_{A\cap \sim B} = \chi_{B\cap \sim A}\<br>
+&amp;\iff A\cap \sim B = B \cap \sim A\<br>
+&amp;即为所求<br>
+\end{align}<br>
+$$</p>
+<h2><span id="作业8">作业8</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;利用第一数学归纳法进行证明\<br>
+&amp;(1)由于为自然数序列，所以显然有0\le a_0\<br>
+&amp;(2)\forall n\ge 0,若n \le a_n,下面证明n^+\le a_{n^+}\<br>
+&amp;由于为单调递增序列，因此显然有a_n &lt;a_{n^+}\<br>
+&amp;同时为正整数序列，由于正整数是不稠密的\<br>
+&amp;有a_n + 1 \le a_{n^+}\<br>
+&amp;n^+ = n + 1 \le a_n + 1\le a_{n^+}\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;对于本题我们先证明如下结论:\<br>
+&amp;\forall i \in n, 有i \subseteq n\<br>
+&amp;使用第一数学归纳法进行证明\<br>
+&amp;(1)n = 0时显然成立。\<br>
+&amp;(2)\forall n \ge 0,若结论成立，即\forall i \in n, 有i\subseteq n\<br>
+&amp;那么对于n^+,有n^+ = {n,{n}}\<br>
+&amp;\forall i \in n^+, 有i = n 或者i \in n(由三歧性可得)\<br>
+&amp;若i = n,显然有i\subseteq n^+\<br>
+&amp;若i\in n,由归纳假设，i\in n\<br>
+&amp;又n\in n^=,则又i\in n^+\<br>
+&amp;故该结论得证\<br>
+&amp;对于本题,\forall a \in n,\forall x \in a\<br>
+&amp;由于可推出a \in n, 于是显然有x \in n\<br>
+&amp;故综上即可得证\forall n \in N 是传递的<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;本题应该是想用二重归纳法做，但是太麻烦了，我就直接用构造法哈(goutou)\<br>
+&amp;设n = k(m+1) + t,(t &lt; m+1)\<br>
+&amp;由于n &gt; m 且(m+1)\nmid n\<br>
+&amp;可得k \ge 1, t \ne 0\<br>
+&amp;那么甲第一次取t个球，然后每次乙取x个球\<br>
+&amp;甲取(m+1-x)个球，一轮取球数维m+1，故经过k轮\<br>
+&amp;恰好甲取完最后的球，获胜<br>
+\end{align}<br>
+$$</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>高数应用</title>
+    <url>/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<div align="center"><font size="24" face="宋体">高等数学不等式问题探讨</font></div>
+<span id="more"></span>
+<div align="center"><font size="6" face="仿宋">hugo</font></div>
+<p>​				<font size="4.5" face="楷体">[<b>摘要</b>]</font>:本文将介绍大学高等数学中遇到的相关不等式问题，介绍一些著名的不等式，如算术几何平均不等式、$\text{Bernoulli}$不等式、$\text{Jensen}$不等式、$\text{Cauchy}$不等式、$\text{Young}$不等式、$\text{Holder}$不等式、$\text{Minkowski}$不等式，以及在遇到不等式问题的常用处理办法，利用构造函数，求导分析单调性等方法，最后再结合一些例题进行具体分析讨论。</p>
+<p>​				<font size="4.5" face="楷体">[<b>关键词</b>]</font>:算术几何平均不等式；$\text{Jensen}$不等式；$\text{Cauchy}$不等式；$\text{Young}$不等式；$\text{Bernoulli}$不等式；$\text{Holder}$不等式；$\text{Minkowski}$不等式；构造函数；变上限积分</p>
+<h1><span id="1-引言">1   引言</span></h1>
+<p>​	在第五届全国大学生数学竞赛非数学类决赛第三题是一道与常微分方程有关的不等式问题：<br>
+$$<br>
+设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\</p>
+<p>f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\</p>
+<p>试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
+$$<br>
+​	在第八届全国大学生数学竞赛非数学类决赛第二题是一道不等式的综合问题：<br>
+$$<br>
+设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
+$$<br>
+​	在第八届全国大学生数学竞赛非数学类初赛第二题是一道构造变上限积分的题目：<br>
+$$<br>
+设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\<br>
+有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
+$$<br>
+​	在第十届全国大学生数学竞赛非数学类第三题是一道典型的运用到了积分形式的$Cauchy$不等式的题目：<br>
+$$<br>
+设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
+1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
+$$<br>
+​	可以看到不等式问题在考试中的考察还是比较多的，特别是近年有增多的趋势，其次在课后练习及相关研究中，不等式问题具有其独特的数学魅力。不等式问题是许多证明题的重要内容，涵盖的知识点丰富，有许多重要的不等式，这些经典的不等式的处理方法多种多样，在这里我将介绍其中个别方法，并对其在n维度量空间的推广加以介绍。同时将就大学高等数学中出现的不等式问题常用到的方法进行分析，如在导数部分常常用到的构造函数求导分析单调性，在积分部分通过构造变上限积分来证明不等式的问题，同时部分不等式证明题还可以用到$\text{Taylor}$展开、微分中值定理和积分中值定理进行证明。</p>
+<h1><span id="2-几个重要不等式">2   几个重要不等式</span></h1>
+<h4><span id="算术几何平均不等式">算术几何平均不等式</span></h4>
+<p>设$n\in N^*,a_i&gt;0(i=1,2,3\dots n)$,则有<br>
+$$<br>
+{n\over\frac1{a_1}+\frac1{a_2}+\dots +\frac1{a_n}}\le\sqrt[n]{a_1a_2\dots a_n}\le{a_1+a_2+\dots+a_n\over n}\le\sqrt{a_1^2+a_2^2+\dots+a_n^2\over n}\<br>
+$$<br>
+当且仅当$a_1=a_2=\dots=a_n$时等号成立</p>
+<p>**证明：**由归纳法易证</p>
+<h4><span id="bernoulli不等式">Bernoulli不等式</span></h4>
+<p>当$x\ge -1$时，有<br>
+$$<br>
+\begin{align}<br>
+&amp;(1)若\alpha&gt;1,则有(1+x)^\alpha\ge1+\alpha x;\<br>
+&amp;(2)若0&lt;\alpha&lt;1,则有(1+x)^\alpha\le1+\alpha x.<br>
+\end{align}<br>
+$$<br>
+**证明：**构造函数求导分析单调性易证</p>
+<h4><span id="jensen不等式">Jensen不等式</span></h4>
+<p>设f(x)是区间$I$上的凸函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
+$$<br>
+f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\le\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).\<br>
+$$<br>
+如果f(x)是区间I上的凹函数，则对任意的$x_1,x_2,\dots,x_n\in I$,以及满足条件$\lambda_1+\lambda_2+\dots+\lambda_n=1$的任意正数$\lambda_1,\lambda_2,\dots,\lambda_n$,成立<br>
+$$<br>
+f(\lambda_1x_1+\lambda_2x_2+\dots+\lambda_nx_n)\ge\lambda_1f(x_1)+\lambda_2f(x_2)+\dots+\lambda_nf(x_n).<br>
+$$</p>
+<p><strong>证明</strong>：由归纳法易证</p>
+<h4><span id="young不等式">Young不等式</span></h4>
+<p>设$a,b\ge0,p,q&gt;1,\frac1p+\frac1q=1$,则有<br>
+$$<br>
+ab\le\frac{a^p}p+\frac{b^q}q<br>
+$$<br>
+当且仅当$a^{\frac1q}=b^{\frac1p}$时等号成立</p>
+<p><strong>证明：</strong></p>
+<p>若$a=b=0$，则有不等式成立，否则不妨设$b&gt;0$。</p>
+<p>考虑证明$\text{Young}$不等式的等价形式<br>
+$$<br>
+\begin{align}<br>
+&amp;a^{\frac1p}b^{\frac1q}\le\frac ap+\frac bq\<br>
+&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab\right)+1-\frac1p\<br>
+&amp;\left(\frac ab\right)^{\frac1p}\le\frac1p\cdot\left(\frac ab -1\right)+1<br>
+\end{align}<br>
+$$<br>
+作换元$x=\frac ab$，则等价于<br>
+$$<br>
+\left(x\right)^{\frac1p}\le\frac1p\cdot\left(x -1\right)+1<br>
+$$<br>
+构造函数，结合函数的上凸性易证</p>
+<h5><span id="n度量空间的young不等式">n度量空间的Young不等式</span></h5>
+<p>设$x_i\ge0,p_i\ge1(i=1,2,\dots,n),\sum_{i=1}^n\frac1{p_i}=1$,则有<br>
+$$<br>
+\prod_{i=1}^n\le\sum_{i=1}^n\frac{x_i^{p_i}}{p_i}<br>
+$$<br>
+当且仅当$\frac{x_1^{p_1}}{p_1}=\frac{x_2^{p_2}}{p_2}=\dots=\frac{x_n^{p_n}}{p_n}$时等式成立</p>
+<p><strong>证明：</strong></p>
+<p>与证明2度量空间的$\text{Young}$不等式的方法类似，只不过需要利用$n-1$维函数$f(x_1,x_2,\dots,x_{n-1})$的上凸性<br>
+$$<br>
+f(x_1,x_2,\dots,x_{n-1})=\prod_{i=1}^{n-1}x_i^{\frac1{p_i}}<br>
+$$<br>
+易证</p>
+<h4><span id="cauchy不等式">Cauchy不等式</span></h4>
+<p>设$a_i,b_i\in R,i=1,2,\dots,n$,有<br>
+$$<br>
+\left(\sum_{i=1}^na_ib_i\right)^2\le\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)<br>
+$$<br>
+当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立<br>
+$$<br>
+\frac{a_1}{b_1}=\frac{a_2}{b_2}=\dots=\frac{a_n}{b_n}<br>
+$$</p>
+<p><strong>证明：</strong><br>
+法一:由归纳法易证<br>
+法二:构造二次函数证明<br>
+做二次函数<br>
+$$<br>
+\begin{align}<br>
+f(x)&amp;=\left(\sum_{i=1}^na_i^2\right)x^2+2\left(\sum_{i=1}^na_ib_i\right)x+\left(\sum_{i=1}^nb_i^2\right)\<br>
+&amp;=\sum_{i=1}^n(a_ix+b_i)^2\<br>
+&amp;\ge0<br>
+\end{align}<br>
+$$<br>
+由于<br>
+$$<br>
+\left(\sum_{i=1}^na_i^2\right)&gt;0<br>
+$$<br>
+则有<br>
+$$<br>
+\Delta=4\left(\sum_{i=1}^na_ib_i\right)^2-4\left(\sum_{i=1}^na_i^2\right)\left(\sum_{i=1}^nb_i^2\right)\le 0<br>
+$$<br>
+即证</p>
+<h4><span id="holder不等式">Holder不等式</span></h4>
+<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q&gt;1,\frac1p+\frac1q=1$，则有<br>
+$$<br>
+\sum_{i=1}^na_ib_i\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
+$$<br>
+当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
+<p>易见$\text{Cauchy}$不等式是$\text{Holder}$不等式的特例。</p>
+<p><strong>证明：</strong></p>
+<p>若$a_1=\dots=a_n=0$或$b_1=\dots=b_n=0$则显然结论成立，否则不妨设$a_1,b_1&gt;0$。</p>
+<p>令<br>
+$$<br>
+t=\left(\sum_{i=1}^na_i^p\over\sum_{i=1}^nb_i^q\right)^{\frac1{pq}}<br>
+$$<br>
+于是有<br>
+$$<br>
+\begin{align}<br>
+&amp;\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)=\frac1p\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}\<br>
+&amp;\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)=\frac1q\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
+\end{align}<br>
+$$<br>
+由$\text{Young}$不等式易知该不等式成立<br>
+$$<br>
+\begin{align}<br>
+\sum_{i=1}^na_ib_i&amp;=\sum_{i=1}^n(t\cdot a_i)(\frac{b_i}t)\<br>
+&amp;\le\frac{t^p}p\cdot\left(\sum_{i=1}^na_i^p\right)+\frac1{q\cdot t^q}\cdot\left(\sum_{i=1}^nb_i^q\right)<br>
+\end{align}<br>
+$$<br>
+由$\text{Young}$不等式成立的条件易知该不等式成立的条件即为当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时。</p>
+<p>即证</p>
+<p>$\text{Holder}$不等式还可以做一个小推广</p>
+<p>设$a_i,b_i\ge0,i=1,2,\dots,n,p,q,r&gt;1,\frac1p+\frac1q=\frac1r$，则有<br>
+$$<br>
+\left(\sum_{i=1}^na_ib_i\right)^{\frac1r}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}\left(\sum_{i=1}^nb_i^q\right)^{\frac1q}<br>
+$$<br>
+当且仅当向量$(a_1^p,a_2^p,\dots,a_n^p)$与向量$(b_1^q,b_2^q,\dots,b_n^q)$平行时等式成立。</p>
+<p><strong>证明：</strong></p>
+<p>考虑到$r&lt;p,r&lt;q,\frac rp+\frac rq=1$，然后应用$\text{Holder}$不等式即可得证。</p>
+<h5><span id="n度量空间的holder不等式">n度量空间的Holder不等式</span></h5>
+<p>设$x_{i,j}\ge0,r&gt;1,p_i&gt;1,\sum_{i=1}^n\frac1{p_i}=\frac1r$，其中$(1\le i\le n,1\le j\le m)$，则有<br>
+$$<br>
+\left(\sum_{j=1}^m\left(\prod_{i=1}^nx_{i,j}\right)^r\right)^{\frac1r}\le\prod_{i=1}^n\left(\sum_{j=1}^mx_{i,j}^{p_i}\right)^{\frac1{p_i}}<br>
+$$<br>
+定义一组向量$\vec {x_i}=(x_{i,1}^{p_i},x_{i,2}^{p_i},\dots,x_{i,m}^{p_i}),i=1,2,\dots,n$,当且仅当$\vec {x_i}$相互平行时等式成立。</p>
+<p><strong>证明：</strong></p>
+<p>用$\text{Holder}$不等式和归纳法进行证明即可。</p>
+<h4><span id="minkowski不等式">Minkowski不等式</span></h4>
+<p>设$a_i,b_i\ge0,p&gt;1$，则有<br>
+$$<br>
+\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1p}\le\left(\sum_{i=1}^na_i^p\right)^{\frac1p}+\left(\sum_{i=1}^nb_i^p\right)^{\frac1p}<br>
+$$<br>
+当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时等式成立</p>
+<p><strong>证明：</strong></p>
+<p>由$\text{Holder}$不等式有<br>
+$$<br>
+\begin{align}<br>
+\left(\sum_{i=1}^n(a_i+b_i)^p\right)&amp;=\sum_{i=1}^n(a_i+b_i)^{p-1}a_i+\sum_{i=1}^n(a_i+b_i)^{p-1}b_i\<br>
+&amp;\le\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum a_i^p\right)^{\frac1p}+\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\sum b_i^p\right)^{\frac1p}\<br>
+&amp;=\left(\sum_{i=1}^n(a_i+b_i)^{q(p-1)}\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)\<br>
+&amp;=\left(\sum_{i=1}^n(a_i+b_i)^p\right)^{\frac1q}\left(\left(\sum a_i^p\right)^{\frac1p}+\left(\sum b_i^p\right)^{\frac1p}\right)<br>
+\end{align}<br>
+$$<br>
+由$\text{Holder}$不等式易知不等式的成立当且仅当向量$(a_1,a_2,\dots,a_n)$与向量$(b_1,b_2,\dots,b_n)$平行时。</p>
+<p>即证。</p>
+<h1><span id="3-不等式证明常用方法">3   不等式证明常用方法</span></h1>
+<h3><span id="放缩法">放缩法</span></h3>
+<p>如第五届全国大学生数学竞赛非数学类决赛第三题<br>
+$$<br>
+设当x&gt;-1时，可微函数f(x)满足条件\hspace{9cm}\<br>
+f’(x)+f(x)-\frac1{1+x}\int_0^xf(t)dt=0且f(0)=1.\<br>
+试证:当x\ge0时，有e^{-x}\le f(x)\le 1成立\hspace{8.3cm}<br>
+$$<br>
+<strong>解：</strong></p>
+<p>在求导和利用分离变量法求得<br>
+$$<br>
+\begin{align}<br>
+&amp;f’(x)=-\frac{e^{-x}}{1+x}\<br>
+&amp;f’(x)&lt;0且f(0)=1\<br>
+&amp;有f(x)\le1\<br>
+&amp;另一方面\<br>
+&amp;f(x)=f(0)-\int_0^x\frac{e^{-t}}{1+t}dt\ge1-\int_0^xe^{-t}dt=e^{-x}.<br>
+\end{align}<br>
+$$<br>
+此题就是典型的利用放缩法求证不等式</p>
+<h3><span id="求导法">求导法</span></h3>
+<p>如第八届全国大学生数学竞赛非数学类决赛第二题<br>
+$$<br>
+设0&lt;x&lt;\frac\pi2,证明:\frac4{\pi^2}&lt;\frac1{x^2}-\frac1{\tan^2 x}&lt;\frac23.<br>
+$$<br>
+<strong>解：</strong><br>
+$$<br>
+\begin{align}<br>
+&amp;f(x)=\frac1{x^2}-\frac1{\tan^2 x}\left(0&lt;x&lt;\frac\pi2\right),则\<br>
+&amp;f’(x)={2(x^3\cos x-\sin^3x)\over x^3\sin^3x}\<br>
+&amp;令g(x)={six\over \sqrt[3]{\cos x}}-x\left(0&lt;x&lt;\frac\pi2\right)\<br>
+&amp;g’(x)=\frac23\cos^{\frac23}x+\frac13\cos^{-\frac43}x-1\<br>
+&amp;结合均值不等式可得g’(x)&gt;0,又g(0)=0\<br>
+&amp;则有g(x)&gt;0\<br>
+&amp;故f’(x)&lt;0,从而f(x)单调递减\<br>
+&amp;又\lim\limits_{x\rightarrow \frac\pi2-}=\frac4{\pi^2};\lim\limits_{x\rightarrow0+}=\frac23\<br>
+&amp;故即可得证<br>
+\end{align}<br>
+$$</p>
+<h3><span id="构造函数变上限积分">构造函数（变上限积分）</span></h3>
+<p>如第八届全国大学生数学竞赛非数学类初赛第二题：<br>
+$$<br>
+设f(x)在[0,1]上可导，f(0)=0,且当x\in(0,1),0&lt;f’(x)&lt;1.试证:当a\in(0,1)时，\有\left(\int_0^af(x)dx\right)^2&gt;\int_0^af^3(x)dx.<br>
+$$<br>
+<strong>解：</strong></p>
+<p>构造<br>
+$$<br>
+\begin{align}<br>
+&amp;令F(x)=\left(\int_0^xf(t)dt\right)^2-\int_0^xf^3(t)dt\<br>
+&amp;求导有，F’(x)=f(x)\left(2\int_0^xf(t)dt-f^2(x)\right)\<br>
+&amp;令G(x)=2\int_0^xf(t)dt-f^2(x)\<br>
+&amp;G’(x)=2f(x)(1-f’(x))\<br>
+&amp;有G’(x)&gt;0,则G(x)单调递增\<br>
+&amp;又G(0)=0,则G(x)&gt;0\<br>
+&amp;有F’(X)&gt;0,则F(x)单调递增\<br>
+&amp;又F(0)=0\<br>
+&amp;即可得证<br>
+\end{align}<br>
+$$</p>
+<h3><span id="利用重要不等式">利用重要不等式</span></h3>
+<p>如第十届全国大学生数学竞赛非数学类第三题<br>
+$$<br>
+设f(x)在区间[0,1]上连续，且1\le f(x)\le3.证明:\hspace{7cm}\<br>
+1\le \int_0^1f(x)dx\int_0^1\frac1{f(x)}dx\le\frac43.<br>
+$$<br>
+<strong>解：</strong></p>
+<p>所证式子的左式由$\text{Cauchy}$不等式即证</p>
+<p>右式由于由基本不等式（算术几何平均不等式的二阶形式）<br>
+$$<br>
+\begin{align}<br>
+\int_0^1f(x)dx\int_0^1\frac3{f(x)}dx&amp;\le\frac14\left(\int_0^1f(x)dx+\int_0^1\frac3{f(x)}dx\right)^2\<br>
+&amp;\le4<br>
+\end{align}<br>
+$$<br>
+即证</p>
+]]></content>
+      <categories>
+        <category>数学分析</category>
+      </categories>
+      <tags>
+        <tag>数学分析</tag>
       </tags>
   </entry>
 </search>
