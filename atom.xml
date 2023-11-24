@@ -6,7 +6,7 @@
   <link href="https://hugohealthy.top/atom.xml" rel="self"/>
   
   <link href="https://hugohealthy.top/"/>
-  <updated>2023-11-09T17:14:02.650Z</updated>
+  <updated>2023-11-24T09:10:09.795Z</updated>
   <id>https://hugohealthy.top/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>离散2</title>
+    <link href="https://hugohealthy.top/2023/11/24/%E7%A6%BB%E6%95%A32/"/>
+    <id>https://hugohealthy.top/2023/11/24/%E7%A6%BB%E6%95%A32/</id>
+    <published>2023-11-24T09:09:30.000Z</published>
+    <updated>2023-11-24T09:10:09.795Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;离散2&quot;&gt;离散2&lt;/span&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    
+    <category term="离散2" scheme="https://hugohealthy.top/tags/%E7%A6%BB%E6%95%A32/"/>
+    
+  </entry>
   
   <entry>
     <title>OOpre</title>
@@ -202,30 +226,6 @@
     
     
     <category term="数据结构" scheme="https://hugohealthy.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>离散1</title>
-    <link href="https://hugohealthy.top/2023/05/04/%E7%A6%BB%E6%95%A32/"/>
-    <id>https://hugohealthy.top/2023/05/04/%E7%A6%BB%E6%95%A32/</id>
-    <published>2023-05-04T10:52:30.000Z</published>
-    <updated>2023-11-24T09:04:15.589Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1&gt;&lt;span id=&quot;离散2&quot;&gt;离散2&lt;/span&gt;&lt;/h1&gt;
-&lt;h2&gt;&lt;span</summary>
-        
-      
-    
-    
-    
-    
-    <category term="离散2" scheme="https://hugohealthy.top/tags/%E7%A6%BB%E6%95%A32/"/>
     
   </entry>
   
