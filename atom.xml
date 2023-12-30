@@ -6,7 +6,7 @@
   <link href="https://hugohealthy.top/atom.xml" rel="self"/>
   
   <link href="https://hugohealthy.top/"/>
-  <updated>2023-11-24T09:10:09.795Z</updated>
+  <updated>2023-12-30T18:26:01.325Z</updated>
   <id>https://hugohealthy.top/</id>
   
   <author>
@@ -17,11 +17,38 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>高代期末</title>
+    <link href="https://hugohealthy.top/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/"/>
+    <id>https://hugohealthy.top/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/</id>
+    <published>2023-12-30T18:22:21.000Z</published>
+    <updated>2023-12-30T18:26:01.325Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;[toc]&lt;/p&gt;
+&lt;p&gt;$$&lt;br&gt;
+\newcommand{\bxi}[0]{\boldsymbol\xi}&lt;br&gt;
+\newcommand{\b}[1]{\boldsymbol&lt;/p&gt;
+</summary>
+        
+      
+    
+    
+    
+    
+    <category term="高代" scheme="https://hugohealthy.top/tags/%E9%AB%98%E4%BB%A3/"/>
+    
+  </entry>
+  
+  <entry>
     <title>离散2</title>
     <link href="https://hugohealthy.top/2023/11/24/%E7%A6%BB%E6%95%A32/"/>
     <id>https://hugohealthy.top/2023/11/24/%E7%A6%BB%E6%95%A32/</id>
     <published>2023-11-24T09:09:30.000Z</published>
-    <updated>2023-11-24T09:10:09.795Z</updated>
+    <updated>2023-11-24T10:58:40.199Z</updated>
     
     
       
