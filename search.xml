@@ -82,6 +82,122 @@
       </tags>
   </entry>
   <entry>
+    <title>Trie</title>
+    <url>/2023/05/25/Trie/</url>
+    <content><![CDATA[<blockquote>
+<p>Tire树，即字典树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。</p>
+</blockquote>
+<p>说白了，就是一棵大树，这棵树的每个除了根节点的结点都存储了一个字符。</p>
+<h2><span id="说在前面">说在前面</span></h2>
+<p>字典树有两种实现方式，一种是利用指针实现，也就是一个实实在在的二十六叉树；另一种就是利用数组实现。（在这里分别称之为指针版字典树和数组版字典树）</p>
+<p>两种实现方式各有优劣，指针版本的清晰明了，空间占用率相对较小（空间占用小就可以用剩下的空间干其他很多事）；而数组版字典树就是一次性把空间开好了，比较方便。</p>
+<h2><span id="指针版字典树">指针版字典树</span></h2>
+<p>结构体定义：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">datatype</span> <span class="token expression"><span class="token keyword">int</span></span></span>
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">node</span><span class="token punctuation">{</span>
+    bool isEnd<span class="token punctuation">;</span>
+    datatype data<span class="token punctuation">;</span>		<span class="token comment">//一般是计数</span>
+    <span class="token keyword">struct</span> <span class="token class-name">node</span> <span class="token operator">*</span>letter<span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>Node<span class="token punctuation">,</span><span class="token operator">*</span>List<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>新建一个结点的初始化：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    p<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> false<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当然，一种更加推荐的方式是使用<code>calloc()</code>函数，<code>malloc()</code>有更多自己操控的空间</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">calloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>创建一棵<code>Trie</code>:</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MAXSIZE</span> <span class="token expression"><span class="token number">1000</span></span></span>
+<span class="token keyword">void</span> <span class="token function">createStopTrie</span><span class="token punctuation">(</span>List <span class="token operator">*</span>root<span class="token punctuation">,</span> FILE <span class="token operator">*</span>in<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> pos <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">fread</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> MAXSIZE<span class="token punctuation">,</span> in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">char</span> ch<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    List end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>pos <span class="token operator">&lt;</span> len<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        ch <span class="token operator">=</span> <span class="token function">tolower</span><span class="token punctuation">(</span>buffer<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">islower</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            end <span class="token operator">=</span> end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            pos<span class="token operator">++</span><span class="token punctuation">;</span>
+            depth<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            end<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> true<span class="token punctuation">;</span>
+            pos<span class="token operator">++</span><span class="token punctuation">;</span>
+            end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>depth <span class="token operator">&gt;</span> Depth<span class="token punctuation">)</span> Depth <span class="token operator">=</span> depth<span class="token punctuation">;</span>
+            depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>调用前需要</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">Root <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">createArticleTrie</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Root<span class="token punctuation">,</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><strong>三个基本性质：</strong></p>
+<ul>
+<li>根节点不包含字符，除根节点的每一个节点都只包含一个字符。</li>
+<li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。</li>
+<li>每个节点的所有子节点包含的字符都不相同</li>
+</ul>
+<p>我觉得这个像是一个26叉树，也有一点想26进制的一个东西。</p>
+<p>我们这里存储的都是小写字母，如果包含又大写字母的话可能就是一个52叉树了。一般不会出现这种情况吧，<s>出现了也不怪我</s></p>
+<blockquote>
+<p>主要实现单词的高效存储与高效查找</p>
+</blockquote>
+<p>利用<code>cout[i]</code>来记录以<code>i</code>为编号的字符结尾的字符串的个数。</p>
+<p>就有两个基本操作</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token keyword">const</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">1e5</span> <span class="token operator">+</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> tr<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cou<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">,</span> idx<span class="token punctuation">;</span>
+<span class="token keyword">char</span> str<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">insert</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
+      tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">++</span>idx<span class="token punctuation">;</span>
+    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">query</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
+      <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://blog.csdn.net/forever_dreams/article/details/81009580">https://blog.csdn.net/forever_dreams/article/details/81009580</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/28891541">https://zhuanlan.zhihu.com/p/28891541</a></li>
+<li><a href="https://blog.csdn.net/weixin_42815609/article/details/102692411">https://blog.csdn.net/weixin_42815609/article/details/102692411</a></li>
+<li>用C++讲得很清楚：<a href="https://blog.csdn.net/weixin_44176696/article/details/104716191">https://blog.csdn.net/weixin_44176696/article/details/104716191</a></li>
+<li>这个有头文件诶，高级！：<a href="https://blog.csdn.net/A951860555/article/details/108716487">https://blog.csdn.net/A951860555/article/details/108716487</a></li>
+</ol>
+]]></content>
+      <tags>
+        <tag>数据结构</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>OOpre</title>
     <url>/2023/11/10/OOpre/</url>
     <content><![CDATA[<h1><span id="buaa-oopre总结">BUAA-OOpre总结</span></h1>
@@ -213,188 +329,6 @@
 ]]></content>
       <tags>
         <tag>OOpre</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Trie</title>
-    <url>/2023/05/25/Trie/</url>
-    <content><![CDATA[<blockquote>
-<p>Tire树，即字典树，又称单词查找树或键树，是一种树形结构，是一种哈希树的变种。</p>
-</blockquote>
-<p>说白了，就是一棵大树，这棵树的每个除了根节点的结点都存储了一个字符。</p>
-<h2><span id="说在前面">说在前面</span></h2>
-<p>字典树有两种实现方式，一种是利用指针实现，也就是一个实实在在的二十六叉树；另一种就是利用数组实现。（在这里分别称之为指针版字典树和数组版字典树）</p>
-<p>两种实现方式各有优劣，指针版本的清晰明了，空间占用率相对较小（空间占用小就可以用剩下的空间干其他很多事）；而数组版字典树就是一次性把空间开好了，比较方便。</p>
-<h2><span id="指针版字典树">指针版字典树</span></h2>
-<p>结构体定义：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">datatype</span> <span class="token expression"><span class="token keyword">int</span></span></span>
-<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">node</span><span class="token punctuation">{</span>
-    bool isEnd<span class="token punctuation">;</span>
-    datatype data<span class="token punctuation">;</span>		<span class="token comment">//一般是计数</span>
-    <span class="token keyword">struct</span> <span class="token class-name">node</span> <span class="token operator">*</span>letter<span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>Node<span class="token punctuation">,</span><span class="token operator">*</span>List<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>新建一个结点的初始化：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">memset</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    p<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> false<span class="token punctuation">;</span>
-    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>当然，一种更加推荐的方式是使用<code>calloc()</code>函数，<code>malloc()</code>有更多自己操控的空间</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">List <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    List p <span class="token operator">=</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span><span class="token function">calloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span>Node<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> p<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>创建一棵<code>Trie</code>:</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">MAXSIZE</span> <span class="token expression"><span class="token number">1000</span></span></span>
-<span class="token keyword">void</span> <span class="token function">createStopTrie</span><span class="token punctuation">(</span>List <span class="token operator">*</span>root<span class="token punctuation">,</span> FILE <span class="token operator">*</span>in<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> pos <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token function">fread</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> MAXSIZE<span class="token punctuation">,</span> in<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">char</span> ch<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    List end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
-    <span class="token keyword">while</span> <span class="token punctuation">(</span>pos <span class="token operator">&lt;</span> len<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        ch <span class="token operator">=</span> <span class="token function">tolower</span><span class="token punctuation">(</span>buffer<span class="token punctuation">[</span>pos<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">islower</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-            end <span class="token operator">=</span> end<span class="token operator">-&gt;</span>letter<span class="token punctuation">[</span>ch <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-            pos<span class="token operator">++</span><span class="token punctuation">;</span>
-            depth<span class="token operator">++</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            end<span class="token operator">-&gt;</span>isEnd <span class="token operator">=</span> true<span class="token punctuation">;</span>
-            pos<span class="token operator">++</span><span class="token punctuation">;</span>
-            end <span class="token operator">=</span> <span class="token operator">*</span>root<span class="token punctuation">;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>depth <span class="token operator">&gt;</span> Depth<span class="token punctuation">)</span> Depth <span class="token operator">=</span> depth<span class="token punctuation">;</span>
-            depth <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>调用前需要</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">Root <span class="token operator">=</span> <span class="token function">Initial</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">createArticleTrie</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Root<span class="token punctuation">,</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p><strong>三个基本性质：</strong></p>
-<ul>
-<li>根节点不包含字符，除根节点的每一个节点都只包含一个字符。</li>
-<li>从根节点到某一节点，路径上经过的字符连接起来，为该节点对应的字符串。</li>
-<li>每个节点的所有子节点包含的字符都不相同</li>
-</ul>
-<p>我觉得这个像是一个26叉树，也有一点想26进制的一个东西。</p>
-<p>我们这里存储的都是小写字母，如果包含又大写字母的话可能就是一个52叉树了。一般不会出现这种情况吧，<s>出现了也不怪我</s></p>
-<blockquote>
-<p>主要实现单词的高效存储与高效查找</p>
-</blockquote>
-<p>利用<code>cout[i]</code>来记录以<code>i</code>为编号的字符结尾的字符串的个数。</p>
-<p>就有两个基本操作</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
-<span class="token keyword">const</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">1e5</span> <span class="token operator">+</span> <span class="token number">5</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> tr<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">27</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cou<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">,</span> idx<span class="token punctuation">;</span>
-<span class="token keyword">char</span> str<span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
-
-<span class="token keyword">void</span> <span class="token function">insert</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
-  <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
-      tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token operator">++</span>idx<span class="token punctuation">;</span>
-    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-  cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">int</span> <span class="token function">query</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-  <span class="token keyword">int</span> p <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
-  <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> u <span class="token operator">=</span> <span class="token punctuation">(</span>s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token char">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">)</span>
-      <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    p <span class="token operator">=</span> tr<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">[</span>u<span class="token punctuation">]</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-  <span class="token keyword">return</span> cou<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>参考资料：</p>
-<ol>
-<li><a href="https://blog.csdn.net/forever_dreams/article/details/81009580">https://blog.csdn.net/forever_dreams/article/details/81009580</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/28891541">https://zhuanlan.zhihu.com/p/28891541</a></li>
-<li><a href="https://blog.csdn.net/weixin_42815609/article/details/102692411">https://blog.csdn.net/weixin_42815609/article/details/102692411</a></li>
-<li>用C++讲得很清楚：<a href="https://blog.csdn.net/weixin_44176696/article/details/104716191">https://blog.csdn.net/weixin_44176696/article/details/104716191</a></li>
-<li>这个有头文件诶，高级！：<a href="https://blog.csdn.net/A951860555/article/details/108716487">https://blog.csdn.net/A951860555/article/details/108716487</a></li>
-</ol>
-]]></content>
-      <tags>
-        <tag>数据结构</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hammingDistance</title>
-    <url>/2023/05/25/hammingDistance/</url>
-    <content><![CDATA[<h1><span id="__uint128_t_"><code>__uint128_t_</code></span></h1>
-<p>最近越来越多的协议会定义 16 字节长的整形，gcc 在 4.6 以上版本就可以使用 __int128_t &amp; __uint128_t 了。</p>
-<p>但需要注意的是，_uint128_t &amp; __int128_t 仅对 64 位程序才有定义，因此如果编译选项中加入了 -m32，会出现找不到定义的编译错误。</p>
-<p>另外 _uint128_t &amp; __int128_t  并非 c/c++ 标准，所以 gcc 目前只支持基本运算符的操作，printf 这些都需要另外实现。</p>
-<h1><span id="快速计算汉明距离">快速计算汉明距离</span></h1>
-<blockquote>
-<p>在信息论中，两个等长字符串之间的汉明距离（英语：Hamming distance）是两个字符串对应位置的不同字符的个数。换句话说，它就是将一个字符串变换成另外一个字符串所需要替换的字符个数。</p>
-<p>汉明距离是以<strong>理查德・卫斯里・汉明</strong>的名字命名的。在通信传输过程中，累计定长二进制字中发生翻转的错误数据位，所以它也被称为信号距离。汉明距离在包括信息论、编码理论、密码学等领域都有应用。</p>
-</blockquote>
-<p>对于两个字符串计算汉明距离，那肯定也就只能是逐位比较</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//s1,s2为两个字符串，M为这两个字符串的长度</span>
-<span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span><span class="token keyword">char</span> s1<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">char</span> s2<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span> M<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> l1 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">,</span> l2 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> M <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l1 <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l2<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        dist <span class="token operator">+=</span> s1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> s2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>那么这样肯定是很慢的，如果可以转化两个整型的数，我们很容易想到利用到异或运算。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c">__uint128_t fingerprint <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> l <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> l <span class="token operator">&lt;</span> M<span class="token punctuation">;</span> <span class="token operator">++</span>l<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span>sumsignedweight <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
-        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>这样可以转换最高128位的两个01字符串。</p>
-<p>那么就可以利用<code>^</code>运算来就算汉明距离了,由于异或运算的性质，得到的c的数位上为1说明ab的对应位不相同，反之则相同，那么我们就之需要计算c的二进制表示中数位为1的数目。这里可以按位采取<code>&amp;</code>运算。</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>c <span class="token operator">&amp;</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-            dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        c <span class="token operator">=</span> c <span class="token operator">&gt;&gt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>布莱恩·克尼根算法</strong></p>
-<p>我们先观察如下一个现象：对于任意一个非零的二进制数 <code>a</code>（将其看作无符号数），考虑 <code>a</code> 和 <code>a-1</code> 的关系。由于 <code>a</code> 非零，那么 <code>a</code> 中总有一些位为 <code>1</code>。假设 <code>a</code> 中最低位的 <code>1</code> 处于从右向左数的第 <code>N</code> 位。那么，<code>a</code> 的第 <code>N</code> 位以及第 <code>N</code> 位以后的每一位的值和 <code>a-1</code> 的第 <code>N</code> 位及第 <code>N</code> 位以后的每一位的值均不同。</p>
-<p>举个例子就很容易理解了。我们以 8 位数来描述。假设 <code>a=10010000</code>，根据上述描述，从右往左数的第一个 <code>1</code> 出现在第 <code>5</code> 位，那么有 <code>N=5</code>。同时可以计算出 <code>a-1=10001111</code>，可以看到，从第 <code>N</code> 位开始，<code>a</code> 的后缀是 <code>10000</code>，而 <code>a-1</code> 的后缀是 <code>01111</code>。满足上述描述的现象。</p>
-<p>进一步地，我们可以发现，如果对 <code>a</code> 和 <code>a-1</code> 进行与操作，就会直接消去位于最后一位，也就是第 <code>N</code> 位的 <code>1</code>。还以上面的 <code>a</code> 为例，<code>a &amp; (a-1)=10000000</code>。可以看到，我们不需要遍历，而是通过一次运算，就可以把 <code>a</code> 中的最后一个 <code>1</code> 消掉。如果我们一直重复这项操作，那么 <code>a</code> 里有多少个 <code>1</code>，我们就仅需要多少次 <code>a &amp; (a-1)</code> 的操作，就能把 <code>a</code> 化为 <code>0</code> 了。而这个操作的次数正是我们所要求的。</p>
-<p>那么计算汉明距离就可以改进为：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        c <span class="token operator">=</span> c <span class="token operator">&amp;</span> <span class="token punctuation">(</span>c <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-]]></content>
-      <categories>
-        <category>数据结构</category>
-      </categories>
-      <tags>
-        <tag>大作业优化</tag>
       </tags>
   </entry>
   <entry>
@@ -915,6 +849,929 @@ __uint128_t fingerprintSample <span class="token operator">=</span> <span class=
       </categories>
       <tags>
         <tag>大作业优化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>离散2</title>
+    <url>/2023/11/24/%E7%A6%BB%E6%95%A32/</url>
+    <content><![CDATA[<h1><span id="离散2">离散2</span></h1>
+<h2><span id="作业5">作业5</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(1)不是\<br>
+&amp;A = {1, 2, 3}\<br>
+&amp;R_1 = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;,&lt;1,2&gt;,&lt;2,1&gt;, &lt;1,3&gt;,&lt;3,1&gt;,&lt;2,3&gt;,&lt;3,2&gt;}\<br>
+&amp;R_2 = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;1,2&gt;,&lt;2,1&gt;}\<br>
+&amp;则r(R_1 - R_2) = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;,&lt;2,3&gt;,&lt;3,2&gt;,&lt;1,3&gt;,&lt;3,1&gt;}\<br>
+&amp;而有&lt;1,3&gt;,&lt;3,2&gt;\in r(R_1 - R_2) 但是&lt;1,2&gt; \notin r(R_1 - R_2),故r(R_1-R_2)不是传递的，因而不是等价关系\<br>
+&amp;(2)不是\<br>
+&amp; 上课已经讲过，R_1 , R_2是对称时，R_1 \circ R_2 不一定对称\<br>
+&amp; 比如取A = {1, 2, 3}\<br>
+&amp;R_1 = {&lt;1,1&gt;, &lt;2,2&gt;,&lt;1,2&gt;,&lt;2,1&gt;,}\<br>
+&amp;R_2 = {&lt;2,2&gt;, &lt;3,3&gt;, &lt;2,3&gt;,&lt;3,2&gt;}\<br>
+&amp;则R_1\circ R_2 = {&lt;2,2&gt;,&lt;2,3&gt;,&lt;1,3&gt;,&lt;1,2&gt;}显然不是等价关系\<br>
+&amp;(3)是\<br>
+&amp;R_1,R_2都是等价关系，那么都是自反，对称，传递的\<br>
+&amp;就有R_1\cup R_2是自反的，对称的\<br>
+&amp;同时如果R_1 \cup R_2 是自反的，对称的，那么t(R_1,R_2)仍然是自反、对称的，同时还是传递的\<br>
+&amp;由等价关系的定义可知t(R_1, R_2)是等价关系<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(a)\<br>
+&amp;左到右:\<br>
+&amp;S_1 \in A/R1,则\forall s_1 \in S_1\<br>
+&amp;s_1 = [x]<em>{R_1} = {y|y\in A \wedge x R_1y},x为A中元素\<br>
+&amp;又R_1\subseteq R_2,及&lt;x,y&gt; \in R_1 有&lt;x,y&gt; \in R_2，即xR_2y\<br>
+&amp;故s_1 \in S_2 = [x]</em>{R_2} = {y|y \in A \wedge xR_2y}\<br>
+&amp;即S_1 \subseteq S_2,由加细的定义有A/R_1 \le A/R_2\<br>
+&amp;右到左:\<br>
+&amp;A/R_1 \le A/R_2\<br>
+&amp;有\forall S_1 \in A/R_1 , \exist S_2 \in A/R_2 , s.t. S_1 \subseteq S_2\<br>
+&amp;\forall s_1 \in S_1\<br>
+&amp;s_1 = [x]<em>{R_1} = {y|y\in A \wedge x R_1y},x为A中元素\<br>
+&amp;故\exist s_2 = [x]</em>{R_2} = {y|y \in A \wedge xR_2y},s_1 \subseteq s_2 \<br>
+&amp;即\forall xR_1y,有xR_2y,即R_1 \subseteq R_2\<br>
+&amp;综上即可得证\<br>
+&amp;(b)\<br>
+&amp;左到右:\<br>
+&amp;R_1 \subset R_2 必然有R_1 \subseteq R_2，则A/R_1 \le A/R_2\<br>
+&amp;又R_1\ne R_2,即\exist &lt;x_0,y&gt; \in R_2,&lt;x_0,y&gt;\notin R_1\<br>
+&amp;取s_2 = [x_0]<em>{R_2} = {y|y \in A \wedge x_0R_2y},s_2 \in S_2，其中S_2 \in A/R_2\<br>
+&amp;且由于&lt;x_0,y&gt;\notin R_1 ,s_2 \notin S_1,故S_1 \ne S_2,其中S_1 \in A/R_1\<br>
+&amp;即A/R_1 \ne A/R_2\<br>
+&amp;右到左:\<br>
+&amp;A/R_1 \subset A/R_2,则同样易有R_1\subseteq R_2\<br>
+&amp;A/R_1 \ne A/R_2\<br>
+&amp;则存在S_2 \in A/R_2,找不到S_1 \in A/R_1,s.t. S_2 \subseteq S_1,\<br>
+&amp;同样取s_2 = [x_0]</em>{R_2} = {y|y \in A \wedge x_0R_2y},s_2\in S_2，且s_2 \notin S_1\<br>
+&amp;即\exist &lt;x_0,y_0&gt;,s.t. x_0R_2y_0,x_0\overline{R_1}y_0\<br>
+&amp;即R_1 \ne R_2\<br>
+&amp;故R_1 \subset R_2\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;看法不对,证明就不可能对了嘛。\<br>
+&amp;若R是非空集合A的空关系，由于前件为0，R是对称和传递的，但是\forall x \in A, &lt;x,x&gt;\notin R\<br>
+&amp;R不是自反的\<br>
+&amp;故即可完成论证\<br>
+\end{align}<br>
+$$</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;必要性:\<br>
+&amp;(显然bushi)R是等价关系，且&lt;a,b&gt;\in R,&lt;a,c&gt; \in R\<br>
+&amp;由于R是对称的，有&lt;b,a&gt;\in R\<br>
+&amp;由于R是传递的，有&lt;b,c&gt;\in R\<br>
+&amp;必要性即证\<br>
+&amp;充分性:\<br>
+&amp;若&lt;a,b&gt;\in R,&lt;a,c&gt;\in R,则&lt;b,c&gt;\in R\<br>
+&amp;同时R是自反的\<br>
+&amp;\forall &lt;a,b&gt;\in R, 且由自反性有&lt;a,a&gt; \in R \<br>
+&amp;由条件可得，&lt;b,a&gt; \in R，故R是对称的\<br>
+&amp;\forall &lt;a,b&gt; \in R , &lt;b,c&gt; \in R\<br>
+&amp;证明了对称性，有&lt;b,a&gt;\in R,则结合条件可得\<br>
+&amp;&lt;a,c&gt;\in R，故R是传递的\<br>
+&amp;由等价关系的定义可知R是等价关系\<br>
+&amp;充分性得证\<br>
+&amp;综上即可得证\<br>
+\end{align}<br>
+$$</p>
+<ol start="5">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;必要性:\<br>
+&amp;(也挺显然的)&lt;x,y&gt;\in R,&lt;y,z&gt;\in R\<br>
+&amp;则由传递性，&lt;x,z&gt;\in R\<br>
+&amp;再由对称性，&lt;z,x&gt;\in R\<br>
+&amp;必要性即证\<br>
+&amp;充分性:\<br>
+&amp;R是自反的，且R是循环的\<br>
+&amp;\forall &lt;x,y&gt; \in R, 由自反性&lt;y,y&gt;\in R\<br>
+&amp;再有循环性，有&lt;y,x&gt;\in R，即R是对称的\<br>
+&amp;\forall &lt;x,y&gt;\in R,&lt;y,z&gt;\in R\<br>
+&amp;由循环性,&lt;z,x&gt;\in R,又已经证明R是对称的\<br>
+&amp;则有&lt;x,z&gt;\in R，故R是传递的\<br>
+&amp;必要性得证\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<h2><span id="作业六">作业六</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(1)能够\<br>
+&amp;dom = {1,2,3,4}\<br>
+&amp;ran = {&lt;2,3&gt;,&lt;3,4&gt;,&lt;1,4&gt;}\<br>
+&amp;(2)能够\<br>
+&amp;dom = {1,2,3}\<br>
+&amp;ran = {&lt;2,3&gt;,&lt;3,4&gt;,&lt;3,2&gt;}\<br>
+&amp;(3)不能够\<br>
+&amp;(4)能够\<br>
+&amp;dom = {1,2,3}\<br>
+&amp;ran = {&lt;2,3&gt;}\<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp; (1)\forall y \in f[A] - f[B]\<br>
+&amp;\Rightarrow y \in f[A] \wedge y \notin f[B]\<br>
+&amp;\exist x\in A \quad s.t. \quad y = f(x)\<br>
+&amp;若x\in B,则与y\notin f[B]矛盾,故x\in A - B\<br>
+&amp;即y \in f[A- B]\<br>
+&amp;反例:\<br>
+&amp;X= {1,2},Y = {0}\<br>
+&amp;f = {&lt;1,0&gt;,&lt;2,0&gt;}\<br>
+&amp;A = {1,2}, B = {1}\<br>
+&amp;此时f[A] = {0},f[B] = {0},f[A] - f[B] = \varnothing\<br>
+&amp;f[A-B] = {0}，等号不成立\<br>
+&amp;(2)\forall x \in f^{-1}[C-D]\<br>
+&amp;\exist y \in C- D , y = f(x)\<br>
+&amp;\Rightarrow y\in C\wedge y\notin D\<br>
+&amp;\Rightarrow x\in f^{-1}[C] \wedge x \notin f^{-1}[D]\<br>
+&amp;\Rightarrow x \in f^{-1}[C]-f^{-1}[D]\<br>
+&amp;因此有f^{-1}[C-D]\subseteq f^{-1}[C]-f^{-1}[D]\<br>
+&amp;\forall x \in f^{-1}[C]-f^{-1}[D]\<br>
+&amp;\exist y \in C ,y = f(x)\<br>
+&amp;若y\in D,则x\in f^{-1}[D],矛盾，因此y\notin D\<br>
+&amp;\Rightarrow y\in C-D\<br>
+&amp;即x \in f^{-1}[C-D]\<br>
+&amp;因此有f^{-1}[C]-f^{-a}[D] \subseteq f^{-a}[C-D]\<br>
+&amp;故综上有f^{-1}[C-D] = f^{-1}[C]- f^{-1}[D]\<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;单射：(1),(2)\<br>
+&amp;满射：(2),(3)\<br>
+&amp;双射：(2)\<br>
+\end{align}<br>
+$$</p>
+<h2><span id="作业七">作业七</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;由上课讲的定理显然可得：\<br>
+&amp;(定理如下，课上证明了，课下就不证了了吧)\<br>
+&amp;f:X ⟶ Y 和 g: Y ⟶ Z，则\<br>
+&amp;(1) 若 f 和 g 都是满射，则 g\circ ƒ 也是满射\<br>
+&amp;(2) 若 f 和 g 都是单射，则 g\circ ƒ 也是单射\<br>
+&amp;(3) 若 f 和 g 都是双射，则 g\circ ƒ 也是双射\<br>
+&amp;用数学归纳法显然可证\<br>
+&amp;n = 1时，结论成立 \<br>
+&amp;若n时结论成立，则n+1时\<br>
+&amp;f^{n+1} = f^n \circ f\<br>
+&amp;f^n和f都是满射，单射或双射，则f^{n+1}时满射，单射或双射\<br>
+&amp;由数学归纳法即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;(1)g\circ f为满射，g为单射\<br>
+&amp;则ran(g\circ f) = Z\<br>
+&amp;且由课上结论,g为满射，故g为1-1映射\<br>
+&amp;dom(g) = Y,g^{-1}[Z] = Y \<br>
+&amp;又g[ran(f)] = Z\<br>
+&amp;即ran(f) = Y\<br>
+&amp;故f为满射\<br>
+&amp;综上即可得证\<br>
+&amp;(2)g\circ f为单射,f为满射\<br>
+&amp;且由课上结论，f为单射，故f为1-1映射\<br>
+&amp;\forall y_1 ,y_2\in Y,且y_1 \ne y_2\<br>
+&amp;由于f为1-1映射,故存在唯一x_1,x_2,s.t.y_1 = f(x_1),y_2 = f(x_2)\<br>
+&amp;若x_1 = x_2 ,则显然y_1 = y_2，故有x_1 \ne x_2\<br>
+&amp;则g\circ f(x_1) = g(y_1)  = z_1,g\circ f(x_2) = g(y_2) = z_2\<br>
+&amp;由g\circ f为单射,故z_1\ne z_2\<br>
+&amp;故可得g也为单射\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;dom(f\circ f) = {x | x\in \R \wedge x \ne 0}\<br>
+&amp;ran(f\circ f) = {x | x\in \R \wedge x \ne 0}\<br>
+&amp;dom(h\circ g) = {x | x\in \R}\<br>
+&amp;ran(h\circ g) = {x | x\in \R_+ | x = 0}\<br>
+&amp;dom(g\circ h) = {x|x \in \R_+ | x = 0}\<br>
+&amp;ran(g\circ h) = {x|x \in \R_+ | x = 0}\</p>
+<p>\end{align}<br>
+$$</p>
+<h2><span id="作业7">作业7</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;左推右\<br>
+&amp;显然!!f可逆等价于f有唯一的左逆和右逆\<br>
+&amp;右推左\<br>
+&amp;若f有唯一的左逆(右逆证明类似)\<br>
+&amp;那么可以推出f是单射\<br>
+&amp;需要证明f是可逆的，那么只需要证明f是右可逆的\<br>
+&amp;这里采用反证法，假设f不是右可逆的，那么等价于f不是满射\<br>
+&amp;设A中至少有的两个元素为a_1, a_2,由于f是单射\<br>
+&amp;设f(a_1) = b_1, f(a_2) = b_2,且有b_1 \ne b_2，同时由于不是满射\<br>
+&amp;B中至少存在一个元素，设为b_3,A中没有元素映射到b_3\<br>
+&amp;接下来我们构造g_1,g_2,使得g_1 \circ f = I_A,g_2\circ f_2 = I_A，且g_1 \ne g_2\<br>
+&amp;g_1(x) = \begin{cases}<br>
+a_i, &amp; if, x = b_i,i=1,2\<br>
+a_1, &amp; if, x = b_3\<br>
+f^{-1}(x), &amp; if, x \in ran(f) \wedge x \notin{b_1, b_2}<br>
+\end{cases}\<br>
+&amp;g_2(x) = \begin{cases}<br>
+a_i, &amp; if, x = b_i,i=1,2\<br>
+a_2, &amp; if, x = b_3\<br>
+f^{-1}(x), &amp; if, x \in ran(f) \wedge x \notin{b_1, b_2}<br>
+\end{cases}\<br>
+&amp;那么就有g_1 \circ f = I_A,g_2\circ f_2 = I_A，且g_1 \ne g_2成立，与f有唯一的左逆矛盾\<br>
+&amp;故有上面的反证法可以得到f是右可逆的，那么f是可逆，即可得证\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+(1)&amp;f是左可逆，右可逆，可逆的\<br>
+&amp;显然f是单射，满射，因此是可逆的。同时求出f的逆即为f的左逆和右逆\<br>
+&amp;构造g(x) = \begin{cases}<br>
+4,&amp; if, x= 0\<br>
+x-1,&amp; if, x = 1,2,3,4\<br>
+x,&amp; if, x &gt; 5<br>
+\end{cases}\<br>
+&amp;可以验证f\circ g = I_N, g\circ f = I_N\<br>
+&amp;即为所求\<br>
+(2)&amp;f是右可逆，不是左可逆，不是可逆\<br>
+&amp;由于f(1)  = f(3) =  3,因此f不是单射，f不是左可逆\<br>
+&amp;f是满射，\forall x \in N,\exist f(2x) = x,2x \in N;<br>
+&amp;下面构造f的右逆g\<br>
+&amp;g(x) = 2x, x \in N;即为右逆之一<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;\chi_{A-B\cap C}\<br>
+&amp;= \chi_A - \chi_A <em>\chi_{B\cap C}\<br>
+&amp;= \chi_A - \chi_A</em>\chi_B*\chi_C\<br>
+&amp;\chi_{(A-B)\cup (A-C)}\<br>
+&amp;=\chi_{A-B} + \chi_{A-C}-\chi_{A-B}<em>\chi_{A-C}\<br>
+&amp;=\chi_A-\chi_A</em>\chi_B+\chi_A-\chi_A*\chi_C - (\chi_A-\chi_A*\chi_B)<em>(\chi_A-\chi_A</em>\chi_C)\<br>
+&amp;=\chi_A-\chi_A*\chi_B+\chi_A-\chi_A*\chi_C-(\chi_A-\chi_A*\chi_A*\chi_C-\chi_A*\chi_B*\chi_A+\chi_A*\chi_B*\chi_A*\chi_C)\<br>
+&amp;=\chi_A-\chi_A*\chi_B+\chi_A-\chi_A*\chi_C-(\chi_A-\chi_A*\chi_C-\chi_A*\chi_B+\chi_A*\chi_B*\chi_C)\<br>
+&amp;=\chi_A - \chi_A*\chi_B*\chi_C\<br>
+&amp;于是显然有\chi_{A-B\cap C} = \chi_{(A-B)\cup (A-C)}\<br>
+&amp;于是可以证明A-B\cap C = (A-B)\cup(A-C)\<br>
+\end{align}<br>
+$$</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;\chi_{A\oplus B}\<br>
+&amp;=\chi_{A} - \chi_{A\cap B} + \chi_{B}-\chi_{A\cap B}\<br>
+&amp;=\chi_{A} + \chi_{B} - 2*\chi_{A}<em>\chi_{B}\<br>
+&amp;=0\<br>
+&amp;那么有\chi_{A}</em>(1-\chi_{B}) = \chi_B*(1-\chi_{A})\<br>
+&amp;\iff \chi_{A}<em>\chi_{\sim B} = \chi_{B}</em>\chi_{\sim A}\<br>
+&amp;\iff \chi_{A\cap \sim B} = \chi_{B\cap \sim A}\<br>
+&amp;\iff A\cap \sim B = B \cap \sim A\<br>
+&amp;即为所求<br>
+\end{align}<br>
+$$</p>
+<h2><span id="作业8">作业8</span></h2>
+<ol>
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;利用第一数学归纳法进行证明\<br>
+&amp;(1)由于为自然数序列，所以显然有0\le a_0\<br>
+&amp;(2)\forall n\ge 0,若n \le a_n,下面证明n^+\le a_{n^+}\<br>
+&amp;由于为单调递增序列，因此显然有a_n &lt;a_{n^+}\<br>
+&amp;同时为正整数序列，由于正整数是不稠密的\<br>
+&amp;有a_n + 1 \le a_{n^+}\<br>
+&amp;n^+ = n + 1 \le a_n + 1\le a_{n^+}\<br>
+&amp;综上即可得证<br>
+\end{align}<br>
+$$</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;对于本题我们先证明如下结论:\<br>
+&amp;\forall i \in n, 有i \subseteq n\<br>
+&amp;使用第一数学归纳法进行证明\<br>
+&amp;(1)n = 0时显然成立。\<br>
+&amp;(2)\forall n \ge 0,若结论成立，即\forall i \in n, 有i\subseteq n\<br>
+&amp;那么对于n^+,有n^+ = {n,{n}}\<br>
+&amp;\forall i \in n^+, 有i = n 或者i \in n(由三歧性可得)\<br>
+&amp;若i = n,显然有i\subseteq n^+\<br>
+&amp;若i\in n,由归纳假设，i\in n\<br>
+&amp;又n\in n^=,则又i\in n^+\<br>
+&amp;故该结论得证\<br>
+&amp;对于本题,\forall a \in n,\forall x \in a\<br>
+&amp;由于可推出a \in n, 于是显然有x \in n\<br>
+&amp;故综上即可得证\forall n \in N 是传递的<br>
+\end{align}<br>
+$$</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>$$<br>
+\begin{align}<br>
+&amp;本题应该是想用二重归纳法做，但是太麻烦了，我就直接用构造法哈(goutou)\<br>
+&amp;设n = k(m+1) + t,(t &lt; m+1)\<br>
+&amp;由于n &gt; m 且(m+1)\nmid n\<br>
+&amp;可得k \ge 1, t \ne 0\<br>
+&amp;那么甲第一次取t个球，然后每次乙取x个球\<br>
+&amp;甲取(m+1-x)个球，一轮取球数维m+1，故经过k轮\<br>
+&amp;恰好甲取完最后的球，获胜<br>
+\end{align}<br>
+$$</p>
+]]></content>
+      <tags>
+        <tag>离散2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>高代期末</title>
+    <url>/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/</url>
+    <content><![CDATA[<h1><span id="线代期末串讲">线代期末串讲</span></h1>
+<blockquote>
+<p><a href="https://bhpan.buaa.edu.cn/link/AA8158DA29E46E4B62A400D7DA65647D7C">https://bhpan.buaa.edu.cn/link/AA8158DA29E46E4B62A400D7DA65647D7C</a><br>
+文件夹名：高代期末串讲<br>
+有效期限：永久有效</p>
+</blockquote>
+<p>资料如上</p>
+<blockquote>
+<p>2023 12.31 <a href="hugohealthy.top">胡健</a></p>
+</blockquote>
+<p>线性代数这门课程的切入点有很多，这里从知识层面上划分出来了线性方程组和向量组，线性空间，矩阵与行列式这三大部分。同时，会讲到几个重要的定理和公式。</p>
+<h2><span id="线性方程组和向量组">线性方程组和向量组</span></h2>
+<ul>
+<li>线性方程组</li>
+</ul>
+<p>齐次解和非齐次解的讨论<br>
+$$<br>
+AX=O\<br>
+AX=\beta<br>
+$$<br>
+齐次：有唯一解，有无穷多组解</p>
+<p>非齐次：无解，有唯一解，有无穷多组解<br>
+$$<br>
+有解\iff r(A)=r(A|\beta)<br>
+$$<br>
+<strong>可拓展到矩阵方程的解的情况</strong></p>
+<p>通解问题<br>
+$$<br>
+\begin{align}<br>
+&amp;X=t_1\varepsilon_1+\dots t_p\varepsilon_p\<br>
+&amp;X=t_1\varepsilon_1+\dots t_p\varepsilon_p + X_1<br>
+\end{align}<br>
+$$</p>
+<ul>
+<li>向量组</li>
+</ul>
+<p>(列向量组)<br>
+$$<br>
+\alpha_i\in R^n,{\alpha_1\dots \alpha_p}<br>
+$$<br>
+线性相关与线性无关的含义<br>
+$$<br>
+\begin{align}<br>
+&amp;存在不全为0的k_1\dots k_p,k_1\alpha_1 +\dots k_p\alpha_p = 0\Rightarrow线性相关\<br>
+&amp;k_1\alpha_1 +\dots k_p\alpha_p = 0\rightarrow k_1\dots k_p = 0\Rightarrow线性无关<br>
+\end{align}<br>
+$$</p>
+<ul>
+<li>极大线性无关与秩</li>
+</ul>
+<p>极大线性无关组指的是：<br>
+$$<br>
+\alpha_1\dots\alpha_m线性无关，且加上向量组中任一向量\alpha后线性相关<br>
+$$<br>
+向量组的秩的含义是极大线性无关组中向量的个数</p>
+<ul>
+<li>向量组的等价</li>
+</ul>
+<p>一个向量组A中的每一个向量可以用另一个向量组B来线性表示，称向量组A能由向量组B线性表示</p>
+<p>向量组的等价指的是可以相互线性表示</p>
+<ul>
+<li>
+<p>向量组的一些性质</p>
+</li>
+<li>
+<p>相关的线性表示（及其逆，单边法则）</p>
+</li>
+</ul>
+<blockquote>
+<p>由线性相关的定义可推出，其中某个向量可以由其余向量线性表示，这又可推出其中的某个向量可以写成前面的向量的线性组合。<br>
+所以我们逆过来看，线性无关，等价于<br>
+$每一个向量都不可由前面的向量表示（\alpha_i = 0） $<br>
+这我们叫做单边法则</p>
+</blockquote>
+<ul>
+<li>大数法则/不大法则</li>
+</ul>
+<blockquote>
+<p>我们先来看，一个向量组被另一个向量组表示被表示的意义。<br>
+$S_1组被S_2组表示\Leftrightarrow \forall \alpha_i \in S_1 , \alpha_i 可以被 \beta_j \in S_2 表示 $<br>
+大的向量组可以被小的向量组表示，大组必相关<br>
+（逆否命题：若A组无关，但可以被B组表示，则A比B小 ——不大法则）<br>
+为啥可以被表示，我们可以理解了后面的秩再来说，是不是说AX=B有解啊。</p>
+</blockquote>
+<ul>
+<li>表示的传递性</li>
+</ul>
+<blockquote>
+<p>$我们说S_2 能被S_1表示，S_1能被S_0表示，则S_2能被S_0表示$</p>
+</blockquote>
+<ul>
+<li>唯一表示法则</li>
+</ul>
+<blockquote>
+<p>${\alpha_1,……,\alpha_n}无关,{\alpha_1,……,\alpha_n,\beta}相关，则\beta 由{\alpha_1,……,\alpha_n}唯一表示 $</p>
+</blockquote>
+<ul>
+<li>子组相关法则</li>
+</ul>
+<blockquote>
+<p>子组相关，全组必定相关<br>
+proof:<br>
+$k_1\alpha_1 + k_2\alpha_2 +……+k_p\alpha_p = 0 (k_1,……,k_p不全为零) $<br>
+$\therefore k_1\alpha_1 + k_2\alpha_2 +……+k_p\alpha_p + 0\alpha_{p+1} + …… + 0\alpha_n  = 0$</p>
+</blockquote>
+<ul>
+<li>等数法则</li>
+</ul>
+<blockquote>
+<p>${\alpha_1,……\alpha_p},{\beta_1,……\beta_q}两组无关，且能相互表示，则p=q $<br>
+由不大法则可证</p>
+</blockquote>
+<ul>
+<li>长短法则</li>
+</ul>
+<blockquote>
+<p>长相关则短相关，短无关则长无关<br>
+看具体怎么理解了，有的老师说“如果矩阵A的子矩阵A0的各行（列）线性无关，则由A0的这些行（列）扩充得到的A的行（列）线性无关。”<br>
+这是从大到小，从矩阵看问题<br>
+也可以这么理解（从小到大，从向量组）</p>
+</blockquote>
+<ul>
+<li>行变再行变，列的关系不改变</li>
+</ul>
+<h2><span id="空间解空间内积空间">空间(解空间，内积空间)</span></h2>
+<p>解空间(初次接触)</p>
+<p>张成空间(你已经会很多了)</p>
+<p>欧式空间(你会的差不多了)</p>
+<p>线性空间(你会了！！)</p>
+<ul>
+<li>定义</li>
+</ul>
+<p>满足八条性质，其实就是满足封闭性和线性性</p>
+<ul>
+<li>生成空间的定义</li>
+</ul>
+<p>由向量组表示的所有向量的集合<br>
+$$<br>
+\begin{align}<br>
+&amp;\alpha_1\dots\alpha_m\<br>
+&amp;L={\lambda_1\alpha_1 \dots \lambda_m\alpha_m|\lambda_1\dots\lambda_m\in R}<br>
+\end{align}<br>
+$$</p>
+<ul>
+<li>解空间的理解</li>
+</ul>
+<p>定义：n元齐次线性方程组的解集是n维向量空间$F^n$的非空子集(易证满足封闭性和线性性)</p>
+<p>生成空间角度：基础解的张成空间</p>
+<p>矩阵内积的理解：<br>
+$$<br>
+(\alpha_1,\dots,\alpha_m)<br>
+\begin{pmatrix}<br>
+x_1\<br>
+\vdots\<br>
+x_m<br>
+\end{pmatrix}\<br>
+AX<br>
+$$</p>
+<blockquote>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231230223324226.png" alt></p>
+</blockquote>
+<ul>
+<li>空间的交与和（还有<strong>直和</strong>和<strong>并</strong>，应该不考）</li>
+</ul>
+<p>how to solve？</p>
+<p>$V_1:\alpha_1\dots \alpha_p,V_2:\beta_1\dots\beta_q$</p>
+<p>空间的交：<br>
+$$<br>
+\begin{align}<br>
+&amp;\gamma = s_1\alpha_1+\dots s_p\alpha_p = t_1\beta_1+\dots t_q\beta_q\<br>
+&amp;解出来后得到s_1\dots s_p\<br>
+&amp;带入后易得<br>
+\end{align}<br>
+$$<br>
+空间的和：<br>
+$$<br>
+\begin{align}<br>
+&amp;{\alpha_1\dots\alpha_p,\beta_1\dots\beta_q}这个向量组的极大线性无关组\<br>
+&amp;和空间的维数即为极大线性无关组的秩<br>
+\end{align}<br>
+$$<br>
+维数公式<br>
+$$<br>
+\dim(W_1+W_2)=\dim W_1+\dim W_2-\dim (W_1\cap W_2)<br>
+$$<br>
+其中$W_1+W_2={w_1+w_2:w_1\in W_1,w_2\in W_2}$</p>
+<ul>
+<li>内积与Gram矩阵</li>
+</ul>
+<p>$$<br>
+\begin{align}<br>
+&amp;A={\alpha_1\dots\alpha_n}\<br>
+&amp;Gram=<br>
+\begin{pmatrix}<br>
+(\alpha_1,\alpha_1)&amp;\dots &amp;(\alpha_1,\alpha_n)\<br>
+\vdots &amp;  &amp;\vdots\<br>
+(\alpha_n,\alpha_1) &amp;\dots &amp;(\alpha_n,\alpha_n)<br>
+\end{pmatrix}\<br>
+&amp;Gram=A^TA<br>
+\end{align}<br>
+$$</p>
+<p>定义预正交阵和正交阵</p>
+<p>预正交阵：列向量两两正交</p>
+<p>正交阵：两向量两两正交且每个列向量的模为1</p>
+<p>度量阵：由基向量产生的Gram矩阵，特殊情况下是单位阵</p>
+<p>二次型<br>
+$$<br>
+\begin{align}<br>
+&amp;f=\sum_{i=1}^n\sum_{j=1}^na_{ij}x_ix_j\<br>
+&amp;二次型对应的矩阵为：\<br>
+&amp;\begin{pmatrix}<br>
+a_{11}&amp;\dots &amp;a_{1n}\<br>
+\vdots &amp;  &amp;\vdots\<br>
+a_{n1} &amp;\dots &amp;a_{nn}<br>
+\end{pmatrix}\<br>
+&amp;a_{ij}=a_{ji}<br>
+\end{align}<br>
+$$</p>
+<ul>
+<li>线性映射和线性变换</li>
+</ul>
+<p>线性映射：$R^n\rightarrow R^m$</p>
+<p>线性变换：$R^n\rightarrow R^n$</p>
+<blockquote>
+<p>这个概念挺抽象的</p>
+<p>不同书定义也不一样(点名批评同济大学的紫书)</p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231230234949295.png" alt></p>
+<p>这里以《矩阵论》上面的定义为准</p>
+</blockquote>
+<ul>
+<li>
+<p>过渡矩阵与坐标变换公式</p>
+<p>若两组基$ S=\begin{bmatrix}{\varepsilon_1,\cdots,\varepsilon_n}\end{bmatrix}, T=\begin{bmatrix}{\eta_1,\dots,\eta_n}\end{bmatrix}$满足基变换公式$ T= S P$，则称$ P$是从$\S$到$ T$的过渡矩阵。</p>
+<p>设向量$\alpha$在$ S, T$下的坐标分别为$ X, Y$，则满足坐标变换公式$ X= P Y$。</p>
+</li>
+<li>
+<p>线性变换矩阵</p>
+<p>对于一组基$\xi_1,\dots,\xi_n$，若存在矩阵$A$使得线性变换$\sigma$满足$\sigma(\xi_1,\dots,\xi_n)=(\xi_1,\dots,\xi_n) A$，则称矩阵$ A$为线性变换$\sigma$在基$\xi_1,\dots,\xi_n$下所对应的矩阵。</p>
+<p>若线性空间$V$的线性变换$\sigma$在两组基$\xi_1,\dots,\xi_n$以及$\eta_1,\dots,\eta_n$下对应的矩阵分别为$ A, B$，$\xi_1,\dots,\xi_n$到$\eta_1,\dots,\eta_n$的过渡矩阵为$ P$，则有$ B= P^{-1} A P$。</p>
+</li>
+</ul>
+<blockquote>
+<p>虽然这个也有点抽象，但是整理了一下也就这几个公式</p>
+<p>理解不了就记住吧</p>
+</blockquote>
+<h2><span id="矩阵与行列式">矩阵与行列式</span></h2>
+<ul>
+<li>矩阵的可逆与正交</li>
+</ul>
+<p>$$<br>
+\begin{align}<br>
+&amp;A=A_{n\times n}\<br>
+&amp;r(A)=n\<br>
+\iff&amp;行满秩\<br>
+\iff&amp;列满秩\<br>
+\iff&amp;A^{-1}存在\<br>
+\iff&amp;|A|\ne 0\<br>
+\iff&amp;\lambda_i\ne 0|A|=\lambda_1\dots\lambda_n\<br>
+\end{align}<br>
+$$</p>
+<p>正交：$A^T=A^{-1}$或者$A^TA^{-1}=A^{-1}A^T=I_n$</p>
+<ul>
+<li>矩阵的秩</li>
+</ul>
+<p>行秩：行向量组的秩</p>
+<p>列秩：列向量组的秩</p>
+<p>阶梯秩：化为阶梯阵后非零行的个数</p>
+<p>古典秩：存在k阶子式的行列式不为0，任意k+1阶子式的行列式都为0</p>
+<blockquote>
+<p>这四个是等价的</p>
+</blockquote>
+<ul>
+<li>行列式的计算</li>
+</ul>
+<blockquote>
+<p>这个我感觉高阶的也不会让你算</p>
+<p>低阶的直接爆算或者化为上三角行列式</p>
+</blockquote>
+<p>范德蒙德行列式</p>
+<p><strong>下降公式/换位公式</strong></p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/E:%5CPictures%5Ctypora%5C3%E6%8D%A2%E4%BD%8D%E5%85%AC%E5%BC%8F%E4%BE%8B%E9%A2%98.png" alt="换位公式例题"></p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231004939668.png" alt></p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231004927501.png" alt></p>
+<ul>
+<li>相伴秩公式</li>
+</ul>
+<p>$$<br>
+A=A_{n\times n}\<br>
+A^*=<br>
+\begin{pmatrix}<br>
+A_{11} &amp;A_{21}&amp;\dots &amp;A_{n1}\<br>
+\vdots &amp;&amp;&amp;\vdots\<br>
+A_{1n} &amp;A_{2n}&amp;\dots &amp;A_{nn}<br>
+\end{pmatrix}<br>
+$$</p>
+<p>注意这里还转置了一下</p>
+<p>$AA^*=|A|I_n$</p>
+<p>可得$|A^*| = |A|^{n-1}$</p>
+<p>和伴随矩阵有关的秩的公式<br>
+$$<br>
+r(A^*) =<br>
+\begin{cases}<br>
+n,r(A) = n\<br>
+1,r(A)=n-1\<br>
+0,else<br>
+\end{cases}<br>
+$$</p>
+<blockquote>
+<p>proof:由古典秩的含义</p>
+<p>第二个用到$AA^<em>=O 有r(A)+r(A^</em>) \le n $</p>
+<p>且$r(A^*) \ge 1$</p>
+</blockquote>
+<h2><span id="特征值与二次型">特征值与二次型</span></h2>
+<ul>
+<li>根的遗传公式</li>
+</ul>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231010720537.png" alt></p>
+<blockquote>
+<p>零化式</p>
+</blockquote>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231010812719.png" alt></p>
+<blockquote>
+<p>theory</p>
+</blockquote>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231011008818.png" alt></p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231011031258.png" alt></p>
+<ul>
+<li>Cayley定理</li>
+</ul>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231011404990.png" alt></p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231011426721.png" alt></p>
+<ul>
+<li>许尔公式</li>
+<li>相似对角化</li>
+</ul>
+<p>可对角化</p>
+<ol>
+<li>n阶矩阵A与对角阵相似（即A能对角化）的充分必要条件是A有n个线性无关的特征向量。</li>
+<li>如果n阶矩阵A的n个特征值互不相等，则A与对角阵相似。</li>
+<li>对称阵的特征值为实数</li>
+<li>不同特征根的特征向量正交</li>
+</ol>
+<p>对称阵A对角化的步骤</p>
+<ol>
+<li>
+<p>求出A的全部互不相等的特征值$\lambda_1,\dots \lambda_s$，它们的重数依次为$k_1,\dots k_s(k_1+\dots +k_s = n)$。</p>
+</li>
+<li>
+<p>对每个$k_i$重特征值$\lambda_i$，求方程$(A-\lambda_i I)X=O$的基础解系，得$k_i$个线性无关的特征向量。再把它们<strong>正交化</strong>、单位化，得ki个两两正交的单位特征向量。因$k_1+\dots +k_s=n$，故总共可得n个两两正交的单位特征向量。</p>
+</li>
+</ol>
+<p>$Schimidt$正交化方法</p>
+<p>若有$n$个线性无关的向量$\alpha_1,\dots,\alpha_n$，则过程分为正交化和单位化</p>
+<p>正交化过程<br>
+$$<br>
+\beta_k=\alpha_k-\sum_{i=1}^{k-1}\frac{(\beta_i,\alpha_k)}{(\beta_i,\beta_i)}\beta_i,\quad k=1,\dots,n<br>
+$$<br>
+单位化过程<br>
+$$<br>
+\eta_k=\frac{\beta_k}{||\beta_k||},\quad k=1,\dots,n<br>
+$$<br>
+从而得到一组单位正交向量$\eta_1\cdots,\eta_n$。</p>
+<ol start="3">
+<li>把这n个两两正交的单位特征向量构成正交阵P，便有$P^{-1}AP = P^TAP = Λ$。注意Λ中对角元的排列次序应与P中列向量的排列次序相对应。</li>
+</ol>
+<ul>
+<li>实对称阵的性质</li>
+</ul>
+<p>实对称矩阵的正交相似对角化</p>
+<p>（1）实对称矩阵的特征值均为实数；</p>
+<p>（2）实对称矩阵对应不同特征值的特征向量相互正交；</p>
+<p>（3）实对称矩阵必定可以相似对角化；</p>
+<p>（4）若$ A$是$n$阶实对称矩阵，且特征值为$\lambda_1,\cdots,\lambda_n$，则存在正交矩阵$ Q$，使得<br>
+$$<br>
+Q^T A Q=\begin{bmatrix}\lambda_1&amp;&amp;\&amp;\ddots\&amp;&amp;\lambda_n\end{bmatrix}<br>
+$$<br>
+（5）若$ A$和$ B$均为$n$阶实对称矩阵，则$ A$和$ B$相似的充要条件是$ A$和$ B$有相同的特征值。</p>
+<ul>
+<li>二次型与六二条件</li>
+</ul>
+<p>正定矩阵：</p>
+<p>（1）$ A$所有特征值均为正;</p>
+<p>（2）$ A$正惯性指数为$n$；</p>
+<p>（3）$ A$与单位阵合同；</p>
+<p>（4）$ A$的各阶顺序主子式大于零；</p>
+<p>（5）存在可逆矩阵$ P$使得$ A= P^T P$。</p>
+<p>（6）若对任意$n$维维非零向量$ \alpha$均有$\alpha^T A\alpha&gt;0$</p>
+<p>负定矩阵：</p>
+<p>（1）若对任意$n$维维非零向量$ \alpha$均有$\alpha^T A\alpha&lt;0$</p>
+<p>（2）$ A$的奇数阶主子式为负，偶数阶主子式为正；</p>
+<ul>
+<li>双合同定理</li>
+</ul>
+<p>若$A,B$同阶实对称，其中一个为正定，可设$A$正定，存在可逆$W$,$W^TAW=I_n，W^TBW=diag(d_1,\dots,d_n)$,即$W^TAW,W^TBW$都为对角形</p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/E:%5CPictures%5Ctypora%5Cimage-20231231015741579.png" alt="image-20231231015741579"></p>
+<p><a href="https://zhuanlan.zhihu.com/p/376561675">more</a></p>
+<h2><span id="一些典型的整理">一些典型的整理</span></h2>
+<ul>
+<li>秩公式</li>
+</ul>
+<p>阶梯阵概念，及其与向量组秩的联系。</p>
+<blockquote>
+<p>矩阵就是向量组拼起来的，所以矩阵的秩就是向量组的秩。<br>
+我们在线性方程组的矩阵消元法中见识过，我们把一个矩阵变成阶梯状，我们考虑一下，变成阶梯状以后，后面的向量前缀都是零，所以不可能可以表示前面的向量，所以很简单，阶梯有多少阶，就会有多少秩。<br>
+那么到底是行向量的秩还是列向量的秩呢，不用纠结我们通过阶梯可以看出，行向量的秩就是列向量的秩。<br>
+所以三种同解变形，其实就代表着三种初等变换。</p>
+</blockquote>
+<p>秩一阵</p>
+<blockquote>
+<p>我们来看一个矩阵，秩一阵，可分解为两个向量之间的乘积。</p>
+</blockquote>
+<p>我们在最后再来谈秩的各种公式的关系</p>
+<blockquote>
+<ul>
+<li>满秩则有唯一解<br>
+$proof: \because r(A) = n $<br>
+$\therefore {\alpha_1,……,\alpha_n}可作为一组基 $<br>
+$\therefore \forall \beta \in R^n 都会存在\beta 的坐标(x_1,……,x_n) $<br>
+$坐标即为唯一解 $</li>
+<li>满秩则可逆<br>
+$proof: 由上可知：AX_1 = \varepsilon_1, AX_2 = \varepsilon_2,……,AX_n = \varepsilon_n 都有解$<br>
+$所以AA^{-1} = I可解出A^{-1} = (X_1,X_2,……,X_n) $</li>
+</ul>
+</blockquote>
+<p>所以说到这就只需要明确一个事情，满秩，行向量组列向量组无关，行列式不等于0，可逆，只有唯一解，非奇异这都是等价的概念</p>
+<blockquote>
+<p>分块秩公式</p>
+</blockquote>
+<p>$$<br>
+r\begin{pmatrix}<br>
+A &amp;O\<br>
+O &amp;B<br>
+\end{pmatrix}=r(A)+a(B)\<br>
+r\begin{pmatrix}<br>
+O &amp;B\<br>
+A &amp;O<br>
+\end{pmatrix}=r(A)+a(B)\<br>
+r\begin{pmatrix}<br>
+A &amp;C\<br>
+O &amp;B<br>
+\end{pmatrix}\ge r(A)+a(B)\<br>
+$$</p>
+<blockquote>
+<p>乘积不增秩公式</p>
+</blockquote>
+<p>$$<br>
+\begin{align}<br>
+&amp;r(AB)\le r(A),r(B)\<br>
+&amp;A=A_{m\times n} = (\alpha_1,\dots,\alpha_n),B=B_{n\times p} = (\beta_1,\dots,\beta_p)\<br>
+&amp;AB=(A\beta_1,\dots,A\beta_p)\<br>
+&amp;A\beta_i=\alpha_1b_1+\dots+\alpha_nb_n,\beta_i=\begin{pmatrix}<br>
+b_1\b_2\\vdots\b_n<br>
+\end{pmatrix}\<br>
+&amp;AB可以被{\alpha_1,\dots,\alpha_n}表示<br>
+\end{align}<br>
+$$</p>
+<blockquote>
+<p>积0公式</p>
+</blockquote>
+<p>$$<br>
+\begin{align}<br>
+&amp;AB=O\<br>
+&amp;r(A)+r(B)\le n<br>
+\end{align}<br>
+$$</p>
+<blockquote>
+<p>转置积秩公式</p>
+</blockquote>
+<p>$$<br>
+r(A)+r(B)\le r(AB)+n<br>
+$$</p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231021249979.png" alt></p>
+<blockquote>
+<p>加减秩公式</p>
+</blockquote>
+<p>$$<br>
+\begin{align}<br>
+&amp;r(A+B)\le r(A)+r(B)\<br>
+&amp;r(A-B)\le r(A)+r(B)\<br>
+&amp;r(A+B)=r(A|B)r\begin{pmatrix}I_n\I_n\end{pmatrix}\le r(A|B)\le r(A)+r(B)<br>
+\end{align}<br>
+$$</p>
+<ul>
+<li>可逆的等价表示</li>
+</ul>
+<ol>
+<li>
+<p>$A$的行列式不等于0</p>
+</li>
+<li>
+<p>$A$的秩等于$n$，即$A$为满秩矩阵</p>
+</li>
+<li>
+<p>$A$的行（列）向量组线性无关</p>
+</li>
+<li>
+<p>齐次方程组$Ax=0$只有零解</p>
+</li>
+<li>
+<p>对于任意$b$属于$R^n$(表示向量空间)，Ax=b总有唯一解</p>
+</li>
+<li>
+<p>A与单位矩阵等价</p>
+</li>
+<li>
+<p>A可表示成若干个初等矩阵的乘积</p>
+</li>
+<li>
+<p>A的列向量可以作为n维向量空间$R^n$的一组基</p>
+</li>
+<li>
+<p>$R^n$中任意一个向量都可以由$A$的列向量线性表出</p>
+</li>
+<li>
+<p>$A$的特征值全不为0</p>
+</li>
+<li>
+<p>$A^TA$是正定矩阵</p>
+</li>
+<li>
+<p>$A$是非奇异的</p>
+</li>
+</ol>
+<ul>
+<li>求逆的方法学</li>
+</ul>
+<p>初等变换（常用且方便）</p>
+<p>伴随矩阵法</p>
+<p>分块矩阵法</p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/E:%5CPictures%5Ctypora%5Cimage-20231231021933921.png" alt="image-20231231021933921"></p>
+<p>零化式法</p>
+<ul>
+<li>下降公式</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>高代</tag>
       </tags>
   </entry>
   <entry>
@@ -1493,398 +2350,6 @@ $$</p>
       </tags>
   </entry>
   <entry>
-    <title>离散2</title>
-    <url>/2023/11/24/%E7%A6%BB%E6%95%A32/</url>
-    <content><![CDATA[<h1><span id="离散2">离散2</span></h1>
-<h2><span id="作业5">作业5</span></h2>
-<ol>
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;(1)不是\<br>
-&amp;A = {1, 2, 3}\<br>
-&amp;R_1 = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;,&lt;1,2&gt;,&lt;2,1&gt;, &lt;1,3&gt;,&lt;3,1&gt;,&lt;2,3&gt;,&lt;3,2&gt;}\<br>
-&amp;R_2 = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;1,2&gt;,&lt;2,1&gt;}\<br>
-&amp;则r(R_1 - R_2) = {&lt;1,1&gt;, &lt;2,2&gt;, &lt;3,3&gt;,&lt;2,3&gt;,&lt;3,2&gt;,&lt;1,3&gt;,&lt;3,1&gt;}\<br>
-&amp;而有&lt;1,3&gt;,&lt;3,2&gt;\in r(R_1 - R_2) 但是&lt;1,2&gt; \notin r(R_1 - R_2),故r(R_1-R_2)不是传递的，因而不是等价关系\<br>
-&amp;(2)不是\<br>
-&amp; 上课已经讲过，R_1 , R_2是对称时，R_1 \circ R_2 不一定对称\<br>
-&amp; 比如取A = {1, 2, 3}\<br>
-&amp;R_1 = {&lt;1,1&gt;, &lt;2,2&gt;,&lt;1,2&gt;,&lt;2,1&gt;,}\<br>
-&amp;R_2 = {&lt;2,2&gt;, &lt;3,3&gt;, &lt;2,3&gt;,&lt;3,2&gt;}\<br>
-&amp;则R_1\circ R_2 = {&lt;2,2&gt;,&lt;2,3&gt;,&lt;1,3&gt;,&lt;1,2&gt;}显然不是等价关系\<br>
-&amp;(3)是\<br>
-&amp;R_1,R_2都是等价关系，那么都是自反，对称，传递的\<br>
-&amp;就有R_1\cup R_2是自反的，对称的\<br>
-&amp;同时如果R_1 \cup R_2 是自反的，对称的，那么t(R_1,R_2)仍然是自反、对称的，同时还是传递的\<br>
-&amp;由等价关系的定义可知t(R_1, R_2)是等价关系<br>
-\end{align}<br>
-$$</p>
-<ol start="2">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;(a)\<br>
-&amp;左到右:\<br>
-&amp;S_1 \in A/R1,则\forall s_1 \in S_1\<br>
-&amp;s_1 = [x]<em>{R_1} = {y|y\in A \wedge x R_1y},x为A中元素\<br>
-&amp;又R_1\subseteq R_2,及&lt;x,y&gt; \in R_1 有&lt;x,y&gt; \in R_2，即xR_2y\<br>
-&amp;故s_1 \in S_2 = [x]</em>{R_2} = {y|y \in A \wedge xR_2y}\<br>
-&amp;即S_1 \subseteq S_2,由加细的定义有A/R_1 \le A/R_2\<br>
-&amp;右到左:\<br>
-&amp;A/R_1 \le A/R_2\<br>
-&amp;有\forall S_1 \in A/R_1 , \exist S_2 \in A/R_2 , s.t. S_1 \subseteq S_2\<br>
-&amp;\forall s_1 \in S_1\<br>
-&amp;s_1 = [x]<em>{R_1} = {y|y\in A \wedge x R_1y},x为A中元素\<br>
-&amp;故\exist s_2 = [x]</em>{R_2} = {y|y \in A \wedge xR_2y},s_1 \subseteq s_2 \<br>
-&amp;即\forall xR_1y,有xR_2y,即R_1 \subseteq R_2\<br>
-&amp;综上即可得证\<br>
-&amp;(b)\<br>
-&amp;左到右:\<br>
-&amp;R_1 \subset R_2 必然有R_1 \subseteq R_2，则A/R_1 \le A/R_2\<br>
-&amp;又R_1\ne R_2,即\exist &lt;x_0,y&gt; \in R_2,&lt;x_0,y&gt;\notin R_1\<br>
-&amp;取s_2 = [x_0]<em>{R_2} = {y|y \in A \wedge x_0R_2y},s_2 \in S_2，其中S_2 \in A/R_2\<br>
-&amp;且由于&lt;x_0,y&gt;\notin R_1 ,s_2 \notin S_1,故S_1 \ne S_2,其中S_1 \in A/R_1\<br>
-&amp;即A/R_1 \ne A/R_2\<br>
-&amp;右到左:\<br>
-&amp;A/R_1 \subset A/R_2,则同样易有R_1\subseteq R_2\<br>
-&amp;A/R_1 \ne A/R_2\<br>
-&amp;则存在S_2 \in A/R_2,找不到S_1 \in A/R_1,s.t. S_2 \subseteq S_1,\<br>
-&amp;同样取s_2 = [x_0]</em>{R_2} = {y|y \in A \wedge x_0R_2y},s_2\in S_2，且s_2 \notin S_1\<br>
-&amp;即\exist &lt;x_0,y_0&gt;,s.t. x_0R_2y_0,x_0\overline{R_1}y_0\<br>
-&amp;即R_1 \ne R_2\<br>
-&amp;故R_1 \subset R_2\<br>
-&amp;综上即可得证<br>
-\end{align}<br>
-$$</p>
-<ol start="3">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;看法不对,证明就不可能对了嘛。\<br>
-&amp;若R是非空集合A的空关系，由于前件为0，R是对称和传递的，但是\forall x \in A, &lt;x,x&gt;\notin R\<br>
-&amp;R不是自反的\<br>
-&amp;故即可完成论证\<br>
-\end{align}<br>
-$$</p>
-<ol start="4">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;必要性:\<br>
-&amp;(显然bushi)R是等价关系，且&lt;a,b&gt;\in R,&lt;a,c&gt; \in R\<br>
-&amp;由于R是对称的，有&lt;b,a&gt;\in R\<br>
-&amp;由于R是传递的，有&lt;b,c&gt;\in R\<br>
-&amp;必要性即证\<br>
-&amp;充分性:\<br>
-&amp;若&lt;a,b&gt;\in R,&lt;a,c&gt;\in R,则&lt;b,c&gt;\in R\<br>
-&amp;同时R是自反的\<br>
-&amp;\forall &lt;a,b&gt;\in R, 且由自反性有&lt;a,a&gt; \in R \<br>
-&amp;由条件可得，&lt;b,a&gt; \in R，故R是对称的\<br>
-&amp;\forall &lt;a,b&gt; \in R , &lt;b,c&gt; \in R\<br>
-&amp;证明了对称性，有&lt;b,a&gt;\in R,则结合条件可得\<br>
-&amp;&lt;a,c&gt;\in R，故R是传递的\<br>
-&amp;由等价关系的定义可知R是等价关系\<br>
-&amp;充分性得证\<br>
-&amp;综上即可得证\<br>
-\end{align}<br>
-$$</p>
-<ol start="5">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;必要性:\<br>
-&amp;(也挺显然的)&lt;x,y&gt;\in R,&lt;y,z&gt;\in R\<br>
-&amp;则由传递性，&lt;x,z&gt;\in R\<br>
-&amp;再由对称性，&lt;z,x&gt;\in R\<br>
-&amp;必要性即证\<br>
-&amp;充分性:\<br>
-&amp;R是自反的，且R是循环的\<br>
-&amp;\forall &lt;x,y&gt; \in R, 由自反性&lt;y,y&gt;\in R\<br>
-&amp;再有循环性，有&lt;y,x&gt;\in R，即R是对称的\<br>
-&amp;\forall &lt;x,y&gt;\in R,&lt;y,z&gt;\in R\<br>
-&amp;由循环性,&lt;z,x&gt;\in R,又已经证明R是对称的\<br>
-&amp;则有&lt;x,z&gt;\in R，故R是传递的\<br>
-&amp;必要性得证\<br>
-&amp;综上即可得证<br>
-\end{align}<br>
-$$</p>
-<h2><span id="作业六">作业六</span></h2>
-<ol>
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;(1)能够\<br>
-&amp;dom = {1,2,3,4}\<br>
-&amp;ran = {&lt;2,3&gt;,&lt;3,4&gt;,&lt;1,4&gt;}\<br>
-&amp;(2)能够\<br>
-&amp;dom = {1,2,3}\<br>
-&amp;ran = {&lt;2,3&gt;,&lt;3,4&gt;,&lt;3,2&gt;}\<br>
-&amp;(3)不能够\<br>
-&amp;(4)能够\<br>
-&amp;dom = {1,2,3}\<br>
-&amp;ran = {&lt;2,3&gt;}\<br>
-\end{align}<br>
-$$</p>
-<ol start="2">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp; (1)\forall y \in f[A] - f[B]\<br>
-&amp;\Rightarrow y \in f[A] \wedge y \notin f[B]\<br>
-&amp;\exist x\in A \quad s.t. \quad y = f(x)\<br>
-&amp;若x\in B,则与y\notin f[B]矛盾,故x\in A - B\<br>
-&amp;即y \in f[A- B]\<br>
-&amp;反例:\<br>
-&amp;X= {1,2},Y = {0}\<br>
-&amp;f = {&lt;1,0&gt;,&lt;2,0&gt;}\<br>
-&amp;A = {1,2}, B = {1}\<br>
-&amp;此时f[A] = {0},f[B] = {0},f[A] - f[B] = \varnothing\<br>
-&amp;f[A-B] = {0}，等号不成立\<br>
-&amp;(2)\forall x \in f^{-1}[C-D]\<br>
-&amp;\exist y \in C- D , y = f(x)\<br>
-&amp;\Rightarrow y\in C\wedge y\notin D\<br>
-&amp;\Rightarrow x\in f^{-1}[C] \wedge x \notin f^{-1}[D]\<br>
-&amp;\Rightarrow x \in f^{-1}[C]-f^{-1}[D]\<br>
-&amp;因此有f^{-1}[C-D]\subseteq f^{-1}[C]-f^{-1}[D]\<br>
-&amp;\forall x \in f^{-1}[C]-f^{-1}[D]\<br>
-&amp;\exist y \in C ,y = f(x)\<br>
-&amp;若y\in D,则x\in f^{-1}[D],矛盾，因此y\notin D\<br>
-&amp;\Rightarrow y\in C-D\<br>
-&amp;即x \in f^{-1}[C-D]\<br>
-&amp;因此有f^{-1}[C]-f^{-a}[D] \subseteq f^{-a}[C-D]\<br>
-&amp;故综上有f^{-1}[C-D] = f^{-1}[C]- f^{-1}[D]\<br>
-\end{align}<br>
-$$</p>
-<ol start="3">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;单射：(1),(2)\<br>
-&amp;满射：(2),(3)\<br>
-&amp;双射：(2)\<br>
-\end{align}<br>
-$$</p>
-<h2><span id="作业七">作业七</span></h2>
-<ol>
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;由上课讲的定理显然可得：\<br>
-&amp;(定理如下，课上证明了，课下就不证了了吧)\<br>
-&amp;f:X ⟶ Y 和 g: Y ⟶ Z，则\<br>
-&amp;(1) 若 f 和 g 都是满射，则 g\circ ƒ 也是满射\<br>
-&amp;(2) 若 f 和 g 都是单射，则 g\circ ƒ 也是单射\<br>
-&amp;(3) 若 f 和 g 都是双射，则 g\circ ƒ 也是双射\<br>
-&amp;用数学归纳法显然可证\<br>
-&amp;n = 1时，结论成立 \<br>
-&amp;若n时结论成立，则n+1时\<br>
-&amp;f^{n+1} = f^n \circ f\<br>
-&amp;f^n和f都是满射，单射或双射，则f^{n+1}时满射，单射或双射\<br>
-&amp;由数学归纳法即可得证<br>
-\end{align}<br>
-$$</p>
-<ol start="2">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;(1)g\circ f为满射，g为单射\<br>
-&amp;则ran(g\circ f) = Z\<br>
-&amp;且由课上结论,g为满射，故g为1-1映射\<br>
-&amp;dom(g) = Y,g^{-1}[Z] = Y \<br>
-&amp;又g[ran(f)] = Z\<br>
-&amp;即ran(f) = Y\<br>
-&amp;故f为满射\<br>
-&amp;综上即可得证\<br>
-&amp;(2)g\circ f为单射,f为满射\<br>
-&amp;且由课上结论，f为单射，故f为1-1映射\<br>
-&amp;\forall y_1 ,y_2\in Y,且y_1 \ne y_2\<br>
-&amp;由于f为1-1映射,故存在唯一x_1,x_2,s.t.y_1 = f(x_1),y_2 = f(x_2)\<br>
-&amp;若x_1 = x_2 ,则显然y_1 = y_2，故有x_1 \ne x_2\<br>
-&amp;则g\circ f(x_1) = g(y_1)  = z_1,g\circ f(x_2) = g(y_2) = z_2\<br>
-&amp;由g\circ f为单射,故z_1\ne z_2\<br>
-&amp;故可得g也为单射\<br>
-&amp;综上即可得证<br>
-\end{align}<br>
-$$</p>
-<ol start="3">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;dom(f\circ f) = {x | x\in \R \wedge x \ne 0}\<br>
-&amp;ran(f\circ f) = {x | x\in \R \wedge x \ne 0}\<br>
-&amp;dom(h\circ g) = {x | x\in \R}\<br>
-&amp;ran(h\circ g) = {x | x\in \R_+ | x = 0}\<br>
-&amp;dom(g\circ h) = {x|x \in \R_+ | x = 0}\<br>
-&amp;ran(g\circ h) = {x|x \in \R_+ | x = 0}\</p>
-<p>\end{align}<br>
-$$</p>
-<h2><span id="作业7">作业7</span></h2>
-<ol>
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;左推右\<br>
-&amp;显然!!f可逆等价于f有唯一的左逆和右逆\<br>
-&amp;右推左\<br>
-&amp;若f有唯一的左逆(右逆证明类似)\<br>
-&amp;那么可以推出f是单射\<br>
-&amp;需要证明f是可逆的，那么只需要证明f是右可逆的\<br>
-&amp;这里采用反证法，假设f不是右可逆的，那么等价于f不是满射\<br>
-&amp;设A中至少有的两个元素为a_1, a_2,由于f是单射\<br>
-&amp;设f(a_1) = b_1, f(a_2) = b_2,且有b_1 \ne b_2，同时由于不是满射\<br>
-&amp;B中至少存在一个元素，设为b_3,A中没有元素映射到b_3\<br>
-&amp;接下来我们构造g_1,g_2,使得g_1 \circ f = I_A,g_2\circ f_2 = I_A，且g_1 \ne g_2\<br>
-&amp;g_1(x) = \begin{cases}<br>
-a_i, &amp; if, x = b_i,i=1,2\<br>
-a_1, &amp; if, x = b_3\<br>
-f^{-1}(x), &amp; if, x \in ran(f) \wedge x \notin{b_1, b_2}<br>
-\end{cases}\<br>
-&amp;g_2(x) = \begin{cases}<br>
-a_i, &amp; if, x = b_i,i=1,2\<br>
-a_2, &amp; if, x = b_3\<br>
-f^{-1}(x), &amp; if, x \in ran(f) \wedge x \notin{b_1, b_2}<br>
-\end{cases}\<br>
-&amp;那么就有g_1 \circ f = I_A,g_2\circ f_2 = I_A，且g_1 \ne g_2成立，与f有唯一的左逆矛盾\<br>
-&amp;故有上面的反证法可以得到f是右可逆的，那么f是可逆，即可得证\<br>
-&amp;综上即可得证<br>
-\end{align}<br>
-$$</p>
-<ol start="2">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-(1)&amp;f是左可逆，右可逆，可逆的\<br>
-&amp;显然f是单射，满射，因此是可逆的。同时求出f的逆即为f的左逆和右逆\<br>
-&amp;构造g(x) = \begin{cases}<br>
-4,&amp; if, x= 0\<br>
-x-1,&amp; if, x = 1,2,3,4\<br>
-x,&amp; if, x &gt; 5<br>
-\end{cases}\<br>
-&amp;可以验证f\circ g = I_N, g\circ f = I_N\<br>
-&amp;即为所求\<br>
-(2)&amp;f是右可逆，不是左可逆，不是可逆\<br>
-&amp;由于f(1)  = f(3) =  3,因此f不是单射，f不是左可逆\<br>
-&amp;f是满射，\forall x \in N,\exist f(2x) = x,2x \in N;<br>
-&amp;下面构造f的右逆g\<br>
-&amp;g(x) = 2x, x \in N;即为右逆之一<br>
-\end{align}<br>
-$$</p>
-<ol start="3">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;\chi_{A-B\cap C}\<br>
-&amp;= \chi_A - \chi_A <em>\chi_{B\cap C}\<br>
-&amp;= \chi_A - \chi_A</em>\chi_B*\chi_C\<br>
-&amp;\chi_{(A-B)\cup (A-C)}\<br>
-&amp;=\chi_{A-B} + \chi_{A-C}-\chi_{A-B}<em>\chi_{A-C}\<br>
-&amp;=\chi_A-\chi_A</em>\chi_B+\chi_A-\chi_A*\chi_C - (\chi_A-\chi_A*\chi_B)<em>(\chi_A-\chi_A</em>\chi_C)\<br>
-&amp;=\chi_A-\chi_A*\chi_B+\chi_A-\chi_A*\chi_C-(\chi_A-\chi_A*\chi_A*\chi_C-\chi_A*\chi_B*\chi_A+\chi_A*\chi_B*\chi_A*\chi_C)\<br>
-&amp;=\chi_A-\chi_A*\chi_B+\chi_A-\chi_A*\chi_C-(\chi_A-\chi_A*\chi_C-\chi_A*\chi_B+\chi_A*\chi_B*\chi_C)\<br>
-&amp;=\chi_A - \chi_A*\chi_B*\chi_C\<br>
-&amp;于是显然有\chi_{A-B\cap C} = \chi_{(A-B)\cup (A-C)}\<br>
-&amp;于是可以证明A-B\cap C = (A-B)\cup(A-C)\<br>
-\end{align}<br>
-$$</p>
-<ol start="4">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;\chi_{A\oplus B}\<br>
-&amp;=\chi_{A} - \chi_{A\cap B} + \chi_{B}-\chi_{A\cap B}\<br>
-&amp;=\chi_{A} + \chi_{B} - 2*\chi_{A}<em>\chi_{B}\<br>
-&amp;=0\<br>
-&amp;那么有\chi_{A}</em>(1-\chi_{B}) = \chi_B*(1-\chi_{A})\<br>
-&amp;\iff \chi_{A}<em>\chi_{\sim B} = \chi_{B}</em>\chi_{\sim A}\<br>
-&amp;\iff \chi_{A\cap \sim B} = \chi_{B\cap \sim A}\<br>
-&amp;\iff A\cap \sim B = B \cap \sim A\<br>
-&amp;即为所求<br>
-\end{align}<br>
-$$</p>
-<h2><span id="作业8">作业8</span></h2>
-<ol>
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;利用第一数学归纳法进行证明\<br>
-&amp;(1)由于为自然数序列，所以显然有0\le a_0\<br>
-&amp;(2)\forall n\ge 0,若n \le a_n,下面证明n^+\le a_{n^+}\<br>
-&amp;由于为单调递增序列，因此显然有a_n &lt;a_{n^+}\<br>
-&amp;同时为正整数序列，由于正整数是不稠密的\<br>
-&amp;有a_n + 1 \le a_{n^+}\<br>
-&amp;n^+ = n + 1 \le a_n + 1\le a_{n^+}\<br>
-&amp;综上即可得证<br>
-\end{align}<br>
-$$</p>
-<ol start="2">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;对于本题我们先证明如下结论:\<br>
-&amp;\forall i \in n, 有i \subseteq n\<br>
-&amp;使用第一数学归纳法进行证明\<br>
-&amp;(1)n = 0时显然成立。\<br>
-&amp;(2)\forall n \ge 0,若结论成立，即\forall i \in n, 有i\subseteq n\<br>
-&amp;那么对于n^+,有n^+ = {n,{n}}\<br>
-&amp;\forall i \in n^+, 有i = n 或者i \in n(由三歧性可得)\<br>
-&amp;若i = n,显然有i\subseteq n^+\<br>
-&amp;若i\in n,由归纳假设，i\in n\<br>
-&amp;又n\in n^=,则又i\in n^+\<br>
-&amp;故该结论得证\<br>
-&amp;对于本题,\forall a \in n,\forall x \in a\<br>
-&amp;由于可推出a \in n, 于是显然有x \in n\<br>
-&amp;故综上即可得证\forall n \in N 是传递的<br>
-\end{align}<br>
-$$</p>
-<ol start="3">
-<li></li>
-</ol>
-<p>$$<br>
-\begin{align}<br>
-&amp;本题应该是想用二重归纳法做，但是太麻烦了，我就直接用构造法哈(goutou)\<br>
-&amp;设n = k(m+1) + t,(t &lt; m+1)\<br>
-&amp;由于n &gt; m 且(m+1)\nmid n\<br>
-&amp;可得k \ge 1, t \ne 0\<br>
-&amp;那么甲第一次取t个球，然后每次乙取x个球\<br>
-&amp;甲取(m+1-x)个球，一轮取球数维m+1，故经过k轮\<br>
-&amp;恰好甲取完最后的球，获胜<br>
-\end{align}<br>
-$$</p>
-]]></content>
-      <tags>
-        <tag>离散2</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>高代期末</title>
-    <url>/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/</url>
-    <content><![CDATA[<p>$$<br>
-\newcommand{\bxi}[0]{\boldsymbol\xi}<br>
-\newcommand{\b}[1]{\boldsymbol</p>
-]]></content>
-      <tags>
-        <tag>高代</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>高数应用</title>
     <url>/2022/10/23/%E9%AB%98%E6%95%B0%E5%BA%94%E7%94%A8/</url>
     <content><![CDATA[<div align="center"><font size="24" face="宋体">高等数学不等式问题探讨</font></div>
@@ -2147,6 +2612,72 @@ $$<br>
       </categories>
       <tags>
         <tag>数学分析</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hammingDistance</title>
+    <url>/2023/05/25/hammingDistance/</url>
+    <content><![CDATA[<h1><span id="__uint128_t_"><code>__uint128_t_</code></span></h1>
+<p>最近越来越多的协议会定义 16 字节长的整形，gcc 在 4.6 以上版本就可以使用 __int128_t &amp; __uint128_t 了。</p>
+<p>但需要注意的是，_uint128_t &amp; __int128_t 仅对 64 位程序才有定义，因此如果编译选项中加入了 -m32，会出现找不到定义的编译错误。</p>
+<p>另外 _uint128_t &amp; __int128_t  并非 c/c++ 标准，所以 gcc 目前只支持基本运算符的操作，printf 这些都需要另外实现。</p>
+<h1><span id="快速计算汉明距离">快速计算汉明距离</span></h1>
+<blockquote>
+<p>在信息论中，两个等长字符串之间的汉明距离（英语：Hamming distance）是两个字符串对应位置的不同字符的个数。换句话说，它就是将一个字符串变换成另外一个字符串所需要替换的字符个数。</p>
+<p>汉明距离是以<strong>理查德・卫斯里・汉明</strong>的名字命名的。在通信传输过程中，累计定长二进制字中发生翻转的错误数据位，所以它也被称为信号距离。汉明距离在包括信息论、编码理论、密码学等领域都有应用。</p>
+</blockquote>
+<p>对于两个字符串计算汉明距离，那肯定也就只能是逐位比较</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//s1,s2为两个字符串，M为这两个字符串的长度</span>
+<span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span><span class="token keyword">char</span> s1<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">char</span> s2<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token keyword">int</span> M<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> l1 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s1<span class="token punctuation">)</span><span class="token punctuation">,</span> l2 <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> M <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l1 <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;</span> l2<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        dist <span class="token operator">+=</span> s1<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> s2<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>那么这样肯定是很慢的，如果可以转化两个整型的数，我们很容易想到利用到异或运算。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">__uint128_t fingerprint <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> l <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> l <span class="token operator">&lt;</span> M<span class="token punctuation">;</span> <span class="token operator">++</span>l<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>sumsignedweight <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+        fingerprint <span class="token operator">=</span> <span class="token punctuation">(</span>fingerprint <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样可以转换最高128位的两个01字符串。</p>
+<p>那么就可以利用<code>^</code>运算来就算汉明距离了,由于异或运算的性质，得到的c的数位上为1说明ab的对应位不相同，反之则相同，那么我们就之需要计算c的二进制表示中数位为1的数目。这里可以按位采取<code>&amp;</code>运算。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>c <span class="token operator">&amp;</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        c <span class="token operator">=</span> c <span class="token operator">&gt;&gt;</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>布莱恩·克尼根算法</strong></p>
+<p>我们先观察如下一个现象：对于任意一个非零的二进制数 <code>a</code>（将其看作无符号数），考虑 <code>a</code> 和 <code>a-1</code> 的关系。由于 <code>a</code> 非零，那么 <code>a</code> 中总有一些位为 <code>1</code>。假设 <code>a</code> 中最低位的 <code>1</code> 处于从右向左数的第 <code>N</code> 位。那么，<code>a</code> 的第 <code>N</code> 位以及第 <code>N</code> 位以后的每一位的值和 <code>a-1</code> 的第 <code>N</code> 位及第 <code>N</code> 位以后的每一位的值均不同。</p>
+<p>举个例子就很容易理解了。我们以 8 位数来描述。假设 <code>a=10010000</code>，根据上述描述，从右往左数的第一个 <code>1</code> 出现在第 <code>5</code> 位，那么有 <code>N=5</code>。同时可以计算出 <code>a-1=10001111</code>，可以看到，从第 <code>N</code> 位开始，<code>a</code> 的后缀是 <code>10000</code>，而 <code>a-1</code> 的后缀是 <code>01111</code>。满足上述描述的现象。</p>
+<p>进一步地，我们可以发现，如果对 <code>a</code> 和 <code>a-1</code> 进行与操作，就会直接消去位于最后一位，也就是第 <code>N</code> 位的 <code>1</code>。还以上面的 <code>a</code> 为例，<code>a &amp; (a-1)=10000000</code>。可以看到，我们不需要遍历，而是通过一次运算，就可以把 <code>a</code> 中的最后一个 <code>1</code> 消掉。如果我们一直重复这项操作，那么 <code>a</code> 里有多少个 <code>1</code>，我们就仅需要多少次 <code>a &amp; (a-1)</code> 的操作，就能把 <code>a</code> 化为 <code>0</code> 了。而这个操作的次数正是我们所要求的。</p>
+<p>那么计算汉明距离就可以改进为：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">hammingDistance</span><span class="token punctuation">(</span>__uint128_t a<span class="token punctuation">,</span>__uint128_t b<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    __uint128_t c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> dist <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        dist <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        c <span class="token operator">=</span> c <span class="token operator">&amp;</span> <span class="token punctuation">(</span>c <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> dist<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>大作业优化</tag>
       </tags>
   </entry>
 </search>

@@ -5,10 +5,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="高代期末, C,Python,数分，高代，离散等">
-    <meta name="description" content="$$
-\newcommand{\bxi}[0]{\boldsymbol\xi}
-\newcommand{\b}[1]{\boldsymbol
-">
+    <meta name="description" content="线代期末串讲
+
+https://bhpan.buaa.edu.cn/link/AA8158DA29E46E4B62A400D7DA65647D7C
+文件夹名：高代期末串讲
+有效期限：永久有效
+
+资料如上
+
+2023 12.31 胡健
+
+线性">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -392,14 +399,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    9
+                    3.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    14 分
                 </div>
                 
 
@@ -427,9 +434,540 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>$$<br>
-\newcommand{\bxi}[0]{\boldsymbol\xi}<br>
-\newcommand{\b}[1]{\boldsymbol</p>
+                <h1><span id="线代期末串讲">线代期末串讲</span></h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://bhpan.buaa.edu.cn/link/AA8158DA29E46E4B62A400D7DA65647D7C">https://bhpan.buaa.edu.cn/link/AA8158DA29E46E4B62A400D7DA65647D7C</a><br>
+文件夹名：高代期末串讲<br>
+有效期限：永久有效</p>
+</blockquote>
+<p>资料如上</p>
+<blockquote>
+<p>2023 12.31 <a href="hugohealthy.top">胡健</a></p>
+</blockquote>
+<p>线性代数这门课程的切入点有很多，这里从知识层面上划分出来了线性方程组和向量组，线性空间，矩阵与行列式这三大部分。同时，会讲到几个重要的定理和公式。</p>
+<h2><span id="线性方程组和向量组">线性方程组和向量组</span></h2>
+<ul>
+<li>线性方程组</li>
+</ul>
+<p>齐次解和非齐次解的讨论<br>
+$$<br>
+AX=O\<br>
+AX=\beta<br>
+$$<br>
+齐次：有唯一解，有无穷多组解</p>
+<p>非齐次：无解，有唯一解，有无穷多组解<br>
+$$<br>
+有解\iff r(A)=r(A|\beta)<br>
+$$<br>
+<strong>可拓展到矩阵方程的解的情况</strong></p>
+<p>通解问题<br>
+$$<br>
+\begin{align}<br>
+&amp;X=t_1\varepsilon_1+\dots t_p\varepsilon_p\<br>
+&amp;X=t_1\varepsilon_1+\dots t_p\varepsilon_p + X_1<br>
+\end{align}<br>
+$$</p>
+<ul>
+<li>向量组</li>
+</ul>
+<p>(列向量组)<br>
+$$<br>
+\alpha_i\in R^n,{\alpha_1\dots \alpha_p}<br>
+$$<br>
+线性相关与线性无关的含义<br>
+$$<br>
+\begin{align}<br>
+&amp;存在不全为0的k_1\dots k_p,k_1\alpha_1 +\dots k_p\alpha_p = 0\Rightarrow线性相关\<br>
+&amp;k_1\alpha_1 +\dots k_p\alpha_p = 0\rightarrow k_1\dots k_p = 0\Rightarrow线性无关<br>
+\end{align}<br>
+$$</p>
+<ul>
+<li>极大线性无关与秩</li>
+</ul>
+<p>极大线性无关组指的是：<br>
+$$<br>
+\alpha_1\dots\alpha_m线性无关，且加上向量组中任一向量\alpha后线性相关<br>
+$$<br>
+向量组的秩的含义是极大线性无关组中向量的个数</p>
+<ul>
+<li>向量组的等价</li>
+</ul>
+<p>一个向量组A中的每一个向量可以用另一个向量组B来线性表示，称向量组A能由向量组B线性表示</p>
+<p>向量组的等价指的是可以相互线性表示</p>
+<ul>
+<li>
+<p>向量组的一些性质</p>
+</li>
+<li>
+<p>相关的线性表示（及其逆，单边法则）</p>
+</li>
+</ul>
+<blockquote>
+<p>由线性相关的定义可推出，其中某个向量可以由其余向量线性表示，这又可推出其中的某个向量可以写成前面的向量的线性组合。<br>
+所以我们逆过来看，线性无关，等价于<br>
+$每一个向量都不可由前面的向量表示（\alpha_i = 0） $<br>
+这我们叫做单边法则</p>
+</blockquote>
+<ul>
+<li>大数法则/不大法则</li>
+</ul>
+<blockquote>
+<p>我们先来看，一个向量组被另一个向量组表示被表示的意义。<br>
+$S_1组被S_2组表示\Leftrightarrow \forall \alpha_i \in S_1 , \alpha_i 可以被 \beta_j \in S_2 表示 $<br>
+大的向量组可以被小的向量组表示，大组必相关<br>
+（逆否命题：若A组无关，但可以被B组表示，则A比B小 ——不大法则）<br>
+为啥可以被表示，我们可以理解了后面的秩再来说，是不是说AX=B有解啊。</p>
+</blockquote>
+<ul>
+<li>表示的传递性</li>
+</ul>
+<blockquote>
+<p>$我们说S_2 能被S_1表示，S_1能被S_0表示，则S_2能被S_0表示$</p>
+</blockquote>
+<ul>
+<li>唯一表示法则</li>
+</ul>
+<blockquote>
+<p>${\alpha_1,……,\alpha_n}无关,{\alpha_1,……,\alpha_n,\beta}相关，则\beta 由{\alpha_1,……,\alpha_n}唯一表示 $</p>
+</blockquote>
+<ul>
+<li>子组相关法则</li>
+</ul>
+<blockquote>
+<p>子组相关，全组必定相关<br>
+proof:<br>
+$k_1\alpha_1 + k_2\alpha_2 +……+k_p\alpha_p = 0 (k_1,……,k_p不全为零) $<br>
+$\therefore k_1\alpha_1 + k_2\alpha_2 +……+k_p\alpha_p + 0\alpha_{p+1} + …… + 0\alpha_n  = 0$</p>
+</blockquote>
+<ul>
+<li>等数法则</li>
+</ul>
+<blockquote>
+<p>${\alpha_1,……\alpha_p},{\beta_1,……\beta_q}两组无关，且能相互表示，则p=q $<br>
+由不大法则可证</p>
+</blockquote>
+<ul>
+<li>长短法则</li>
+</ul>
+<blockquote>
+<p>长相关则短相关，短无关则长无关<br>
+看具体怎么理解了，有的老师说“如果矩阵A的子矩阵A0的各行（列）线性无关，则由A0的这些行（列）扩充得到的A的行（列）线性无关。”<br>
+这是从大到小，从矩阵看问题<br>
+也可以这么理解（从小到大，从向量组）</p>
+</blockquote>
+<ul>
+<li>行变再行变，列的关系不改变</li>
+</ul>
+<h2><span id="空间解空间内积空间">空间(解空间，内积空间)</span></h2>
+<p>解空间(初次接触)</p>
+<p>张成空间(你已经会很多了)</p>
+<p>欧式空间(你会的差不多了)</p>
+<p>线性空间(你会了！！)</p>
+<ul>
+<li>定义</li>
+</ul>
+<p>满足八条性质，其实就是满足封闭性和线性性</p>
+<ul>
+<li>生成空间的定义</li>
+</ul>
+<p>由向量组表示的所有向量的集合<br>
+$$<br>
+\begin{align}<br>
+&amp;\alpha_1\dots\alpha_m\<br>
+&amp;L={\lambda_1\alpha_1 \dots \lambda_m\alpha_m|\lambda_1\dots\lambda_m\in R}<br>
+\end{align}<br>
+$$</p>
+<ul>
+<li>解空间的理解</li>
+</ul>
+<p>定义：n元齐次线性方程组的解集是n维向量空间$F^n$的非空子集(易证满足封闭性和线性性)</p>
+<p>生成空间角度：基础解的张成空间</p>
+<p>矩阵内积的理解：<br>
+$$<br>
+(\alpha_1,\dots,\alpha_m)<br>
+\begin{pmatrix}<br>
+x_1\<br>
+\vdots\<br>
+x_m<br>
+\end{pmatrix}\<br>
+AX<br>
+$$</p>
+<blockquote>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231230223324226.png" alt></p>
+</blockquote>
+<ul>
+<li>空间的交与和（还有<strong>直和</strong>和<strong>并</strong>，应该不考）</li>
+</ul>
+<p>how to solve？</p>
+<p>$V_1:\alpha_1\dots \alpha_p,V_2:\beta_1\dots\beta_q$</p>
+<p>空间的交：<br>
+$$<br>
+\begin{align}<br>
+&amp;\gamma = s_1\alpha_1+\dots s_p\alpha_p = t_1\beta_1+\dots t_q\beta_q\<br>
+&amp;解出来后得到s_1\dots s_p\<br>
+&amp;带入后易得<br>
+\end{align}<br>
+$$<br>
+空间的和：<br>
+$$<br>
+\begin{align}<br>
+&amp;{\alpha_1\dots\alpha_p,\beta_1\dots\beta_q}这个向量组的极大线性无关组\<br>
+&amp;和空间的维数即为极大线性无关组的秩<br>
+\end{align}<br>
+$$<br>
+维数公式<br>
+$$<br>
+\dim(W_1+W_2)=\dim W_1+\dim W_2-\dim (W_1\cap W_2)<br>
+$$<br>
+其中$W_1+W_2={w_1+w_2:w_1\in W_1,w_2\in W_2}$</p>
+<ul>
+<li>内积与Gram矩阵</li>
+</ul>
+<p>$$<br>
+\begin{align}<br>
+&amp;A={\alpha_1\dots\alpha_n}\<br>
+&amp;Gram=<br>
+\begin{pmatrix}<br>
+(\alpha_1,\alpha_1)&amp;\dots &amp;(\alpha_1,\alpha_n)\<br>
+\vdots &amp;  &amp;\vdots\<br>
+(\alpha_n,\alpha_1) &amp;\dots &amp;(\alpha_n,\alpha_n)<br>
+\end{pmatrix}\<br>
+&amp;Gram=A^TA<br>
+\end{align}<br>
+$$</p>
+<p>定义预正交阵和正交阵</p>
+<p>预正交阵：列向量两两正交</p>
+<p>正交阵：两向量两两正交且每个列向量的模为1</p>
+<p>度量阵：由基向量产生的Gram矩阵，特殊情况下是单位阵</p>
+<p>二次型<br>
+$$<br>
+\begin{align}<br>
+&amp;f=\sum_{i=1}^n\sum_{j=1}^na_{ij}x_ix_j\<br>
+&amp;二次型对应的矩阵为：\<br>
+&amp;\begin{pmatrix}<br>
+a_{11}&amp;\dots &amp;a_{1n}\<br>
+\vdots &amp;  &amp;\vdots\<br>
+a_{n1} &amp;\dots &amp;a_{nn}<br>
+\end{pmatrix}\<br>
+&amp;a_{ij}=a_{ji}<br>
+\end{align}<br>
+$$</p>
+<ul>
+<li>线性映射和线性变换</li>
+</ul>
+<p>线性映射：$R^n\rightarrow R^m$</p>
+<p>线性变换：$R^n\rightarrow R^n$</p>
+<blockquote>
+<p>这个概念挺抽象的</p>
+<p>不同书定义也不一样(点名批评同济大学的紫书)</p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231230234949295.png" alt></p>
+<p>这里以《矩阵论》上面的定义为准</p>
+</blockquote>
+<ul>
+<li>
+<p>过渡矩阵与坐标变换公式</p>
+<p>若两组基$ S=\begin{bmatrix}{\varepsilon_1,\cdots,\varepsilon_n}\end{bmatrix}, T=\begin{bmatrix}{\eta_1,\dots,\eta_n}\end{bmatrix}$满足基变换公式$ T= S P$，则称$ P$是从$\S$到$ T$的过渡矩阵。</p>
+<p>设向量$\alpha$在$ S, T$下的坐标分别为$ X, Y$，则满足坐标变换公式$ X= P Y$。</p>
+</li>
+<li>
+<p>线性变换矩阵</p>
+<p>对于一组基$\xi_1,\dots,\xi_n$，若存在矩阵$A$使得线性变换$\sigma$满足$\sigma(\xi_1,\dots,\xi_n)=(\xi_1,\dots,\xi_n) A$，则称矩阵$ A$为线性变换$\sigma$在基$\xi_1,\dots,\xi_n$下所对应的矩阵。</p>
+<p>若线性空间$V$的线性变换$\sigma$在两组基$\xi_1,\dots,\xi_n$以及$\eta_1,\dots,\eta_n$下对应的矩阵分别为$ A, B$，$\xi_1,\dots,\xi_n$到$\eta_1,\dots,\eta_n$的过渡矩阵为$ P$，则有$ B= P^{-1} A P$。</p>
+</li>
+</ul>
+<blockquote>
+<p>虽然这个也有点抽象，但是整理了一下也就这几个公式</p>
+<p>理解不了就记住吧</p>
+</blockquote>
+<h2><span id="矩阵与行列式">矩阵与行列式</span></h2>
+<ul>
+<li>矩阵的可逆与正交</li>
+</ul>
+<p>$$<br>
+\begin{align}<br>
+&amp;A=A_{n\times n}\<br>
+&amp;r(A)=n\<br>
+\iff&amp;行满秩\<br>
+\iff&amp;列满秩\<br>
+\iff&amp;A^{-1}存在\<br>
+\iff&amp;|A|\ne 0\<br>
+\iff&amp;\lambda_i\ne 0|A|=\lambda_1\dots\lambda_n\<br>
+\end{align}<br>
+$$</p>
+<p>正交：$A^T=A^{-1}$或者$A^TA^{-1}=A^{-1}A^T=I_n$</p>
+<ul>
+<li>矩阵的秩</li>
+</ul>
+<p>行秩：行向量组的秩</p>
+<p>列秩：列向量组的秩</p>
+<p>阶梯秩：化为阶梯阵后非零行的个数</p>
+<p>古典秩：存在k阶子式的行列式不为0，任意k+1阶子式的行列式都为0</p>
+<blockquote>
+<p>这四个是等价的</p>
+</blockquote>
+<ul>
+<li>行列式的计算</li>
+</ul>
+<blockquote>
+<p>这个我感觉高阶的也不会让你算</p>
+<p>低阶的直接爆算或者化为上三角行列式</p>
+</blockquote>
+<p>范德蒙德行列式</p>
+<p><strong>下降公式/换位公式</strong></p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/E:%5CPictures%5Ctypora%5C3%E6%8D%A2%E4%BD%8D%E5%85%AC%E5%BC%8F%E4%BE%8B%E9%A2%98.png" alt="换位公式例题"></p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231004939668.png" alt></p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231004927501.png" alt></p>
+<ul>
+<li>相伴秩公式</li>
+</ul>
+<p>$$<br>
+A=A_{n\times n}\<br>
+A^*=<br>
+\begin{pmatrix}<br>
+A_{11} &amp;A_{21}&amp;\dots &amp;A_{n1}\<br>
+\vdots &amp;&amp;&amp;\vdots\<br>
+A_{1n} &amp;A_{2n}&amp;\dots &amp;A_{nn}<br>
+\end{pmatrix}<br>
+$$</p>
+<p>注意这里还转置了一下</p>
+<p>$AA^*=|A|I_n$</p>
+<p>可得$|A^*| = |A|^{n-1}$</p>
+<p>和伴随矩阵有关的秩的公式<br>
+$$<br>
+r(A^*) =<br>
+\begin{cases}<br>
+n,r(A) = n\<br>
+1,r(A)=n-1\<br>
+0,else<br>
+\end{cases}<br>
+$$</p>
+<blockquote>
+<p>proof:由古典秩的含义</p>
+<p>第二个用到$AA^<em>=O 有r(A)+r(A^</em>) \le n $</p>
+<p>且$r(A^*) \ge 1$</p>
+</blockquote>
+<h2><span id="特征值与二次型">特征值与二次型</span></h2>
+<ul>
+<li>根的遗传公式</li>
+</ul>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231010720537.png" alt></p>
+<blockquote>
+<p>零化式</p>
+</blockquote>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231010812719.png" alt></p>
+<blockquote>
+<p>theory</p>
+</blockquote>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231011008818.png" alt></p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231011031258.png" alt></p>
+<ul>
+<li>Cayley定理</li>
+</ul>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231011404990.png" alt></p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231011426721.png" alt></p>
+<ul>
+<li>许尔公式</li>
+<li>相似对角化</li>
+</ul>
+<p>可对角化</p>
+<ol>
+<li>n阶矩阵A与对角阵相似（即A能对角化）的充分必要条件是A有n个线性无关的特征向量。</li>
+<li>如果n阶矩阵A的n个特征值互不相等，则A与对角阵相似。</li>
+<li>对称阵的特征值为实数</li>
+<li>不同特征根的特征向量正交</li>
+</ol>
+<p>对称阵A对角化的步骤</p>
+<ol>
+<li>
+<p>求出A的全部互不相等的特征值$\lambda_1,\dots \lambda_s$，它们的重数依次为$k_1,\dots k_s(k_1+\dots +k_s = n)$。</p>
+</li>
+<li>
+<p>对每个$k_i$重特征值$\lambda_i$，求方程$(A-\lambda_i I)X=O$的基础解系，得$k_i$个线性无关的特征向量。再把它们<strong>正交化</strong>、单位化，得ki个两两正交的单位特征向量。因$k_1+\dots +k_s=n$，故总共可得n个两两正交的单位特征向量。</p>
+</li>
+</ol>
+<p>$Schimidt$正交化方法</p>
+<p>若有$n$个线性无关的向量$\alpha_1,\dots,\alpha_n$，则过程分为正交化和单位化</p>
+<p>正交化过程<br>
+$$<br>
+\beta_k=\alpha_k-\sum_{i=1}^{k-1}\frac{(\beta_i,\alpha_k)}{(\beta_i,\beta_i)}\beta_i,\quad k=1,\dots,n<br>
+$$<br>
+单位化过程<br>
+$$<br>
+\eta_k=\frac{\beta_k}{||\beta_k||},\quad k=1,\dots,n<br>
+$$<br>
+从而得到一组单位正交向量$\eta_1\cdots,\eta_n$。</p>
+<ol start="3">
+<li>把这n个两两正交的单位特征向量构成正交阵P，便有$P^{-1}AP = P^TAP = Λ$。注意Λ中对角元的排列次序应与P中列向量的排列次序相对应。</li>
+</ol>
+<ul>
+<li>实对称阵的性质</li>
+</ul>
+<p>实对称矩阵的正交相似对角化</p>
+<p>（1）实对称矩阵的特征值均为实数；</p>
+<p>（2）实对称矩阵对应不同特征值的特征向量相互正交；</p>
+<p>（3）实对称矩阵必定可以相似对角化；</p>
+<p>（4）若$ A$是$n$阶实对称矩阵，且特征值为$\lambda_1,\cdots,\lambda_n$，则存在正交矩阵$ Q$，使得<br>
+$$<br>
+Q^T A Q=\begin{bmatrix}\lambda_1&amp;&amp;\&amp;\ddots\&amp;&amp;\lambda_n\end{bmatrix}<br>
+$$<br>
+（5）若$ A$和$ B$均为$n$阶实对称矩阵，则$ A$和$ B$相似的充要条件是$ A$和$ B$有相同的特征值。</p>
+<ul>
+<li>二次型与六二条件</li>
+</ul>
+<p>正定矩阵：</p>
+<p>（1）$ A$所有特征值均为正;</p>
+<p>（2）$ A$正惯性指数为$n$；</p>
+<p>（3）$ A$与单位阵合同；</p>
+<p>（4）$ A$的各阶顺序主子式大于零；</p>
+<p>（5）存在可逆矩阵$ P$使得$ A= P^T P$。</p>
+<p>（6）若对任意$n$维维非零向量$ \alpha$均有$\alpha^T A\alpha&gt;0$</p>
+<p>负定矩阵：</p>
+<p>（1）若对任意$n$维维非零向量$ \alpha$均有$\alpha^T A\alpha&lt;0$</p>
+<p>（2）$ A$的奇数阶主子式为负，偶数阶主子式为正；</p>
+<ul>
+<li>双合同定理</li>
+</ul>
+<p>若$A,B$同阶实对称，其中一个为正定，可设$A$正定，存在可逆$W$,$W^TAW=I_n，W^TBW=diag(d_1,\dots,d_n)$,即$W^TAW,W^TBW$都为对角形</p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/E:%5CPictures%5Ctypora%5Cimage-20231231015741579.png" alt="image-20231231015741579"></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/376561675">more</a></p>
+<h2><span id="一些典型的整理">一些典型的整理</span></h2>
+<ul>
+<li>秩公式</li>
+</ul>
+<p>阶梯阵概念，及其与向量组秩的联系。</p>
+<blockquote>
+<p>矩阵就是向量组拼起来的，所以矩阵的秩就是向量组的秩。<br>
+我们在线性方程组的矩阵消元法中见识过，我们把一个矩阵变成阶梯状，我们考虑一下，变成阶梯状以后，后面的向量前缀都是零，所以不可能可以表示前面的向量，所以很简单，阶梯有多少阶，就会有多少秩。<br>
+那么到底是行向量的秩还是列向量的秩呢，不用纠结我们通过阶梯可以看出，行向量的秩就是列向量的秩。<br>
+所以三种同解变形，其实就代表着三种初等变换。</p>
+</blockquote>
+<p>秩一阵</p>
+<blockquote>
+<p>我们来看一个矩阵，秩一阵，可分解为两个向量之间的乘积。</p>
+</blockquote>
+<p>我们在最后再来谈秩的各种公式的关系</p>
+<blockquote>
+<ul>
+<li>满秩则有唯一解<br>
+$proof: \because r(A) = n $<br>
+$\therefore {\alpha_1,……,\alpha_n}可作为一组基 $<br>
+$\therefore \forall \beta \in R^n 都会存在\beta 的坐标(x_1,……,x_n) $<br>
+$坐标即为唯一解 $</li>
+<li>满秩则可逆<br>
+$proof: 由上可知：AX_1 = \varepsilon_1, AX_2 = \varepsilon_2,……,AX_n = \varepsilon_n 都有解$<br>
+$所以AA^{-1} = I可解出A^{-1} = (X_1,X_2,……,X_n) $</li>
+</ul>
+</blockquote>
+<p>所以说到这就只需要明确一个事情，满秩，行向量组列向量组无关，行列式不等于0，可逆，只有唯一解，非奇异这都是等价的概念</p>
+<blockquote>
+<p>分块秩公式</p>
+</blockquote>
+<p>$$<br>
+r\begin{pmatrix}<br>
+A &amp;O\<br>
+O &amp;B<br>
+\end{pmatrix}=r(A)+a(B)\<br>
+r\begin{pmatrix}<br>
+O &amp;B\<br>
+A &amp;O<br>
+\end{pmatrix}=r(A)+a(B)\<br>
+r\begin{pmatrix}<br>
+A &amp;C\<br>
+O &amp;B<br>
+\end{pmatrix}\ge r(A)+a(B)\<br>
+$$</p>
+<blockquote>
+<p>乘积不增秩公式</p>
+</blockquote>
+<p>$$<br>
+\begin{align}<br>
+&amp;r(AB)\le r(A),r(B)\<br>
+&amp;A=A_{m\times n} = (\alpha_1,\dots,\alpha_n),B=B_{n\times p} = (\beta_1,\dots,\beta_p)\<br>
+&amp;AB=(A\beta_1,\dots,A\beta_p)\<br>
+&amp;A\beta_i=\alpha_1b_1+\dots+\alpha_nb_n,\beta_i=\begin{pmatrix}<br>
+b_1\b_2\\vdots\b_n<br>
+\end{pmatrix}\<br>
+&amp;AB可以被{\alpha_1,\dots,\alpha_n}表示<br>
+\end{align}<br>
+$$</p>
+<blockquote>
+<p>积0公式</p>
+</blockquote>
+<p>$$<br>
+\begin{align}<br>
+&amp;AB=O\<br>
+&amp;r(A)+r(B)\le n<br>
+\end{align}<br>
+$$</p>
+<blockquote>
+<p>转置积秩公式</p>
+</blockquote>
+<p>$$<br>
+r(A)+r(B)\le r(AB)+n<br>
+$$</p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/image-20231231021249979.png" alt></p>
+<blockquote>
+<p>加减秩公式</p>
+</blockquote>
+<p>$$<br>
+\begin{align}<br>
+&amp;r(A+B)\le r(A)+r(B)\<br>
+&amp;r(A-B)\le r(A)+r(B)\<br>
+&amp;r(A+B)=r(A|B)r\begin{pmatrix}I_n\I_n\end{pmatrix}\le r(A|B)\le r(A)+r(B)<br>
+\end{align}<br>
+$$</p>
+<ul>
+<li>可逆的等价表示</li>
+</ul>
+<ol>
+<li>
+<p>$A$的行列式不等于0</p>
+</li>
+<li>
+<p>$A$的秩等于$n$，即$A$为满秩矩阵</p>
+</li>
+<li>
+<p>$A$的行（列）向量组线性无关</p>
+</li>
+<li>
+<p>齐次方程组$Ax=0$只有零解</p>
+</li>
+<li>
+<p>对于任意$b$属于$R^n$(表示向量空间)，Ax=b总有唯一解</p>
+</li>
+<li>
+<p>A与单位矩阵等价</p>
+</li>
+<li>
+<p>A可表示成若干个初等矩阵的乘积</p>
+</li>
+<li>
+<p>A的列向量可以作为n维向量空间$R^n$的一组基</p>
+</li>
+<li>
+<p>$R^n$中任意一个向量都可以由$A$的列向量线性表出</p>
+</li>
+<li>
+<p>$A$的特征值全不为0</p>
+</li>
+<li>
+<p>$A^TA$是正定矩阵</p>
+</li>
+<li>
+<p>$A$是非奇异的</p>
+</li>
+</ol>
+<ul>
+<li>求逆的方法学</li>
+</ul>
+<p>初等变换（常用且方便）</p>
+<p>伴随矩阵法</p>
+<p>分块矩阵法</p>
+<p><img src="/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/E:%5CPictures%5Ctypora%5Cimage-20231231021933921.png" alt="image-20231231021933921"></p>
+<p>零化式法</p>
+<ul>
+<li>下降公式</li>
+</ul>
 
                 
             </div>
@@ -891,7 +1429,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">16.7k</span>
+                        class="white-color">20.1k</span>
             
             
             
