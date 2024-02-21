@@ -6,7 +6,7 @@
   <link href="https://hugohealthy.top/atom.xml" rel="self"/>
   
   <link href="https://hugohealthy.top/"/>
-  <updated>2023-12-30T18:49:01.681Z</updated>
+  <updated>2024-02-21T08:56:25.899Z</updated>
   <id>https://hugohealthy.top/</id>
   
   <author>
@@ -15,6 +15,153 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>p7-流水线</title>
+    <link href="https://hugohealthy.top/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/"/>
+    <id>https://hugohealthy.top/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/</id>
+    <published>2024-02-21T08:46:15.000Z</published>
+    <updated>2024-02-21T08:56:25.899Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;mathscr-hugo-mathbbcpu-五级流水线mathscrdesign&quot;&gt;$\mathscr {Hugo}$ $\mathbb{CPU}$</summary>
+        
+      
+    
+    
+    
+    <category term="计算机组成原理" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="p7" scheme="https://hugohealthy.top/tags/p7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>p7-知识点整理</title>
+    <link href="https://hugohealthy.top/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"/>
+    <id>https://hugohealthy.top/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</id>
+    <published>2024-02-21T08:46:00.000Z</published>
+    <updated>2024-02-21T08:57:16.309Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;mips-微系统&quot;&gt;mips 微系统&lt;/span&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;span id=&quot;cp0协处理器&quot;&gt;CP0协处理器&lt;/span&gt;&lt;/h2&gt;
+&lt;h3&gt;&lt;span id=&quot;cpu-控制寄存器&quot;&gt;&lt;strong&gt;CPU</summary>
+        
+      
+    
+    
+    
+    <category term="计算机组成原理" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="p7" scheme="https://hugohealthy.top/tags/p7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>p5p6-流水线</title>
+    <link href="https://hugohealthy.top/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/"/>
+    <id>https://hugohealthy.top/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/</id>
+    <published>2024-02-21T08:45:26.000Z</published>
+    <updated>2024-02-21T08:55:18.025Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;mathscr-hugo-mathbbcpu-五级流水线mathscrdesign&quot;&gt;$\mathscr {Hugo}$ $\mathbb{CPU}$</summary>
+        
+      
+    
+    
+    
+    <category term="计算机" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/"/>
+    
+    
+    <category term="p6" scheme="https://hugohealthy.top/tags/p6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>p5-流水线</title>
+    <link href="https://hugohealthy.top/2024/02/21/p5-%E6%B5%81%E6%B0%B4%E7%BA%BF/"/>
+    <id>https://hugohealthy.top/2024/02/21/p5-%E6%B5%81%E6%B0%B4%E7%BA%BF/</id>
+    <published>2024-02-21T08:45:05.000Z</published>
+    <updated>2024-02-21T08:54:30.132Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;mathscr-hugo-mathbbcpu五级流水线mathscrdesign&quot;&gt;$\mathscr {Hugo}$</summary>
+        
+      
+    
+    
+    
+    <category term="计算机组成原理" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="p5" scheme="https://hugohealthy.top/tags/p5/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>p4-CPU-设计文档</title>
+    <link href="https://hugohealthy.top/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/"/>
+    <id>https://hugohealthy.top/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/</id>
+    <published>2024-02-21T08:44:35.000Z</published>
+    <updated>2024-02-21T08:54:07.536Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="计算机" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/"/>
+    
+    
+    <category term="p4" scheme="https://hugohealthy.top/tags/p4/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>p3-CPU-设计文档</title>
+    <link href="https://hugohealthy.top/2024/02/21/p3-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/"/>
+    <id>https://hugohealthy.top/2024/02/21/p3-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/</id>
+    <published>2024-02-21T08:44:19.000Z</published>
+    <updated>2024-02-21T08:53:18.931Z</updated>
+    
+    
+    <summary type="html">&lt;h1&gt;单周期mips架构CPU的logisim实现&lt;/h1&gt;
+&lt;p&gt;通过抽象的方式我们从两个方面来构建单周期CPU，也就是数据路径（DataPath）和控制器（Controller）&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="计算机组成原理" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
+    
+    
+    <category term="p3" scheme="https://hugohealthy.top/tags/p3/"/>
+    
+  </entry>
   
   <entry>
     <title>高代期末</title>

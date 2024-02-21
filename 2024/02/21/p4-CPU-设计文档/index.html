@@ -1,0 +1,2146 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="p4-CPU-设计文档, C,Python,数分，高代，离散等">
+    <meta name="description" content="单周期mips架构CPU的verilog实现
+通过抽象的方式我们从两个方面来构建单周期CPU，也就是数据路径（DataPath）和控制器（Controller）
+数据路径
+对于一个数据路径，包括取指令(IF)，译码(ID)，执行(EX)，访">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>p4-CPU-设计文档 | hugo</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="hugo" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">hugo</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">hugo</div>
+        <div class="logo-desc">
+            
+            今天阳光正好
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hjzts/hjzts.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hjzts/hjzts.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/004.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">p4-CPU-设计文档</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/p4/">
+                                <span class="chip bg-color">p4</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" class="post-category">
+                                计算机
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2024-02-21
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.9k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    11 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1><span id="单周期mips架构cpu的verilog实现">单周期mips架构CPU的verilog实现</span></h1>
+<p>通过抽象的方式我们从两个方面来构建单周期CPU，也就是数据路径（DataPath）和控制器（Controller）</p>
+<h2><span id="数据路径">数据路径</span></h2>
+<p>对于一个数据路径，包括取指令(IF)，译码(ID)，执行(EX)，访存(MEM)，回写(WB)这几个方面，相应的有IFU，NPC，GRF，ALU，IM，DM这几个基本单元，单元之间通过Splitter和MUX等进行元件之间的数据交换和处理，这里需要在构建是需要留下几个控制信号的接口，以便于最后CU（控制器单元）单元的构建。</p>
+<h3><span id="ifu取指令单元">IFU取指令单元</span></h3>
+<p>该模块由PC（Programming Counter)模块和IM（Instruction Memory）模块组成。其中PC模块负责对每次新的指令状态进行转移，IM模块则从ROM中得到相应的指令。</p>
+<blockquote>
+<p>这里考虑到之后<u><strong>可能</strong></u>需要将IM和DM放到一起，这里不再对PC和IM进行进一步的封装。</p>
+</blockquote>
+<h4><span id="pc程序计数器">PC（程序计数器）</span></h4>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号</td>
+</tr>
+<tr>
+<td>npc</td>
+<td>I</td>
+<td>32</td>
+<td>通过计算得到的下一条指令的地址</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>O</td>
+<td>32</td>
+<td>状态转移后的地址，输出当前正在执行的地址</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>当Reset信号有效时，将PC寄存器中的值置为0x00003000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>停止</td>
+<td>当Stop信号有效时，PC寄存器忽略时钟输入，PC当前值保持不变</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写 PC 寄存器</td>
+<td>当 Stop 信号失效且时钟上升沿来临时，将下一条指令的地址（next PC）写入 PC 寄存器</td>
+</tr>
+</tbody>
+</table>
+<h4><span id="im指令存储器">IM（指令存储器）</span></h4>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pc</td>
+<td>I</td>
+<td>32</td>
+<td>当前正在执行的地址</td>
+</tr>
+<tr>
+<td>instr</td>
+<td>O</td>
+<td>32</td>
+<td>输出当前正在执行的指令</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>取指令</td>
+<td>根据当前PC的值从IM中读出对应的指令</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="npc下一指令计算单元">NPC（下一指令计算单元）</span></h3>
+<p>计算下一个指令，有三种方式，包括直接计算下一条指令，b型跳转指令，j型跳转指令。其中j型跳转指令包括跳转到寄存器的值和直接跳转两种。</p>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pc</td>
+<td>I</td>
+<td>32</td>
+<td>当前指令地址</td>
+</tr>
+<tr>
+<td>npcOp</td>
+<td>I</td>
+<td>2</td>
+<td>NPC控制信号</td>
+</tr>
+<tr>
+<td>Imm16</td>
+<td>I</td>
+<td>16</td>
+<td>branch类型的16位立即数</td>
+</tr>
+<tr>
+<td>jumpEn</td>
+<td>I</td>
+<td>1</td>
+<td>用于得到branch类型的跳转条件是否成立</td>
+</tr>
+<tr>
+<td>imm26</td>
+<td>I</td>
+<td>26</td>
+<td>jump类型的26位立即数</td>
+</tr>
+<tr>
+<td>regAddr</td>
+<td>I</td>
+<td>32</td>
+<td>寄存器中存储的地址</td>
+</tr>
+<tr>
+<td>PC+4</td>
+<td>O</td>
+<td>32</td>
+<td>输出PC+4的值</td>
+</tr>
+<tr>
+<td>npc</td>
+<td>O</td>
+<td>32</td>
+<td>下一条指令地址</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>选择信号类型</th>
+<th>位宽</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NPC_PC_4</td>
+<td>2</td>
+<td>2‘b00</td>
+<td>pc+4</td>
+</tr>
+<tr>
+<td>NPC_J</td>
+<td>2</td>
+<td>2’b01</td>
+<td>直接跳转，26位立即数拓展后的地址</td>
+</tr>
+<tr>
+<td>NPC_B</td>
+<td>2</td>
+<td>2’b10</td>
+<td>条件跳转，满足条件跳转到16位立即数拓展后的地址</td>
+</tr>
+<tr>
+<td>NPC_JR</td>
+<td>2</td>
+<td>2’b11</td>
+<td>跳转到寄存器存储的地址</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>三种跳转指令</strong></li>
+</ul>
+<p><strong>b型跳转指令</strong></p>
+<p><img src="/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/image-20240221165229781.png" alt="image-20240221165229781"></p>
+<p>均为判断后跳转到label（即Offset）</p>
+<p><strong>JR型跳转指令(jr,jalr)</strong></p>
+<p><img src="/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/image-20240221165224329.png" alt="image-20240221165224329"></p>
+<p>跳转到寄存器中的存储的地址</p>
+<p><strong>J型跳转指令(j,jal)</strong></p>
+<p><img src="/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/image-20240221165218734.png" alt="image-20240221165218734"></p>
+<p>跳转到target这个立即数对应的地址</p>
+<p>其实也可以分为：</p>
+<p><strong>间接寻址</strong>（通过PC+4和Offset寻址）</p>
+<p><strong>直接寻址</strong>（直接跳转到立即数对应地址，或者寄存器中存储的地址）</p>
+<h3><span id="grf通用寄存器组">GRF（通用寄存器组）</span></h3>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLK</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>Reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号<br>1：复位信号有效<br>0：复位信号无效</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号<br>1：写入有效<br>0：写入无效</td>
+</tr>
+<tr>
+<td>A1</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定 32 个寄存器中的一个，将其中的数据读出到 RD1</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定 32 个寄存器中的一个，将其中的数据读出到 RD2</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定 32 个寄存器中的一个，将其作为写入目标</td>
+</tr>
+<tr>
+<td>WD</td>
+<td>I</td>
+<td>32</td>
+<td>数据输入信号</td>
+</tr>
+<tr>
+<td>RD1</td>
+<td>O</td>
+<td>32</td>
+<td>输出A1指定的寄存器中的 32 位数据</td>
+</tr>
+<tr>
+<td>RD2</td>
+<td>O</td>
+<td>32</td>
+<td>输出A2指定的寄存器中的 32 位数据</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>Reset 信号有效时，所有寄存器中储存的值均被清零</td>
+</tr>
+<tr>
+<td>2</td>
+<td>读数据</td>
+<td>读出 A1，A2 地址对应的寄存器中储存的数据，将其加载到 RD1 和 RD2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写数据</td>
+<td>当 WE 信号有效且时钟上升沿来临时，将 WD 中的数据写入到 A3 地址对应的寄存器</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="ext拓展单元">EXT（拓展单元）</span></h3>
+<p>将16位立即数符号拓展为32位。这里为了提高可拓展性，添加了<code>UnsignedExt</code>接口</p>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imm16</td>
+<td>I</td>
+<td>16</td>
+<td>16位立即数输入信号</td>
+</tr>
+<tr>
+<td>extUnsignedSel</td>
+<td>I</td>
+<td>1</td>
+<td>无符号拓展信号<br>1：无符号拓展（0拓展）<br>0：符号拓展</td>
+</tr>
+<tr>
+<td>imm32</td>
+<td>O</td>
+<td>32</td>
+<td>32位立即数输出信号</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>符号拓展</td>
+<td>将16位立即数进行符号拓展</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="alu逻辑运算单元">ALU（逻辑运算单元）</span></h3>
+<table>
+<thead>
+<tr>
+<th>ALUOp</th>
+<th>指令</th>
+<th>Opcode</th>
+<th>Op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加法</td>
+<td>add</td>
+<td>0000</td>
+<td>ALURes = SrcA+SrcB</td>
+</tr>
+<tr>
+<td>减法</td>
+<td>sub</td>
+<td>0001</td>
+<td>ALURes = SrcA-SrcB</td>
+</tr>
+<tr>
+<td>乘法(low)</td>
+<td>mul</td>
+<td>0010</td>
+<td>ALURes = SrcA*SrcB</td>
+</tr>
+<tr>
+<td>除法(商)</td>
+<td>div</td>
+<td>0011</td>
+<td>ALURes = SrcA / SrcB</td>
+</tr>
+<tr>
+<td>与运算</td>
+<td>and</td>
+<td>0100</td>
+<td>ALURes = SrcA &amp; SrcB</td>
+</tr>
+<tr>
+<td>或运算</td>
+<td>or</td>
+<td>0101</td>
+<td>ALURes = SrcA | SrcB</td>
+</tr>
+<tr>
+<td>异或运算</td>
+<td>xor</td>
+<td>0110</td>
+<td>ALURes = SrcA $\oplus$ SrcB</td>
+</tr>
+<tr>
+<td>或非运算</td>
+<td>nor</td>
+<td>0111</td>
+<td>ALURes = ~(SrcA | SrcB)</td>
+</tr>
+<tr>
+<td>逻辑左移</td>
+<td>sll</td>
+<td>1000</td>
+<td>ALURes = SrcB &lt;&lt; Shift</td>
+</tr>
+<tr>
+<td>逻辑右移</td>
+<td>srl</td>
+<td>1001</td>
+<td>ALURes = SrcB &gt;&gt; Shift</td>
+</tr>
+<tr>
+<td>算数右移</td>
+<td>sra</td>
+<td>1010</td>
+<td>ALURes = SrcB &gt;&gt;&gt; Shift</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="dm数据存储器">DM（数据存储器）</span></h3>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>reset</td>
+<td>I</td>
+<td>1</td>
+<td>复位信号</td>
+</tr>
+<tr>
+<td>addr</td>
+<td>I</td>
+<td>32</td>
+<td>内存中的地址信号</td>
+</tr>
+<tr>
+<td>dmOp</td>
+<td>I</td>
+<td>2</td>
+<td>选择信号<br>2’b00:word<br>2’b01:half_word<br>2’b10:byte</td>
+</tr>
+<tr>
+<td>dmWriteEn</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号<br>1：写入有效<br>0：写入无效</td>
+</tr>
+<tr>
+<td>WD</td>
+<td>I</td>
+<td>32</td>
+<td>在写入信号有效时，写入内存地址的数据</td>
+</tr>
+<tr>
+<td>RD</td>
+<td>O</td>
+<td>32</td>
+<td>输出内存中对应地址的数据</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="splitter">Splitter</span></h3>
+<ul>
+<li>端口定义</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>instr</td>
+<td>I</td>
+<td>32</td>
+<td>输入指令信号</td>
+</tr>
+<tr>
+<td>opcode</td>
+<td>O</td>
+<td>6</td>
+<td>instr[31:26]</td>
+</tr>
+<tr>
+<td>rs</td>
+<td>O</td>
+<td>5</td>
+<td>instr[25:21]</td>
+</tr>
+<tr>
+<td>base</td>
+<td>O</td>
+<td>5</td>
+<td>instr[25:21]</td>
+</tr>
+<tr>
+<td>rt</td>
+<td>O</td>
+<td>5</td>
+<td>instr[20:16]</td>
+</tr>
+<tr>
+<td>rd</td>
+<td>O</td>
+<td>5</td>
+<td>instr[15:11]</td>
+</tr>
+<tr>
+<td>sa</td>
+<td>O</td>
+<td>5</td>
+<td>instr[10:6]</td>
+</tr>
+<tr>
+<td>func</td>
+<td>O</td>
+<td>6</td>
+<td>instr[5:0]</td>
+</tr>
+<tr>
+<td>imm26</td>
+<td>O</td>
+<td>26</td>
+<td>instr[25:0]</td>
+</tr>
+<tr>
+<td>imm16</td>
+<td>O</td>
+<td>16</td>
+<td>instr[15:0]</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="cmp">CMP</span></h3>
+<p>用于生成Branch类跳转信号是否跳转的使能信号</p>
+<ul>
+<li>端口定义</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cmpA</td>
+<td>I</td>
+<td>32</td>
+<td>输入信号</td>
+</tr>
+<tr>
+<td>cmpB</td>
+<td>I</td>
+<td>32</td>
+<td>输入信号</td>
+</tr>
+<tr>
+<td>branchOp</td>
+<td>I</td>
+<td></td>
+<td>比较类型</td>
+</tr>
+<tr>
+<td>jumpOp</td>
+<td>O</td>
+<td>1</td>
+<td>是否满足跳转条件</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>功能定义</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>branchOP</th>
+<th>值</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2><span id="控制">控制</span></h2>
+<h3><span id="cu">CU</span></h3>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>Opcode[31:26]</th>
+<th>[25:21]</th>
+<th>[20:16]</th>
+<th>[15:11]</th>
+<th>[10:6]</th>
+<th>[5:0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>add</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>sub</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>100010</td>
+</tr>
+<tr>
+<td>ori</td>
+<td>001101</td>
+<td>rs</td>
+<td>rt</td>
+<td>immediate</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>lw</td>
+<td>100011</td>
+<td>base</td>
+<td>rt</td>
+<td>offset</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>sw</td>
+<td>101011</td>
+<td>base</td>
+<td>rt</td>
+<td>offset</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>beq</td>
+<td>000100</td>
+<td>rs</td>
+<td>rt</td>
+<td>offset</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>lui</td>
+<td>001111</td>
+<td>00000</td>
+<td>rt</td>
+<td>immediate</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>nop</td>
+<td>000000</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>由于我是先搓完的数据路径部分，在写到CU的时候对于大多数的接口已经<strong>不记得了</strong>。这里可以学习<strong>黑书中的模式</strong>，通过一条指令来构建起其中的一些指令的控制，然后加指令来增加前面可能缺少的接口，同时补全接口的定义等。</p>
+<p>首先我是将一些和初始化、终止等相关的接口拿出来，这些基本上是自定义的，用于提高CPU的可拓展性。比如在IFU中的Stop，EXT中的UnsignedExt信号等。</p>
+<p>其次从CU的角度开始处理指令。</p>
+<p>第一步，<strong>输入信号</strong>。</p>
+<p>这里包括两个，<code>Instr[31:26]</code>也就是Opcode，<code>Instr[5:0]</code>也就是在R类型指令中的Func。</p>
+<p>对这两个进行输入解析。利用<code>And Logical</code>，判断得到对应什么指令。</p>
+<p>然后利用<code>Or Logical</code>，来激活相应的接口。</p>
+<p>第二步，对于<strong>lw指令</strong>。</p>
+<p><img src="/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/image-20240221165208821.png" alt="image-20240221165208821"></p>
+<p>这里首先调整了几个选择信号，同时检查发现加上了WriteReg控制信号。</p>
+<p>第三步，对于<strong>sw信号</strong>。</p>
+<p><img src="/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/image-20240221165204960.png" alt="image-20240221165204960"></p>
+<p>发现sw和lw基本一模一样。做完这两个之后对于整体指令已经熟悉了，然后开始实现剩余的指令控制信号。</p>
+<p>最后，反过来从接口的角度思考有哪些指令需要用到该接口或者对该接口有什么操作，然后对CU进行补全以及检查。</p>
+<h2><span id="自动化测试">自动化测试</span></h2>
+<h2><span id="思考题">思考题</span></h2>
+<ul>
+<li>阅读下面给出的 DM 的输入示例中（示例 DM 容量为 4KB，即 32bit × 1024 字），根据你的理解回答，这个 addr 信号又是从哪里来的？地址信号 addr 位数为什么是 [11:2] 而不是 [9:0] ？</li>
+</ul>
+<p><img src="/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/image-20240221165157185.png" alt="image-20240221165157185"></p>
+<blockquote>
+<p>addr信号来自于ALU。因为是按字存储的，每四个byte一个字节。</p>
+</blockquote>
+<ul>
+<li>思考上述两种控制器设计的译码方式，给出代码示例，并尝试对比各方式的优劣。</li>
+</ul>
+<blockquote>
+<p>记录指令的控制信号如何取值</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token important">always @</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+     <span class="token function">if</span><span class="token punctuation">(</span>opcode <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">begin</span>
+         <span class="token function">case</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span> 
+             <span class="token number">6'b100000</span> <span class="token punctuation">:</span> <span class="token keyword">begin</span>
+                 npcOp <span class="token operator">==</span> <span class="token constant">`NPC_PC_4</span><span class="token punctuation">;</span>
+                 writeRegSel <span class="token operator">==</span> <span class="token constant">`CU_GRF_A3_RD</span><span class="token punctuation">;</span>
+                 grfWriteEn <span class="token operator">==</span> <span class="token number">1'b1</span><span class="token punctuation">;</span>
+             <span class="token keyword">end</span>
+         <span class="token keyword">endcase</span>
+     <span class="token keyword">end</span>
+     <span class="token keyword">else</span> <span class="token keyword">begin</span>
+         <span class="token keyword">case</span> <span class="token punctuation">(</span>opcode<span class="token punctuation">)</span><span class="token punctuation">:</span>
+             <span class="token constant">`CU_add_OP</span> <span class="token punctuation">:</span> <span class="token keyword">begin</span>
+
+         <span class="token keyword">end</span>
+     <span class="token keyword">endcase</span>
+             <span class="token keyword">end</span>
+ <span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>记录控制信号每种取值所对应的指令</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">assign</span> npcOp <span class="token operator">=</span> <span class="token punctuation">(</span>beq<span class="token punctuation">)</span>     <span class="token operator">?</span> <span class="token constant">`NPC_B</span> <span class="token punctuation">:</span>
+               <span class="token punctuation">(</span>j <span class="token operator">|</span> jal<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`NPC_J</span> <span class="token punctuation">:</span>
+               <span class="token punctuation">(</span>jr<span class="token punctuation">)</span>      <span class="token operator">?</span> <span class="token constant">`NPC_JR</span><span class="token punctuation">:</span>
+                           <span class="token constant">`NPC_PC_4</span><span class="token punctuation">;</span>
+<span class="token keyword">assign</span> writeRegSel <span class="token operator">=</span> <span class="token punctuation">(</span>add <span class="token operator">|</span> sub <span class="token operator">|</span> sll<span class="token punctuation">)</span>       <span class="token operator">?</span> <span class="token constant">`CU_GRF_A3_RD</span> <span class="token punctuation">:</span>
+                     <span class="token punctuation">(</span>ori <span class="token operator">|</span> lw  <span class="token operator">|</span> sw <span class="token operator">|</span> lui <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CU_GRF_A3_RT</span> <span class="token punctuation">:</span>
+                     <span class="token punctuation">(</span>jal<span class="token punctuation">)</span>                   <span class="token operator">?</span> <span class="token constant">`CU_GRF_A3_RA</span> <span class="token punctuation">:</span>
+                                               <span class="token constant">`CU_GRF_A3_RD</span> <span class="token punctuation">;</span>
+<span class="token keyword">assign</span> grfWriteEn <span class="token operator">=</span> <span class="token punctuation">(</span>add <span class="token operator">|</span> sub <span class="token operator">|</span> ori <span class="token operator">|</span> lui <span class="token operator">|</span> sll <span class="token operator">|</span> jal <span class="token operator">|</span> lw<span class="token punctuation">)</span> <span class="token operator">?</span>  <span class="token number">1'b1</span> <span class="token punctuation">:</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+<span class="token keyword">assign</span> writeRegDataSel <span class="token operator">=</span> <span class="token punctuation">(</span>add <span class="token operator">|</span> sub <span class="token operator">|</span> ori <span class="token operator">|</span> lui <span class="token operator">|</span> sll<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CU_GRF_WD_ALURESULT</span> <span class="token punctuation">:</span>
+                         <span class="token punctuation">(</span>lw<span class="token punctuation">)</span>                          <span class="token operator">?</span> <span class="token constant">`CU_GRF_WD_MEMRD</span> <span class="token punctuation">:</span>
+                         <span class="token punctuation">(</span>jal<span class="token punctuation">)</span>                         <span class="token operator">?</span> <span class="token constant">`CU_GRF_WD_PC_4</span> <span class="token punctuation">:</span>
+                                                         <span class="token constant">`CU_GRF_WD_ALURESULT</span><span class="token punctuation">;</span>
+<span class="token keyword">assign</span> extUnsignedSel <span class="token operator">=</span> <span class="token punctuation">(</span>ori <span class="token operator">|</span> lui<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1'b1</span> <span class="token punctuation">:</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+<span class="token keyword">assign</span> aluSrcSel <span class="token operator">=</span> <span class="token punctuation">(</span>add <span class="token operator">|</span> sub <span class="token operator">|</span> beq <span class="token operator">|</span> sll<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CU_ALU_SRCB_GRFRD2</span> <span class="token punctuation">:</span>
+                   <span class="token punctuation">(</span>ori <span class="token operator">|</span> lui <span class="token operator">|</span> lw <span class="token operator">|</span> sw<span class="token punctuation">)</span>   <span class="token operator">?</span> <span class="token constant">`CU_ALU_SRCB_IMM32</span>  <span class="token punctuation">:</span>
+                                             <span class="token constant">`CU_ALU_SRCB_GRFRD2</span> <span class="token punctuation">;</span>
+<span class="token keyword">assign</span> shamtSel <span class="token operator">=</span> <span class="token punctuation">(</span>lui<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CU_ALU_SHAMT_SEL_16</span> <span class="token punctuation">:</span>
+                  <span class="token punctuation">(</span>sll<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CU_ALU_SHAMT_SEL_sa</span> <span class="token punctuation">:</span>
+                          <span class="token constant">`CU_ALU_SHAMT_SEL_sa</span><span class="token punctuation">;</span>
+<span class="token keyword">assign</span> aluOp <span class="token operator">=</span> <span class="token punctuation">(</span>add <span class="token operator">|</span> lw <span class="token operator">|</span> sw<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`ALU_add</span> <span class="token punctuation">:</span>
+               <span class="token punctuation">(</span>sub<span class="token punctuation">)</span>           <span class="token operator">?</span> <span class="token constant">`ALU_sub</span> <span class="token punctuation">:</span>
+               <span class="token punctuation">(</span>ori<span class="token punctuation">)</span>           <span class="token operator">?</span> <span class="token constant">`ALU_or</span>  <span class="token punctuation">:</span>
+               <span class="token punctuation">(</span>lui <span class="token operator">|</span> sll<span class="token punctuation">)</span>     <span class="token operator">?</span> <span class="token constant">`ALU_sll</span> <span class="token punctuation">:</span>
+                                 <span class="token constant">`ALU_add</span><span class="token punctuation">;</span>
+<span class="token keyword">assign</span> dmWriteEn <span class="token operator">=</span> <span class="token punctuation">(</span>sw<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1'b1</span> <span class="token punctuation">:</span> <span class="token number">1'b0</span><span class="token punctuation">;</span>
+<span class="token keyword">assign</span> dmOp <span class="token operator">=</span> <span class="token punctuation">(</span>lw <span class="token operator">|</span> sw<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`DM_WORD</span> <span class="token punctuation">:</span>
+                          <span class="token constant">`DM_WORD</span> <span class="token punctuation">;</span>
+<span class="token keyword">assign</span> branchOp <span class="token operator">=</span> <span class="token punctuation">(</span>beq<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CMP_EQUAL</span> <span class="token punctuation">:</span>
+                  <span class="token punctuation">(</span>bne<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CMP_NOT_EQUAL</span> <span class="token punctuation">:</span>
+                  <span class="token punctuation">(</span>bge<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CMP_SIGNED_GREATER_OR_EQUAL</span> <span class="token punctuation">:</span>
+                  <span class="token punctuation">(</span>ble<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CMP_SIGNED_LESS_OR_EQUAL</span> <span class="token punctuation">:</span>
+                  <span class="token punctuation">(</span>blt<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CMP_SIGNED_LESS</span> <span class="token punctuation">:</span>
+                  <span class="token punctuation">(</span>bgt<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`CMP_SIGNED_GREATER</span> <span class="token punctuation">:</span>
+                          <span class="token constant">`CMP_EQUAL</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>记录指令的控制信号如何取值，更加方便记录追踪每一条指令的问题。这个对于增加指令也比较方便。</li>
+<li>记录控制信号每种取值所对应的指令，方便看某一个控制指令的组成</li>
+</ul>
+</blockquote>
+<ul>
+<li>在相应的部件中，复位信号的设计都是<strong>同步复位</strong>，这与 P3 中的设计要求不同。请对比<strong>同步复位</strong>与<strong>异步复位</strong>这两种方式的 reset 信号与 clk 信号优先级的关系。</li>
+</ul>
+<blockquote>
+<p>同步复位中，clk信号优先于reset信号。</p>
+<p>异步复位中，reset信号优先于clk信号。</p>
+</blockquote>
+<ul>
+<li>C 语言是一种弱类型程序设计语言。C 语言中不对计算结果溢出进行处理，这意味着 C 语言要求程序员必须很清楚计算结果是否会导致溢出。因此，如果仅仅支持 C 语言，MIPS 指令的所有计算指令均可以忽略溢出。 请说明为什么在忽略溢出的前提下，addi 与 addiu 是等价的，add 与 addu 是等价的。提示：阅读《MIPS32® Architecture For Programmers Volume II: The MIPS32® Instruction Set》中相关指令的 Operation 部分。</li>
+</ul>
+<blockquote>
+<p>addi和addiu的区别，add和addu的区别在于addi和add在溢出是会报溢出异常，忽略溢出二者自然就相同了嘛。</p>
+<ul>
+<li>
+<p>add</p>
+<p><img src="/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/image-20240221165124611.png" alt="image-20240221165124611"></p>
+</li>
+<li>
+<p>addu</p>
+<p><img src="/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/image-20240221165132920.png" alt="image-20240221165132920"></p>
+</li>
+<li>
+<p>addi</p>
+<p><img src="/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/image-20240221165139866.png" alt="image-20240221165139866"></p>
+</li>
+<li>
+<p>addiu</p>
+<p><img src="/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/image-20240221165148096.png" alt="image-20240221165148096"></p>
+</li>
+</ul>
+</blockquote>
+<h2><span id="命名的合理性">命名的合理性</span></h2>
+<p>元件统一大驼峰（首字母大写）</p>
+<p>接口连线统一小驼峰（首字母小写），单个字母仍然使用大写以保证美观。（想了想GRF还是采用以前的A1这种命名吧，不然感觉好奇怪。</p>
+<p><strong>操作控制</strong>：选择信号以Op结尾</p>
+<p><strong>写使能控制</strong>：使能信号以En结尾</p>
+<p><strong>多路控制</strong>：多路选择器开关信号以Sel结尾。</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">hugo</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hugohealthy.top/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/">https://hugohealthy.top/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">hugo</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/p4/">
+                                    <span class="chip bg-color">p4</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+        <div class="disqus-card card" data-aos="fade-up">
+    <div id="disqus_thread" class="card-content">
+        <noscript>Please enable JavaScript to view the
+            <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+    </div>
+</div>
+
+<script type="text/javascript">
+    disqus_config = function () {
+        this.page.url = 'https://hugohealthy.top/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/';
+        this.page.identifier = '/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/';
+        this.page.title = 'p4-CPU-设计文档';
+    };
+    let disqus_shortname = '';
+
+    (function () { // DON'T EDIT BELOW THIS LINE
+        let d = document, s = d.createElement('script');
+        // 如：s.src = 'https://blinkfox.disqus.com/embed.js';
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2024/02/21/p5-%E6%B5%81%E6%B0%B4%E7%BA%BF/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/011.jpg" class="responsive-img" alt="p5-流水线">
+                        
+                        <span class="card-title">p5-流水线</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-02-21
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="post-category">
+                                    计算机组成原理
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/p5/">
+                        <span class="chip bg-color">p5</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/02/21/p3-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/005.jpg" class="responsive-img" alt="p3-CPU-设计文档">
+                        
+                        <span class="card-title">p3-CPU-设计文档</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            单周期mips架构CPU的logisim实现
+通过抽象的方式我们从两个方面来构建单周期CPU，也就是数据路径（DataPath）和控制器（Controller）
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-02-21
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="post-category">
+                                    计算机组成原理
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/p3/">
+                        <span class="chip bg-color">p3</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: hugo<br />'
+            + '文章作者: hugo<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '这里是hugo。本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="tencent"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='true'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2023-2024</span>
+            
+            <a href="/about" target="_blank">hugo</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">41.7k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:3376467972@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=3376467972" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 3376467972" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+    <a href="https://i.328888.xyz/2023/04/10/imVT4z.jpeg" class="tooltipped" target="_blank" data-tooltip="微信联系我: https://i.328888.xyz/2023/04/10/imVT4z.jpeg" data-position="top" data-delay="50">
+        <i class="fab fa-weixin"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+        <!-- <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script> -->
+        <script src='/libs/mermaid/mermaid.min.js'></script>
+        <script>
+          if (window.mermaid) {
+            mermaid.initialize({theme: 'forest'});
+          }
+        </script>
+    
+
+    
+    
+    
+        
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/sakura.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/star.js"><\/script>');
+            }
+        </script>
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+    <script type="text/javascript" color="0,20,255"
+        pointColor="40,50,255" opacity='0.7'
+        zIndex="-1" count="99"
+        src="/libs/background/canvas-nest.js"></script>
+    
+
+    
+    
+    <script type="text/javascript" size="90" alpha='0.9'
+        zIndex="-1" src="/libs/background/ribbon.min.js" async="async"></script>
+    
+
+    
+
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+
+</html>

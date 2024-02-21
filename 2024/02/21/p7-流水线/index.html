@@ -1,0 +1,3005 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="p7-流水线, C,Python,数分，高代，离散等">
+    <meta name="description" content="$\mathscr {Hugo}$ $\mathbb{CPU}$ 五级流水线$\mathscr{Design}$
+
+这里是hugo的blog
+
+
+P6-P7
+
+MIPS微系统
+有亿点点麻烦，首先阐释具体的概念，然后是工程化的应用。
+
+P7的">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>p7-流水线 | hugo</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="hugo" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">hugo</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">hugo</div>
+        <div class="logo-desc">
+            
+            今天阳光正好
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hjzts/hjzts.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hjzts/hjzts.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/001.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">p7-流水线</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/p7/">
+                                <span class="chip bg-color">p7</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="post-category">
+                                计算机组成原理
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2024-02-21
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    7k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    27 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1><span id="mathscr-hugo-mathbbcpu-五级流水线mathscrdesign">$\mathscr {Hugo}$ $\mathbb{CPU}$ 五级流水线$\mathscr{Design}$</span></h1>
+<blockquote>
+<p>这里是hugo的blog</p>
+</blockquote>
+<blockquote>
+<p>P6-P7</p>
+</blockquote>
+<h2><span id="mips微系统">MIPS微系统</span></h2>
+<p>有亿点点麻烦，首先阐释具体的概念，然后是工程化的应用。</p>
+<ul>
+<li>P7的任务是实现一个简单的计算机系统，即“mips微系统”</li>
+<li>为了实现CPU的异常报告和与外设进行复杂的交互</li>
+</ul>
+<p><img src="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/%E5%BE%AE%E7%B3%BB%E7%BB%9F.png" alt="img"></p>
+<h3><span id="外设">外设</span></h3>
+<p>暂时不重要</p>
+<ul>
+<li>Timer</li>
+<li>Memory</li>
+<li>InterruptGenerator</li>
+</ul>
+<p>Timer那里的是定时产生时钟中断。</p>
+<p>InterruptGenerator是产生随机的外部中断信号，用来模拟外界情形</p>
+<p><img src="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/structure-1701416411059-3.svg" alt="structure"></p>
+<blockquote>
+<ul>
+<li>
+<p><strong>Q：我们计组课程一本参考书目标题中有 “硬件 / 软件接口” 接口字样，那么到底什么是 “硬件 / 软件接口”？(Tips：什么是接口？和我们到现在为止所学的有什么联系？)</strong></p>
+<p><strong>A：</strong> 硬件 / 软件接口是指软件和硬件之间数据交互的接口。在我看来，这个应该指的是操作系统，操作系统将外部软件程序的机器码传入 core，由 core 执行；而 core 执行后产生的数据又通过操作系统传给软件。</p>
+</li>
+<li>
+<p><strong>Q：BE 部件对所有的外设都是必要的吗？</strong></p>
+<p><strong>A：</strong> 我认为没有必要，BE 部件是为了实现 DM 按字节访存设置的，而其他的部件例如 Timer 仅仅支持按字访存，因此不需要 BE 部件。</p>
+</li>
+<li>
+<p><strong>Q：请查阅相关资料，说明鼠标和键盘的输入信号是如何被 CPU 知晓的？</strong></p>
+<p><strong>A：</strong> 鼠标和键盘等外设并不是直接与 CPU 相连的，中间需要通过软件来连接，这个软件也就是我们熟知的驱动。驱动和硬件之间通过操作系统进行处理。</p>
+</li>
+<li>
+<p><strong>Q:</strong> 请开发一个主程序以及定时器的 exception handler。整个系统完成如下功能：</p>
+<p>（1）定时器在主程序中被初始化为模式 0；</p>
+<p>（2）定时器倒计数至 0 产生中断；</p>
+<p>（3）handler 设置使能 Enable 为 1 从而再次启动定时器的计数器。(2) 及 (3) 被无限重复。</p>
+<p>（4）主程序在初始化时将定时器初始化为模式 0，设定初值寄存器的初值为某个值，如 100 或 1000。（注意，主程序可能需要涉及对 <a target="_blank" rel="noopener" href="http://CP0.SR">CP0.SR</a> 的编程，推荐阅读过后文后再进行。）</p>
+<p><strong>A:</strong></p>
+<p>verilog</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog">主程序<span class="token punctuation">:</span>
+<span class="token punctuation">.</span>text
+ori <span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">0</span>xfc01
+mtc0 <span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$12</span>
+ori <span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">0</span>x0
+sw <span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token number">0</span>x7f00
+ori <span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">288</span>
+sw <span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token number">0</span>x7f04
+ori <span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">0</span>x9
+sw <span class="token kernel-function property">$t0</span><span class="token punctuation">,</span> <span class="token number">0</span>x7f00
+addi <span class="token kernel-function property">$t1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">1</span>
+loop<span class="token punctuation">:</span>
+add <span class="token kernel-function property">$s0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span>
+add <span class="token kernel-function property">$s1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span>
+add <span class="token kernel-function property">$s2</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span>
+add <span class="token kernel-function property">$s3</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span>
+j loop
+异常处理程序<span class="token punctuation">:</span>
+<span class="token punctuation">.</span>ktext <span class="token number">0</span>x00004180
+ori <span class="token kernel-function property">$k0</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">0</span>x1
+ori <span class="token kernel-function property">$k1</span><span class="token punctuation">,</span> <span class="token kernel-function property">$0</span><span class="token punctuation">,</span> <span class="token number">0</span>x9
+sw <span class="token kernel-function property">$k0</span><span class="token punctuation">,</span> <span class="token number">0</span>x7f00
+sw <span class="token kernel-function property">$k1</span><span class="token punctuation">,</span> <span class="token number">0</span>x7f00
+eret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>P5-P6</p>
+</blockquote>
+<p>本次迭代新增了不少calc_r,calc_i型指令，这类指令基本上不敲错code基本上没啥问题，对于新增的md,mt,mf类型的指令，新增一个D_MDU进行处理。</p>
+<p>关键这里将IM和DM进行了外置</p>
+<blockquote></blockquote>
+<p>实现五级流水线CPU</p>
+<ul>
+<li>命名统一采用hugo命名法（借鉴了匈牙利命名法和下划线命名）</li>
+<li>主体为mips.v模块，不再像P4一样加入DataPath模块，统一在mips.v中完成连线等大部分操作。</li>
+<li>控制部分分为<code>Ctrl_Unit</code>和<code>Hazard_Ctrl</code>两个部分，处理冲突为在能够使用旁路转换的情况下尽可能的使用旁路转换</li>
+<li>流水线阶段分为IF，ID，EX，MEM，WB五个部分
+<ul>
+<li>F：<code>NPC</code>,<code>PC</code>,<code>IM</code></li>
+<li>D: <code>GRF</code>,<code>EXT</code>,<code>CMP</code></li>
+<li>E: <code>ALU</code></li>
+<li>M: <code>DM</code></li>
+<li>W: <code>GRF</code></li>
+</ul>
+</li>
+<li>其中用到大部分的宏定义在<code>def.v</code>中定义</li>
+</ul>
+<h2><span id="cpu流水线的实现">CPU流水线的实现</span></h2>
+<h3><span id="实现指令说明">实现指令说明</span></h3>
+<p>将本CPU实现的指令分为以下几类：</p>
+<table>
+<thead>
+<tr>
+<th>classify</th>
+<th>指令set</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>load</td>
+<td>lw//lh,lhu,lb,lbu</td>
+</tr>
+<tr>
+<td>store</td>
+<td>sw//sh,sb</td>
+</tr>
+<tr>
+<td>calc_r</td>
+<td>add,sub//addu, subu,and,or,nor,xor,slt,sltu</td>
+</tr>
+<tr>
+<td>calc_i</td>
+<td>ori//addiu,addi,xori,slti,sltiu</td>
+</tr>
+<tr>
+<td>shift_s</td>
+<td>sll//sra,srl</td>
+</tr>
+<tr>
+<td>shift_v</td>
+<td>//sllv,srav,srlv</td>
+</tr>
+<tr>
+<td>b_type</td>
+<td>beq//bne</td>
+</tr>
+<tr>
+<td>j</td>
+<td>jal,j</td>
+</tr>
+<tr>
+<td>特殊</td>
+<td>jr,lui</td>
+</tr>
+</tbody>
+</table>
+<p>基本的数据通路</p>
+<p>IF阶段的pc需要保留到后面继续使用</p>
+<p>重点处理的在于ALU</p>
+<h3><span id="命名规范">命名规范</span></h3>
+<ul>
+<li>对于每一个模块依旧采用仅有文件英文名的办法，对于其实例化为_小写</li>
+<li>对于每一条线采用层级+命名的方式（原本采用的是匈牙利命名法，也就是前面加上对应的类型，后发现全部都是wire，遂弃之）</li>
+<li>寄存器文件采用两边的流水线层级加上_REG的方式。</li>
+</ul>
+<h2><span id="数据通路datapath">数据通路DataPath</span></h2>
+<p>同P4，变量命名有稍微修改。</p>
+<p>但没有单独使用一个DataPath的模块，显得比较多余。</p>
+<p>对于一个数据路径，包括取指令(IF)，译码(ID)，执行(EX)，访存(MEM)，回写(WB)这几个方面，相应的有IFU，NPC，GRF，ALU，IM，DM这几个基本单元，单元之间通过Splitter和MUX等进行元件之间的数据交换和处理，这里需要在构建是需要留下几个控制信号的接口，以便于最后CU（控制器单元）单元的构建。</p>
+<h3><span id="ifu取指令单元">IFU取指令单元</span></h3>
+<p>该模块由PC（Programming Counter)模块和IM（Instruction Memory）模块组成。其中PC模块负责对每次新的指令状态进行转移，IM模块则从ROM中得到相应的指令。</p>
+<blockquote>
+<p>这里考虑到之后<u><strong>可能</strong></u>需要将IM和DM放到一起，这里不再对PC和IM进行进一步的封装。</p>
+</blockquote>
+<h4><span id="f_pc程序计数器">F_PC（程序计数器）</span></h4>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>i_reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号</td>
+</tr>
+<tr>
+<td>i_en</td>
+<td>I</td>
+<td>1</td>
+<td>使能信号</td>
+</tr>
+<tr>
+<td>i_npc</td>
+<td>I</td>
+<td>32</td>
+<td>通过计算得到的下一条指令的地址</td>
+</tr>
+<tr>
+<td>or_pc</td>
+<td>O</td>
+<td>32</td>
+<td>状态转移后的地址，输出当前正在执行的地址</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>当Reset信号有效时，将PC寄存器中的值置为0x00003000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>停止</td>
+<td>当Stop信号有效时，PC寄存器忽略时钟输入，PC当前值保持不变</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写 PC 寄存器</td>
+<td>当 Stop 信号失效且时钟上升沿来临时，将下一条指令的地址（next PC）写入 PC 寄存器</td>
+</tr>
+</tbody>
+</table>
+<h4><span id="f_im指令存储器">F_IM（指令存储器）</span></h4>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_pc</td>
+<td>I</td>
+<td>32</td>
+<td>当前正在执行的地址</td>
+</tr>
+<tr>
+<td>o_instr</td>
+<td>O</td>
+<td>32</td>
+<td>输出当前正在执行的指令</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>取指令</td>
+<td>根据当前PC的值从IM中读出对应的指令</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="d_npc下一指令计算单元">D_NPC（下一指令计算单元）</span></h3>
+<p>计算下一个指令，有三种方式，包括直接计算下一条指令，b型跳转指令，j型跳转指令。其中j型跳转指令包括跳转到寄存器的值和直接跳转两种。</p>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_pc</td>
+<td>I</td>
+<td>32</td>
+<td>当前指令地址</td>
+</tr>
+<tr>
+<td>i_npcOp</td>
+<td>I</td>
+<td>2</td>
+<td>NPC控制信号</td>
+</tr>
+<tr>
+<td>i_imm16</td>
+<td>I</td>
+<td>16</td>
+<td>branch类型的16位立即数</td>
+</tr>
+<tr>
+<td>i_imm26</td>
+<td>I</td>
+<td>26</td>
+<td>jump类型的26位立即数</td>
+</tr>
+<tr>
+<td>i_jumpEn</td>
+<td>I</td>
+<td>1</td>
+<td>用于得到branch类型的跳转条件是否成立</td>
+</tr>
+<tr>
+<td>i_ra_of_jr</td>
+<td>I</td>
+<td>32</td>
+<td>寄存器中存储的地址</td>
+</tr>
+<tr>
+<td>o_npc</td>
+<td>O</td>
+<td>32</td>
+<td>下一条指令地址</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>选择信号类型</th>
+<th>位宽</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NPC_PC4</td>
+<td>3</td>
+<td>3‘b000</td>
+<td>pc+4</td>
+</tr>
+<tr>
+<td>NPC_J</td>
+<td>3</td>
+<td>3’b001</td>
+<td>直接跳转，26位立即数拓展后的地址</td>
+</tr>
+<tr>
+<td>NPC_B</td>
+<td>3</td>
+<td>3’b010</td>
+<td>条件跳转，满足条件跳转到16位立即数拓展后的地址</td>
+</tr>
+<tr>
+<td>NPC_JR</td>
+<td>3</td>
+<td>3’b011</td>
+<td>跳转到寄存器存储的地址</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>三种跳转指令</strong></li>
+</ul>
+<p><strong>b型跳转指令</strong></p>
+<p><img src="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231026163128067.png" alt="image-20231026163128067"></p>
+<p>均为判断后跳转到label（即Offset）</p>
+<p><strong>JR型跳转指令(jr,jalr)</strong></p>
+<p><img src="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231026163459284.png" alt="image-20231026163459284"></p>
+<p>跳转到寄存器中的存储的地址</p>
+<p><strong>J型跳转指令(j,jal)</strong></p>
+<p><img src="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231026164030190.png" alt="image-20231026164030190"></p>
+<p>跳转到target这个立即数对应的地址</p>
+<p>其实也可以分为：</p>
+<p><strong>间接寻址</strong>（通过PC+4和Offset寻址）</p>
+<p><strong>直接寻址</strong>（直接跳转到立即数对应地址，或者寄存器中存储的地址）</p>
+<h3><span id="d_grf通用寄存器组">D_GRF（通用寄存器组）</span></h3>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>i_reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号<br>1：复位信号有效<br>0：复位信号无效</td>
+</tr>
+<tr>
+<td>i_writeEn</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号<br>1：写入有效<br>0：写入无效</td>
+</tr>
+<tr>
+<td>i_A1</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定 32 个寄存器中的一个，将其中的数据读出到 RD1</td>
+</tr>
+<tr>
+<td>i_A2</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定 32 个寄存器中的一个，将其中的数据读出到 RD2</td>
+</tr>
+<tr>
+<td>i_A3</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定 32 个寄存器中的一个，将其作为写入目标</td>
+</tr>
+<tr>
+<td>i_WD</td>
+<td>I</td>
+<td>32</td>
+<td>数据输入信号</td>
+</tr>
+<tr>
+<td>o_RD1</td>
+<td>O</td>
+<td>32</td>
+<td>输出A1指定的寄存器中的 32 位数据</td>
+</tr>
+<tr>
+<td>o_RD2</td>
+<td>O</td>
+<td>32</td>
+<td>输出A2指定的寄存器中的 32 位数据</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>i_pc</td>
+<td>I</td>
+<td>32</td>
+<td>用于$display</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>Reset 信号有效时，所有寄存器中储存的值均被清零</td>
+</tr>
+<tr>
+<td>2</td>
+<td>读数据</td>
+<td>读出 A1，A2 地址对应的寄存器中储存的数据，将其加载到 RD1 和 RD2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写数据</td>
+<td>当 WE 信号有效且时钟上升沿来临时，将 WD 中的数据写入到 A3 地址对应的寄存器</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="d_ext拓展单元">D_EXT（拓展单元）</span></h3>
+<p>将16位立即数符号拓展为32位。这里为了提高可拓展性，添加了<code>UnsignedExt</code>接口</p>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_imm16</td>
+<td>I</td>
+<td>16</td>
+<td>16位立即数输入信号</td>
+</tr>
+<tr>
+<td>i_unsigned_ext_Sel</td>
+<td>I</td>
+<td>1</td>
+<td>无符号拓展信号<br>1：无符号拓展（0拓展）<br>0：符号拓展</td>
+</tr>
+<tr>
+<td>o_imm32</td>
+<td>O</td>
+<td>32</td>
+<td>32位立即数输出信号</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>符号拓展</td>
+<td>将16位立即数进行符号拓展</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="d_cmpb类指令比较单元">D_CMP(B类指令比较单元)</span></h3>
+<p>用于生成Branch类跳转信号是否跳转的使能信号。该单元根据输入的branchOp信号对当前B指令的类型进行判断，进而对当前输入的数值进行比较，最后输出结果。</p>
+<ul>
+<li>端口定义</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_cmpA</td>
+<td>I</td>
+<td>32</td>
+<td>输入信号</td>
+</tr>
+<tr>
+<td>i_cmpB</td>
+<td>I</td>
+<td>32</td>
+<td>输入信号</td>
+</tr>
+<tr>
+<td>i_branchOp</td>
+<td>I</td>
+<td></td>
+<td>比较类型</td>
+</tr>
+<tr>
+<td>jumpOp</td>
+<td>O</td>
+<td>1</td>
+<td>是否满足跳转条件</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>功能定义</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>branchOP</th>
+<th>位宽</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMP_EQUAL</td>
+<td>4</td>
+<td>4‘b0000</td>
+<td>判断是否相等</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="e_alu逻辑运算单元">E_ALU（逻辑运算单元）</span></h3>
+<p>该模块可实现加，减，按位与，按位或等 11 种运算，并根据 ALUOP 信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断</p>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">方向</th>
+<th style="text-align:left">位宽</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ALUOp</td>
+<td style="text-align:left">I</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">ALU 功能选择信号</td>
+</tr>
+<tr>
+<td style="text-align:left">src_A</td>
+<td style="text-align:left">I</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">参与 ALU 计算的第一个值</td>
+</tr>
+<tr>
+<td style="text-align:left">src_B</td>
+<td style="text-align:left">I</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">参与 ALU 计算的第二个值 S</td>
+</tr>
+<tr>
+<td style="text-align:left">shamt</td>
+<td style="text-align:left">I</td>
+<td style="text-align:left">5</td>
+<td style="text-align:left">移位数输入</td>
+</tr>
+<tr>
+<td style="text-align:left">out</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">输出 ALU 计算结果</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ALUOp</th>
+<th>指令</th>
+<th>Opcode</th>
+<th>Op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加法</td>
+<td>add</td>
+<td>00000</td>
+<td>ALURes = SrcA+SrcB</td>
+</tr>
+<tr>
+<td>减法</td>
+<td>sub</td>
+<td>00001</td>
+<td>ALURes = SrcA-SrcB</td>
+</tr>
+<tr>
+<td>乘法(low)</td>
+<td>mul</td>
+<td>00010</td>
+<td>ALURes = SrcA*SrcB</td>
+</tr>
+<tr>
+<td>除法(商)</td>
+<td>div</td>
+<td>00011</td>
+<td>ALURes = SrcA / SrcB</td>
+</tr>
+<tr>
+<td>与运算</td>
+<td>and</td>
+<td>00100</td>
+<td>ALURes = SrcA &amp; SrcB</td>
+</tr>
+<tr>
+<td>或运算</td>
+<td>or</td>
+<td>00101</td>
+<td>ALURes = SrcA | SrcB</td>
+</tr>
+<tr>
+<td>异或运算</td>
+<td>xor</td>
+<td>00110</td>
+<td>ALURes = SrcA $\oplus$ SrcB</td>
+</tr>
+<tr>
+<td>或非运算</td>
+<td>nor</td>
+<td>00111</td>
+<td>ALURes = ~(SrcA | SrcB)</td>
+</tr>
+<tr>
+<td>逻辑左移</td>
+<td>sll</td>
+<td>01000</td>
+<td>ALURes = SrcB &lt;&lt; Shift</td>
+</tr>
+<tr>
+<td>逻辑右移</td>
+<td>srl</td>
+<td>01001</td>
+<td>ALURes = SrcB &gt;&gt; Shift</td>
+</tr>
+<tr>
+<td>算数右移</td>
+<td>sra</td>
+<td>01010</td>
+<td>ALURes = SrcB &gt;&gt;&gt; Shift</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="m_dm数据存储器">M_DM（数据存储器）</span></h3>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>i_reset</td>
+<td>I</td>
+<td>1</td>
+<td>复位信号</td>
+</tr>
+<tr>
+<td>i_Addr</td>
+<td>I</td>
+<td>32</td>
+<td>内存中的地址信号</td>
+</tr>
+<tr>
+<td>i_dmOp</td>
+<td>I</td>
+<td>2</td>
+<td>选择信号<br>2’b00:word<br>2’b01:half_word<br>2’b10:byte</td>
+</tr>
+<tr>
+<td>i_WriteEn</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号<br>1：写入有效<br>0：写入无效</td>
+</tr>
+<tr>
+<td>i_writeData</td>
+<td>I</td>
+<td>32</td>
+<td>在写入信号有效时，写入内存地址的数据</td>
+</tr>
+<tr>
+<td>o_RD</td>
+<td>O</td>
+<td>32</td>
+<td>输出内存中对应地址的数据</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>reset信号有效时，所有寄存器的中存储的值均被清零</td>
+</tr>
+<tr>
+<td>2</td>
+<td>读数据</td>
+<td>读出A地址对应的存储单元的数据，将其加载到RD</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写数据</td>
+<td>当WE信号有效且时钟上升沿来临时，将WD中的数据写入到A地址对应的存储单元</td>
+</tr>
+</tbody>
+</table>
+<h2><span id="流水器寄存器模块定义">流水器寄存器模块定义</span></h2>
+<p>采用的是分布式译码，流水的是pc和instr，在每个阶段实例化CU模块，得到该阶段的对应控制信号。</p>
+<h3><span id="fd_refifid流水寄存器">FD_REF(IF/ID流水寄存器)</span></h3>
+<ul>
+<li>
+<p><strong>端口定义</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方向</th>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">位宽</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">输入来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_clk</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">时钟信号</td>
+<td style="text-align:left">mips.v 中的 clk</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_reset</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">同步复位信号</td>
+<td style="text-align:left">mips.v 中的 reset</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_en</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">D 级寄存器使能信号</td>
+<td style="text-align:left">HCU 中 stall 信号取反</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_flush</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">D 级寄存器清空信号</td>
+<td style="text-align:left">默认为 1‘b0</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">F_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">F 级 instr 输入</td>
+<td style="text-align:left">IFU_instr</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">F_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">F 级 pc 输入</td>
+<td style="text-align:left">IFU_pc</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">D_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">D 级 instr 输出</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">D_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">D 级 pc 输出</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3><span id="de_regidex-流水寄存器">DE_Reg（ID/EX 流水寄存器）</span></h3>
+<ul>
+<li>
+<p><strong>端口定义</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方向</th>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">位宽</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">输入来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_clk</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">时钟信号</td>
+<td style="text-align:left">mips.v中的clk</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_reset</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">同步复位信号</td>
+<td style="text-align:left">mips.v中的reset</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_en</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">使能信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_flush</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">清空信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_grf_RD1</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">D级产生的有效信号</td>
+<td style="text-align:left">from GRF</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_grf_RD2</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">D级产生的有效信号</td>
+<td style="text-align:left">from GRF</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">D级产生的有效信号</td>
+<td style="text-align:left">from EXT</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_grf_RD1</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">传给E级的有效信号</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_grf_RD2</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">传给E级的有效信号</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">传给E级的有效信号</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>运算功能</strong></p>
+<p>$Tnew_D = (Tnew_E &gt; 0) ? (Tnew_D-1) : 0$</p>
+</li>
+</ul>
+<h3><span id="em_regexmem-流水寄存器">EM_Reg（EX/MEM 流水寄存器）</span></h3>
+<ul>
+<li>
+<p>端口定义</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方向</th>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">位宽</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">输入来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_clk</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">时钟信号</td>
+<td style="text-align:left">mips.v中的clk</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_reset</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">同步复位信号</td>
+<td style="text-align:left">mips.v中的reset</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_en</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">使能信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_flush</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">清空信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_alu_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_mem_writeData</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">关于sw的来自GRF_RD2的信号</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_alu_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_mem_writeData</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>运算功能</strong></p>
+<blockquote>
+<p>我这里暂停部分在专门的一个模块HU中解决了</p>
+</blockquote>
+<p>$Tnew_E = (Tnew_D &gt; 0) ? (Tnew_E-1) : 0$</p>
+</li>
+</ul>
+<h3><span id="mw_regmemwb-流水寄存器">MW_Reg（MEM/WB 流水寄存器）</span></h3>
+<ul>
+<li>
+<p><strong>接口定义</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方向</th>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">位宽</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">输入来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_clk</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">时钟信号</td>
+<td style="text-align:left">mips.v中的clk</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_reset</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">同步复位信号</td>
+<td style="text-align:left">mips.v中的reset</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_en</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">使能信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_flush</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">清空信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_dm_RD</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">来自dm的数据读出信号</td>
+<td style="text-align:left">from M_DM</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_alu_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_dm_RD</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_alu_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2><span id="控制单元_cu">控制单元_CU</span></h2>
+<p>输入改为instr，之前为opcode和func</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>Opcode[31:26]</th>
+<th>[25:21]</th>
+<th>[20:16]</th>
+<th>[15:11]</th>
+<th>[10:6]</th>
+<th>[5:0]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>add</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>sub</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>100010</td>
+</tr>
+<tr>
+<td>ori</td>
+<td>001101</td>
+<td>rs</td>
+<td>rt</td>
+<td>immediate</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>lw</td>
+<td>100011</td>
+<td>base</td>
+<td>rt</td>
+<td>offset</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>sw</td>
+<td>101011</td>
+<td>base</td>
+<td>rt</td>
+<td>offset</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>beq</td>
+<td>000100</td>
+<td>rs</td>
+<td>rt</td>
+<td>offset</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>lui</td>
+<td>001111</td>
+<td>00000</td>
+<td>rt</td>
+<td>immediate</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>nop</td>
+<td>000000</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="分支转移实现">分支转移实现</span></h3>
+<h4><span id="b-类指令">B 类指令</span></h4>
+<p>为了减少因控制冲突导致的暂停（<strong>stall</strong>），我们将 B 类指令的判断进行前置，单独使用 CMP 模块进行判断。当 B 类指令进入 D 级后（此时 F 级的指令为编译优化调度的指令），CMP 模块的判断结果进入 NPC，如过 CMP 结果为真（CMP_out = 1）而且 NPCOp 信号为 0x001（说明当前指令为 B 类指令），NPC 输出转移的地址 npc 并进入 IFU 的输入端，在下一时钟沿上升时进入 F 级，实现转移。</p>
+<h4><span id="j-和-jal">j 和 jal</span></h4>
+<p>当 j 或 jal 进入 D 级后（此时 F 级的指令为编译优化调度的指令），D_instr 中 imm26 域的数据进入 NPC 进行处理，如果当前 NPCOp 信号为 0x010（说明当前指令为 jal 或 j 指令），NPC 输出转移的地址 npc，并进入 IFU 的输入端，在下一时钟沿上升时进入 F 级，实现转移。</p>
+<p>jal 指令在实现跳转的同时，还需要将下一条指令的地址存入 31 号寄存器中，因此我们需要在 IFU 中计算出改地址，并随着 jal 指令进行流水，最终在 W 级写入 GRF 的 31 号寄存器。由于存在延迟槽，pc+4 地址中的指令是编译优化机制调度过来的，因此我们要保存的地址应该为 pc+8。</p>
+<h4><span id="jr">jr</span></h4>
+<p>当 jr 进入 D 级后（此时 F 级的指令为编译优化调度的指令），D_V1_f（经过转发后的 D_V1 值）进入 NPC，如果当前 NPCOp 信号为 0x011（说明当前指令为 jr 指令），NPC 输出转移的地址 npc，并进入 IFU 的输入端，在下一时钟沿上升时进入 F 级，实现转移。</p>
+<h2><span id="冒险处理">冒险处理</span></h2>
+<p>冒险处理我们均通过 “A_T” 法实现 ——</p>
+<h3><span id="转发forward">转发（forward）</span></h3>
+<p><strong>无脑转发策略。</strong></p>
+<p><strong>将所有在该层级后面的均进行转发。</strong></p>
+<p><strong>比如ID级流水，需要用到D_rs和D_rt的对应寄存器的值。对于写入寄存器的值，可能为E级中的，E_alu_result, M_mem_writeData。</strong></p>
+<p>当前面的指令要写寄存器但还未写入，而后面的指令需要用到没有被写入的值时，这时候会产生<strong>数据冒险</strong>，我们首先考虑进行转发。我们<strong>假设所有的数据冒险均可通过转发解决</strong>。也就是说，当某一指令前进到必须使用某一寄存器的值的流水阶段时，这个寄存器的值一定已经产生，并<strong>存储于后续某个流水线寄存器中</strong>。</p>
+<p>在这一阶段，我们不管需要的值有没由计算出，都要进行转发，即暴力转发。为实现这一机制，我们要清楚哪些模块需要转发后的数据（<strong>需求者</strong>）和保存着写入值的流水寄存器（<strong>供应者</strong>）</p>
+<ul>
+<li>
+<p><strong>供应者及其产生的数据</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">流水级</th>
+<th style="text-align:left">产生数据</th>
+<th style="text-align:left">MUX 名 &amp; 选择信号名</th>
+<th style="text-align:left">MUX 输出名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">E</td>
+<td style="text-align:left">E_E32，E_pc8</td>
+<td style="text-align:left">MUX_E_out &amp; SelEMOut</td>
+<td style="text-align:left">E_out</td>
+</tr>
+<tr>
+<td style="text-align:left">M</td>
+<td style="text-align:left">M_AO，M_pc8</td>
+<td style="text-align:left">MUX_M_out &amp; SelEMOut</td>
+<td style="text-align:left">M_out</td>
+</tr>
+<tr>
+<td style="text-align:left">W</td>
+<td style="text-align:left">W_AO，W_RD，W_pc8</td>
+<td style="text-align:left">MUX_W_out &amp; SelWOut</td>
+<td style="text-align:left">W_out</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>需求者及其产生的数据</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">接收端口</th>
+<th style="text-align:left">选择数据</th>
+<th style="text-align:left">HMUX 名 &amp; 选择信号名</th>
+<th style="text-align:left">MUX 输出名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">CMP_D1/NPC_ra</td>
+<td style="text-align:left">D_V1，M_out，E_out</td>
+<td style="text-align:left">HMUX_CMP_D1 &amp; FwdCMPD1</td>
+<td style="text-align:left">D_V1_f</td>
+</tr>
+<tr>
+<td style="text-align:left">CMP_D2</td>
+<td style="text-align:left">D_v1，M_out，E_out</td>
+<td style="text-align:left">HMUX_CMP_D2 &amp; FwdCMPD2</td>
+<td style="text-align:left">D_V2_f</td>
+</tr>
+<tr>
+<td style="text-align:left">ALU_A</td>
+<td style="text-align:left">E_V1， W_out，M_out</td>
+<td style="text-align:left">HMUX_ALU_A &amp; FwdALUA</td>
+<td style="text-align:left">E_V1_f</td>
+</tr>
+<tr>
+<td style="text-align:left">ALU_B</td>
+<td style="text-align:left">E_V2，W_out，M_out</td>
+<td style="text-align:left">HMUX_ALU_B &amp; FwdALUB</td>
+<td style="text-align:left">E_V1_f</td>
+</tr>
+<tr>
+<td style="text-align:left">DM_WD</td>
+<td style="text-align:left">M_V2， W_out</td>
+<td style="text-align:left">HMUX_DM &amp; FwdDM</td>
+<td style="text-align:left">M_V2_f</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>从上表可以看出，W 级中的数据没有转发到 D 级，原因是我们在 GRF 内实现了内部转发机制，将 GRF 输入端的数据（还未写入）及时反映到 RD1 或这 RD2，判断条件为 <code>A3 == A2</code> 或者 <code>A3 == A1</code>。</p>
+<p>此时为了生成 HMUX 的选择信号，我们需要向 HCU（冒险控制器）输入”A” 数据，然后进行选择信号的计算，执行转发的条件为 ——</p>
+<ul>
+<li><strong>前位点的读取寄存器地址和某转发输入来源的写入寄存器地址相等且不为 0</strong></li>
+<li><strong>写使能信号有效</strong></li>
+</ul>
+<p>根据以上条件我们可以生成上面的 5 个 HMUX 选择信号，选择信号的输出值应遵循 “就近原则”，及最先产生的数据最先被转发。</p>
+<h3><span id="暂停stall">暂停（stall）</span></h3>
+<p>接下来，我们来处理通过转发不能处理的数据冒险。在这种情况下，新的数据还未来得及产生。我们只能暂停流水线，等待新的数据产生。为了方便处理，我们仅仅为 D 级的指令进行暂停处理。</p>
+<p>我们把 Tuse 和 Tnew 作为暂停的判断依据 ——</p>
+<ul>
+<li>Tuse：指令进入 <strong>D 级</strong>后，其后的某个功能部件<strong>再</strong>经过多少时钟周期就<strong>必须</strong>要使用寄存器值。对于有两个操作数的指令，其<strong>每个操作数的 Tuse 值可能不等</strong>（如 store 型指令 rs、rt 的 Tuse 分别为 1 和 2 ）。</li>
+<li>Tnew：位于 <strong>E 级及其后各级</strong>的指令，再经过多少周期就能够产生要写入寄存器的结果。在我们目前的 CPU 中，W 级的指令 Tnew 恒为 0；对于同一条指令，Tnew@M = max (Tnew@E - 1, 0)</li>
+</ul>
+<p>在这一阶段，我们找到 D 级生成的 Tuse_rs 和 Tuse_rt 和在 E,M,W 级寄存器中流水的 Tnew_D，Tnew_M，Tnew_W，如下表所示</p>
+<ul>
+<li>
+<p><strong>Tuse 表</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指令类型</th>
+<th style="text-align:left">Tuse_rs</th>
+<th style="text-align:left">Tuse_rt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">calc_R</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">1</td>
+</tr>
+<tr>
+<td style="text-align:left">calc_I</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">shift</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">1</td>
+</tr>
+<tr>
+<td style="text-align:left">shiftv</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">1</td>
+</tr>
+<tr>
+<td style="text-align:left">load</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">store</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">2</td>
+</tr>
+<tr>
+<td style="text-align:left">branch</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">jump</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">jr</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">X</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>Tnew 表</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指令类型</th>
+<th style="text-align:left">Tnew_D</th>
+<th style="text-align:left">Tnew_E</th>
+<th style="text-align:left">Tnew_M</th>
+<th style="text-align:left">Tnew_W</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">calc_R</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">calc_I</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">shift</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">shiftv</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">load</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">store</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">branch</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">jal</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">jr</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">lui</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>然后我们 Tnew 和 Tuse 传入 HCU（冒险控制器中），然后进行 stall 信号的计算。如果 Tnew &gt; TuseHCU 中的 stall 信号值为 1，此时执行以下操作 ——</p>
+<ul>
+<li><strong>冻结 PC 寄存器（IFU_en = ~stall = 0）</strong></li>
+<li><strong>冻结 D 级寄存器（D_en = ~stall = 0）</strong></li>
+<li><strong>清空 E 级寄存器（E_clr = stall = 1）</strong></li>
+</ul>
+<h1><span id="碎碎念">碎碎念</span></h1>
+<ul>
+<li>
+<p>关于slt</p>
+<blockquote>
+<p>下面这种是错的</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"> <span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> signed_srcA<span class="token punctuation">,</span> signed_srcB<span class="token punctuation">;</span>
+ <span class="token keyword">assign</span> signed_srcB <span class="token operator">=</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>i_srcB<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token keyword">assign</span> signed_srcA <span class="token operator">=</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>i_srcA<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">(</span>i_aluOp <span class="token operator">==</span> <span class="token constant">`ALU_slt</span> <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token punctuation">(</span>  signed_srcA <span class="token operator">&lt;</span> signed_srcB<span class="token punctuation">)</span><span class="token punctuation">:</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是这种是对的</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token punctuation">(</span>i_aluOp <span class="token operator">==</span> <span class="token constant">`ALU_slt</span> <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token punctuation">(</span>  <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>i_srcA<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token kernel-function property">$signed</span><span class="token punctuation">(</span>i_srcB<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</blockquote>
+</li>
+<li>
+<p>关于lb</p>
+<blockquote>
+<p>不知道这个为什么会有问题</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"># def<span class="token punctuation">.</span>v<span class="token punctuation">:</span>
+<span class="token constant">`define</span> GRF_WD_PC4          <span class="token number">3'b000</span>
+<span class="token constant">`define</span> GRF_WD_PC8          <span class="token number">3'b001</span>
+<span class="token constant">`define</span> GRF_WD_ALU_RESULT   <span class="token number">3'b010</span>
+<span class="token constant">`define</span> GRF_WD_MEM_RD       <span class="token number">3'b011</span>
+<span class="token constant">`define</span> GRF_WD_EXT          <span class="token number">3'b100</span>
+<span class="token constant">`define</span> GRF_WD_MDU_RESULT   <span class="token number">3'b101</span>
+# CU<span class="token punctuation">.</span>v<span class="token punctuation">:</span>
+	<span class="token keyword">assign</span> o_grf_WD_Sel       <span class="token operator">=</span> <span class="token punctuation">(</span>o_load             <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`GRF_WD_MEM_RD</span>     <span class="token punctuation">:</span>
+                             <span class="token punctuation">(</span>o_calc_r <span class="token operator">|</span> o_calc_i<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`GRF_WD_ALU_RESULT</span> <span class="token punctuation">:</span>
+                             <span class="token punctuation">(</span>o_mf               <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`GRF_WD_MDU_RESULT</span> <span class="token punctuation">:</span>
+                             <span class="token punctuation">(</span>o_link             <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`GRF_WD_PC8</span>        <span class="token punctuation">:</span>
+                             <span class="token punctuation">(</span>o_lui              <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`GRF_WD_EXT</span>        <span class="token punctuation">:</span> 
+                                                     <span class="token constant">`GRF_WD_ALU_RESULT</span> <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个W级CU的控制信号（我采用的是分布式译码），然后本来是o_calc_r和o_calc_i那个是第一行，为了测试调整了一下，按照仿真结果</p>
+<p><img src="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231126002548684.png" alt="image-20231126002548684"></p>
+<p>o_load确实是1,但是为什么这个Sel（grf的写入数据写入信号）为什么还是010（也就是ALU的那个呀）</p>
+<p>测试代码如下：</p>
+<p><img src="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231126003114530.png" alt="image-20231126003114530"></p>
+<p>标准输出：</p>
+<p><img src="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231126003204669.png" alt="image-20231126003204669"></p>
+<p>我的输出：</p>
+<p><img src="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231126003137500.png" alt="image-20231126003137500"></p>
+<p>这个0x0000260f正好就是alu_result也就是计算得到的lb的地址</p>
+</blockquote>
+</li>
+<li>
+<p>bne</p>
+<blockquote>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"># def<span class="token punctuation">.</span>v
+<span class="token constant">`define</span> NPC_PC4       <span class="token number">3'b000</span>
+<span class="token constant">`define</span> NPC_BRANCH    <span class="token number">3'b001</span>
+<span class="token constant">`define</span> NPC_J         <span class="token number">3'b010</span>
+<span class="token constant">`define</span> NPC_JR        <span class="token number">3'b011</span>
+# CU<span class="token punctuation">.</span>v
+		<span class="token keyword">assign</span> o_npcOp        <span class="token operator">=</span> <span class="token punctuation">(</span>o_b_type <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`NPC_BRANCH</span> <span class="token punctuation">:</span>
+                             <span class="token punctuation">(</span>o_j_imm26<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`NPC_J</span>  <span class="token punctuation">:</span>
+                             <span class="token punctuation">(</span>o_j_r    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">`NPC_JR</span> <span class="token punctuation">:</span>
+                                           <span class="token constant">`NPC_PC4</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也出现了类似上面的情况</p>
+<p><img src="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231126010102868.png" alt="image-20231126010102868"></p>
+<p>也就是o_b_type为1,但是npcOp仍然是PC4的000，而不是001</p>
+</blockquote>
+</li>
+</ul>
+<h1><span id="思考题">思考题</span></h1>
+<blockquote>
+<p>1、为什么需要有单独的乘除法部件而不是整合进 ALU？为何需要有独立的 HI、LO 寄存器？</p>
+</blockquote>
+<ul>
+<li>乘除法都有较高的延迟，若整合进 ALU，则进行乘除法的时候，所有的运算类指令都只能阻塞在 D 级，造成了极大的性能损失。单独设置 MDU 的话，无关的指令还能正常的在 ALU 运行，效率较高。</li>
+<li>HI，LO 寄存器并不是通用寄存器，和其他通用寄存器的用法不一致，不能通过非乘除法指令修改和访问，因此不需要置于 GRF 中，内置在 MDU 中即可。</li>
+</ul>
+<blockquote>
+<p>2、真实的流水线 CPU 是如何使用实现乘除法的？请查阅相关资料进行简单说明。</p>
+</blockquote>
+<ul>
+<li>
+<p>真实的流水线 CPU 采用的乘法是有加法器和移位器循环，具体实现过程为：</p>
+<blockquote>
+<p>首先 CPU 会初始化三个通用寄存器用来存放被乘数，乘数，部分积。<br>
+部分积寄存器初始化为 0。<br>
+判断乘数寄存器的低位是 0|1，如果为 0 则将乘数寄存器右移一位，同时将部分积寄存器也右移一位。<br>
+在位移时遵循计算机位移规则，乘数寄存器低位溢出的一位丢弃，部分积寄存器低位溢出的一位填充到乘数寄存器的高位。<br>
+同时部分积寄存器高位补 0。如果为 1 则将部分积寄存器加上被乘数寄存器，再进行移位操作。<br>
+当所有乘数位处理完成后部分积寄存器做高位，乘数寄存器做低位就是最终乘法结果。</p>
+</blockquote>
+</li>
+<li>
+<p>还有另一种乘法的方式：</p>
+<blockquote>
+<p>只需两个寄存器，A [31:0],B [63:0]，A 初始化为被乘数，B 初始化为乘数。<br>
+每一次取 B 的最低位，为 1 则将 A [31:0]+B [63:32] -&gt; B [63:32]，为 0 则不操作。<br>
+每次将 B &gt;&gt; 1，然后高位补 0。</p>
+</blockquote>
+</li>
+<li>
+<p>除法实现：</p>
+<blockquote>
+<p>与乘法的操作基本相反，首先 CPU 会初始化三个寄存器，用来存放被除数，除数，部分商。余数 (被除数与除数比较的结果) 放到被除数的有效高位上。CPU 做除法时和做除法时是相反的，乘法是右移，除法是左移，乘法做的是加法，除法做的是减法。首先 CPU 会把被除数 bit 位与除数 bit 位对齐，然后再让对齐的被除数与除数比较 (双符号位判断)。比如 01-10=11 (前面的 1 是符号位) 1-2=-1 计算机通过符号位和后一位的 bit 位来判断大于和小于，那么 01-10=11 就说明 01 小于 10，如果得数为 01 就代表大于，如果得数为 00 代表等于。如果得数大于或等于则将比较的结果放到被除数的有效高位上然后再商寄存器上商：1 并向后多看一位 (上商就是将商的最低位左移 1 位腾出商寄存器最低位上新的商) 如果得数小于则上商：0 并向后多看一位然后循环做以上操作当所有的被除数都处理完后，商做结果被除数里面的值就是余数。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>3、请结合自己的实现分析，你是如何处理 Busy 信号带来的周期阻塞的？</p>
+</blockquote>
+<ul>
+<li>除 cnt—，和 BusyReg 置位以外全是组合逻辑的操作（不然可能会多出来一个空周期）</li>
+<li>对于乘除指令：
+<ul>
+<li>将 Busy，start_E，MDUOp_D 传入 HCU</li>
+<li>然后 md 暂停信号为 <code>(Busy | start_E) &amp; (MDUOp_D != 0)</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>4、请问采用字节使能信号的方式处理写指令有什么好处？（提示：从清晰性、统一性等角度考虑）</p>
+</blockquote>
+<ul>
+<li>对于需要写入的位置更加的直观，相当于将 DMWE、DMOP 写入的 A [1:0] 用四位字节使能信号表示，十分的统一。</li>
+</ul>
+<blockquote>
+<p>5、请思考，我们在按字节读和按字节写时，实际从 DM 获得的数据和向 DM 写入的数据是否是一字节？在什么情况下我们按字节读和按字节写的效率会高于按字读和按字写呢？</p>
+</blockquote>
+<ul>
+<li>按字节读写的时候，我们获得的是一字节，但是我们如果要 lw 或 lh 的话我们就需要拼接。如果是 sw 或 sh 的话我们需要多次存入。</li>
+<li>若用 lb，sb，lh，sh 这种非取字的读写时，按字节读可以省去，取位，拼接的步骤，效率要优于按字读写。</li>
+</ul>
+<blockquote>
+<p>6、为了对抗复杂性你采取了哪些抽象和规范手段？这些手段在译码和处理数据冲突的时候有什么样的特点与帮助？</p>
+</blockquote>
+<ul>
+<li>我们根据不同指令之间的相似性将指令分成了几类 ——calc_R、calc_I、shift、shiftv、load、store、B 类、J 类、md 类、mf 类、mt 类， 并设置对应信号帮助译码，防止计算表达式过长，而且在处理数据冲突时我们只需要将表示该类的信号写入表达式即可。此外，我们将相似功能的控制信号用一个多位宽信号来表示，如针对 DM 的访存功能，我们设置一个 3 位 LSOp 信号；针对乘除槽中的 md、mf、mt 功能，我们设置一个 MDUOp 信号来控制，从而减少了流水寄存器的接口数目，从而降低复杂度。</li>
+</ul>
+<blockquote>
+<p>7、在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？</p>
+</blockquote>
+<p>tuse和tnew部分有</p>
+<blockquote>
+<p>8、如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证<strong>覆盖</strong>了所有需要测试的情况；如果你是<strong>完全随机</strong>生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了<strong>特殊的策略</strong>，比如构造连续数据冒险序列，请你描述一下你使用的策略如何<strong>结合了随机性</strong>达到强测的效果。</p>
+</blockquote>
+<p>白嫖捏</p>
+<h3><span id="参考">参考</span></h3>
+<p><a target="_blank" rel="noopener" href="https://thysrael.github.io/posts/59164957">一篇写的非常好的博客</a></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">hugo</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hugohealthy.top/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/">https://hugohealthy.top/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">hugo</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/p7/">
+                                    <span class="chip bg-color">p7</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+        <div class="disqus-card card" data-aos="fade-up">
+    <div id="disqus_thread" class="card-content">
+        <noscript>Please enable JavaScript to view the
+            <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+    </div>
+</div>
+
+<script type="text/javascript">
+    disqus_config = function () {
+        this.page.url = 'https://hugohealthy.top/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/';
+        this.page.identifier = '/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/';
+        this.page.title = 'p7-流水线';
+    };
+    let disqus_shortname = '';
+
+    (function () { // DON'T EDIT BELOW THIS LINE
+        let d = document, s = d.createElement('script');
+        // 如：s.src = 'https://blinkfox.disqus.com/embed.js';
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/001.jpg" class="responsive-img" alt="p7-流水线">
+                        
+                        <span class="card-title">p7-流水线</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-02-21
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="post-category">
+                                    计算机组成原理
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/p7/">
+                        <span class="chip bg-color">p7</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/015.jpg" class="responsive-img" alt="p7-知识点整理">
+                        
+                        <span class="card-title">p7-知识点整理</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-02-21
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" class="post-category">
+                                    计算机组成原理
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/p7/">
+                        <span class="chip bg-color">p7</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: hugo<br />'
+            + '文章作者: hugo<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '这里是hugo。本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="tencent"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='true'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2023-2024</span>
+            
+            <a href="/about" target="_blank">hugo</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">41.7k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:3376467972@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=3376467972" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 3376467972" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+    <a href="https://i.328888.xyz/2023/04/10/imVT4z.jpeg" class="tooltipped" target="_blank" data-tooltip="微信联系我: https://i.328888.xyz/2023/04/10/imVT4z.jpeg" data-position="top" data-delay="50">
+        <i class="fab fa-weixin"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+        <!-- <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script> -->
+        <script src='/libs/mermaid/mermaid.min.js'></script>
+        <script>
+          if (window.mermaid) {
+            mermaid.initialize({theme: 'forest'});
+          }
+        </script>
+    
+
+    
+    
+    
+        
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/sakura.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/star.js"><\/script>');
+            }
+        </script>
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+    <script type="text/javascript" color="0,20,255"
+        pointColor="40,50,255" opacity='0.7'
+        zIndex="-1" count="99"
+        src="/libs/background/canvas-nest.js"></script>
+    
+
+    
+    
+    <script type="text/javascript" size="90" alpha='0.9'
+        zIndex="-1" src="/libs/background/ribbon.min.js" async="async"></script>
+    
+
+    
+
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+
+</html>
