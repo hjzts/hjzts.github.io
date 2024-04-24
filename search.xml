@@ -409,6 +409,1188 @@
       </tags>
   </entry>
   <entry>
+    <title>lab0实验报告</title>
+    <url>/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/</url>
+    <content><![CDATA[<h1><span id="lab0">lab0</span></h1>
+<h2><span id="思考题">思考题</span></h2>
+<h3><span id="thinking-01">Thinking 0.1</span></h3>
+<ul>
+<li>
+<p>在前述已初始化的 <code>~/learnGit </code>目录下，创建一个名为 <code>README.txt</code> 的文件。执 行命令 <code>git status &gt; Untracked.txt</code>（其中的 &gt; 为输出重定向，我们将在 0.6.3 中 详细介绍）。</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313183854380.png" alt="image-20240313183854380"></p>
+</li>
+<li>
+<p>在<code>README.txt</code>文件中添加任意文件内容，然后使用 <code>add</code> 命令，再执行命令<code> git status &gt; Stage.txt</code>。</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313184010190.png" alt="image-20240313184010190"></p>
+</li>
+<li>
+<p>提交 <code>README.txt</code>，并在提交说明里写入自己的学号</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313184040344.png" alt="image-20240313184040344"></p>
+</li>
+<li>
+<p>执行命令 <code>cat Untracked.txt</code> 和 <code>cat Stage.txt</code>，对比两次运行的结果，体会 <code>README.txt</code> 两次所处位置的不同。</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313184130590.png" alt="image-20240313184130590"></p>
+<p>不一样。第一次是在工作区添加了文件，没有提交的暂存区。而第二次提交到了暂存区，只是没有commit到HEAD。而由于都没有进行commit ，因此都没有跟踪，于是提示是为跟踪的文件。</p>
+</li>
+</ul>
+<h3><span id="thinking-02">Thinking 0.2</span></h3>
+<ul>
+<li>
+<p>仔细看看0.10，思考一下箭头中的 add the file 、 stage the file 和commit 分别对应的是 Git 里的哪些命令呢？</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314115041772.png" alt="image-20240314115041772"></p>
+<p>add the file : 对应<code>git add</code></p>
+<p>stage the file : 对应<code>git commit</code></p>
+<p>commit : 对应<code>git checkout</code></p>
+</li>
+</ul>
+<h3><span id="thinking-03">Thinking 0.3</span></h3>
+<ul>
+<li>
+<p>代码文件 print.c 被错误删除时，应当使用什么命令将其恢复？</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314121507355.png" alt="image-20240314121507355"></p>
+<blockquote>
+<p>使用 <code>git restore print.c</code>即可</p>
+</blockquote>
+</li>
+<li>
+<p>代码文件 print.c 被错误删除后，执行了 git rm print.c 命令，此时应当使用什么命令将其恢复？</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314142825497.png" alt="image-20240314142825497"></p>
+<blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> restore <span class="token parameter variable">--staged</span> print.c
+<span class="token function">git</span> restore print.c<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</blockquote>
+</li>
+<li>
+<p>无关文件 hello.txt 已经被添加到暂存区时，如何在不删除此文件的前提下将其移出暂存区？</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314143326431.png" alt="image-20240314143326431"></p>
+<blockquote>
+<p>使用<code>git restore --staged hello.txt</code>即可</p>
+</blockquote>
+</li>
+</ul>
+<h3><span id="thinking-04">Thinking 0.4</span></h3>
+<ul>
+<li>
+<p>找到在 /home/22xxxxxx/learnGit 下刚刚创建的 README.txt 文件，若不存在则新建该文件</p>
+</li>
+<li>
+<p>在文件里加入 Testing 1， git add， git commit，提交说明记为 1。</p>
+</li>
+<li>
+<p>模仿上述做法，把 1 分别改为 2 和 3，再提交两次。</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160243954.png" alt="image-20240314160243954"></p>
+</li>
+<li>
+<p>使用 git log 命令查看提交日志，看是否已经有三次提交，记下提交说明为3 的哈希值</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160309950.png" alt="image-20240314160309950"></p>
+<blockquote>
+<p>进行操作后可以看到确实有了三次提交的记录</p>
+</blockquote>
+</li>
+<li>
+<p>进行版本回退。执行命令 git reset --hard HEAD^ 后，再执行 git log，观察其变化</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160417333.png" alt="image-20240314160417333"></p>
+<blockquote>
+<p>此时git log的第一项是2，相当于撤销了第三次提交</p>
+</blockquote>
+</li>
+<li>
+<p>找到提交说明为 1 的哈希值，执行命令 git reset --hard <hash> 后，再执行 git log，观察其变化。</hash></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160510381.png" alt="image-20240314160510381"></p>
+<blockquote>
+<p>强制撤销到1时候的版本，因此git log只能看到1的提交记录</p>
+</blockquote>
+</li>
+<li>
+<p>现在已经回到了旧版本，为了再次回到新版本，执行 git reset --hard <hash>，再执行 git log，观察其变化。</hash></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314161613264.png" alt="image-20240314161613264"></p>
+<blockquote>
+<p>可以看到又恢复了原样，也就是回到了新版</p>
+</blockquote>
+</li>
+</ul>
+<h3><span id="thinking-05">Thinking 0.5</span></h3>
+<ul>
+<li>
+<p>执行如下命令，并查看结果</p>
+<ul>
+<li>echo first</li>
+<li>echo second &gt; output.txt</li>
+<li>echo third &gt; output.txt</li>
+<li>echo forth &gt;&gt; output.txt</li>
+</ul>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314161945989.png" alt="image-20240314161945989"></p>
+<blockquote>
+<p><code>&gt;</code>是覆盖写入</p>
+<p><code>&gt;&gt;</code>是追加指令</p>
+</blockquote>
+</li>
+</ul>
+<h3><span id="thinking-06">Thinking 0.6</span></h3>
+<ul>
+<li>
+<p>使用你知道的方法（包括重定向）创建下图内容的文件（文件命名为 test），将创建该文件的命令序列保存在 command 文件中，并将 test 文件作为批处理文件运行，将运行结果输出至 result 文件中。给出 command 文件和 result 文件的内容，并对最后的结果进行解释说明（可以从 test 文件的内容入手） . 具体实现的过程中思考下列问题: echo echo Shell Start 与 echo <code>echo Shell Start</code> 效果是否有区别; echo echo $c&gt;file1与 echo <code>echo $c&gt;file1</code> 效果是否有区别</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314162443513.png" alt="image-20240314162443513"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314162939850.png" alt="image-20240314162939850"></p>
+<blockquote>
+<p>前两条指令的效果是有区别的，而后两条指令的效果是没有区别</p>
+<p>加上反引号相当于将反引号的内容重定向作为参数</p>
+<p>因此</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> Shell Start <span class="token comment"># 标准输出为Shell Start</span>
+<span class="token builtin class-name">echo</span> <span class="token variable"><span class="token variable">`</span><span class="token builtin class-name">echo</span> Shell Start<span class="token variable">`</span></span> <span class="token comment"># 后面指令的标准输出为Shell Start ，作为echo的参数，因此输出还是Shell Start</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>而</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">c</span><span class="token operator">=</span><span class="token number">3</span>
+<span class="token builtin class-name">echo</span> <span class="token builtin class-name">echo</span> <span class="token variable">$c</span><span class="token operator">&gt;</span>file1 <span class="token comment"># 相当于是echo指令输出了echo $c,其中$c 为 3，然后重定向到文件中</span>
+<span class="token builtin class-name">echo</span> <span class="token variable"><span class="token variable">`</span><span class="token builtin class-name">echo</span> $c<span class="token operator">&gt;</span>file1<span class="token variable">`</span></span><span class="token comment"># 相当于是首先`echo $c&gt;file1` ,将$c的值重定向到了file1中，标准输出为空，将标准输出作为前面的echo的参数，因此输出为空，但是echo会默认添加一个换行符，因此还有一个换行</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</blockquote>
+</li>
+</ul>
+<h2><span id="难点分析">难点分析</span></h2>
+<h3><span id="cli">CLI</span></h3>
+<blockquote>
+<p>第一个难点在于如果之前习惯了使用<code>GUI</code>界面，刚开始接触这种命令行界面是不够熟悉的。</p>
+<p>依稀记得自己第一次接触<code>ubuntu</code>时探索了好久好久，当时使用的还是图形化界面。</p>
+</blockquote>
+<p>命令行界面(CLI)是基于文本的界面，可以在其中输入与计算机操作系统交互的命令。CLI在默认Shell的帮助下运行，该Shell位于操作系统和用户之间。</p>
+<p>Shell负责处理各种任务，例如命令解析、环境管理和流程执行等。</p>
+<p>此外还可以自定义Shell环境。为此，可以设置环境变量、定义别名(较长命令的快捷方式等)以及为自动化或重复任务创建Shell脚本。</p>
+<ul>
+<li>命令的工作原理</li>
+</ul>
+<p>在CLI中输入命令是，系统会执行以下步骤：</p>
+<ol>
+<li>Shell命令行解释器解析输入的命令以了解其结构，并且分离命令名称、选项和参数</li>
+<li>Shell在其可用命令列表中查找命令名称。命令名称代表用户希望操作系统执行的操作</li>
+<li>Shell搜索系统的PATH变量(系统文件所在的目录列表)，以查找与该命令关联的相应文件</li>
+<li>CLI Shell会调用相应的文件，并且传递任何指定的选项和参数作为输入。</li>
+<li>操作系统执行所需的操作</li>
+<li>此操作可能会生成输出，例如信息性消息、错误消息、请求的数据或操作结果</li>
+<li>CLI Shell会显示输出，因此可以看到命令的结果</li>
+</ol>
+<p>CLI Shell循环运行，等待输入另一条指令。</p>
+<h3><span id="linux">Linux</span></h3>
+<p>Linux与Windows命令行的一些指令的差异可能会让人感到措手不及。比如<code>bash</code>的指令和<code>powershell</code>以及<code>cmd</code>的指令是有比较大的差异的可能让人感到不熟悉。</p>
+<p>同时也不熟练的使用Linux的一些基本操作。包括<code>sudo</code>等</p>
+<h3><span id="vim">Vim</span></h3>
+<p>由于使用<code>CLI</code>的缘故，我们没有很好的图形化文本编辑器，于是需要使用<code>Vim</code>或者<code>emacs</code>等文本编辑工具。</p>
+<p>对于Vim的快捷键以及工作模式不熟悉会带来比较大的难点。</p>
+<blockquote>
+<p>对此我强烈推荐跟着<code>vimtutor</code>走一遍，基本上可以熟悉大多数的操作，以及基本的几个vim模式</p>
+</blockquote>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174337175.png" alt="image-20240314174337175"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174412381.png" alt="image-20240314174412381"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174441142.png" alt="image-20240314174441142"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174505883.png" alt="image-20240314174505883"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174529894.png" alt="image-20240314174529894"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174700133.png" alt="image-20240314174700133"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174717116.png" alt="image-20240314174717116"></p>
+<p>其实简单的用法也只有</p>
+<ul>
+<li>输入<code>i</code>进入编辑模式</li>
+<li>点击<code>Esa</code>退出编辑模式</li>
+<li>输入<code>:w</code>保存，<code>:wq</code>保存并退出</li>
+</ul>
+<p>基本上可以完成最基本的使用，甚至上下左右可以直接使用箭头键，都不需要使用到<code>hjkl</code>。</p>
+<h3><span id="gcc">GCC</span></h3>
+<p>对于<code>gcc</code>的基本使用指令不够了解。</p>
+<blockquote>
+<p><code>tldr</code>是个非常好用的命令用法查询工具，狠狠种草</p>
+</blockquote>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314175039544.png" alt="image-20240314175039544"></p>
+<p>可以看到<code>gcc</code>的基本用法</p>
+<ul>
+<li><code>gcc</code>是一个C语言编译器</li>
+<li><code>g++</code>是一个C++语言编译器</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">语法：gcc <span class="token punctuation">[</span>选项<span class="token punctuation">]</span><span class="token punctuation">..</span>. <span class="token punctuation">[</span>文件<span class="token punctuation">]</span><span class="token punctuation">..</span>.
+选项：
+<span class="token parameter variable">-c</span> 仅编译，不链接
+<span class="token parameter variable">-o</span> 指定输出文件
+<span class="token parameter variable">-E</span> 预处理
+<span class="token parameter variable">-S</span> 汇编
+<span class="token parameter variable">-l</span> 指定库文件
+<span class="token parameter variable">-L</span> 指定库文件路径
+<span class="token parameter variable">-I</span> Path/to/head/file 指定头文件路径
+<span class="token parameter variable">-D</span> 定义宏
+<span class="token parameter variable">-wall</span> 显示所有警告
+<span class="token parameter variable">-g</span> 生成调试信息
+<span class="token parameter variable">-std</span><span class="token operator">=</span>c99 指定C语言标准
+参数：
+file.c 源文件<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>示例</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc <span class="token parameter variable">-o</span> hello_world hello_world.c  <span class="token comment">#编译hello_world.c文件为hello_world可执行文件</span>
+gcc <span class="token parameter variable">-c</span> hello_world.c  <span class="token comment">#编译hello_world.c文件为hello_world.o目标文件</span>
+gcc <span class="token parameter variable">-E</span> hello_world.c  <span class="token comment">#预处理hello_world.c文件</span>
+gcc <span class="token parameter variable">-S</span> hello_world.c  <span class="token comment">#汇编hello_world.c文件</span>
+gcc <span class="token parameter variable">-o</span> hello_world hello_world.c <span class="token parameter variable">-lm</span>  <span class="token comment">#编译hello_world.c文件为hello_world可执行文件，并链接数学库</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同时编译多个文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc <span class="token parameter variable">-o</span> hello_world hello_world.c hello_world2.c  <span class="token comment">#编译hello_world.c和hello_world2.c文件为hello_world可执行文件</span>
+gcc <span class="token parameter variable">-c</span> hello_world.c hello_world2.c  <span class="token comment">#编译hello_world.c和hello_world2.c文件为hello_world.o和hello_world2.o目标文件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<blockquote>
+<p>选项-o用于指定要生成的结果文件，后面跟的就是结果文件名字。o是output的意思，不是目标的意思。结果文件可能是预处理文件、汇编文件、目标文件或者最终可执行文件。</p>
+</blockquote>
+<h3><span id="git">Git</span></h3>
+<blockquote>
+<p>git真是一个非常好用的版本管理工具，发明者太强了没办法！</p>
+</blockquote>
+<p>相信同学们经过<code>oopre</code>后基本上对于<code>git</code>的基本用法已经了如指掌了，这里包括</p>
+<ul>
+<li>git add .	添加修改文件到暂存区</li>
+<li>git commit -m “message”提交文件到版本库</li>
+<li>git push 提交到远程仓库</li>
+</ul>
+<p>同时还包括一些基本的分支的操作</p>
+<ul>
+<li>git checkout -b new_branch</li>
+</ul>
+<p>但是<code>git</code>的更多高阶的用法其实还是不够熟悉，大多数还是需要查询相关资料进行使用。</p>
+<p>这里推荐一个可视化git学习网站：<a href="https://learngitbranching.js.org/?locale=zh_CN">Learn Git Branching</a></p>
+<blockquote>
+<p>同时我这里整理了一下一些git 常用的指令</p>
+</blockquote>
+<p><strong>基本操作</strong></p>
+<ul>
+<li><code>git init</code>初始化一个仓库</li>
+<li><code>git clone</code>克隆一个仓库</li>
+<li><code>git add</code>添加文件到暂存区</li>
+<li><code>git commit</code>提交文件到仓库</li>
+<li><code>git status</code>查看仓库状态</li>
+<li><code>git diff</code>查看文件差异</li>
+<li><code>git log</code>查看提交日志</li>
+<li><code>git reset</code>重置仓库</li>
+<li><code>git rm</code>删除文件</li>
+<li><code>git mv</code>移动文件</li>
+<li><code>git branch</code>查看分支</li>
+</ul>
+<p><strong>分支操作</strong></p>
+<ul>
+<li><code>git branch</code>查看分支</li>
+<li><code>git checkout</code>切换分支</li>
+<li><code>git merge</code>合并分支</li>
+<li><code>git rebase</code>变基分支</li>
+<li><code>git cherry-pick</code>挑选提交</li>
+<li><code>git tag</code>标记提交</li>
+<li><code>git stash</code>暂存工作区</li>
+<li><code>git fetch</code>获取远程分支</li>
+<li><code>git pull</code>拉取远程分支</li>
+<li><code>git push</code>推送远程分支</li>
+<li><code>git remote</code>管理远程仓库</li>
+<li><code>git submodule</code>管理子模块</li>
+<li><code>git worktree</code>管理工作树</li>
+<li><code>git reflog</code>查看引用日志</li>
+<li><code>git bisect</code>二分查找</li>
+<li><code>git blame</code>查看文件作者</li>
+<li><code>git grep</code>查找文件内容</li>
+<li><code>git log</code>查看提交日志</li>
+<li><code>git show</code>查看提交详情</li>
+</ul>
+<p><strong>高级操作</strong></p>
+<ul>
+<li><code>git filter-branch</code>过滤分支</li>
+<li><code>git subcommand</code>子命令</li>
+<li><code>git rerere</code>重用冲突解决</li>
+<li><code>git gc</code>垃圾回收</li>
+<li><code>git fsck</code>检查仓库</li>
+<li><code>git prune</code>删除无用对象</li>
+</ul>
+<p><strong>git 版本回退</strong></p>
+<ul>
+<li><code>git reset --hard HEAD^</code>回退到上一个版本</li>
+<li><code>git reset --hard HEAD^^</code>回退到上上一个版本</li>
+<li><code>git reset --hard HEAD~100</code>回退到上100个版本</li>
+<li><code>git reset --hard commit_id</code>回退到指定版本</li>
+<li><code>git reflog</code>查看命令历史</li>
+<li><code>git reset --hard commit_id</code>回退到指定版本</li>
+<li><code>git reset --hard HEAD@{n}</code>回退到指定版本</li>
+<li><code>git reset --hard ORIG_HEAD</code>回退到上一个版本</li>
+<li><code>git reset --hard</code>回退到上一个版本</li>
+</ul>
+<p><strong>配置</strong></p>
+<ul>
+<li><code>git config --global user.name "Your Name"</code>设置用户名</li>
+<li>`git config --global user.email "</li>
+<li><code>git config --global core.editor "vim"</code>设置编辑器</li>
+<li><code>git config --global merge.tool "vimdiff"</code>设置合并工具</li>
+<li><code>git config --global color.ui true</code>设置颜色</li>
+<li><code>git config --global alias.st status</code>设置别名</li>
+<li><code>git config --global alias.co checkout</code>设置别名</li>
+<li><code>git config --global alias.ci commit</code>设置别名</li>
+<li><code>git config --global alias.br branch</code>设置别名</li>
+<li><code>git config --global alias.unstage "reset HEAD"</code>设置别名</li>
+</ul>
+<h3><span id="shell脚本">Shell脚本</span></h3>
+<blockquote>
+<p>这个对于我自己来说也是一个比较大的难点！！主要对于一些特殊字符的用法不了解，其中包括小括号，中括号，大括号，单引号，反引号，双引号</p>
+<p>我觉得把这个讲清楚真的非常重要，其次就是了解一些基本的变量、控制结构(条件结构，循环结构)基本上就能够懂得基本的用法了</p>
+<p>其中稍微高阶一点，也是shell作为一个脚本型语言的特色就是其参数传递了</p>
+<p>同时还有一些比较困难的指令的使用，包括<code>grep awk sed</code></p>
+<p>虽然可以通过<code>man</code>来了解大部分</p>
+</blockquote>
+<h3><span id="shell脚本">shell脚本</span></h3>
+<blockquote>
+<p>shell脚本是一个用于执行命令的脚本文件</p>
+</blockquote>
+<ul>
+<li>在脚本中在第一行添加<code>#!/bin/bash</code>可以指定脚本使用的shell</li>
+<li>运行脚本
+<ul>
+<li>通过<code>chmod +x script.sh</code>添加执行权限后，<code>./script.sh</code>运行脚本</li>
+<li><code>sh script.sh</code>运行脚本</li>
+<li><code>./script.sh</code>运行脚本</li>
+<li><code>source script.sh</code>运行脚本</li>
+</ul>
+</li>
+<li>参数
+<ul>
+<li><code>$0</code>脚本名</li>
+<li><code>$1</code>第一个参数</li>
+<li><code>$2</code>第二个参数</li>
+<li><code>$#</code>参数个数</li>
+<li><code>$*</code>所有参数，所有参数都是一个字符串</li>
+<li><code>$@</code>所有参数，每个参数都是一个独立的字符串</li>
+<li><code>$$</code>脚本的进程号</li>
+<li><code>$?</code>上一个命令的返回值</li>
+<li><code>$!</code>后台运行的最后一个进程的进程号</li>
+</ul>
+</li>
+<li>函数
+<ul>
+<li><code>function_name(){...}</code>定义函数</li>
+<li><code>function_name</code>调用函数</li>
+<li><code>return</code>返回值</li>
+</ul>
+</li>
+<li>控制结构
+<ul>
+<li><code>if...then...fi</code>条件语句</li>
+<li><code>case...esac</code>多条件语句</li>
+<li><code>for...do...done</code>循环语句</li>
+<li><code>while...do...done</code>循环语句</li>
+<li><code>until...do...done</code>循环语句</li>
+<li><code>break</code>跳出循环</li>
+<li><code>continue</code>跳过本次循环</li>
+<li><code>exit</code>退出脚本</li>
+<li><code>trap</code>捕获信号</li>
+<li><code>eval</code>执行命令</li>
+<li><code>exec</code>执行命令</li>
+<li><code>let</code>执行算术运算</li>
+<li><code>select</code>选择语句</li>
+<li><code>shift</code>移动参数</li>
+<li><code>source</code>执行脚本</li>
+<li><code>test</code>测试语句</li>
+<li><code>time</code>计时</li>
+<li><code>type</code>查找命令</li>
+<li><code>ulimit</code>设置资源限制</li>
+</ul>
+</li>
+<li>关系运算符
+<ul>
+<li><code>-eq</code>等于</li>
+<li><code>-ne</code>不等于</li>
+<li><code>-gt</code>大于</li>
+<li><code>-lt</code>小于</li>
+<li><code>-ge</code>大于等于</li>
+<li><code>-le</code>小于等于</li>
+<li><code>=</code>字符串相等</li>
+<li><code>!=</code>字符串不相等</li>
+<li><code>-z</code>字符串为空</li>
+<li><code>-n</code>字符串不为空</li>
+<li><code>-e</code>文件存在</li>
+<li><code>-f</code>文件存在且是普通文件</li>
+<li><code>-d</code>文件存在且是目录</li>
+<li><code>-s</code>文件存在且不为空</li>
+<li><code>-r</code>文件存在且可读</li>
+</ul>
+</li>
+</ul>
+<p><strong>grep</strong></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314180342701.png" alt="image-20240314180342701"></p>
+<p><strong>awk</strong></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314180412634.png" alt="image-20240314180412634"></p>
+<p><strong>sed</strong></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314180442171.png" alt="image-20240314180442171"></p>
+<h2><span id="实验体会">实验体会</span></h2>
+<p>我觉得通过本次实验自己对于一些工具包括<code>vim tmux</code>更加熟悉了，同时对于<code>shell</code>脚本的撰写也更加熟悉了。学到了很多东西！！！</p>
+<p>当然还有一点体会就是对于命令的细节还是要更加了解一点，比如<code>echo</code>会自动加入换行符，真的被狠狠背刺了啊啊啊啊！！</p>
+<p>前面没有提到，这里分享一下自己学习<code>tmux</code>的经验</p>
+<blockquote>
+<p>tmux is terminal multiplexer</p>
+</blockquote>
+<blockquote>
+<p>虽然你可以打开多个终端，但是tmux帅啊！！</p>
+</blockquote>
+<p>创建会话 <code>creating tmux sessions</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">tmux<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这样会打开一个新的页面也该窗口</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308144341753.png" alt="image-20240308144341753"></p>
+<p>退出</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">exit</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>增加一个命名：</p>
+<pre class="line-numbers language-none"><code class="language-none">tmux new -s test<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308144443438.png" alt="image-20240308144443438"></p>
+<p>创建新的tmux窗口<code>creating new tmux windows</code></p>
+<pre class="line-numbers language-none"><code class="language-none">Ctrl-b c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><code>Ctrl-b</code>在tmux里面相当于是一个命令前缀</p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308144816204.png" alt="image-20240308144816204"></p>
+<p>在两个tmux窗口之间切换 s<code>witching between tmux windows</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b n<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这样会顺序遍历已经创建的窗口</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>你可以注意到这个窗口的名字叫做bash，是因为目前是正在运行进程，如果你某一个窗口运行<code>htop</code>，那么那个窗口的名字就是<code>htop</code></p>
+<p>如果你想要设置一个不会改变的窗口命名</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b ,<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150121933.png" alt="image-20240308150121933"></p>
+<p>离开一个会话<code>detaching from a tmux session</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>连接一个会话<code>attaching to a tmus session</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">tmux a<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>如果需要重新新建一个任务可以</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b new <span class="token parameter variable">-s</span> coding
+// 也就是前面的新建一个session的操作<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150456377.png" alt="image-20240308150456377"></p>
+<p>列举所有tmux会话<code>listing tmux sessions</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">tmux <span class="token function">ls</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>如果想要连接某一个<code>session</code>，可以</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">tmux a <span class="token parameter variable">-t</span> <span class="token builtin class-name">test</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150641122.png" alt="image-20240308150641122"></p>
+<p>可以再几个<code>session</code>之间切换</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b s<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150751219.png" alt="image-20240308150751219"></p>
+<p>窗格操作</p>
+<p>划分窗格</p>
+<p><code>tmux split-window</code>命令用来划分窗格。</p>
+<blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 划分上下两个窗格</span>
+$ tmux split-window
+
+<span class="token comment"># 划分左右两个窗格</span>
+$ tmux split-window <span class="token parameter variable">-h</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</blockquote>
+<p>移动光标</p>
+<p><code>tmux select-pane</code>命令用来移动光标位置。</p>
+<blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 光标切换到上方窗格</span>
+$ tmux select-pane <span class="token parameter variable">-U</span>
+
+<span class="token comment"># 光标切换到下方窗格</span>
+$ tmux select-pane <span class="token parameter variable">-D</span>
+
+<span class="token comment"># 光标切换到左边窗格</span>
+$ tmux select-pane <span class="token parameter variable">-L</span>
+
+<span class="token comment"># 光标切换到右边窗格</span>
+$ tmux select-pane <span class="token parameter variable">-R</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</blockquote>
+<p>交换窗格位置</p>
+<p><code>tmux swap-pane</code>命令用来交换窗格位置。</p>
+<blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 当前窗格上移</span>
+$ tmux swap-pane <span class="token parameter variable">-U</span>
+
+<span class="token comment"># 当前窗格下移</span>
+$ tmux swap-pane <span class="token parameter variable">-D</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</blockquote>
+<p>窗格快捷键</p>
+<p>下面是一些窗格操作的快捷键。</p>
+<blockquote>
+<ul>
+<li><code>Ctrl+b %</code>：划分左右两个窗格。</li>
+<li><code>Ctrl+b "</code>：划分上下两个窗格。</li>
+<li><code>Ctrl+b &lt;arrow key&gt;</code>：光标切换到其他窗格。<code>&lt;arrow key&gt;</code>是指向要切换到的窗格的方向键，比如切换到下方窗格，就按方向键<code>↓</code>。</li>
+<li><code>Ctrl+b ;</code>：光标切换到上一个窗格。</li>
+<li><code>Ctrl+b o</code>：光标切换到下一个窗格。</li>
+<li><code>Ctrl+b {</code>：当前窗格与上一个窗格交换位置。</li>
+<li><code>Ctrl+b }</code>：当前窗格与下一个窗格交换位置。</li>
+<li><code>Ctrl+b Ctrl+o</code>：所有窗格向前移动一个位置，第一个窗格变成最后一个窗格。</li>
+<li><code>Ctrl+b Alt+o</code>：所有窗格向后移动一个位置，最后一个窗格变成第一个窗格。</li>
+<li><code>Ctrl+b x</code>：关闭当前窗格。</li>
+<li><code>Ctrl+b !</code>：将当前窗格拆分为一个独立窗口。</li>
+<li><code>Ctrl+b z</code>：当前窗格全屏显示，再使用一次会变回原来大小。</li>
+<li><code>Ctrl+b Ctrl+&lt;arrow key&gt;</code>：按箭头方向调整窗格大小。</li>
+<li><code>Ctrl+b q</code>：显示窗格编号。</li>
+</ul>
+</blockquote>
+<p>获取帮助<code>getting help with tmux</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b ?<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>或者使用</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">man</span> tmux<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150851773.png" alt="image-20240308150851773"></p>
+<p><strong>reference</strong></p>
+<p><a href="https://www.ruanyifeng.com/blog/2019/10/tmux.html">https://www.ruanyifeng.com/blog/2019/10/tmux.html</a></p>
+<p><a href="https://www.linuxtrainingacademy.com/tmux-tutorial/">https://www.linuxtrainingacademy.com/tmux-tutorial/</a></p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>os-lab0</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>os-lab1实验报告</title>
+    <url>/2024/04/24/os-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>os_lab0笔记</title>
+    <url>/2024/04/24/os-lab0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1><span id="操作系统lab0">操作系统lab0</span></h1>
+<h2><span id="1linux操作">1.Linux操作</span></h2>
+<h3><span id="11-查看文件">1.1 查看文件</span></h3>
+<blockquote>
+<p>ls<br>
+用法: ls [选项]… [文件]…<br>
+选项（常用）：<br>
+-a 不隐藏任何以 . 开始的项目<br>
+-l 每行只列出一个文件</p>
+</blockquote>
+<p>示例：<code>ls -al</code></p>
+<h3><span id="12-创建一个新的空文件">1.2 创建一个新的空文件</span></h3>
+<blockquote>
+<p>touch<br>
+用法: touch [选项]… 文件…</p>
+</blockquote>
+<p>示例：<code>touch hello_world.c</code>成功创建一个新的文件</p>
+<h3><span id="13-创建并打开一个文件">1.3 (创建并打开一个文件)</span></h3>
+<blockquote>
+<p>vim [文件名]</p>
+</blockquote>
+<h3><span id="14-创建文件目录">1.4 创建文件目录</span></h3>
+<blockquote>
+<p>mkdir<br>
+用法：mkdir [选项]… 目录…</p>
+</blockquote>
+<p>示例：<code>mkdir newdir</code>在目录下创建了一个名为<code>newdir</code>的目录</p>
+<h3><span id="15-进入目录">1.5 进入目录</span></h3>
+<blockquote>
+<p>cd<br>
+用法：cd [目录]</p>
+</blockquote>
+<p>示例：<code>cd newdir</code>进入<code>newdir</code>目录，<code>cd ..</code>返回上一级目录,<code>cd</code>返回主目录,<code>cd -</code>返回上一次所在的目录<br>
+输入<code>pwd</code>可以查看当前所在的绝对路径。</p>
+<h3><span id="16-删除一个空目录">1.6 删除一个空目录</span></h3>
+<blockquote>
+<p>rmdir<br>
+用法：rmdir [选项]… 目录…</p>
+</blockquote>
+<p>示例：<code>rmdir newdir</code>删除<code>newdir</code>目录</p>
+<h3><span id="17-删除">1.7 删除</span></h3>
+<blockquote>
+<p>rm<br>
+用法：rm [选项]… 文件…<br>
+选项：<br>
+-r 递归删除目录及其内容<br>
+-f 强制删除。忽略不存在的文件，不给出提示</p>
+</blockquote>
+<p>示例：<code>rm -rf newdir</code>删除<code>newdir</code>目录及其内容</p>
+<p>rm命令可以删除一个目录中的一个或多个文件或目录，也可以将某个目录及其下属的所有文件及其子目录均删<br>
+除掉。对于链接文件，只是删除整个链接文件，而原有文件保持不变。 rm命令还有-i选项，这个选项在使用文<br>
+件扩展名字符删除多个文件时特别有用。使用这个选项，系统会要求逐一确定是否要删除。这时，必须输入Y并<br>
+按回车键，才能删除文件。 示例：rm -rf /-可强制递归删除全盘文件！！！</p>
+<blockquote>
+<p>可以考虑在家目录下创建回收站目录，删除文件时先移动到回收站，再删除</p>
+</blockquote>
+<h3><span id="18-复制文件">1.8 复制文件</span></h3>
+<blockquote>
+<p>cp<br>
+用法：cp [选项]… 源文件 目标文件<br>
+选项：<br>
+-r 递归复制目录及其内容</p>
+</blockquote>
+<p>示例：<code>cp hello_world.c hello_world2.c</code>复制<code>hello_world.c</code>文件为<code>hello_world2.c</code><br>
+该命令的第一个参数为原文件路径，命令的第二个参数为目标文件路径。如果目标文件路径不存在，则会创建一个新的文件。</p>
+<h3><span id="19-移动文件">1.9 移动文件</span></h3>
+<blockquote>
+<p>mv<br>
+用法：mv [选项]… 源文件 目标文件<br>
+选项：<br>
+-i 若目标文件已经存在，询问是否覆盖</p>
+</blockquote>
+<p>示例：<code>mv hello_world2.c newdir</code>将<code>hello_world2.c</code>移动到<code>newdir</code>目录下<br>
+<code>mv oldname newname</code>可以重命名文件</p>
+<h3><span id="110-回显">1.10 回显</span></h3>
+<blockquote>
+<p>echo</p>
+</blockquote>
+<p>示例：<code>echo "hello world"</code>输出<code>hello world</code></p>
+<h3><span id="111-查看文件内容">1.11 查看文件内容</span></h3>
+<blockquote>
+<p>cat<br>
+用法：cat [选项]… [文件]…<br>
+选项：<br>
+-n 显示行号<br>
+-b 显示行号，空行不显示<br>
+-A 显示所有字符，包括控制字符<br>
+-E 显示行尾的$<br>
+-T 显示制表符<br>
+-v 显示不可见字符<br>
+-s 合并多个空行为一个空行<br>
+-e 显示行尾的$</p>
+</blockquote>
+<p>示例：<code>cat hello_world.c</code>查看<code>hello_world.c</code>文件内容<br>
+<code>cat -n file1 &gt; file2</code> 将file1的内容输出到file2中，并且在每一行前加上行号<br>
+<code>cat -b file1 file2 &gt;&gt; file3</code> 将file1和file2的内容输出附加到file3中，并且在每一行前加上行号</p>
+<p>###　1.12 帮助</p>
+<blockquote>
+<p>man -manual<br>
+用法：man [选项]… [命令]…<br>
+选项：<br>
+-f 显示命令的简短说明</p>
+</blockquote>
+<p>示例：<code>man ls</code>查看<code>ls</code>命令的帮助<br>
+通过man命令可以查看命令的详细用法和参数说明</p>
+<h3><span id="113-查找">1.13 查找</span></h3>
+<blockquote>
+<p>find<br>
+用法：find [选项]… [路径]… [表达式]…<br>
+选项：<br>
+-name 按文件名查找<br>
+-type 按文件类型查找<br>
+-size 按文件大小查找<br>
+-exec 对查找到的文件执行命令</p>
+</blockquote>
+<ul>
+<li><code>find</code>当前目录下递归查找符合参数所示文件名的文件，并将文件的路径输出至屏幕上</li>
+</ul>
+<p>示例：<code>find . -name "hello_world.c"</code>查找当前目录下的<code>hello_world.c</code>文件</p>
+<blockquote>
+<p>grep<br>
+用法：grep [选项]… 模式 [文件]…<br>
+选项：<br>
+-n 显示行号<br>
+-v 显示不包含模式的行<br>
+-i 忽略大小写<br>
+-r 递归查找<br>
+-l 只显示文件名<br>
+-c 显示匹配行数<br>
+-w 匹配整个单词<br>
+-A 显示匹配行及后面的n行</p>
+</blockquote>
+<ul>
+<li><code>grep</code>使用正则表达式匹配文件内容，并把匹配的行输出至屏幕上。可以从文件中查找包含<code>pattern</code>部分字符串的行，并将该文件的路径和该行输出值屏幕</li>
+</ul>
+<p>示例：<code>grep "hello" hello_world.c</code>查找<code>hello_world.c</code>文件中包含<code>hello</code>的行</p>
+<blockquote>
+<p>tree<br>
+用法：tree [选项]… [目录]…<br>
+选项：<br>
+-d 只显示目录<br>
+-L 显示目录的深度<br>
+-a 显示所有文件<br>
+-f 显示完整路径</p>
+</blockquote>
+<ul>
+<li><code>tree</code>可以以树状图的形式显示目录结构</li>
+</ul>
+<p>示例：<code>tree</code>显示当前目录的树状图</p>
+<h3><span id="114-权限">1.14 权限</span></h3>
+<blockquote>
+<p>chmod<br>
+用法：chmod [选项]… 模式 文件…<br>
+选项：<br>
+-R 递归修改<br>
+模式：<br>
+u 用户<br>
+g 用户组<br>
+o 其他用户<br>
+a 所有用户<br>
+‘+’ 添加权限<br>
+‘-’ 减少权限<br>
+= 设置权限<br>
+r 读权限<br>
+w 写权限<br>
+x 执行权限<br>
+s 设置用户ID<br>
+t 粘滞位</p>
+</blockquote>
+<p>示例：<code>chmod u+x hello_world.c</code>给<code>hello_world.c</code>文件的用户添加执行权限<br>
+<code>chmod 777 hello_world.c</code>给<code>hello_world.c</code>文件的所有用户添加读写执行权限<br>
+<code>chmod 755 hello_world.c</code>给<code>hello_world.c</code>文件的用户添加读写执行权限，用户组和其他用户添加读执行权限(对应二进制111b=7, 101b=5)<br>
+<code>chmod -w hello_world.c</code>删除<code>hello_world.c</code>文件的写权限</p>
+<blockquote>
+<p>chown<br>
+用法：chown [选项]… 用户:用户组 文件…<br>
+选项：<br>
+-R 递归修改<br>
+用户：文件的所有者<br>
+用户组：文件的所属用户组<br>
+文件：要修改的文件<br>
+该命令可以修改文件的所有者和所属用户组</p>
+</blockquote>
+<p>示例：<code>chown root:root hello_world.c</code>将<code>hello_world.c</code>文件的所有者和所属用户组修改为<code>root</code></p>
+<h3><span id="115-比较文件差异">1.15 比较文件差异</span></h3>
+<blockquote>
+<p>diff<br>
+用法：diff [选项]… 文件1 文件2<br>
+选项：<br>
+-c 以上下文的方式显示差异<br>
+-u 以统一的方式显示差异<br>
+-r 递归比较目录<br>
+-b 忽略空格<br>
+-B 忽略空行<br>
+-q 只显示是否有差异</p>
+</blockquote>
+<p>该命令可以比较两个文件的差异</p>
+<h3><span id="116-文件处理">1.16 文件处理</span></h3>
+<blockquote>
+<p>sed<br>
+用法：sed [选项]… [脚本]… [文件]…<br>
+选项：<br>
+-n 安静模式，只显示脚本处理后的结果<br>
+-e 多个脚本处理<br>
+-f 从文件中读取脚本<br>
+脚本：</p>
+<ul>
+<li>s/old/new/g 替换old为new</li>
+<li>d 删除匹配行</li>
+<li>p 打印匹配行</li>
+<li>a 在匹配行后添加</li>
+<li>i 在匹配行前添加</li>
+<li>c 替换匹配行</li>
+<li>r 从文件中读取</li>
+<li>w 写入文件</li>
+<li>q 退出</li>
+</ul>
+<p>-i 直接修改文件，而不是输出到屏幕。否则，只输出不编辑</p>
+</blockquote>
+<p>示例：<code>sed -i 's/old/new/g' hello_world.c</code>将<code>hello_world.c</code>文件中的<code>old</code>替换为<code>new</code></p>
+<blockquote>
+<p>[行号]a[内容] 新增，在行号后新增一行相应内容。行号可以是“数字”，在这一行之后新增，也可以是“起始行，终止行”，在其中的每一行后新增。当不写行号时，在每一行之后新增。使用$表示最后一行。后面的命令同理<br>
+[行号]c[内容] 取代。用内容取代相应行的文本<br>
+[行号]i[内容] 插入。在当前行的上面插入一行文本<br>
+[行号]d 删除当前行的内容<br>
+[行号]p 输出选择的内容。通常与选项-n一起使用<br>
+s/re/string 将 re（正则表达式）匹配的内容替换为 string</p>
+</blockquote>
+<p>示例</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'1a\hello'</span> hello_world.c   <span class="token comment">#在第一行后添加hello</span>
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'1,3d'</span> hello_world.c      <span class="token comment">#删除第一行到第三行</span>
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'1,3p'</span> hello_world.c     <span class="token comment">#输出第一行到第三行</span>
+<span class="token comment"># 输出 my.txt 的第三行</span>
+<span class="token function">sed</span> <span class="token parameter variable">-n</span> <span class="token string">'3p'</span> my.txt
+<span class="token comment"># 删除 my.txt 文件的第二行</span>
+<span class="token function">sed</span> <span class="token string">'2d'</span> my.txt
+<span class="token comment"># 删除 my.txt 文件的第二行到最后一行（$ 符号表示到最末尾）</span>
+<span class="token function">sed</span> <span class="token string">'2,$d'</span> my.txt
+<span class="token comment"># 在整行范围内把 str1 替换为 str2</span>
+<span class="token comment"># 如果没有 g 标记，则只有每行第一个匹配的 str1 被替换成 str2</span>
+<span class="token function">sed</span> <span class="token string">'s/str1/str2/g'</span> my.txt
+<span class="token comment"># -e 选项允许在同一行里执行多条命令。例子的第一条是第四行后添加一个 str, 第二个命令是将</span>
+str 替换为 aaa。命令的执行顺序对结果有影响。
+<span class="token function">sed</span> <span class="token parameter variable">-e</span> <span class="token string">'4a\str'</span> <span class="token parameter variable">-e</span> <span class="token string">'s/str/aaa/'</span> my.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>awk<br>
+用法：awk [选项]… [脚本]… [文件]…<br>
+选项：<br>
+-F 指定分隔符<br>
+脚本：</p>
+<ul>
+<li>print 打印</li>
+<li>printf 格式化打印</li>
+<li>NR 行号</li>
+<li>NF 列数</li>
+<li>$1 第一列</li>
+<li>$0 整行</li>
+<li>$NF 最后一列</li>
+<li>$NR 最后一行</li>
+<li>BEGIN{…} 开始时执行</li>
+<li>END{…} 结束时执行</li>
+<li>FS 分隔符</li>
+<li>OFS 输出分隔符</li>
+<li>RS 输入行分隔符</li>
+<li>ORS 输出行分隔符</li>
+<li>FILENAME 文件名</li>
+<li>FNR 当前文件的行号</li>
+<li>ARGIND 当前文件的序号</li>
+<li>ARGV 当前文件的名字</li>
+<li>ENVIRON 环境变量</li>
+<li>length() 字符串长度</li>
+<li>substr() 截取字符串</li>
+<li>index() 查找字符串</li>
+<li>match() 匹配字符串</li>
+<li>split() 分割字符串</li>
+<li>tolower() 转小写</li>
+<li>toupper() 转大写</li>
+<li>system() 执行系统命令</li>
+<li>getline 读取下一行</li>
+<li>close 关闭文件</li>
+<li>delete 删除数组</li>
+<li>next 跳过当前行</li>
+<li>exit 退出</li>
+</ul>
+<p>-f 从文件中读取脚本<br>
+-v 定义变量</p>
+</blockquote>
+<p>示例</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">awk</span> <span class="token string">'{print $1}'</span> my.txt  <span class="token comment">#输出 my.txt 的第一列 </span>
+<span class="token function">awk</span> -F: <span class="token string">'{print $1}'</span> /etc/passwd  <span class="token comment">#以:为分隔符输出/etc/passwd的第一列</span>
+<span class="token function">awk</span> <span class="token string">'{print $1,$2}'</span> my.txt  <span class="token comment">#输出 my.txt 的第一列和第二列</span>
+<span class="token function">awk</span> <span class="token string">'{print $1,$2}'</span> <span class="token assign-left variable">OFS</span><span class="token operator">=</span><span class="token string">":"</span> my.txt  <span class="token comment">#输出 my.txt 的第一列和第二列，以:为分隔符</span>
+<span class="token function">awk</span> <span class="token string">'$1&gt;2 {print$1,$3}'</span> my.txt  <span class="token comment">#输出 my.txt 的第一列大于2的行的第一列和第三列</span>
+<span class="token variable">$n</span> 代表每一行中用空格分隔后的第n项
+<span class="token function">awk</span> <span class="token parameter variable">-F</span> , <span class="token string">'{print $2}'</span> my.txt  <span class="token comment">#以,为分隔符输出 my.txt 的第二列</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3><span id="117-压缩解压">1.17 压缩解压</span></h3>
+<blockquote>
+<p>tar<br>
+用法：tar [选项]… [文件]…<br>
+选项：<br>
+-c 创建压缩文件<br>
+-x 解压文件<br>
+-z 使用gzip压缩<br>
+-j 使用bzip2压缩<br>
+-v 显示详细信息<br>
+-f 指定文件名<br>
+-C 指定目录<br>
+-t 显示压缩文件内容<br>
+-r 向压缩文件中添加文件<br>
+-u 更新压缩文件<br>
+-d 从压缩文件中删除文件<br>
+-A 合并压缩文件<br>
+-W 确认压缩文件<br>
+-p 保留文件权限<br>
+-P 保留绝对路径<br>
+-m 不保留文件修改时间<br>
+-l 保留符号链接<br>
+-k 保留已存在文件<br>
+-N 指定时间<br>
+-X 指定排除文件<br>
+-T 指定文件列表<br>
+-U 更新压缩文件<br>
+-M 多卷压缩文件<br>
+-h 显示帮助</p>
+</blockquote>
+<p>示例</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">tar</span> <span class="token parameter variable">-cvf</span> file.tar file1 file2  <span class="token comment">#将file1和file2打包成file.tar</span>
+<span class="token function">tar</span> <span class="token parameter variable">-xvf</span> file.tar  <span class="token comment">#解压file.tar</span>
+<span class="token function">tar</span> <span class="token parameter variable">-zcvf</span> file.tar.gz file1 file2  <span class="token comment">#将file1和file2打包成file.tar.gz</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h3><span id="118-管道">1.18 管道</span></h3>
+<blockquote>
+<p>管道符号<code>|</code>可以将一个命令的输出作为另一个命令的输入</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">command1 <span class="token operator">|</span> command2 <span class="token operator">|</span> command3<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>示例</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ls</span> <span class="token parameter variable">-al</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"hello"</span>  <span class="token comment">#查找当前目录下包含hello的文件</span>
+<span class="token comment"># 为将my.sh的内容输出给grep命令，grep在其中查找字符串</span>
+<span class="token function">cat</span> my.sh <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Hello"</span>
+<span class="token comment"># 将 my.sh 的内容作为 cat 命令参数，cat 命令 stdout 发给 grep 命令的 stdin，grep 在其</span>
+中查找字符串，最后将结果输出到 output.txt
+<span class="token function">cat</span> <span class="token operator">&lt;</span> my.sh <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Hello"</span> <span class="token operator">&gt;</span> output.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3><span id="119-重定向">1.19 重定向</span></h3>
+<ul>
+<li>标准输入(stdin)：0</li>
+<li>标准输出(stdout)：1</li>
+<li>标准错误(stderr)：2</li>
+</ul>
+<blockquote>
+<p>重定向符号<code>&gt;</code>可以将命令的输出重定向到文件中<br>
+重定向符号<code>&gt;&gt;</code>可以将命令的输出追加到文件中<br>
+重定向符号<code>&lt;</code>可以将文件的内容作为命令的输入<br>
+重定向符号<code>2&gt;</code>可以将错误输出重定向到文件中<br>
+重定向符号<code>&amp;&gt;</code>可以将标准输出和错误输出重定向到文件中<br>
+重定向符号<code>2&gt;&amp;1</code>可以将错误输出重定向到标准输出中<br>
+重定向符号<code>&amp;&gt;&gt;</code>可以将标准输出和错误输出追加到文件中<br>
+重定向符号<code>2&gt;&amp;1</code>可以将错误输出重定向到标准输出中<br>
+重定向符号<code>&amp;&gt;&gt;</code>可以将标准输出和错误输出追加到文件中<br>
+重定向符号<code>2&gt;&amp;1</code>可以将错误输出重定向到标准输出中</p>
+</blockquote>
+<h3><span id="120-环境变量">1.20 环境变量</span></h3>
+<blockquote>
+<p>环境变量是一些系统的配置信息，可以通过环境变量来控制系统的行为</p>
+</blockquote>
+<ul>
+<li><code>PATH</code>环境变量：用于指定系统的可执行文件的路径</li>
+<li><code>HOME</code>环境变量：用于指定用户的家目录</li>
+<li><code>USER</code>环境变量：用于指定当前用户的用户名</li>
+<li><code>SHELL</code>环境变量：用于指定当前用户的shell</li>
+<li><code>PWD</code>环境变量：用于指定当前用户的工作目录</li>
+<li><code>LANG</code>环境变量：用于指定当前用户的语言</li>
+<li><code>TERM</code>环境变量：用于指定当前用户的终端类型</li>
+<li><code>EDITOR</code>环境变量：用于指定当前用户的编辑器</li>
+<li><code>PS1</code>环境变量：用于指定当前用户的命令提示符</li>
+<li><code>PS2</code>环境变量：用于指定当前用户的命令提示符的续行符</li>
+<li><code>PS3</code>环境变量：用于指定当前用户的选择提示符</li>
+<li><code>PS4</code>环境变量：用于指定当前用户的调试提示符</li>
+<li><code>HISTSIZE</code>环境变量：用于指定当前用户的历史记录的大小</li>
+<li><code>HISTFILESIZE</code>环境变量：用于指定当前用户的历史记录文件的大小</li>
+<li><code>HISTCONTROL</code>环境变量：用于指定当前用户的历史记录的控制</li>
+<li><code>HISTIGNORE</code>环境变量：用于指定当前用户的历史记录的忽略</li>
+</ul>
+<blockquote>
+<p><code>export</code>命令可以将一个变量导出为环境变量<br>
+<code>unset</code>命令可以将一个环境变量删除<br>
+<code>env</code>命令可以查看当前的环境变量<br>
+<code>set</code>命令可以查看当前的所有变量<br>
+<code>echo $变量名</code>可以查看变量的值<br>
+<code>echo $PATH</code>可以查看<code>PATH</code>环境变量的值</p>
+</blockquote>
+<h3><span id="121-常用快捷键">1.21 常用快捷键</span></h3>
+<ul>
+<li><code>Ctrl+C</code>中断当前命令</li>
+<li><code>Ctrl+D</code>退出当前shell,相当于<code>exit</code></li>
+<li><code>Ctrl+L</code>清屏</li>
+<li><code>Ctrl+Z</code>挂起当前命令,使用<code>fg</code>命令恢复</li>
+</ul>
+<h3><span id="122-通配符">1.22 通配符</span></h3>
+<ul>
+<li><code>*</code>匹配任意多个字符,<code>ls *.txt</code>匹配所有以<code>.txt</code>结尾的文件</li>
+<li><code>?</code>匹配一个字符,<code>ls ?.txt</code>匹配所有以一个字符加<code>.txt</code>结尾的文件</li>
+<li><code>[]</code>匹配指定范围内的字符,<code>ls [a-z].txt</code>匹配所有以一个小写字母加<code>.txt</code>结尾的文件</li>
+<li><code>!</code>取反,排除匹配的文件,<code>ls !(*.txt)</code>匹配所有不以<code>.txt</code>结尾的文件</li>
+<li><code>{}</code>,<code>ls {*.txt,*.c}</code>匹配所有以<code>.txt</code>或<code>.c</code>结尾的文件</li>
+<li><code>()</code>可以改变优先级,<code>ls (a|b).txt</code>匹配所有以<code>a.txt</code>或<code>b.txt</code>结尾的文件</li>
+<li><code>|</code>或,<code>ls a.txt|b.txt</code>匹配所有以<code>a.txt</code>或<code>b.txt</code>结尾的文件</li>
+<li><code>^</code>匹配行首,<code>ls ^a.txt</code>匹配所有不以<code>a.txt</code>开头的文件</li>
+<li><code>$</code>匹配行尾,<code>ls a.txt$</code>匹配所有以<code>a.txt</code>结尾的文件</li>
+<li><code>\&lt;</code>匹配单词开头,<code>\&gt;</code>匹配单词结尾,<code>ls \&lt;a.txt</code>匹配所有以<code>a.txt</code>开头的文件</li>
+<li><code>**</code>,递归匹配,<code>ls **/*.txt</code>匹配所有以<code>.txt</code>结尾的文件</li>
+</ul>
+<h3><span id="123-tmux">1.23 tmux</span></h3>
+<blockquote>
+<p>tmux是一个终端复用工具，可以在一个终端中同时运行多个终端<br>
+详情看另一个文件</p>
+</blockquote>
+<h2><span id="2-使用工具">2. 使用工具</span></h2>
+<h3><span id="21-编译器">2.1 编译器</span></h3>
+<ul>
+<li><code>gcc</code>是一个C语言编译器</li>
+<li><code>g++</code>是一个C++语言编译器</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">语法：gcc <span class="token punctuation">[</span>选项<span class="token punctuation">]</span><span class="token punctuation">..</span>. <span class="token punctuation">[</span>文件<span class="token punctuation">]</span><span class="token punctuation">..</span>.
+选项：
+<span class="token parameter variable">-c</span> 仅编译，不链接
+<span class="token parameter variable">-o</span> 指定输出文件
+<span class="token parameter variable">-E</span> 预处理
+<span class="token parameter variable">-S</span> 汇编
+<span class="token parameter variable">-l</span> 指定库文件
+<span class="token parameter variable">-L</span> 指定库文件路径
+<span class="token parameter variable">-I</span> Path/to/head/file 指定头文件路径
+<span class="token parameter variable">-D</span> 定义宏
+<span class="token parameter variable">-wall</span> 显示所有警告
+<span class="token parameter variable">-g</span> 生成调试信息
+<span class="token parameter variable">-std</span><span class="token operator">=</span>c99 指定C语言标准
+参数：
+file.c 源文件<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>示例</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc <span class="token parameter variable">-o</span> hello_world hello_world.c  <span class="token comment">#编译hello_world.c文件为hello_world可执行文件</span>
+gcc <span class="token parameter variable">-c</span> hello_world.c  <span class="token comment">#编译hello_world.c文件为hello_world.o目标文件</span>
+gcc <span class="token parameter variable">-E</span> hello_world.c  <span class="token comment">#预处理hello_world.c文件</span>
+gcc <span class="token parameter variable">-S</span> hello_world.c  <span class="token comment">#汇编hello_world.c文件</span>
+gcc <span class="token parameter variable">-o</span> hello_world hello_world.c <span class="token parameter variable">-lm</span>  <span class="token comment">#编译hello_world.c文件为hello_world可执行文件，并链接数学库</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同时编译多个文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gcc <span class="token parameter variable">-o</span> hello_world hello_world.c hello_world2.c  <span class="token comment">#编译hello_world.c和hello_world2.c文件为hello_world可执行文件</span>
+gcc <span class="token parameter variable">-c</span> hello_world.c hello_world2.c  <span class="token comment">#编译hello_world.c和hello_world2.c文件为hello_world.o和hello_world2.o目标文件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<blockquote>
+<p>选项-o用于指定要生成的结果文件，后面跟的就是结果文件名字。o是output的意思，不是目标的意思。结果文件可能是预处理文件、汇编文件、目标文件或者最终可执行文件。</p>
+</blockquote>
+<h3><span id="makefile">Makefile</span></h3>
+<blockquote>
+<p>Makefile是一个用于编译程序的工具，可以自动化编译程序<br>
+基本格式</p>
+</blockquote>
+<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile"><span class="token target symbol">target</span><span class="token punctuation">:</span> dependencies
+    command 1
+    command 2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><code>target</code>是要生成的目标文件</li>
+<li><code>dependencies</code>是生成<code>target</code>所需要的依赖文件</li>
+<li><code>command</code>是生成<code>target</code>所需要执行的命令</li>
+</ul>
+<p>示例</p>
+<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile"><span class="token target symbol">hello_world</span><span class="token punctuation">:</span> hello_world.c
+    gcc -o hello_world hello_world.c<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h3><span id="shell脚本">shell脚本</span></h3>
+<blockquote>
+<p>shell脚本是一个用于执行命令的脚本文件</p>
+</blockquote>
+<ul>
+<li>在脚本中在第一行添加<code>#!/bin/bash</code>可以指定脚本使用的shell</li>
+<li>运行脚本
+<ul>
+<li>通过<code>chmod +x script.sh</code>添加执行权限后，<code>./script.sh</code>运行脚本</li>
+<li><code>sh script.sh</code>运行脚本</li>
+<li><code>./script.sh</code>运行脚本</li>
+<li><code>source script.sh</code>运行脚本</li>
+</ul>
+</li>
+<li>参数
+<ul>
+<li><code>$0</code>脚本名</li>
+<li><code>$1</code>第一个参数</li>
+<li><code>$2</code>第二个参数</li>
+<li><code>$#</code>参数个数</li>
+<li><code>$*</code>所有参数，所有参数都是一个字符串</li>
+<li><code>$@</code>所有参数，每个参数都是一个独立的字符串</li>
+<li><code>$$</code>脚本的进程号</li>
+<li><code>$?</code>上一个命令的返回值</li>
+<li><code>$!</code>后台运行的最后一个进程的进程号</li>
+</ul>
+</li>
+<li>函数
+<ul>
+<li><code>function_name(){...}</code>定义函数</li>
+<li><code>function_name</code>调用函数</li>
+<li><code>return</code>返回值</li>
+</ul>
+</li>
+<li>控制结构
+<ul>
+<li><code>if...then...fi</code>条件语句</li>
+<li><code>case...esac</code>多条件语句</li>
+<li><code>for...do...done</code>循环语句</li>
+<li><code>while...do...done</code>循环语句</li>
+<li><code>until...do...done</code>循环语句</li>
+<li><code>break</code>跳出循环</li>
+<li><code>continue</code>跳过本次循环</li>
+<li><code>exit</code>退出脚本</li>
+<li><code>trap</code>捕获信号</li>
+<li><code>eval</code>执行命令</li>
+<li><code>exec</code>执行命令</li>
+<li><code>let</code>执行算术运算</li>
+<li><code>select</code>选择语句</li>
+<li><code>shift</code>移动参数</li>
+<li><code>source</code>执行脚本</li>
+<li><code>test</code>测试语句</li>
+<li><code>time</code>计时</li>
+<li><code>type</code>查找命令</li>
+<li><code>ulimit</code>设置资源限制</li>
+</ul>
+</li>
+<li>关系运算符
+<ul>
+<li><code>-eq</code>等于</li>
+<li><code>-ne</code>不等于</li>
+<li><code>-gt</code>大于</li>
+<li><code>-lt</code>小于</li>
+<li><code>-ge</code>大于等于</li>
+<li><code>-le</code>小于等于</li>
+<li><code>=</code>字符串相等</li>
+<li><code>!=</code>字符串不相等</li>
+<li><code>-z</code>字符串为空</li>
+<li><code>-n</code>字符串不为空</li>
+<li><code>-e</code>文件存在</li>
+<li><code>-f</code>文件存在且是普通文件</li>
+<li><code>-d</code>文件存在且是目录</li>
+<li><code>-s</code>文件存在且不为空</li>
+<li><code>-r</code>文件存在且可读</li>
+</ul>
+</li>
+</ul>
+<h3><span id="ctags">ctags</span></h3>
+<blockquote>
+<p>ctags是一个用于生成代码索引的工具</p>
+</blockquote>
+<ul>
+<li><code>ctags -R</code>生成当前目录的代码索引</li>
+<li><code>ctags -R /path/to/dir</code>生成指定目录的代码索引</li>
+<li><code>ctags -R /path/to/dir/*</code>生成指定目录的代码索引</li>
+<li>vim 下使用<code>Ctrl+]</code>跳转到定义处,<code>Ctrl+t</code>返回</li>
+<li>vim 下使用<code>:ts</code>查找定义处,<code>:tn</code>下一个,<code>:tp</code>上一个</li>
+</ul>
+<h2><span id="git">Git</span></h2>
+<h3><span id="31-基本操作">3.1 基本操作</span></h3>
+<ul>
+<li><code>git init</code>初始化一个仓库</li>
+<li><code>git clone</code>克隆一个仓库</li>
+<li><code>git add</code>添加文件到暂存区</li>
+<li><code>git commit</code>提交文件到仓库</li>
+<li><code>git status</code>查看仓库状态</li>
+<li><code>git diff</code>查看文件差异</li>
+<li><code>git log</code>查看提交日志</li>
+<li><code>git reset</code>重置仓库</li>
+<li><code>git rm</code>删除文件</li>
+<li><code>git mv</code>移动文件</li>
+<li><code>git branch</code>查看分支</li>
+</ul>
+<h3><span id="32-分支操作">3.2 分支操作</span></h3>
+<ul>
+<li><code>git branch</code>查看分支</li>
+<li><code>git checkout</code>切换分支</li>
+<li><code>git merge</code>合并分支</li>
+<li><code>git rebase</code>变基分支</li>
+<li><code>git cherry-pick</code>挑选提交</li>
+<li><code>git tag</code>标记提交</li>
+<li><code>git stash</code>暂存工作区</li>
+<li><code>git fetch</code>获取远程分支</li>
+<li><code>git pull</code>拉取远程分支</li>
+<li><code>git push</code>推送远程分支</li>
+<li><code>git remote</code>管理远程仓库</li>
+<li><code>git submodule</code>管理子模块</li>
+<li><code>git worktree</code>管理工作树</li>
+<li><code>git reflog</code>查看引用日志</li>
+<li><code>git bisect</code>二分查找</li>
+<li><code>git blame</code>查看文件作者</li>
+<li><code>git grep</code>查找文件内容</li>
+<li><code>git log</code>查看提交日志</li>
+<li><code>git show</code>查看提交详情</li>
+</ul>
+<h3><span id="33-高级操作">3.3 高级操作</span></h3>
+<ul>
+<li><code>git filter-branch</code>过滤分支</li>
+<li><code>git subcommand</code>子命令</li>
+<li><code>git rerere</code>重用冲突解决</li>
+<li><code>git gc</code>垃圾回收</li>
+<li><code>git fsck</code>检查仓库</li>
+<li><code>git prune</code>删除无用对象</li>
+</ul>
+<h3><span id="git-版本回退">git 版本回退</span></h3>
+<ul>
+<li><code>git reset --hard HEAD^</code>回退到上一个版本</li>
+<li><code>git reset --hard HEAD^^</code>回退到上上一个版本</li>
+<li><code>git reset --hard HEAD~100</code>回退到上100个版本</li>
+<li><code>git reset --hard commit_id</code>回退到指定版本</li>
+<li><code>git reflog</code>查看命令历史</li>
+<li><code>git reset --hard commit_id</code>回退到指定版本</li>
+<li><code>git reset --hard HEAD@{n}</code>回退到指定版本</li>
+<li><code>git reset --hard ORIG_HEAD</code>回退到上一个版本</li>
+<li><code>git reset --hard</code>回退到上一个版本</li>
+</ul>
+<h3><span id="配置">配置</span></h3>
+<ul>
+<li><code>git config --global user.name "Your Name"</code>设置用户名</li>
+<li>`git config --global user.email "</li>
+<li><code>git config --global core.editor "vim"</code>设置编辑器</li>
+<li><code>git config --global merge.tool "vimdiff"</code>设置合并工具</li>
+<li><code>git config --global color.ui true</code>设置颜色</li>
+<li><code>git config --global alias.st status</code>设置别名</li>
+<li><code>git config --global alias.co checkout</code>设置别名</li>
+<li><code>git config --global alias.ci commit</code>设置别名</li>
+<li><code>git config --global alias.br branch</code>设置别名</li>
+<li><code>git config --global alias.unstage "reset HEAD"</code>设置别名</li>
+</ul>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>os-lab0</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>os-lab1笔记</title>
+    <url>/2024/04/24/os-lab1%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>os-lab2实验报告</title>
+    <url>/2024/04/24/os-lab2%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>os-lab2笔记</title>
+    <url>/2024/04/24/os-lab2%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>os-lab3笔记</title>
+    <url>/2024/04/24/os-lab3%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>os-lab3实验报告</title>
+    <url>/2024/04/24/os-lab3%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>p3-CPU-设计文档</title>
     <url>/2024/02/21/p3-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/</url>
     <content><![CDATA[<h1><span id="单周期mips架构cpu的logisim实现">单周期mips架构CPU的logisim实现</span></h1>
@@ -2170,6 +3352,1933 @@
       </categories>
       <tags>
         <tag>p5</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>p5p6-流水线</title>
+    <url>/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/</url>
+    <content><![CDATA[<h1><span id="mathscr-hugo-mathbbcpu-五级流水线mathscrdesign">$\mathscr {Hugo}$ $\mathbb{CPU}$ 五级流水线$\mathscr{Design}$</span></h1>
+<p>实现五级流水线CPU</p>
+<span id="more"></span>
+<ul>
+<li>命名统一采用hugo命名法（借鉴了匈牙利命名法和下划线命名）</li>
+<li>主体为mips.v模块，不再像P4一样加入DataPath模块，统一在mips.v中完成连线等大部分操作。</li>
+<li>控制部分分为<code>Ctrl_Unit</code>和<code>Hazard_Ctrl</code>两个部分，处理冲突为在能够使用旁路转换的情况下尽可能的使用旁路转换</li>
+<li>流水线阶段分为IF，ID，EX，MEM，WB五个部分
+<ul>
+<li>F：<code>NPC</code>,<code>PC</code>,<code>IM</code></li>
+<li>D: <code>GRF</code>,<code>EXT</code>,<code>CMP</code></li>
+<li>E: <code>ALU</code></li>
+<li>M: <code>DM</code></li>
+<li>W: <code>GRF</code></li>
+</ul>
+</li>
+<li>其中用到大部分的宏定义在<code>def.v</code>中定义</li>
+</ul>
+<h2><span id="cpu流水线的实现">CPU流水线的实现</span></h2>
+<h3><span id="实现指令说明">实现指令说明</span></h3>
+<p>将本CPU实现的指令分为以下几类：</p>
+<table>
+<thead>
+<tr>
+<th>classify</th>
+<th>指令set</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>load</td>
+<td>lw//lh,lhu,lb,lbu</td>
+</tr>
+<tr>
+<td>store</td>
+<td>sw//sh,sb</td>
+</tr>
+<tr>
+<td>calc_r</td>
+<td>add,sub//addu, subu,and,or,nor,xor,slt,sltu</td>
+</tr>
+<tr>
+<td>calc_i</td>
+<td>ori//addiu,addi,xori,slti,sltiu</td>
+</tr>
+<tr>
+<td>shift_s</td>
+<td>sll//sra,srl</td>
+</tr>
+<tr>
+<td>shift_v</td>
+<td>//sllv,srav,srlv</td>
+</tr>
+<tr>
+<td>b_type</td>
+<td>beq//bne</td>
+</tr>
+<tr>
+<td>j</td>
+<td>jal,j</td>
+</tr>
+<tr>
+<td>特殊</td>
+<td>jr,lui</td>
+</tr>
+</tbody>
+</table>
+<p>基本的数据通路</p>
+<p>IF阶段的pc需要保留到后面继续使用</p>
+<p>重点处理的在于ALU</p>
+<h3><span id="命名规范">命名规范</span></h3>
+<ul>
+<li>对于每一个模块依旧采用仅有文件英文名的办法，对于其实例化为_小写</li>
+<li>对于每一条线采用层级+命名的方式（原本采用的是匈牙利命名法，也就是前面加上对应的类型，后发现全部都是wire，遂弃之）</li>
+<li>寄存器文件采用两边的流水线层级加上_REG的方式。</li>
+</ul>
+<h2><span id="数据通路datapath">数据通路DataPath</span></h2>
+<p>同P4，变量命名有稍微修改。</p>
+<p>但没有单独使用一个DataPath的模块，显得比较多余。</p>
+<p>对于一个数据路径，包括取指令(IF)，译码(ID)，执行(EX)，访存(MEM)，回写(WB)这几个方面，相应的有IFU，NPC，GRF，ALU，IM，DM这几个基本单元，单元之间通过Splitter和MUX等进行元件之间的数据交换和处理，这里需要在构建是需要留下几个控制信号的接口，以便于最后CU（控制器单元）单元的构建。</p>
+<h3><span id="ifu取指令单元">IFU取指令单元</span></h3>
+<p>该模块由PC（Programming Counter)模块和IM（Instruction Memory）模块组成。其中PC模块负责对每次新的指令状态进行转移，IM模块则从ROM中得到相应的指令。</p>
+<blockquote>
+<p>这里考虑到之后<u><strong>可能</strong></u>需要将IM和DM放到一起，这里不再对PC和IM进行进一步的封装。</p>
+</blockquote>
+<h4><span id="f_pc程序计数器">F_PC（程序计数器）</span></h4>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>i_reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号</td>
+</tr>
+<tr>
+<td>i_en</td>
+<td>I</td>
+<td>1</td>
+<td>使能信号</td>
+</tr>
+<tr>
+<td>i_npc</td>
+<td>I</td>
+<td>32</td>
+<td>通过计算得到的下一条指令的地址</td>
+</tr>
+<tr>
+<td>or_pc</td>
+<td>O</td>
+<td>32</td>
+<td>状态转移后的地址，输出当前正在执行的地址</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>当Reset信号有效时，将PC寄存器中的值置为0x00003000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>停止</td>
+<td>当Stop信号有效时，PC寄存器忽略时钟输入，PC当前值保持不变</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写 PC 寄存器</td>
+<td>当 Stop 信号失效且时钟上升沿来临时，将下一条指令的地址（next PC）写入 PC 寄存器</td>
+</tr>
+</tbody>
+</table>
+<h4><span id="f_im指令存储器">F_IM（指令存储器）</span></h4>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_pc</td>
+<td>I</td>
+<td>32</td>
+<td>当前正在执行的地址</td>
+</tr>
+<tr>
+<td>o_instr</td>
+<td>O</td>
+<td>32</td>
+<td>输出当前正在执行的指令</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>取指令</td>
+<td>根据当前PC的值从IM中读出对应的指令</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="d_npc下一指令计算单元">D_NPC（下一指令计算单元）</span></h3>
+<p>计算下一个指令，有三种方式，包括直接计算下一条指令，b型跳转指令，j型跳转指令。其中j型跳转指令包括跳转到寄存器的值和直接跳转两种。</p>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_pc</td>
+<td>I</td>
+<td>32</td>
+<td>当前指令地址</td>
+</tr>
+<tr>
+<td>i_npcOp</td>
+<td>I</td>
+<td>2</td>
+<td>NPC控制信号</td>
+</tr>
+<tr>
+<td>i_imm16</td>
+<td>I</td>
+<td>16</td>
+<td>branch类型的16位立即数</td>
+</tr>
+<tr>
+<td>i_imm26</td>
+<td>I</td>
+<td>26</td>
+<td>jump类型的26位立即数</td>
+</tr>
+<tr>
+<td>i_jumpEn</td>
+<td>I</td>
+<td>1</td>
+<td>用于得到branch类型的跳转条件是否成立</td>
+</tr>
+<tr>
+<td>i_ra_of_jr</td>
+<td>I</td>
+<td>32</td>
+<td>寄存器中存储的地址</td>
+</tr>
+<tr>
+<td>o_npc</td>
+<td>O</td>
+<td>32</td>
+<td>下一条指令地址</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>选择信号类型</th>
+<th>位宽</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NPC_PC4</td>
+<td>3</td>
+<td>3‘b000</td>
+<td>pc+4</td>
+</tr>
+<tr>
+<td>NPC_J</td>
+<td>3</td>
+<td>3’b001</td>
+<td>直接跳转，26位立即数拓展后的地址</td>
+</tr>
+<tr>
+<td>NPC_B</td>
+<td>3</td>
+<td>3’b010</td>
+<td>条件跳转，满足条件跳转到16位立即数拓展后的地址</td>
+</tr>
+<tr>
+<td>NPC_JR</td>
+<td>3</td>
+<td>3’b011</td>
+<td>跳转到寄存器存储的地址</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>三种跳转指令</strong></li>
+</ul>
+<p><strong>b型跳转指令</strong></p>
+<p><img src="/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231026163128067.png" alt="image-20231026163128067"></p>
+<p>均为判断后跳转到label（即Offset）</p>
+<p><strong>JR型跳转指令(jr,jalr)</strong></p>
+<p><img src="/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231026163459284.png" alt="image-20231026163459284"></p>
+<p>跳转到寄存器中的存储的地址</p>
+<p><strong>J型跳转指令(j,jal)</strong></p>
+<p><img src="/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231026164030190.png" alt="image-20231026164030190"></p>
+<p>跳转到target这个立即数对应的地址</p>
+<p>其实也可以分为：</p>
+<p><strong>间接寻址</strong>（通过PC+4和Offset寻址）</p>
+<p><strong>直接寻址</strong>（直接跳转到立即数对应地址，或者寄存器中存储的地址）</p>
+<h3><span id="d_grf通用寄存器组">D_GRF（通用寄存器组）</span></h3>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>i_reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号<br>1：复位信号有效<br>0：复位信号无效</td>
+</tr>
+<tr>
+<td>i_writeEn</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号<br>1：写入有效<br>0：写入无效</td>
+</tr>
+<tr>
+<td>i_A1</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定 32 个寄存器中的一个，将其中的数据读出到 RD1</td>
+</tr>
+<tr>
+<td>i_A2</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定 32 个寄存器中的一个，将其中的数据读出到 RD2</td>
+</tr>
+<tr>
+<td>i_A3</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定 32 个寄存器中的一个，将其作为写入目标</td>
+</tr>
+<tr>
+<td>i_WD</td>
+<td>I</td>
+<td>32</td>
+<td>数据输入信号</td>
+</tr>
+<tr>
+<td>o_RD1</td>
+<td>O</td>
+<td>32</td>
+<td>输出A1指定的寄存器中的 32 位数据</td>
+</tr>
+<tr>
+<td>o_RD2</td>
+<td>O</td>
+<td>32</td>
+<td>输出A2指定的寄存器中的 32 位数据</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>i_pc</td>
+<td>I</td>
+<td>32</td>
+<td>用于$display</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>Reset 信号有效时，所有寄存器中储存的值均被清零</td>
+</tr>
+<tr>
+<td>2</td>
+<td>读数据</td>
+<td>读出 A1，A2 地址对应的寄存器中储存的数据，将其加载到 RD1 和 RD2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写数据</td>
+<td>当 WE 信号有效且时钟上升沿来临时，将 WD 中的数据写入到 A3 地址对应的寄存器</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="d_ext拓展单元">D_EXT（拓展单元）</span></h3>
+<p>将16位立即数符号拓展为32位。这里为了提高可拓展性，添加了<code>UnsignedExt</code>接口</p>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_imm16</td>
+<td>I</td>
+<td>16</td>
+<td>16位立即数输入信号</td>
+</tr>
+<tr>
+<td>i_unsigned_ext_Sel</td>
+<td>I</td>
+<td>1</td>
+<td>无符号拓展信号<br>1：无符号拓展（0拓展）<br>0：符号拓展</td>
+</tr>
+<tr>
+<td>o_imm32</td>
+<td>O</td>
+<td>32</td>
+<td>32位立即数输出信号</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>符号拓展</td>
+<td>将16位立即数进行符号拓展</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="d_cmpb类指令比较单元">D_CMP(B类指令比较单元)</span></h3>
+<p>用于生成Branch类跳转信号是否跳转的使能信号。该单元根据输入的branchOp信号对当前B指令的类型进行判断，进而对当前输入的数值进行比较，最后输出结果。</p>
+<ul>
+<li>端口定义</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_cmpA</td>
+<td>I</td>
+<td>32</td>
+<td>输入信号</td>
+</tr>
+<tr>
+<td>i_cmpB</td>
+<td>I</td>
+<td>32</td>
+<td>输入信号</td>
+</tr>
+<tr>
+<td>i_branchOp</td>
+<td>I</td>
+<td></td>
+<td>比较类型</td>
+</tr>
+<tr>
+<td>jumpOp</td>
+<td>O</td>
+<td>1</td>
+<td>是否满足跳转条件</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>功能定义</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>branchOP</th>
+<th>位宽</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMP_EQUAL</td>
+<td>4</td>
+<td>4‘b0000</td>
+<td>判断是否相等</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="e_alu逻辑运算单元">E_ALU（逻辑运算单元）</span></h3>
+<p>该模块可实现加，减，按位与，按位或等 11 种运算，并根据 ALUOP 信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断</p>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">方向</th>
+<th style="text-align:left">位宽</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">ALUOp</td>
+<td style="text-align:left">I</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">ALU 功能选择信号</td>
+</tr>
+<tr>
+<td style="text-align:left">src_A</td>
+<td style="text-align:left">I</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">参与 ALU 计算的第一个值</td>
+</tr>
+<tr>
+<td style="text-align:left">src_B</td>
+<td style="text-align:left">I</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">参与 ALU 计算的第二个值 S</td>
+</tr>
+<tr>
+<td style="text-align:left">shamt</td>
+<td style="text-align:left">I</td>
+<td style="text-align:left">5</td>
+<td style="text-align:left">移位数输入</td>
+</tr>
+<tr>
+<td style="text-align:left">out</td>
+<td style="text-align:left">O</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">输出 ALU 计算结果</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ALUOp</th>
+<th>指令</th>
+<th>Opcode</th>
+<th>Op</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加法</td>
+<td>add</td>
+<td>00000</td>
+<td>ALURes = SrcA+SrcB</td>
+</tr>
+<tr>
+<td>减法</td>
+<td>sub</td>
+<td>00001</td>
+<td>ALURes = SrcA-SrcB</td>
+</tr>
+<tr>
+<td>乘法(low)</td>
+<td>mul</td>
+<td>00010</td>
+<td>ALURes = SrcA*SrcB</td>
+</tr>
+<tr>
+<td>除法(商)</td>
+<td>div</td>
+<td>00011</td>
+<td>ALURes = SrcA / SrcB</td>
+</tr>
+<tr>
+<td>与运算</td>
+<td>and</td>
+<td>00100</td>
+<td>ALURes = SrcA &amp; SrcB</td>
+</tr>
+<tr>
+<td>或运算</td>
+<td>or</td>
+<td>00101</td>
+<td>ALURes = SrcA | SrcB</td>
+</tr>
+<tr>
+<td>异或运算</td>
+<td>xor</td>
+<td>00110</td>
+<td>ALURes = SrcA $\oplus$ SrcB</td>
+</tr>
+<tr>
+<td>或非运算</td>
+<td>nor</td>
+<td>00111</td>
+<td>ALURes = ~(SrcA | SrcB)</td>
+</tr>
+<tr>
+<td>逻辑左移</td>
+<td>sll</td>
+<td>01000</td>
+<td>ALURes = SrcB &lt;&lt; Shift</td>
+</tr>
+<tr>
+<td>逻辑右移</td>
+<td>srl</td>
+<td>01001</td>
+<td>ALURes = SrcB &gt;&gt; Shift</td>
+</tr>
+<tr>
+<td>算数右移</td>
+<td>sra</td>
+<td>01010</td>
+<td>ALURes = SrcB &gt;&gt;&gt; Shift</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="m_dm数据存储器">M_DM（数据存储器）</span></h3>
+<ul>
+<li><strong>端口定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>i_clk</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>i_reset</td>
+<td>I</td>
+<td>1</td>
+<td>复位信号</td>
+</tr>
+<tr>
+<td>i_Addr</td>
+<td>I</td>
+<td>32</td>
+<td>内存中的地址信号</td>
+</tr>
+<tr>
+<td>i_dmOp</td>
+<td>I</td>
+<td>2</td>
+<td>选择信号<br>2’b00:word<br>2’b01:half_word<br>2’b10:byte</td>
+</tr>
+<tr>
+<td>i_WriteEn</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号<br>1：写入有效<br>0：写入无效</td>
+</tr>
+<tr>
+<td>i_writeData</td>
+<td>I</td>
+<td>32</td>
+<td>在写入信号有效时，写入内存地址的数据</td>
+</tr>
+<tr>
+<td>o_RD</td>
+<td>O</td>
+<td>32</td>
+<td>输出内存中对应地址的数据</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>功能定义</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>复位</td>
+<td>reset信号有效时，所有寄存器的中存储的值均被清零</td>
+</tr>
+<tr>
+<td>2</td>
+<td>读数据</td>
+<td>读出A地址对应的存储单元的数据，将其加载到RD</td>
+</tr>
+<tr>
+<td>3</td>
+<td>写数据</td>
+<td>当WE信号有效且时钟上升沿来临时，将WD中的数据写入到A地址对应的存储单元</td>
+</tr>
+</tbody>
+</table>
+<h2><span id="流水器寄存器模块定义">流水器寄存器模块定义</span></h2>
+<p>采用的是分布式译码，流水的是pc和instr，在每个阶段实例化CU模块，得到该阶段的对应控制信号。</p>
+<h3><span id="fd_refifid流水寄存器">FD_REF(IF/ID流水寄存器)</span></h3>
+<ul>
+<li>
+<p><strong>端口定义</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方向</th>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">位宽</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">输入来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_clk</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">时钟信号</td>
+<td style="text-align:left">mips.v 中的 clk</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_reset</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">同步复位信号</td>
+<td style="text-align:left">mips.v 中的 reset</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_en</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">D 级寄存器使能信号</td>
+<td style="text-align:left">HCU 中 stall 信号取反</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_flush</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">D 级寄存器清空信号</td>
+<td style="text-align:left">默认为 1‘b0</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">F_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">F 级 instr 输入</td>
+<td style="text-align:left">IFU_instr</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">F_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">F 级 pc 输入</td>
+<td style="text-align:left">IFU_pc</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">D_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">D 级 instr 输出</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">D_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">D 级 pc 输出</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3><span id="de_regidex-流水寄存器">DE_Reg（ID/EX 流水寄存器）</span></h3>
+<ul>
+<li>
+<p><strong>端口定义</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方向</th>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">位宽</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">输入来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_clk</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">时钟信号</td>
+<td style="text-align:left">mips.v中的clk</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_reset</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">同步复位信号</td>
+<td style="text-align:left">mips.v中的reset</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_en</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">使能信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_flush</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">清空信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_grf_RD1</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">D级产生的有效信号</td>
+<td style="text-align:left">from GRF</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_grf_RD2</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">D级产生的有效信号</td>
+<td style="text-align:left">from GRF</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">D级产生的有效信号</td>
+<td style="text-align:left">from EXT</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_grf_RD1</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">传给E级的有效信号</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_grf_RD2</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">传给E级的有效信号</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">传给E级的有效信号</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>运算功能</strong></p>
+<p>$Tnew_D = (Tnew_E &gt; 0) ? (Tnew_D-1) : 0$</p>
+</li>
+</ul>
+<h3><span id="em_regexmem-流水寄存器">EM_Reg（EX/MEM 流水寄存器）</span></h3>
+<ul>
+<li>
+<p>端口定义</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方向</th>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">位宽</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">输入来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_clk</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">时钟信号</td>
+<td style="text-align:left">mips.v中的clk</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_reset</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">同步复位信号</td>
+<td style="text-align:left">mips.v中的reset</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_en</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">使能信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_flush</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">清空信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_alu_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_mem_writeData</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">关于sw的来自GRF_RD2的信号</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_alu_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_mem_writeData</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>运算功能</strong></p>
+<blockquote>
+<p>我这里暂停部分在专门的一个模块HU中解决了</p>
+</blockquote>
+<p>$Tnew_E = (Tnew_D &gt; 0) ? (Tnew_E-1) : 0$</p>
+</li>
+</ul>
+<h3><span id="mw_regmemwb-流水寄存器">MW_Reg（MEM/WB 流水寄存器）</span></h3>
+<ul>
+<li>
+<p><strong>接口定义</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">方向</th>
+<th style="text-align:left">信号名</th>
+<th style="text-align:left">位宽</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">输入来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_clk</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">时钟信号</td>
+<td style="text-align:left">mips.v中的clk</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_reset</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">同步复位信号</td>
+<td style="text-align:left">mips.v中的reset</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_en</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">使能信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_flush</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">清空信号</td>
+<td style="text-align:left">from HU</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_pc</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_instr</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_dm_RD</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">来自dm的数据读出信号</td>
+<td style="text-align:left">from M_DM</td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_alu_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">I</td>
+<td style="text-align:left">i_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_dm_RD</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_alu_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">or_ext_result</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2><span id="控制单元_cu">控制单元_CU</span></h2>
+<p>输入改为instr，之前为opcode和func</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>Opcode[31:26]</th>
+<th>[25:21]</th>
+<th>[20:16]</th>
+<th>[15:11]</th>
+<th>[10:6]</th>
+<th>[5:0]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>add</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>sub</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>100010</td>
+</tr>
+<tr>
+<td>ori</td>
+<td>001101</td>
+<td>rs</td>
+<td>rt</td>
+<td>immediate</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>lw</td>
+<td>100011</td>
+<td>base</td>
+<td>rt</td>
+<td>offset</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>sw</td>
+<td>101011</td>
+<td>base</td>
+<td>rt</td>
+<td>offset</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>beq</td>
+<td>000100</td>
+<td>rs</td>
+<td>rt</td>
+<td>offset</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>lui</td>
+<td>001111</td>
+<td>00000</td>
+<td>rt</td>
+<td>immediate</td>
+<td>~</td>
+<td>~</td>
+</tr>
+<tr>
+<td>nop</td>
+<td>000000</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="分支转移实现">分支转移实现</span></h3>
+<h4><span id="b-类指令">B 类指令</span></h4>
+<p>为了减少因控制冲突导致的暂停（<strong>stall</strong>），我们将 B 类指令的判断进行前置，单独使用 CMP 模块进行判断。当 B 类指令进入 D 级后（此时 F 级的指令为编译优化调度的指令），CMP 模块的判断结果进入 NPC，如过 CMP 结果为真（CMP_out = 1）而且 NPCOp 信号为 0x001（说明当前指令为 B 类指令），NPC 输出转移的地址 npc 并进入 IFU 的输入端，在下一时钟沿上升时进入 F 级，实现转移。</p>
+<h4><span id="j-和-jal">j 和 jal</span></h4>
+<p>当 j 或 jal 进入 D 级后（此时 F 级的指令为编译优化调度的指令），D_instr 中 imm26 域的数据进入 NPC 进行处理，如果当前 NPCOp 信号为 0x010（说明当前指令为 jal 或 j 指令），NPC 输出转移的地址 npc，并进入 IFU 的输入端，在下一时钟沿上升时进入 F 级，实现转移。</p>
+<p>jal 指令在实现跳转的同时，还需要将下一条指令的地址存入 31 号寄存器中，因此我们需要在 IFU 中计算出改地址，并随着 jal 指令进行流水，最终在 W 级写入 GRF 的 31 号寄存器。由于存在延迟槽，pc+4 地址中的指令是编译优化机制调度过来的，因此我们要保存的地址应该为 pc+8。</p>
+<h4><span id="jr">jr</span></h4>
+<p>当 jr 进入 D 级后（此时 F 级的指令为编译优化调度的指令），D_V1_f（经过转发后的 D_V1 值）进入 NPC，如果当前 NPCOp 信号为 0x011（说明当前指令为 jr 指令），NPC 输出转移的地址 npc，并进入 IFU 的输入端，在下一时钟沿上升时进入 F 级，实现转移。</p>
+<h2><span id="冒险处理">冒险处理</span></h2>
+<p>冒险处理我们均通过 “A_T” 法实现 ——</p>
+<h3><span id="转发forward">转发（forward）</span></h3>
+<p><strong>无脑转发策略。</strong></p>
+<p><strong>将所有在该层级后面的均进行转发。</strong></p>
+<p><strong>比如ID级流水，需要用到D_rs和D_rt的对应寄存器的值。对于写入寄存器的值，可能为E级中的，E_alu_result, M_mem_writeData。</strong></p>
+<p>当前面的指令要写寄存器但还未写入，而后面的指令需要用到没有被写入的值时，这时候会产生<strong>数据冒险</strong>，我们首先考虑进行转发。我们<strong>假设所有的数据冒险均可通过转发解决</strong>。也就是说，当某一指令前进到必须使用某一寄存器的值的流水阶段时，这个寄存器的值一定已经产生，并<strong>存储于后续某个流水线寄存器中</strong>。</p>
+<p>在这一阶段，我们不管需要的值有没由计算出，都要进行转发，即暴力转发。为实现这一机制，我们要清楚哪些模块需要转发后的数据（<strong>需求者</strong>）和保存着写入值的流水寄存器（<strong>供应者</strong>）</p>
+<ul>
+<li>
+<p><strong>供应者及其产生的数据</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">流水级</th>
+<th style="text-align:left">产生数据</th>
+<th style="text-align:left">MUX 名 &amp; 选择信号名</th>
+<th style="text-align:left">MUX 输出名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">E</td>
+<td style="text-align:left">E_E32，E_pc8</td>
+<td style="text-align:left">MUX_E_out &amp; SelEMOut</td>
+<td style="text-align:left">E_out</td>
+</tr>
+<tr>
+<td style="text-align:left">M</td>
+<td style="text-align:left">M_AO，M_pc8</td>
+<td style="text-align:left">MUX_M_out &amp; SelEMOut</td>
+<td style="text-align:left">M_out</td>
+</tr>
+<tr>
+<td style="text-align:left">W</td>
+<td style="text-align:left">W_AO，W_RD，W_pc8</td>
+<td style="text-align:left">MUX_W_out &amp; SelWOut</td>
+<td style="text-align:left">W_out</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>需求者及其产生的数据</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">接收端口</th>
+<th style="text-align:left">选择数据</th>
+<th style="text-align:left">HMUX 名 &amp; 选择信号名</th>
+<th style="text-align:left">MUX 输出名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">CMP_D1/NPC_ra</td>
+<td style="text-align:left">D_V1，M_out，E_out</td>
+<td style="text-align:left">HMUX_CMP_D1 &amp; FwdCMPD1</td>
+<td style="text-align:left">D_V1_f</td>
+</tr>
+<tr>
+<td style="text-align:left">CMP_D2</td>
+<td style="text-align:left">D_v1，M_out，E_out</td>
+<td style="text-align:left">HMUX_CMP_D2 &amp; FwdCMPD2</td>
+<td style="text-align:left">D_V2_f</td>
+</tr>
+<tr>
+<td style="text-align:left">ALU_A</td>
+<td style="text-align:left">E_V1， W_out，M_out</td>
+<td style="text-align:left">HMUX_ALU_A &amp; FwdALUA</td>
+<td style="text-align:left">E_V1_f</td>
+</tr>
+<tr>
+<td style="text-align:left">ALU_B</td>
+<td style="text-align:left">E_V2，W_out，M_out</td>
+<td style="text-align:left">HMUX_ALU_B &amp; FwdALUB</td>
+<td style="text-align:left">E_V1_f</td>
+</tr>
+<tr>
+<td style="text-align:left">DM_WD</td>
+<td style="text-align:left">M_V2， W_out</td>
+<td style="text-align:left">HMUX_DM &amp; FwdDM</td>
+<td style="text-align:left">M_V2_f</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>从上表可以看出，W 级中的数据没有转发到 D 级，原因是我们在 GRF 内实现了内部转发机制，将 GRF 输入端的数据（还未写入）及时反映到 RD1 或这 RD2，判断条件为 <code>A3 == A2</code> 或者 <code>A3 == A1</code>。</p>
+<p>此时为了生成 HMUX 的选择信号，我们需要向 HCU（冒险控制器）输入”A” 数据，然后进行选择信号的计算，执行转发的条件为 ——</p>
+<ul>
+<li><strong>前位点的读取寄存器地址和某转发输入来源的写入寄存器地址相等且不为 0</strong></li>
+<li><strong>写使能信号有效</strong></li>
+</ul>
+<p>根据以上条件我们可以生成上面的 5 个 HMUX 选择信号，选择信号的输出值应遵循 “就近原则”，及最先产生的数据最先被转发。</p>
+<h3><span id="暂停stall">暂停（stall）</span></h3>
+<p>接下来，我们来处理通过转发不能处理的数据冒险。在这种情况下，新的数据还未来得及产生。我们只能暂停流水线，等待新的数据产生。为了方便处理，我们仅仅为 D 级的指令进行暂停处理。</p>
+<p>我们把 Tuse 和 Tnew 作为暂停的判断依据 ——</p>
+<ul>
+<li>Tuse：指令进入 <strong>D 级</strong>后，其后的某个功能部件<strong>再</strong>经过多少时钟周期就<strong>必须</strong>要使用寄存器值。对于有两个操作数的指令，其<strong>每个操作数的 Tuse 值可能不等</strong>（如 store 型指令 rs、rt 的 Tuse 分别为 1 和 2 ）。</li>
+<li>Tnew：位于 <strong>E 级及其后各级</strong>的指令，再经过多少周期就能够产生要写入寄存器的结果。在我们目前的 CPU 中，W 级的指令 Tnew 恒为 0；对于同一条指令，Tnew@M = max (Tnew@E - 1, 0)</li>
+</ul>
+<p>在这一阶段，我们找到 D 级生成的 Tuse_rs 和 Tuse_rt 和在 E,M,W 级寄存器中流水的 Tnew_D，Tnew_M，Tnew_W，如下表所示</p>
+<ul>
+<li>
+<p><strong>Tuse 表</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指令类型</th>
+<th style="text-align:left">Tuse_rs</th>
+<th style="text-align:left">Tuse_rt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">calc_R</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">1</td>
+</tr>
+<tr>
+<td style="text-align:left">calc_I</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">shift</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">1</td>
+</tr>
+<tr>
+<td style="text-align:left">shiftv</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">1</td>
+</tr>
+<tr>
+<td style="text-align:left">load</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">store</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">2</td>
+</tr>
+<tr>
+<td style="text-align:left">branch</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">jump</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">jr</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">X</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>Tnew 表</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指令类型</th>
+<th style="text-align:left">Tnew_D</th>
+<th style="text-align:left">Tnew_E</th>
+<th style="text-align:left">Tnew_M</th>
+<th style="text-align:left">Tnew_W</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">calc_R</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">calc_I</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">shift</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">shiftv</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">load</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">store</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">branch</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">jal</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">jr</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+<td style="text-align:left">X</td>
+</tr>
+<tr>
+<td style="text-align:left">lui</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>然后我们 Tnew 和 Tuse 传入 HCU（冒险控制器中），然后进行 stall 信号的计算。如果 Tnew &gt; TuseHCU 中的 stall 信号值为 1，此时执行以下操作 ——</p>
+<ul>
+<li><strong>冻结 PC 寄存器（IFU_en = ~stall = 0）</strong></li>
+<li><strong>冻结 D 级寄存器（D_en = ~stall = 0）</strong></li>
+<li><strong>清空 E 级寄存器（E_clr = stall = 1）</strong></li>
+</ul>
+<h1><span id="思考题">思考题</span></h1>
+<blockquote>
+<p>1、我们使用提前分支判断的方法尽早产生结果来减少因不确定而带来的开销，但实际上这种方法并非总能提高效率，请从流水线冒险的角度思考其原因并给出一个指令序列的例子。</p>
+</blockquote>
+<ul>
+<li>我们使用两个寄存器值的时间最早来到了 D 级，所以很可能会引发暂停.</li>
+<li>如下面这种情况，若 beq 的结果在 E 级产生，则不需要暂停，可以转发，但是现在 beq 在 D 级的时候 lw 还在 M 级，没有产生结果，需要暂停。</li>
+</ul>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">lw    $t0, 0($0)
+nop
+beq   $t0, $t0, label<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>2、因为延迟槽的存在，对于 jal 等需要将指令地址写入寄存器的指令，要写回 PC + 8，请思考为什么这样设计？</p>
+</blockquote>
+<ul>
+<li>因为延迟槽的存在，跳转指令的后一条必然会执行，所以需要把 PC+8 写入寄存器，不然 jr 时延迟槽内的指令会再执行一次</li>
+</ul>
+<blockquote>
+<p>3、我们要求大家所有转发数据都来源于流水寄存器而不能是功能部件（如 DM 、 ALU ），请思考为什么？</p>
+</blockquote>
+<ul>
+<li>因为流水寄存器中的储存的数据时前一级已经计算出来的数据，在当前周期内时稳定输出的。而功能部件的输出是有延迟的，如果让这些部件提供数据，有可能再其在回写数据生成前就写入了错误的数据，导致数据波动。</li>
+</ul>
+<blockquote>
+<p>4、我们为什么要使用 GPR 内部转发？该如何实现？</p>
+</blockquote>
+<p>如果你W级写入数据的寄存器与D级读寄存器的地址相同时，将会你导致出现错误的数值，因此需要通过内部转发来规避数据冒险。</p>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">// 内部转发</span>
+    <span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> D_FWD_RD1_D<span class="token punctuation">,</span> D_FWD_RD2_D<span class="token punctuation">;</span>
+    <span class="token keyword">assign</span> D_FWD_RD1_D <span class="token operator">=</span> <span class="token punctuation">(</span> i_A1 <span class="token operator">==</span> <span class="token number">5'h0</span> <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">32'h0</span><span class="token punctuation">:</span>
+                         <span class="token punctuation">(</span><span class="token punctuation">(</span>i_A1 <span class="token operator">==</span> i_A3<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> i_WD <span class="token punctuation">:</span>
+                                            r_rf<span class="token punctuation">[</span>i_A1<span class="token punctuation">]</span><span class="token punctuation">;</span> 
+    <span class="token keyword">assign</span> D_FWD_RD2_D <span class="token operator">=</span> <span class="token punctuation">(</span> i_A2 <span class="token operator">==</span> <span class="token number">5'h0</span> <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">32'h0</span><span class="token punctuation">:</span>
+                         <span class="token punctuation">(</span><span class="token punctuation">(</span>i_A2 <span class="token operator">==</span> i_A3<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> i_WD <span class="token punctuation">:</span>
+                                            r_rf<span class="token punctuation">[</span>i_A2<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>5、我们转发时数据的需求者和供给者可能来源于哪些位置？共有哪些转发数据通路？</p>
+</blockquote>
+<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> D_FWD_rs_RD1 <span class="token operator">=</span> <span class="token punctuation">(</span>D_rs <span class="token operator">==</span> <span class="token number">5'h0</span>    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">32'h0000_0000</span> <span class="token punctuation">:</span>
+                           <span class="token punctuation">(</span>D_rs <span class="token operator">==</span> E_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> E_grf_writeData <span class="token punctuation">:</span>
+                           <span class="token punctuation">(</span>D_rs <span class="token operator">==</span> M_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> M_grf_writeData <span class="token punctuation">:</span>
+                                                D_grf_RD1<span class="token punctuation">;</span>
+<span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> D_FWD_rt_RD2 <span class="token operator">=</span> <span class="token punctuation">(</span>D_rt <span class="token operator">==</span> <span class="token number">5'h0</span>    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">32'h0000_0000</span> <span class="token punctuation">:</span>
+                           <span class="token punctuation">(</span>D_rt <span class="token operator">==</span> E_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> E_grf_writeData <span class="token punctuation">:</span>
+                           <span class="token punctuation">(</span>D_rt <span class="token operator">==</span> M_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> M_grf_writeData <span class="token punctuation">:</span>
+                                                D_grf_RD2<span class="token punctuation">;</span>
+
+<span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> E_FWD_rs_RD1 <span class="token operator">=</span> <span class="token punctuation">(</span>E_rs <span class="token operator">==</span> <span class="token number">5'h0</span>    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token punctuation">:</span>
+                           <span class="token punctuation">(</span>E_rs <span class="token operator">==</span> M_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> M_grf_writeData <span class="token punctuation">:</span>
+                           <span class="token punctuation">(</span>E_rs <span class="token operator">==</span> W_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> W_grf_writeData <span class="token punctuation">:</span>
+                                                E_grf_RD1<span class="token punctuation">;</span>
+<span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> E_FWD_rt_RD2 <span class="token operator">=</span> <span class="token punctuation">(</span>E_rt <span class="token operator">==</span> <span class="token number">5'h0</span>    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token punctuation">:</span>
+                           <span class="token punctuation">(</span>E_rt <span class="token operator">==</span> M_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> M_grf_writeData <span class="token punctuation">:</span>
+                           <span class="token punctuation">(</span>E_rt <span class="token operator">==</span> W_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> W_grf_writeData <span class="token punctuation">:</span>
+                                                E_grf_RD2<span class="token punctuation">;</span>
+
+<span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> M_FWD_writeData <span class="token operator">=</span> <span class="token punctuation">(</span>M_rt <span class="token operator">==</span> <span class="token number">5'h0</span>    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token punctuation">:</span>
+                              <span class="token punctuation">(</span>M_rt <span class="token operator">==</span> W_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> W_grf_writeData <span class="token punctuation">:</span>
+                                                   M_dm_writeData  <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>6、在课上测试时，我们需要你现场实现新的指令，对于这些新的指令，你可能需要在原有的数据通路上做哪些扩展或修改？提示：你可以对指令进行分类，思考每一类指令可能修改或扩展哪些位置。</p>
+</blockquote>
+<ul>
+<li>高内聚低耦合原理：大多数只需要改变控制信号以及相应的功能模块增加功能，但不排除某些需要修改数据通路</li>
+<li>对于计算类：首先改变 MCU，注意每个指令的控制信号的对应，再改 ALU 的结构，增加输出选择</li>
+<li>对于访存类：改变 MCU + 修改 DM 增加相应的功能</li>
+<li>对于跳转类：修改 MCU+NPC 相应功能修改</li>
+<li>小技巧：寻找已有的指令中与新增的指令相似的指令（可能不止一条），然后顺着这几条指令改。</li>
+</ul>
+<blockquote>
+<p>7、确定你的译码方式，简要描述你的译码器架构，并思考该架构的优势以及不足。</p>
+</blockquote>
+<p>我采用的是分布式译码。我感觉分布式译码器确实从实际运用上讲会造成器件的浪费，但是单从code上来讲，确实会方便很多，其中把每个instr传进去也感觉十分方便。</p>
+<p>但是可能不足在于修改了CU相应的部分，mips.v和HU.v都需要进行比较大的改动。</p>
+<h3><span id="流水线冒险">流水线冒险</span></h3>
+<ol>
+<li>
+<p><strong>在采用本节所述的控制冒险处理方式下，PC 的值应当如何被更新？请从数据通路和控制信号两方面进行说明。</strong></p>
+<p><strong>A</strong>：当需要进行暂停时，IFU 的使能信号失效，PC 值不变。当不需要进行分支转移和跳转时，NPC 中将 F_pc 信号加 4 处理返回 IFU，下一时钟沿来临时更新为 F_pc+4。当执行分支指令时，NPC 将 D_pc +4 和符号扩展后的 imm16 相加，返回 IFU，下一时钟沿上升时更新。当执行 j/jal 指令时，NPC 将 imm26 进行扩展（前四位补 D_pc 的前四位，后两位补 0），返回 IFU，下一时钟沿上升时更新。当执行 jr 指令时，NPC 将从 GRF 的 RD1 端口（考虑转发）输出的值输出，返回 IFU 下一时钟沿上升时更新。</p>
+</li>
+<li>
+<p><strong>对于 jal 等需要将指令地址写入寄存器的指令，为什么需要回写 PC+8 ？</strong></p>
+<p><strong>A</strong>：因为需要考虑编译优化，jal 的下一条指令是延迟槽中的指令，在 jal 执行前会被执行。如果回写 PC+4 的话，当出现 “jr $ra” 时，将会回到延迟槽，重复执行延迟槽中的指令。因此需要回写 PC+8。</p>
+</li>
+</ol>
+<h3><span id="数据冒险的分析">数据冒险的分析</span></h3>
+<ol>
+<li>
+<p><strong>为什么所有的供给者都是存储了上一级传来的各种数据的流水级寄存器，而不是由 ALU 或者 DM 等部件来提供数据？</strong></p>
+<p><strong>A</strong>：因为流水寄存器中的储存的数据时前一级已经计算出来的数据，在当前周期内时稳定输出的。而功能部件的输出是有延迟的，如果让这些部件提供数据，有可能再其在回写数据生成前就写入了错误的数据，导致数据波动。</p>
+</li>
+</ol>
+<h3><span id="at-法处理流水线数据冒险">AT 法处理流水线数据冒险</span></h3>
+<ol>
+<li>
+<p><strong>“转发（旁路）机制的构造” 中的 Thinking 1-4；</strong></p>
+<p><strong>Thinking 1</strong>：如果不采用已经转发过的数据，而采用上一级中的原始数据，会出现怎样的问题？试列举指令序列说明这个问题。</p>
+<p><strong>A</strong>：例如：</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">addi    $s0, $0, 4
+andi	$s1, $s0, 5
+sw      $s1, 4($s0)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><strong>Thinking 2</strong>：我们为什么要对 GPR 采用内部转发机制？如果不采用内部转发机制，我们要怎样才能解决这种情况下的转发需求呢？</p>
+<p><strong>A</strong>：因为需要使得 W 级保存的将要写入得数据及时反馈到 GRF 的输出端口，从而规避数据冒险。如果不采用内部转发，我们可以在 GRF 的输出端口加入多路选择器，将 W 级的数据进行转发。</p>
+<p><strong>Thinking 3</strong>：为什么 0 号寄存器需要特殊处理？</p>
+<p><strong>A</strong>：因为对 0 号寄存器的写入是无效的，如果不特殊处理，则会使得向 0 号寄存器写入的数据（无效输入）被错误转发，从而造成 BUG。</p>
+<p><strong>Thinking 4</strong>：什么是 “最新产生的数据”？</p>
+<p><strong>A</strong>: 距离当前需求者最近的流水寄存器中储存的数据。</p>
+</li>
+<li>
+<p><strong>在 AT 方法讨论转发条件的时候，只提到了 “供给者需求者的 A 相同，且不为 0”，但在 CPU 写入 GRF 的时候，是有一个 we 信号来控制是否要写入的。为何在 AT 方法中不需要特判 we 呢？为了用且仅用 A 和 T 完成转发，在翻译出 A 的时候，要结合 we 做什么操作呢？</strong></p>
+<p><strong>A</strong>： 因为当 we 信号为 0 时我们就把 RF 写入地址置为 0，因此如果 “供给者的 A 不为 0”，就已经排除了 “写入信号为 0” 的情况。</p>
+</li>
+</ol>
+<h3><span id="在线测试相关说明">在线测试相关说明</span></h3>
+<p>在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？</p>
+<p>如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证<strong>覆盖</strong>了所有需要测试的情况；如果你是<strong>完全随机</strong>生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了<strong>特殊的策略，<strong>比如构造连续数据冒险序列，请你描述一下你使用的策略如何</strong>结合了随机性</strong>达到强测的效果。</p>
+<p>此思考题请同学们结合自己测试 CPU 使用的具体手段，按照自己的实际情况进行回答。</p>
+<p><strong>A</strong>：我是采用半随机生成半手动构造的方法。对于功能型指令，完全通过 python 脚本自动生成。并且为了提高数据冲突的概率，我们仅仅使用 0~7 号寄存器进行测试。对于跳转指令，我们先使用一定模板进行构建，然后为了增加数据冒险和控制冒险，我们又手动进行一定修改，使得测试样例尽可能更多的覆盖所有可能的情况</p>
+<h3><span id="参考">参考</span></h3>
+<p><a href="https://thysrael.github.io/posts/59164957">一篇写的非常好的博客</a></p>
+]]></content>
+      <categories>
+        <category>计算机组成</category>
+      </categories>
+      <tags>
+        <tag>p6</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>p7-知识点整理</title>
+    <url>/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<h1><span id="mips-微系统">mips 微系统</span></h1>
+<h2><span id="cp0协处理器">CP0协处理器</span></h2>
+<h3><span id="cpu-控制寄存器"><strong>CPU 控制寄存器</strong></span></h3>
+<table>
+<thead>
+<tr>
+<th>寄存器助记符</th>
+<th>寄存器编号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SR</td>
+<td>12</td>
+<td>State Register</td>
+</tr>
+<tr>
+<td>Cause</td>
+<td>13</td>
+<td>记录异常中断的原因</td>
+</tr>
+<tr>
+<td>EPC</td>
+<td>14</td>
+<td>Exception program counter发生异常和中断后从哪里重新开始执行</td>
+</tr>
+</tbody>
+</table>
+<h4><span id="sr"><strong>SR</strong></span></h4>
+<p><img src="/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/image-20231206164953902.png" alt="image-20231206164953902"></p>
+<p>这里我们实际使用到的或者说有意义的只有</p>
+<p><strong>IM——SR[15:10]</strong></p>
+<blockquote>
+<p>其实这里应该指的是SR[15:8]的这8位，其中IP1-0也就是SR[9:8]是由CPU内部产生的</p>
+</blockquote>
+<ul>
+<li>中断屏蔽：一个8位的域定义哪些允许中断源活动时产生异常。其中6个中断源由CPU核外部的信号产生。其余两个是Cause寄存器中软件可写的中断位</li>
+</ul>
+<p><strong>EXL——SR[1]</strong></p>
+<ul>
+<li>异常级：任何异常发生时置位，这会强行进入核心态并禁止中断：目的是吧EXL位维持足够长的时间以便软件决定新的CPU特权级和中断屏蔽该设成什么</li>
+</ul>
+<p><strong>IE——SR[0]</strong></p>
+<ul>
+<li>全局的中断使能位：注意不管这位是什么值，EXL和ERL总是禁止所有的中断</li>
+</ul>
+<h4><span id="cause"><strong>Cause</strong></span></h4>
+<p><img src="/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/image-20231206170514085.png" alt="image-20231206170514085"></p>
+<p><strong>BD——Cause[31]</strong></p>
+<ul>
+<li>
+<p>分支延迟：EPC保存的是异常处理完之后的返回地址，正常情况下，这也指向异常受害指令。</p>
+</li>
+<li>
+<p>但是如果发生异常的指令是在一条转移指令的延时槽里，EPC得指向那条转移指令：重新执行转移指令没有- 什么害处，但是如果返回到延迟槽指令本身，转移就不会发生，从而这个异常将破坏被中断的程序。</p>
+</li>
+<li>
+<p>只要异常发生在延迟槽的指令，Cause(BD)就会置为，EPC就会指向分支指令。如果想要分析异常受害指令，只要看看Cause(BD)(如果Cause(BD)==1，那么该指令位于EPC+4)就知道了。</p>
+</li>
+</ul>
+<p><strong>IP——Cause[15:10]</strong></p>
+<blockquote>
+<p>这里其实也是IM一个道理</p>
+</blockquote>
+<p>待决的中断：这里表示待发生的中断。IP照抄CPU硬件的输入信号，<code>IP1-0</code>（软件中断位）可读可写包含你最近写入的值。</p>
+<ul>
+<li>当相应的<code>SR(IM)</code>位（还要受到其它禁止中断的条件约束）允许时，这八位中的任意以为活动都会导致一个中断</li>
+</ul>
+<p><strong>BD——Cause[6:2]</strong></p>
+<p>这是一个5位的编码，告诉你发生了哪种异常。</p>
+<table>
+<thead>
+<tr>
+<th>ExcCode</th>
+<th>助记符</th>
+<th>指令与指令类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Int</td>
+<td>所有指令</td>
+<td>中断</td>
+</tr>
+<tr>
+<td>4</td>
+<td>AdEL</td>
+<td>所有指令<br>load型指令（或特指其中某型）</td>
+<td>（取数，取指或者存数时）地址错误：<br>PC地址未字对齐<br>PC地址超过0x3000-0x6ffc<br><br> （取数，取指或者存数时）地址错误：<br><strong>lw</strong>：取数地址未与4字节对齐<br><strong>lh</strong>：取数地址未与2字节对齐<br><strong>lh，lb</strong>：取Timer</td>
+</tr>
+<tr>
+<td>5</td>
+<td>AdES</td>
+<td>store型指令</td>
+<td>（取数，取指或者存数时）地址错误：<br><strong>sw</strong>：存数地址未4字节对齐<br><strong>sh</strong>：存数地址未2字节对齐<br><strong>sh，sb</strong>：存Timer寄存器的值<br>store型指令：<br>计算地址加法溢出<br>向计时器的Count寄存器存值<br>存数地址超过DM，Timer0，Timer1，中断发生器的范围</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Syscall</td>
+<td>syscall</td>
+<td>系统调用，执行了一条syscall指令</td>
+</tr>
+<tr>
+<td>10</td>
+<td>RI</td>
+<td></td>
+<td>出现未知的指令码</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Ov</td>
+<td>add,addi,sub</td>
+<td>算数溢出</td>
+</tr>
+</tbody>
+</table>
+<h4><span id="epc">EPC</span></h4>
+<p>异常返回地址寄存器。这是一个博爱村异常返回点的寄存器。导致（或者遭受）异常的指令地址存入EPC，除非Cause寄存器中的BD位置位了，这种情况下EPC指向前一条（分支）指令</p>
+<p>​	<strong>CPU控制指令</strong></p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>格式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mtc0</td>
+<td>s,&lt;n&gt;</td>
+<td>把数据传送到CP0<br>把CPU通用寄存器s中的内容传送到CP0的寄存器n<br>数据为32位</td>
+</tr>
+<tr>
+<td>mfc0</td>
+<td>d,&lt;n&gt;</td>
+<td>从协处理器中取出数据<br>通用寄存器d中装入CPU控制寄存器n的值<br>这是查看控制寄存器的值的唯一方式</td>
+</tr>
+</tbody>
+</table>
+<p>关于mfc0</p>
+<p>想要更新控制寄存器中的单个域——比如说——状态寄存器SR</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">mfc0 t0, SR
+and  t0, &lt;要清零的为的反码&gt;
+or   t0, &lt;要置1的位&gt;
+mtc0 SR, t0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>这里有一个比较抽象的话后续再来理解一下</p>
+<p>即返回到用户态和改变特权级的操作必须是同步的，不可分的（原文只讲了不可分的，我的理解就是同步的进行操作）</p>
+<p>用软件触发的异常——异常调用——作为用户代码请求（运行在高特权级上的）操作系统内核服务的唯一机制。</p>
+</blockquote>
+<p><strong>什么时候需要用到哪些寄存器</strong></p>
+<blockquote>
+<p>这里是针对CP0中的控制寄存器而言的</p>
+</blockquote>
+<p><strong>上电后：</strong></p>
+<p>设置SR来使CPU进入一个可工作的状态</p>
+<p><strong>处理任意异常：</strong></p>
+<ul>
+<li>
+<p>早期：调用一个固定入口地址的公共的“通用异常处理程序”</p>
+</li>
+<li>
+<p>自那以后：对不同目的使用分开的异常处理程序</p>
+</li>
+</ul>
+<p>在异常入口处：不保存任何程序寄存器，只有返回地址被存在EPC中。</p>
+<p><strong>从异常返回：</strong></p>
+<ol>
+<li>控制最终必须返回到异常入口处保存到EPC中的地址。</li>
+<li>不管是什么异常，返回时都需要报SR寄存器调整回原来的值，恢复用户态特权、允许中断以及消除异常的一般影响</li>
+<li>异常返回指令eret合并完成了返回用户空间和复位SR(EXL)的功能</li>
+</ol>
+<p><strong>中断：</strong></p>
+<p>SR用来调整中断掩码（掩码就是一串二进制码，掩码的作用是用来存储和操作“状态”）</p>
+<p><strong>纯粹为了引发异常的指令：</strong></p>
+<p>比如<code>break</code>和<code>syscall</code></p>
+<h2><span id="异常-中断及初始化">异常、中断及初始化</span></h2>
+<ul>
+<li>外部事件：在CPU核之外的时间——即来自于真实的“连线”上的输入信号，这就是中断。</li>
+<li>存储器地址转换异常</li>
+<li>程序或硬件检测到的错误：这些包括不存在的指令、在用户权限下非法的指令、在相应SR位被禁止是执行的协处理器指令、整数溢出、地址对齐出错、用户态中访问kuseg以外的地址</li>
+<li>系统调用和自陷</li>
+</ul>
+<h3><span id="精确异常">精确异常</span></h3>
+<p>也就是我们的宏观pc的来由，如果某个pc是异常受害指令，那么我们希望在这个指令之前的指令已经全部处理完成，在这个指令之后的还没有开始处理。</p>
+<p>全部内容如下：</p>
+<ul>
+<li>明确的罪证：在任何异常之后，CPU的控制寄存器EPC都指向一个正确的地方，异常处理之后从该处开始重新执行。在大多数情形中，EPC指向异常受害指令，但是如果异常受害指令处于分支延迟槽内，则EPC指向前面的分支指令：返回到分支指令去重新执行受害指令，但是返回到受害指令将导致分支被忽略。
+<ul>
+<li>当受害指令处于分支延迟槽内时，原因寄存器的Cause(BD)位置位</li>
+</ul>
+</li>
+<li>异常出现在指令序列中：由于是流水线，而且在不同的流水级都有可能会出现问题，但是我们为了实现精确异常，不应该是出现异常就处理，也就是出现第二条指令的异常事件先发生时需要先处理第一条指令
+<ul>
+<li>为了避免这一个问题，早期发现的异常并不立即采取措施：该事件只是被记录并沿着流水线传递。在大多数CPU设计中，指定一个特定的流水线阶段作为检测异常的地方。如果当我们的异常记录正沿着流水线向下传递，更老的指令的后期检测到的事件到达了这个终点线，此时异常记录就直接丢弃。</li>
+</ul>
+</li>
+<li>后续指令无效：因为流水线的原因，处于EPC中的受害指令之后的指令就已经开始了。</li>
+</ul>
+<h3><span id="非精确异常">非精确异常</span></h3>
+<blockquote>
+<p>这里实际上指的是历史上的MPIS CPU的乘法器，也就是我们P6的内容，采取直接发送一个busy信号的处理方法，这里我们不在进行讨论</p>
+</blockquote>
+<p><strong>异常发生的时机</strong></p>
+<p>因为异常是精确的，那么异常发生的时间应当也是没有歧义的：</p>
+<ul>
+<li>异常之前执行的最后一条指令就是异常受害指令的前一条。</li>
+<li>如果该异常不是中断：受害指令即是引发异常的指令</li>
+</ul>
+<blockquote>
+<p>下面是MIPS CPU决定处理一个异常是所要做的</p>
+</blockquote>
+<ol>
+<li>设置EPC指向重新开始的地址</li>
+<li>设置SR(EXL)位，强制CPU进入内核态（高特权态）并且禁止中断</li>
+<li>设置Cause寄存器这样软件可以看到发生异常的原因。在地址异常时，BadVAddr也要设置<strong>但是我们课程好像没有这个要求</strong></li>
+<li>然后CPU开始从异常入口点取值，此后一切交给软件处理。<strong>其实也就是继续进行handler处理程序的执行部分</strong></li>
+</ol>
+]]></content>
+      <categories>
+        <category>计算机组成</category>
+      </categories>
+      <tags>
+        <tag>p7</tag>
       </tags>
   </entry>
   <entry>
@@ -3967,239 +7076,6 @@ eret<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span
       </tags>
   </entry>
   <entry>
-    <title>p7-知识点整理</title>
-    <url>/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</url>
-    <content><![CDATA[<h1><span id="mips-微系统">mips 微系统</span></h1>
-<h2><span id="cp0协处理器">CP0协处理器</span></h2>
-<h3><span id="cpu-控制寄存器"><strong>CPU 控制寄存器</strong></span></h3>
-<table>
-<thead>
-<tr>
-<th>寄存器助记符</th>
-<th>寄存器编号</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>SR</td>
-<td>12</td>
-<td>State Register</td>
-</tr>
-<tr>
-<td>Cause</td>
-<td>13</td>
-<td>记录异常中断的原因</td>
-</tr>
-<tr>
-<td>EPC</td>
-<td>14</td>
-<td>Exception program counter发生异常和中断后从哪里重新开始执行</td>
-</tr>
-</tbody>
-</table>
-<h4><span id="sr"><strong>SR</strong></span></h4>
-<p><img src="/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/image-20231206164953902.png" alt="image-20231206164953902"></p>
-<p>这里我们实际使用到的或者说有意义的只有</p>
-<p><strong>IM——SR[15:10]</strong></p>
-<blockquote>
-<p>其实这里应该指的是SR[15:8]的这8位，其中IP1-0也就是SR[9:8]是由CPU内部产生的</p>
-</blockquote>
-<ul>
-<li>中断屏蔽：一个8位的域定义哪些允许中断源活动时产生异常。其中6个中断源由CPU核外部的信号产生。其余两个是Cause寄存器中软件可写的中断位</li>
-</ul>
-<p><strong>EXL——SR[1]</strong></p>
-<ul>
-<li>异常级：任何异常发生时置位，这会强行进入核心态并禁止中断：目的是吧EXL位维持足够长的时间以便软件决定新的CPU特权级和中断屏蔽该设成什么</li>
-</ul>
-<p><strong>IE——SR[0]</strong></p>
-<ul>
-<li>全局的中断使能位：注意不管这位是什么值，EXL和ERL总是禁止所有的中断</li>
-</ul>
-<h4><span id="cause"><strong>Cause</strong></span></h4>
-<p><img src="/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/image-20231206170514085.png" alt="image-20231206170514085"></p>
-<p><strong>BD——Cause[31]</strong></p>
-<ul>
-<li>
-<p>分支延迟：EPC保存的是异常处理完之后的返回地址，正常情况下，这也指向异常受害指令。</p>
-</li>
-<li>
-<p>但是如果发生异常的指令是在一条转移指令的延时槽里，EPC得指向那条转移指令：重新执行转移指令没有- 什么害处，但是如果返回到延迟槽指令本身，转移就不会发生，从而这个异常将破坏被中断的程序。</p>
-</li>
-<li>
-<p>只要异常发生在延迟槽的指令，Cause(BD)就会置为，EPC就会指向分支指令。如果想要分析异常受害指令，只要看看Cause(BD)(如果Cause(BD)==1，那么该指令位于EPC+4)就知道了。</p>
-</li>
-</ul>
-<p><strong>IP——Cause[15:10]</strong></p>
-<blockquote>
-<p>这里其实也是IM一个道理</p>
-</blockquote>
-<p>待决的中断：这里表示待发生的中断。IP照抄CPU硬件的输入信号，<code>IP1-0</code>（软件中断位）可读可写包含你最近写入的值。</p>
-<ul>
-<li>当相应的<code>SR(IM)</code>位（还要受到其它禁止中断的条件约束）允许时，这八位中的任意以为活动都会导致一个中断</li>
-</ul>
-<p><strong>BD——Cause[6:2]</strong></p>
-<p>这是一个5位的编码，告诉你发生了哪种异常。</p>
-<table>
-<thead>
-<tr>
-<th>ExcCode</th>
-<th>助记符</th>
-<th>指令与指令类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>Int</td>
-<td>所有指令</td>
-<td>中断</td>
-</tr>
-<tr>
-<td>4</td>
-<td>AdEL</td>
-<td>所有指令<br>load型指令（或特指其中某型）</td>
-<td>（取数，取指或者存数时）地址错误：<br>PC地址未字对齐<br>PC地址超过0x3000-0x6ffc<br><br> （取数，取指或者存数时）地址错误：<br><strong>lw</strong>：取数地址未与4字节对齐<br><strong>lh</strong>：取数地址未与2字节对齐<br><strong>lh，lb</strong>：取Timer</td>
-</tr>
-<tr>
-<td>5</td>
-<td>AdES</td>
-<td>store型指令</td>
-<td>（取数，取指或者存数时）地址错误：<br><strong>sw</strong>：存数地址未4字节对齐<br><strong>sh</strong>：存数地址未2字节对齐<br><strong>sh，sb</strong>：存Timer寄存器的值<br>store型指令：<br>计算地址加法溢出<br>向计时器的Count寄存器存值<br>存数地址超过DM，Timer0，Timer1，中断发生器的范围</td>
-</tr>
-<tr>
-<td>8</td>
-<td>Syscall</td>
-<td>syscall</td>
-<td>系统调用，执行了一条syscall指令</td>
-</tr>
-<tr>
-<td>10</td>
-<td>RI</td>
-<td></td>
-<td>出现未知的指令码</td>
-</tr>
-<tr>
-<td>12</td>
-<td>Ov</td>
-<td>add,addi,sub</td>
-<td>算数溢出</td>
-</tr>
-</tbody>
-</table>
-<h4><span id="epc">EPC</span></h4>
-<p>异常返回地址寄存器。这是一个博爱村异常返回点的寄存器。导致（或者遭受）异常的指令地址存入EPC，除非Cause寄存器中的BD位置位了，这种情况下EPC指向前一条（分支）指令</p>
-<p>​	<strong>CPU控制指令</strong></p>
-<table>
-<thead>
-<tr>
-<th>指令</th>
-<th>格式</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>mtc0</td>
-<td>s,&lt;n&gt;</td>
-<td>把数据传送到CP0<br>把CPU通用寄存器s中的内容传送到CP0的寄存器n<br>数据为32位</td>
-</tr>
-<tr>
-<td>mfc0</td>
-<td>d,&lt;n&gt;</td>
-<td>从协处理器中取出数据<br>通用寄存器d中装入CPU控制寄存器n的值<br>这是查看控制寄存器的值的唯一方式</td>
-</tr>
-</tbody>
-</table>
-<p>关于mfc0</p>
-<p>想要更新控制寄存器中的单个域——比如说——状态寄存器SR</p>
-<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">mfc0 t0, SR
-and  t0, &lt;要清零的为的反码&gt;
-or   t0, &lt;要置1的位&gt;
-mtc0 SR, t0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<blockquote>
-<p>这里有一个比较抽象的话后续再来理解一下</p>
-<p>即返回到用户态和改变特权级的操作必须是同步的，不可分的（原文只讲了不可分的，我的理解就是同步的进行操作）</p>
-<p>用软件触发的异常——异常调用——作为用户代码请求（运行在高特权级上的）操作系统内核服务的唯一机制。</p>
-</blockquote>
-<p><strong>什么时候需要用到哪些寄存器</strong></p>
-<blockquote>
-<p>这里是针对CP0中的控制寄存器而言的</p>
-</blockquote>
-<p><strong>上电后：</strong></p>
-<p>设置SR来使CPU进入一个可工作的状态</p>
-<p><strong>处理任意异常：</strong></p>
-<ul>
-<li>
-<p>早期：调用一个固定入口地址的公共的“通用异常处理程序”</p>
-</li>
-<li>
-<p>自那以后：对不同目的使用分开的异常处理程序</p>
-</li>
-</ul>
-<p>在异常入口处：不保存任何程序寄存器，只有返回地址被存在EPC中。</p>
-<p><strong>从异常返回：</strong></p>
-<ol>
-<li>控制最终必须返回到异常入口处保存到EPC中的地址。</li>
-<li>不管是什么异常，返回时都需要报SR寄存器调整回原来的值，恢复用户态特权、允许中断以及消除异常的一般影响</li>
-<li>异常返回指令eret合并完成了返回用户空间和复位SR(EXL)的功能</li>
-</ol>
-<p><strong>中断：</strong></p>
-<p>SR用来调整中断掩码（掩码就是一串二进制码，掩码的作用是用来存储和操作“状态”）</p>
-<p><strong>纯粹为了引发异常的指令：</strong></p>
-<p>比如<code>break</code>和<code>syscall</code></p>
-<h2><span id="异常-中断及初始化">异常、中断及初始化</span></h2>
-<ul>
-<li>外部事件：在CPU核之外的时间——即来自于真实的“连线”上的输入信号，这就是中断。</li>
-<li>存储器地址转换异常</li>
-<li>程序或硬件检测到的错误：这些包括不存在的指令、在用户权限下非法的指令、在相应SR位被禁止是执行的协处理器指令、整数溢出、地址对齐出错、用户态中访问kuseg以外的地址</li>
-<li>系统调用和自陷</li>
-</ul>
-<h3><span id="精确异常">精确异常</span></h3>
-<p>也就是我们的宏观pc的来由，如果某个pc是异常受害指令，那么我们希望在这个指令之前的指令已经全部处理完成，在这个指令之后的还没有开始处理。</p>
-<p>全部内容如下：</p>
-<ul>
-<li>明确的罪证：在任何异常之后，CPU的控制寄存器EPC都指向一个正确的地方，异常处理之后从该处开始重新执行。在大多数情形中，EPC指向异常受害指令，但是如果异常受害指令处于分支延迟槽内，则EPC指向前面的分支指令：返回到分支指令去重新执行受害指令，但是返回到受害指令将导致分支被忽略。
-<ul>
-<li>当受害指令处于分支延迟槽内时，原因寄存器的Cause(BD)位置位</li>
-</ul>
-</li>
-<li>异常出现在指令序列中：由于是流水线，而且在不同的流水级都有可能会出现问题，但是我们为了实现精确异常，不应该是出现异常就处理，也就是出现第二条指令的异常事件先发生时需要先处理第一条指令
-<ul>
-<li>为了避免这一个问题，早期发现的异常并不立即采取措施：该事件只是被记录并沿着流水线传递。在大多数CPU设计中，指定一个特定的流水线阶段作为检测异常的地方。如果当我们的异常记录正沿着流水线向下传递，更老的指令的后期检测到的事件到达了这个终点线，此时异常记录就直接丢弃。</li>
-</ul>
-</li>
-<li>后续指令无效：因为流水线的原因，处于EPC中的受害指令之后的指令就已经开始了。</li>
-</ul>
-<h3><span id="非精确异常">非精确异常</span></h3>
-<blockquote>
-<p>这里实际上指的是历史上的MPIS CPU的乘法器，也就是我们P6的内容，采取直接发送一个busy信号的处理方法，这里我们不在进行讨论</p>
-</blockquote>
-<p><strong>异常发生的时机</strong></p>
-<p>因为异常是精确的，那么异常发生的时间应当也是没有歧义的：</p>
-<ul>
-<li>异常之前执行的最后一条指令就是异常受害指令的前一条。</li>
-<li>如果该异常不是中断：受害指令即是引发异常的指令</li>
-</ul>
-<blockquote>
-<p>下面是MIPS CPU决定处理一个异常是所要做的</p>
-</blockquote>
-<ol>
-<li>设置EPC指向重新开始的地址</li>
-<li>设置SR(EXL)位，强制CPU进入内核态（高特权态）并且禁止中断</li>
-<li>设置Cause寄存器这样软件可以看到发生异常的原因。在地址异常时，BadVAddr也要设置<strong>但是我们课程好像没有这个要求</strong></li>
-<li>然后CPU开始从异常入口点取值，此后一切交给软件处理。<strong>其实也就是继续进行handler处理程序的执行部分</strong></li>
-</ol>
-]]></content>
-      <categories>
-        <category>计算机组成</category>
-      </categories>
-      <tags>
-        <tag>p7</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>大一下数据结构大作业</title>
     <url>/2023/05/25/%E5%A4%A7%E4%BD%9C%E4%B8%9A/</url>
     <content><![CDATA[<blockquote>
@@ -4648,1700 +7524,6 @@ __uint128_t fingerprintSample <span class="token operator">=</span> <span class=
       </categories>
       <tags>
         <tag>大作业优化</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>p5p6-流水线</title>
-    <url>/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/</url>
-    <content><![CDATA[<h1><span id="mathscr-hugo-mathbbcpu-五级流水线mathscrdesign">$\mathscr {Hugo}$ $\mathbb{CPU}$ 五级流水线$\mathscr{Design}$</span></h1>
-<p>实现五级流水线CPU</p>
-<span id="more"></span>
-<ul>
-<li>命名统一采用hugo命名法（借鉴了匈牙利命名法和下划线命名）</li>
-<li>主体为mips.v模块，不再像P4一样加入DataPath模块，统一在mips.v中完成连线等大部分操作。</li>
-<li>控制部分分为<code>Ctrl_Unit</code>和<code>Hazard_Ctrl</code>两个部分，处理冲突为在能够使用旁路转换的情况下尽可能的使用旁路转换</li>
-<li>流水线阶段分为IF，ID，EX，MEM，WB五个部分
-<ul>
-<li>F：<code>NPC</code>,<code>PC</code>,<code>IM</code></li>
-<li>D: <code>GRF</code>,<code>EXT</code>,<code>CMP</code></li>
-<li>E: <code>ALU</code></li>
-<li>M: <code>DM</code></li>
-<li>W: <code>GRF</code></li>
-</ul>
-</li>
-<li>其中用到大部分的宏定义在<code>def.v</code>中定义</li>
-</ul>
-<h2><span id="cpu流水线的实现">CPU流水线的实现</span></h2>
-<h3><span id="实现指令说明">实现指令说明</span></h3>
-<p>将本CPU实现的指令分为以下几类：</p>
-<table>
-<thead>
-<tr>
-<th>classify</th>
-<th>指令set</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>load</td>
-<td>lw//lh,lhu,lb,lbu</td>
-</tr>
-<tr>
-<td>store</td>
-<td>sw//sh,sb</td>
-</tr>
-<tr>
-<td>calc_r</td>
-<td>add,sub//addu, subu,and,or,nor,xor,slt,sltu</td>
-</tr>
-<tr>
-<td>calc_i</td>
-<td>ori//addiu,addi,xori,slti,sltiu</td>
-</tr>
-<tr>
-<td>shift_s</td>
-<td>sll//sra,srl</td>
-</tr>
-<tr>
-<td>shift_v</td>
-<td>//sllv,srav,srlv</td>
-</tr>
-<tr>
-<td>b_type</td>
-<td>beq//bne</td>
-</tr>
-<tr>
-<td>j</td>
-<td>jal,j</td>
-</tr>
-<tr>
-<td>特殊</td>
-<td>jr,lui</td>
-</tr>
-</tbody>
-</table>
-<p>基本的数据通路</p>
-<p>IF阶段的pc需要保留到后面继续使用</p>
-<p>重点处理的在于ALU</p>
-<h3><span id="命名规范">命名规范</span></h3>
-<ul>
-<li>对于每一个模块依旧采用仅有文件英文名的办法，对于其实例化为_小写</li>
-<li>对于每一条线采用层级+命名的方式（原本采用的是匈牙利命名法，也就是前面加上对应的类型，后发现全部都是wire，遂弃之）</li>
-<li>寄存器文件采用两边的流水线层级加上_REG的方式。</li>
-</ul>
-<h2><span id="数据通路datapath">数据通路DataPath</span></h2>
-<p>同P4，变量命名有稍微修改。</p>
-<p>但没有单独使用一个DataPath的模块，显得比较多余。</p>
-<p>对于一个数据路径，包括取指令(IF)，译码(ID)，执行(EX)，访存(MEM)，回写(WB)这几个方面，相应的有IFU，NPC，GRF，ALU，IM，DM这几个基本单元，单元之间通过Splitter和MUX等进行元件之间的数据交换和处理，这里需要在构建是需要留下几个控制信号的接口，以便于最后CU（控制器单元）单元的构建。</p>
-<h3><span id="ifu取指令单元">IFU取指令单元</span></h3>
-<p>该模块由PC（Programming Counter)模块和IM（Instruction Memory）模块组成。其中PC模块负责对每次新的指令状态进行转移，IM模块则从ROM中得到相应的指令。</p>
-<blockquote>
-<p>这里考虑到之后<u><strong>可能</strong></u>需要将IM和DM放到一起，这里不再对PC和IM进行进一步的封装。</p>
-</blockquote>
-<h4><span id="f_pc程序计数器">F_PC（程序计数器）</span></h4>
-<ul>
-<li><strong>端口定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>i_clk</td>
-<td>I</td>
-<td>1</td>
-<td>时钟信号</td>
-</tr>
-<tr>
-<td>i_reset</td>
-<td>I</td>
-<td>1</td>
-<td>异步复位信号</td>
-</tr>
-<tr>
-<td>i_en</td>
-<td>I</td>
-<td>1</td>
-<td>使能信号</td>
-</tr>
-<tr>
-<td>i_npc</td>
-<td>I</td>
-<td>32</td>
-<td>通过计算得到的下一条指令的地址</td>
-</tr>
-<tr>
-<td>or_pc</td>
-<td>O</td>
-<td>32</td>
-<td>状态转移后的地址，输出当前正在执行的地址</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>功能定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>功能名称</th>
-<th>功能描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>复位</td>
-<td>当Reset信号有效时，将PC寄存器中的值置为0x00003000</td>
-</tr>
-<tr>
-<td>2</td>
-<td>停止</td>
-<td>当Stop信号有效时，PC寄存器忽略时钟输入，PC当前值保持不变</td>
-</tr>
-<tr>
-<td>3</td>
-<td>写 PC 寄存器</td>
-<td>当 Stop 信号失效且时钟上升沿来临时，将下一条指令的地址（next PC）写入 PC 寄存器</td>
-</tr>
-</tbody>
-</table>
-<h4><span id="f_im指令存储器">F_IM（指令存储器）</span></h4>
-<ul>
-<li><strong>端口定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>i_pc</td>
-<td>I</td>
-<td>32</td>
-<td>当前正在执行的地址</td>
-</tr>
-<tr>
-<td>o_instr</td>
-<td>O</td>
-<td>32</td>
-<td>输出当前正在执行的指令</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>功能定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>功能名称</th>
-<th>功能描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>取指令</td>
-<td>根据当前PC的值从IM中读出对应的指令</td>
-</tr>
-</tbody>
-</table>
-<h3><span id="d_npc下一指令计算单元">D_NPC（下一指令计算单元）</span></h3>
-<p>计算下一个指令，有三种方式，包括直接计算下一条指令，b型跳转指令，j型跳转指令。其中j型跳转指令包括跳转到寄存器的值和直接跳转两种。</p>
-<ul>
-<li><strong>端口定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>i_pc</td>
-<td>I</td>
-<td>32</td>
-<td>当前指令地址</td>
-</tr>
-<tr>
-<td>i_npcOp</td>
-<td>I</td>
-<td>2</td>
-<td>NPC控制信号</td>
-</tr>
-<tr>
-<td>i_imm16</td>
-<td>I</td>
-<td>16</td>
-<td>branch类型的16位立即数</td>
-</tr>
-<tr>
-<td>i_imm26</td>
-<td>I</td>
-<td>26</td>
-<td>jump类型的26位立即数</td>
-</tr>
-<tr>
-<td>i_jumpEn</td>
-<td>I</td>
-<td>1</td>
-<td>用于得到branch类型的跳转条件是否成立</td>
-</tr>
-<tr>
-<td>i_ra_of_jr</td>
-<td>I</td>
-<td>32</td>
-<td>寄存器中存储的地址</td>
-</tr>
-<tr>
-<td>o_npc</td>
-<td>O</td>
-<td>32</td>
-<td>下一条指令地址</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>选择信号类型</th>
-<th>位宽</th>
-<th>值</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>NPC_PC4</td>
-<td>3</td>
-<td>3‘b000</td>
-<td>pc+4</td>
-</tr>
-<tr>
-<td>NPC_J</td>
-<td>3</td>
-<td>3’b001</td>
-<td>直接跳转，26位立即数拓展后的地址</td>
-</tr>
-<tr>
-<td>NPC_B</td>
-<td>3</td>
-<td>3’b010</td>
-<td>条件跳转，满足条件跳转到16位立即数拓展后的地址</td>
-</tr>
-<tr>
-<td>NPC_JR</td>
-<td>3</td>
-<td>3’b011</td>
-<td>跳转到寄存器存储的地址</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>三种跳转指令</strong></li>
-</ul>
-<p><strong>b型跳转指令</strong></p>
-<p><img src="/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231026163128067.png" alt="image-20231026163128067"></p>
-<p>均为判断后跳转到label（即Offset）</p>
-<p><strong>JR型跳转指令(jr,jalr)</strong></p>
-<p><img src="/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231026163459284.png" alt="image-20231026163459284"></p>
-<p>跳转到寄存器中的存储的地址</p>
-<p><strong>J型跳转指令(j,jal)</strong></p>
-<p><img src="/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/image-20231026164030190.png" alt="image-20231026164030190"></p>
-<p>跳转到target这个立即数对应的地址</p>
-<p>其实也可以分为：</p>
-<p><strong>间接寻址</strong>（通过PC+4和Offset寻址）</p>
-<p><strong>直接寻址</strong>（直接跳转到立即数对应地址，或者寄存器中存储的地址）</p>
-<h3><span id="d_grf通用寄存器组">D_GRF（通用寄存器组）</span></h3>
-<ul>
-<li><strong>端口定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>i_clk</td>
-<td>I</td>
-<td>1</td>
-<td>时钟信号</td>
-</tr>
-<tr>
-<td>i_reset</td>
-<td>I</td>
-<td>1</td>
-<td>异步复位信号<br>1：复位信号有效<br>0：复位信号无效</td>
-</tr>
-<tr>
-<td>i_writeEn</td>
-<td>I</td>
-<td>1</td>
-<td>写使能信号<br>1：写入有效<br>0：写入无效</td>
-</tr>
-<tr>
-<td>i_A1</td>
-<td>I</td>
-<td>5</td>
-<td>地址输入信号，指定 32 个寄存器中的一个，将其中的数据读出到 RD1</td>
-</tr>
-<tr>
-<td>i_A2</td>
-<td>I</td>
-<td>5</td>
-<td>地址输入信号，指定 32 个寄存器中的一个，将其中的数据读出到 RD2</td>
-</tr>
-<tr>
-<td>i_A3</td>
-<td>I</td>
-<td>5</td>
-<td>地址输入信号，指定 32 个寄存器中的一个，将其作为写入目标</td>
-</tr>
-<tr>
-<td>i_WD</td>
-<td>I</td>
-<td>32</td>
-<td>数据输入信号</td>
-</tr>
-<tr>
-<td>o_RD1</td>
-<td>O</td>
-<td>32</td>
-<td>输出A1指定的寄存器中的 32 位数据</td>
-</tr>
-<tr>
-<td>o_RD2</td>
-<td>O</td>
-<td>32</td>
-<td>输出A2指定的寄存器中的 32 位数据</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>i_pc</td>
-<td>I</td>
-<td>32</td>
-<td>用于$display</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>功能定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>功能名称</th>
-<th>功能描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>复位</td>
-<td>Reset 信号有效时，所有寄存器中储存的值均被清零</td>
-</tr>
-<tr>
-<td>2</td>
-<td>读数据</td>
-<td>读出 A1，A2 地址对应的寄存器中储存的数据，将其加载到 RD1 和 RD2</td>
-</tr>
-<tr>
-<td>3</td>
-<td>写数据</td>
-<td>当 WE 信号有效且时钟上升沿来临时，将 WD 中的数据写入到 A3 地址对应的寄存器</td>
-</tr>
-</tbody>
-</table>
-<h3><span id="d_ext拓展单元">D_EXT（拓展单元）</span></h3>
-<p>将16位立即数符号拓展为32位。这里为了提高可拓展性，添加了<code>UnsignedExt</code>接口</p>
-<ul>
-<li><strong>端口定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>i_imm16</td>
-<td>I</td>
-<td>16</td>
-<td>16位立即数输入信号</td>
-</tr>
-<tr>
-<td>i_unsigned_ext_Sel</td>
-<td>I</td>
-<td>1</td>
-<td>无符号拓展信号<br>1：无符号拓展（0拓展）<br>0：符号拓展</td>
-</tr>
-<tr>
-<td>o_imm32</td>
-<td>O</td>
-<td>32</td>
-<td>32位立即数输出信号</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>功能定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>功能名称</th>
-<th>功能描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>符号拓展</td>
-<td>将16位立即数进行符号拓展</td>
-</tr>
-</tbody>
-</table>
-<h3><span id="d_cmpb类指令比较单元">D_CMP(B类指令比较单元)</span></h3>
-<p>用于生成Branch类跳转信号是否跳转的使能信号。该单元根据输入的branchOp信号对当前B指令的类型进行判断，进而对当前输入的数值进行比较，最后输出结果。</p>
-<ul>
-<li>端口定义</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>i_cmpA</td>
-<td>I</td>
-<td>32</td>
-<td>输入信号</td>
-</tr>
-<tr>
-<td>i_cmpB</td>
-<td>I</td>
-<td>32</td>
-<td>输入信号</td>
-</tr>
-<tr>
-<td>i_branchOp</td>
-<td>I</td>
-<td></td>
-<td>比较类型</td>
-</tr>
-<tr>
-<td>jumpOp</td>
-<td>O</td>
-<td>1</td>
-<td>是否满足跳转条件</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>功能定义</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>branchOP</th>
-<th>位宽</th>
-<th>值</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>CMP_EQUAL</td>
-<td>4</td>
-<td>4‘b0000</td>
-<td>判断是否相等</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3><span id="e_alu逻辑运算单元">E_ALU（逻辑运算单元）</span></h3>
-<p>该模块可实现加，减，按位与，按位或等 11 种运算，并根据 ALUOP 信号的值在这些功能中进行选择。除此之外，该模块还可以实现溢出判断</p>
-<ul>
-<li><strong>端口定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">信号名</th>
-<th style="text-align:left">方向</th>
-<th style="text-align:left">位宽</th>
-<th style="text-align:left">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">ALUOp</td>
-<td style="text-align:left">I</td>
-<td style="text-align:left">4</td>
-<td style="text-align:left">ALU 功能选择信号</td>
-</tr>
-<tr>
-<td style="text-align:left">src_A</td>
-<td style="text-align:left">I</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">参与 ALU 计算的第一个值</td>
-</tr>
-<tr>
-<td style="text-align:left">src_B</td>
-<td style="text-align:left">I</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">参与 ALU 计算的第二个值 S</td>
-</tr>
-<tr>
-<td style="text-align:left">shamt</td>
-<td style="text-align:left">I</td>
-<td style="text-align:left">5</td>
-<td style="text-align:left">移位数输入</td>
-</tr>
-<tr>
-<td style="text-align:left">out</td>
-<td style="text-align:left">O</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">输出 ALU 计算结果</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>功能定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>ALUOp</th>
-<th>指令</th>
-<th>Opcode</th>
-<th>Op</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>加法</td>
-<td>add</td>
-<td>00000</td>
-<td>ALURes = SrcA+SrcB</td>
-</tr>
-<tr>
-<td>减法</td>
-<td>sub</td>
-<td>00001</td>
-<td>ALURes = SrcA-SrcB</td>
-</tr>
-<tr>
-<td>乘法(low)</td>
-<td>mul</td>
-<td>00010</td>
-<td>ALURes = SrcA*SrcB</td>
-</tr>
-<tr>
-<td>除法(商)</td>
-<td>div</td>
-<td>00011</td>
-<td>ALURes = SrcA / SrcB</td>
-</tr>
-<tr>
-<td>与运算</td>
-<td>and</td>
-<td>00100</td>
-<td>ALURes = SrcA &amp; SrcB</td>
-</tr>
-<tr>
-<td>或运算</td>
-<td>or</td>
-<td>00101</td>
-<td>ALURes = SrcA | SrcB</td>
-</tr>
-<tr>
-<td>异或运算</td>
-<td>xor</td>
-<td>00110</td>
-<td>ALURes = SrcA $\oplus$ SrcB</td>
-</tr>
-<tr>
-<td>或非运算</td>
-<td>nor</td>
-<td>00111</td>
-<td>ALURes = ~(SrcA | SrcB)</td>
-</tr>
-<tr>
-<td>逻辑左移</td>
-<td>sll</td>
-<td>01000</td>
-<td>ALURes = SrcB &lt;&lt; Shift</td>
-</tr>
-<tr>
-<td>逻辑右移</td>
-<td>srl</td>
-<td>01001</td>
-<td>ALURes = SrcB &gt;&gt; Shift</td>
-</tr>
-<tr>
-<td>算数右移</td>
-<td>sra</td>
-<td>01010</td>
-<td>ALURes = SrcB &gt;&gt;&gt; Shift</td>
-</tr>
-</tbody>
-</table>
-<h3><span id="m_dm数据存储器">M_DM（数据存储器）</span></h3>
-<ul>
-<li><strong>端口定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>信号名</th>
-<th>方向</th>
-<th>位宽</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>i_clk</td>
-<td>I</td>
-<td>1</td>
-<td>时钟信号</td>
-</tr>
-<tr>
-<td>i_reset</td>
-<td>I</td>
-<td>1</td>
-<td>复位信号</td>
-</tr>
-<tr>
-<td>i_Addr</td>
-<td>I</td>
-<td>32</td>
-<td>内存中的地址信号</td>
-</tr>
-<tr>
-<td>i_dmOp</td>
-<td>I</td>
-<td>2</td>
-<td>选择信号<br>2’b00:word<br>2’b01:half_word<br>2’b10:byte</td>
-</tr>
-<tr>
-<td>i_WriteEn</td>
-<td>I</td>
-<td>1</td>
-<td>写使能信号<br>1：写入有效<br>0：写入无效</td>
-</tr>
-<tr>
-<td>i_writeData</td>
-<td>I</td>
-<td>32</td>
-<td>在写入信号有效时，写入内存地址的数据</td>
-</tr>
-<tr>
-<td>o_RD</td>
-<td>O</td>
-<td>32</td>
-<td>输出内存中对应地址的数据</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>功能定义</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>功能名称</th>
-<th>功能描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>复位</td>
-<td>reset信号有效时，所有寄存器的中存储的值均被清零</td>
-</tr>
-<tr>
-<td>2</td>
-<td>读数据</td>
-<td>读出A地址对应的存储单元的数据，将其加载到RD</td>
-</tr>
-<tr>
-<td>3</td>
-<td>写数据</td>
-<td>当WE信号有效且时钟上升沿来临时，将WD中的数据写入到A地址对应的存储单元</td>
-</tr>
-</tbody>
-</table>
-<h2><span id="流水器寄存器模块定义">流水器寄存器模块定义</span></h2>
-<p>采用的是分布式译码，流水的是pc和instr，在每个阶段实例化CU模块，得到该阶段的对应控制信号。</p>
-<h3><span id="fd_refifid流水寄存器">FD_REF(IF/ID流水寄存器)</span></h3>
-<ul>
-<li>
-<p><strong>端口定义</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">方向</th>
-<th style="text-align:left">信号名</th>
-<th style="text-align:left">位宽</th>
-<th style="text-align:left">描述</th>
-<th style="text-align:left">输入来源</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_clk</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">时钟信号</td>
-<td style="text-align:left">mips.v 中的 clk</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_reset</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">同步复位信号</td>
-<td style="text-align:left">mips.v 中的 reset</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_en</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">D 级寄存器使能信号</td>
-<td style="text-align:left">HCU 中 stall 信号取反</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_flush</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">D 级寄存器清空信号</td>
-<td style="text-align:left">默认为 1‘b0</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">F_instr</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">F 级 instr 输入</td>
-<td style="text-align:left">IFU_instr</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">F_pc</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">F 级 pc 输入</td>
-<td style="text-align:left">IFU_pc</td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">D_instr</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">D 级 instr 输出</td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">D_pc</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">D 级 pc 输出</td>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-</li>
-</ul>
-<h3><span id="de_regidex-流水寄存器">DE_Reg（ID/EX 流水寄存器）</span></h3>
-<ul>
-<li>
-<p><strong>端口定义</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">方向</th>
-<th style="text-align:left">信号名</th>
-<th style="text-align:left">位宽</th>
-<th style="text-align:left">描述</th>
-<th style="text-align:left">输入来源</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_clk</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">时钟信号</td>
-<td style="text-align:left">mips.v中的clk</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_reset</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">同步复位信号</td>
-<td style="text-align:left">mips.v中的reset</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_en</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">使能信号</td>
-<td style="text-align:left">from HU</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_flush</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">清空信号</td>
-<td style="text-align:left">from HU</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_pc</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_instr</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_pc</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_instr</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_grf_RD1</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">D级产生的有效信号</td>
-<td style="text-align:left">from GRF</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_grf_RD2</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">D级产生的有效信号</td>
-<td style="text-align:left">from GRF</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_ext_result</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">D级产生的有效信号</td>
-<td style="text-align:left">from EXT</td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_grf_RD1</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">传给E级的有效信号</td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_grf_RD2</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">传给E级的有效信号</td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_ext_result</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">传给E级的有效信号</td>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p><strong>运算功能</strong></p>
-<p>$Tnew_D = (Tnew_E &gt; 0) ? (Tnew_D-1) : 0$</p>
-</li>
-</ul>
-<h3><span id="em_regexmem-流水寄存器">EM_Reg（EX/MEM 流水寄存器）</span></h3>
-<ul>
-<li>
-<p>端口定义</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">方向</th>
-<th style="text-align:left">信号名</th>
-<th style="text-align:left">位宽</th>
-<th style="text-align:left">描述</th>
-<th style="text-align:left">输入来源</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_clk</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">时钟信号</td>
-<td style="text-align:left">mips.v中的clk</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_reset</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">同步复位信号</td>
-<td style="text-align:left">mips.v中的reset</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_en</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">使能信号</td>
-<td style="text-align:left">from HU</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_flush</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">清空信号</td>
-<td style="text-align:left">from HU</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_pc</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_instr</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_pc</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_instr</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_alu_result</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_mem_writeData</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">关于sw的来自GRF_RD2的信号</td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_ext_result</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_alu_result</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_mem_writeData</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_ext_result</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p><strong>运算功能</strong></p>
-<blockquote>
-<p>我这里暂停部分在专门的一个模块HU中解决了</p>
-</blockquote>
-<p>$Tnew_E = (Tnew_D &gt; 0) ? (Tnew_E-1) : 0$</p>
-</li>
-</ul>
-<h3><span id="mw_regmemwb-流水寄存器">MW_Reg（MEM/WB 流水寄存器）</span></h3>
-<ul>
-<li>
-<p><strong>接口定义</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">方向</th>
-<th style="text-align:left">信号名</th>
-<th style="text-align:left">位宽</th>
-<th style="text-align:left">描述</th>
-<th style="text-align:left">输入来源</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_clk</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">时钟信号</td>
-<td style="text-align:left">mips.v中的clk</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_reset</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">同步复位信号</td>
-<td style="text-align:left">mips.v中的reset</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_en</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">使能信号</td>
-<td style="text-align:left">from HU</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_flush</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">清空信号</td>
-<td style="text-align:left">from HU</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_pc</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_instr</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_pc</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_instr</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_dm_RD</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left">来自dm的数据读出信号</td>
-<td style="text-align:left">from M_DM</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_alu_result</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">i_ext_result</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_dm_RD</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_alu_result</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">O</td>
-<td style="text-align:left">or_ext_result</td>
-<td style="text-align:left">32</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-</li>
-</ul>
-<h2><span id="控制单元_cu">控制单元_CU</span></h2>
-<p>输入改为instr，之前为opcode和func</p>
-<table>
-<thead>
-<tr>
-<th>指令</th>
-<th>Opcode[31:26]</th>
-<th>[25:21]</th>
-<th>[20:16]</th>
-<th>[15:11]</th>
-<th>[10:6]</th>
-<th>[5:0]</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>add</td>
-<td>000000</td>
-<td>rs</td>
-<td>rt</td>
-<td>rd</td>
-<td>00000</td>
-<td>100000</td>
-</tr>
-<tr>
-<td>sub</td>
-<td>000000</td>
-<td>rs</td>
-<td>rt</td>
-<td>rd</td>
-<td>00000</td>
-<td>100010</td>
-</tr>
-<tr>
-<td>ori</td>
-<td>001101</td>
-<td>rs</td>
-<td>rt</td>
-<td>immediate</td>
-<td>~</td>
-<td>~</td>
-</tr>
-<tr>
-<td>lw</td>
-<td>100011</td>
-<td>base</td>
-<td>rt</td>
-<td>offset</td>
-<td>~</td>
-<td>~</td>
-</tr>
-<tr>
-<td>sw</td>
-<td>101011</td>
-<td>base</td>
-<td>rt</td>
-<td>offset</td>
-<td>~</td>
-<td>~</td>
-</tr>
-<tr>
-<td>beq</td>
-<td>000100</td>
-<td>rs</td>
-<td>rt</td>
-<td>offset</td>
-<td>~</td>
-<td>~</td>
-</tr>
-<tr>
-<td>lui</td>
-<td>001111</td>
-<td>00000</td>
-<td>rt</td>
-<td>immediate</td>
-<td>~</td>
-<td>~</td>
-</tr>
-<tr>
-<td>nop</td>
-<td>000000</td>
-<td>0</td>
-<td>0</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3><span id="分支转移实现">分支转移实现</span></h3>
-<h4><span id="b-类指令">B 类指令</span></h4>
-<p>为了减少因控制冲突导致的暂停（<strong>stall</strong>），我们将 B 类指令的判断进行前置，单独使用 CMP 模块进行判断。当 B 类指令进入 D 级后（此时 F 级的指令为编译优化调度的指令），CMP 模块的判断结果进入 NPC，如过 CMP 结果为真（CMP_out = 1）而且 NPCOp 信号为 0x001（说明当前指令为 B 类指令），NPC 输出转移的地址 npc 并进入 IFU 的输入端，在下一时钟沿上升时进入 F 级，实现转移。</p>
-<h4><span id="j-和-jal">j 和 jal</span></h4>
-<p>当 j 或 jal 进入 D 级后（此时 F 级的指令为编译优化调度的指令），D_instr 中 imm26 域的数据进入 NPC 进行处理，如果当前 NPCOp 信号为 0x010（说明当前指令为 jal 或 j 指令），NPC 输出转移的地址 npc，并进入 IFU 的输入端，在下一时钟沿上升时进入 F 级，实现转移。</p>
-<p>jal 指令在实现跳转的同时，还需要将下一条指令的地址存入 31 号寄存器中，因此我们需要在 IFU 中计算出改地址，并随着 jal 指令进行流水，最终在 W 级写入 GRF 的 31 号寄存器。由于存在延迟槽，pc+4 地址中的指令是编译优化机制调度过来的，因此我们要保存的地址应该为 pc+8。</p>
-<h4><span id="jr">jr</span></h4>
-<p>当 jr 进入 D 级后（此时 F 级的指令为编译优化调度的指令），D_V1_f（经过转发后的 D_V1 值）进入 NPC，如果当前 NPCOp 信号为 0x011（说明当前指令为 jr 指令），NPC 输出转移的地址 npc，并进入 IFU 的输入端，在下一时钟沿上升时进入 F 级，实现转移。</p>
-<h2><span id="冒险处理">冒险处理</span></h2>
-<p>冒险处理我们均通过 “A_T” 法实现 ——</p>
-<h3><span id="转发forward">转发（forward）</span></h3>
-<p><strong>无脑转发策略。</strong></p>
-<p><strong>将所有在该层级后面的均进行转发。</strong></p>
-<p><strong>比如ID级流水，需要用到D_rs和D_rt的对应寄存器的值。对于写入寄存器的值，可能为E级中的，E_alu_result, M_mem_writeData。</strong></p>
-<p>当前面的指令要写寄存器但还未写入，而后面的指令需要用到没有被写入的值时，这时候会产生<strong>数据冒险</strong>，我们首先考虑进行转发。我们<strong>假设所有的数据冒险均可通过转发解决</strong>。也就是说，当某一指令前进到必须使用某一寄存器的值的流水阶段时，这个寄存器的值一定已经产生，并<strong>存储于后续某个流水线寄存器中</strong>。</p>
-<p>在这一阶段，我们不管需要的值有没由计算出，都要进行转发，即暴力转发。为实现这一机制，我们要清楚哪些模块需要转发后的数据（<strong>需求者</strong>）和保存着写入值的流水寄存器（<strong>供应者</strong>）</p>
-<ul>
-<li>
-<p><strong>供应者及其产生的数据</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">流水级</th>
-<th style="text-align:left">产生数据</th>
-<th style="text-align:left">MUX 名 &amp; 选择信号名</th>
-<th style="text-align:left">MUX 输出名</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">E</td>
-<td style="text-align:left">E_E32，E_pc8</td>
-<td style="text-align:left">MUX_E_out &amp; SelEMOut</td>
-<td style="text-align:left">E_out</td>
-</tr>
-<tr>
-<td style="text-align:left">M</td>
-<td style="text-align:left">M_AO，M_pc8</td>
-<td style="text-align:left">MUX_M_out &amp; SelEMOut</td>
-<td style="text-align:left">M_out</td>
-</tr>
-<tr>
-<td style="text-align:left">W</td>
-<td style="text-align:left">W_AO，W_RD，W_pc8</td>
-<td style="text-align:left">MUX_W_out &amp; SelWOut</td>
-<td style="text-align:left">W_out</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p><strong>需求者及其产生的数据</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">接收端口</th>
-<th style="text-align:left">选择数据</th>
-<th style="text-align:left">HMUX 名 &amp; 选择信号名</th>
-<th style="text-align:left">MUX 输出名</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">CMP_D1/NPC_ra</td>
-<td style="text-align:left">D_V1，M_out，E_out</td>
-<td style="text-align:left">HMUX_CMP_D1 &amp; FwdCMPD1</td>
-<td style="text-align:left">D_V1_f</td>
-</tr>
-<tr>
-<td style="text-align:left">CMP_D2</td>
-<td style="text-align:left">D_v1，M_out，E_out</td>
-<td style="text-align:left">HMUX_CMP_D2 &amp; FwdCMPD2</td>
-<td style="text-align:left">D_V2_f</td>
-</tr>
-<tr>
-<td style="text-align:left">ALU_A</td>
-<td style="text-align:left">E_V1， W_out，M_out</td>
-<td style="text-align:left">HMUX_ALU_A &amp; FwdALUA</td>
-<td style="text-align:left">E_V1_f</td>
-</tr>
-<tr>
-<td style="text-align:left">ALU_B</td>
-<td style="text-align:left">E_V2，W_out，M_out</td>
-<td style="text-align:left">HMUX_ALU_B &amp; FwdALUB</td>
-<td style="text-align:left">E_V1_f</td>
-</tr>
-<tr>
-<td style="text-align:left">DM_WD</td>
-<td style="text-align:left">M_V2， W_out</td>
-<td style="text-align:left">HMUX_DM &amp; FwdDM</td>
-<td style="text-align:left">M_V2_f</td>
-</tr>
-</tbody>
-</table>
-</li>
-</ul>
-<p>从上表可以看出，W 级中的数据没有转发到 D 级，原因是我们在 GRF 内实现了内部转发机制，将 GRF 输入端的数据（还未写入）及时反映到 RD1 或这 RD2，判断条件为 <code>A3 == A2</code> 或者 <code>A3 == A1</code>。</p>
-<p>此时为了生成 HMUX 的选择信号，我们需要向 HCU（冒险控制器）输入”A” 数据，然后进行选择信号的计算，执行转发的条件为 ——</p>
-<ul>
-<li><strong>前位点的读取寄存器地址和某转发输入来源的写入寄存器地址相等且不为 0</strong></li>
-<li><strong>写使能信号有效</strong></li>
-</ul>
-<p>根据以上条件我们可以生成上面的 5 个 HMUX 选择信号，选择信号的输出值应遵循 “就近原则”，及最先产生的数据最先被转发。</p>
-<h3><span id="暂停stall">暂停（stall）</span></h3>
-<p>接下来，我们来处理通过转发不能处理的数据冒险。在这种情况下，新的数据还未来得及产生。我们只能暂停流水线，等待新的数据产生。为了方便处理，我们仅仅为 D 级的指令进行暂停处理。</p>
-<p>我们把 Tuse 和 Tnew 作为暂停的判断依据 ——</p>
-<ul>
-<li>Tuse：指令进入 <strong>D 级</strong>后，其后的某个功能部件<strong>再</strong>经过多少时钟周期就<strong>必须</strong>要使用寄存器值。对于有两个操作数的指令，其<strong>每个操作数的 Tuse 值可能不等</strong>（如 store 型指令 rs、rt 的 Tuse 分别为 1 和 2 ）。</li>
-<li>Tnew：位于 <strong>E 级及其后各级</strong>的指令，再经过多少周期就能够产生要写入寄存器的结果。在我们目前的 CPU 中，W 级的指令 Tnew 恒为 0；对于同一条指令，Tnew@M = max (Tnew@E - 1, 0)</li>
-</ul>
-<p>在这一阶段，我们找到 D 级生成的 Tuse_rs 和 Tuse_rt 和在 E,M,W 级寄存器中流水的 Tnew_D，Tnew_M，Tnew_W，如下表所示</p>
-<ul>
-<li>
-<p><strong>Tuse 表</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">指令类型</th>
-<th style="text-align:left">Tuse_rs</th>
-<th style="text-align:left">Tuse_rt</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">calc_R</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">1</td>
-</tr>
-<tr>
-<td style="text-align:left">calc_I</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">X</td>
-</tr>
-<tr>
-<td style="text-align:left">shift</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">1</td>
-</tr>
-<tr>
-<td style="text-align:left">shiftv</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">1</td>
-</tr>
-<tr>
-<td style="text-align:left">load</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">X</td>
-</tr>
-<tr>
-<td style="text-align:left">store</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">2</td>
-</tr>
-<tr>
-<td style="text-align:left">branch</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-</tr>
-<tr>
-<td style="text-align:left">jump</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
-</tr>
-<tr>
-<td style="text-align:left">jr</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">X</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p><strong>Tnew 表</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">指令类型</th>
-<th style="text-align:left">Tnew_D</th>
-<th style="text-align:left">Tnew_E</th>
-<th style="text-align:left">Tnew_M</th>
-<th style="text-align:left">Tnew_W</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">calc_R</td>
-<td style="text-align:left">2</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-</tr>
-<tr>
-<td style="text-align:left">calc_I</td>
-<td style="text-align:left">2</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-</tr>
-<tr>
-<td style="text-align:left">shift</td>
-<td style="text-align:left">2</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-</tr>
-<tr>
-<td style="text-align:left">shiftv</td>
-<td style="text-align:left">2</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-</tr>
-<tr>
-<td style="text-align:left">load</td>
-<td style="text-align:left">3</td>
-<td style="text-align:left">2</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">0</td>
-</tr>
-<tr>
-<td style="text-align:left">store</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
-</tr>
-<tr>
-<td style="text-align:left">branch</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
-</tr>
-<tr>
-<td style="text-align:left">jal</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-</tr>
-<tr>
-<td style="text-align:left">jr</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
-<td style="text-align:left">X</td>
-</tr>
-<tr>
-<td style="text-align:left">lui</td>
-<td style="text-align:left">1</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0</td>
-</tr>
-</tbody>
-</table>
-</li>
-</ul>
-<p>然后我们 Tnew 和 Tuse 传入 HCU（冒险控制器中），然后进行 stall 信号的计算。如果 Tnew &gt; TuseHCU 中的 stall 信号值为 1，此时执行以下操作 ——</p>
-<ul>
-<li><strong>冻结 PC 寄存器（IFU_en = ~stall = 0）</strong></li>
-<li><strong>冻结 D 级寄存器（D_en = ~stall = 0）</strong></li>
-<li><strong>清空 E 级寄存器（E_clr = stall = 1）</strong></li>
-</ul>
-<h1><span id="思考题">思考题</span></h1>
-<blockquote>
-<p>1、我们使用提前分支判断的方法尽早产生结果来减少因不确定而带来的开销，但实际上这种方法并非总能提高效率，请从流水线冒险的角度思考其原因并给出一个指令序列的例子。</p>
-</blockquote>
-<ul>
-<li>我们使用两个寄存器值的时间最早来到了 D 级，所以很可能会引发暂停.</li>
-<li>如下面这种情况，若 beq 的结果在 E 级产生，则不需要暂停，可以转发，但是现在 beq 在 D 级的时候 lw 还在 M 级，没有产生结果，需要暂停。</li>
-</ul>
-<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">lw    $t0, 0($0)
-nop
-beq   $t0, $t0, label<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<blockquote>
-<p>2、因为延迟槽的存在，对于 jal 等需要将指令地址写入寄存器的指令，要写回 PC + 8，请思考为什么这样设计？</p>
-</blockquote>
-<ul>
-<li>因为延迟槽的存在，跳转指令的后一条必然会执行，所以需要把 PC+8 写入寄存器，不然 jr 时延迟槽内的指令会再执行一次</li>
-</ul>
-<blockquote>
-<p>3、我们要求大家所有转发数据都来源于流水寄存器而不能是功能部件（如 DM 、 ALU ），请思考为什么？</p>
-</blockquote>
-<ul>
-<li>因为流水寄存器中的储存的数据时前一级已经计算出来的数据，在当前周期内时稳定输出的。而功能部件的输出是有延迟的，如果让这些部件提供数据，有可能再其在回写数据生成前就写入了错误的数据，导致数据波动。</li>
-</ul>
-<blockquote>
-<p>4、我们为什么要使用 GPR 内部转发？该如何实现？</p>
-</blockquote>
-<p>如果你W级写入数据的寄存器与D级读寄存器的地址相同时，将会你导致出现错误的数值，因此需要通过内部转发来规避数据冒险。</p>
-<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token comment">// 内部转发</span>
-    <span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> D_FWD_RD1_D<span class="token punctuation">,</span> D_FWD_RD2_D<span class="token punctuation">;</span>
-    <span class="token keyword">assign</span> D_FWD_RD1_D <span class="token operator">=</span> <span class="token punctuation">(</span> i_A1 <span class="token operator">==</span> <span class="token number">5'h0</span> <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">32'h0</span><span class="token punctuation">:</span>
-                         <span class="token punctuation">(</span><span class="token punctuation">(</span>i_A1 <span class="token operator">==</span> i_A3<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> i_WD <span class="token punctuation">:</span>
-                                            r_rf<span class="token punctuation">[</span>i_A1<span class="token punctuation">]</span><span class="token punctuation">;</span> 
-    <span class="token keyword">assign</span> D_FWD_RD2_D <span class="token operator">=</span> <span class="token punctuation">(</span> i_A2 <span class="token operator">==</span> <span class="token number">5'h0</span> <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">32'h0</span><span class="token punctuation">:</span>
-                         <span class="token punctuation">(</span><span class="token punctuation">(</span>i_A2 <span class="token operator">==</span> i_A3<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> i_WD <span class="token punctuation">:</span>
-                                            r_rf<span class="token punctuation">[</span>i_A2<span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<blockquote>
-<p>5、我们转发时数据的需求者和供给者可能来源于哪些位置？共有哪些转发数据通路？</p>
-</blockquote>
-<pre class="line-numbers language-verilog" data-language="verilog"><code class="language-verilog"><span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> D_FWD_rs_RD1 <span class="token operator">=</span> <span class="token punctuation">(</span>D_rs <span class="token operator">==</span> <span class="token number">5'h0</span>    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">32'h0000_0000</span> <span class="token punctuation">:</span>
-                           <span class="token punctuation">(</span>D_rs <span class="token operator">==</span> E_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> E_grf_writeData <span class="token punctuation">:</span>
-                           <span class="token punctuation">(</span>D_rs <span class="token operator">==</span> M_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> M_grf_writeData <span class="token punctuation">:</span>
-                                                D_grf_RD1<span class="token punctuation">;</span>
-<span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> D_FWD_rt_RD2 <span class="token operator">=</span> <span class="token punctuation">(</span>D_rt <span class="token operator">==</span> <span class="token number">5'h0</span>    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">32'h0000_0000</span> <span class="token punctuation">:</span>
-                           <span class="token punctuation">(</span>D_rt <span class="token operator">==</span> E_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> E_grf_writeData <span class="token punctuation">:</span>
-                           <span class="token punctuation">(</span>D_rt <span class="token operator">==</span> M_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> M_grf_writeData <span class="token punctuation">:</span>
-                                                D_grf_RD2<span class="token punctuation">;</span>
-
-<span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> E_FWD_rs_RD1 <span class="token operator">=</span> <span class="token punctuation">(</span>E_rs <span class="token operator">==</span> <span class="token number">5'h0</span>    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token punctuation">:</span>
-                           <span class="token punctuation">(</span>E_rs <span class="token operator">==</span> M_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> M_grf_writeData <span class="token punctuation">:</span>
-                           <span class="token punctuation">(</span>E_rs <span class="token operator">==</span> W_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> W_grf_writeData <span class="token punctuation">:</span>
-                                                E_grf_RD1<span class="token punctuation">;</span>
-<span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> E_FWD_rt_RD2 <span class="token operator">=</span> <span class="token punctuation">(</span>E_rt <span class="token operator">==</span> <span class="token number">5'h0</span>    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token punctuation">:</span>
-                           <span class="token punctuation">(</span>E_rt <span class="token operator">==</span> M_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> M_grf_writeData <span class="token punctuation">:</span>
-                           <span class="token punctuation">(</span>E_rt <span class="token operator">==</span> W_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> W_grf_writeData <span class="token punctuation">:</span>
-                                                E_grf_RD2<span class="token punctuation">;</span>
-
-<span class="token keyword">wire</span> <span class="token punctuation">[</span><span class="token number">31</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span> M_FWD_writeData <span class="token operator">=</span> <span class="token punctuation">(</span>M_rt <span class="token operator">==</span> <span class="token number">5'h0</span>    <span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token punctuation">:</span>
-                              <span class="token punctuation">(</span>M_rt <span class="token operator">==</span> W_grf_WA<span class="token punctuation">)</span> <span class="token operator">?</span> W_grf_writeData <span class="token punctuation">:</span>
-                                                   M_dm_writeData  <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<blockquote>
-<p>6、在课上测试时，我们需要你现场实现新的指令，对于这些新的指令，你可能需要在原有的数据通路上做哪些扩展或修改？提示：你可以对指令进行分类，思考每一类指令可能修改或扩展哪些位置。</p>
-</blockquote>
-<ul>
-<li>高内聚低耦合原理：大多数只需要改变控制信号以及相应的功能模块增加功能，但不排除某些需要修改数据通路</li>
-<li>对于计算类：首先改变 MCU，注意每个指令的控制信号的对应，再改 ALU 的结构，增加输出选择</li>
-<li>对于访存类：改变 MCU + 修改 DM 增加相应的功能</li>
-<li>对于跳转类：修改 MCU+NPC 相应功能修改</li>
-<li>小技巧：寻找已有的指令中与新增的指令相似的指令（可能不止一条），然后顺着这几条指令改。</li>
-</ul>
-<blockquote>
-<p>7、确定你的译码方式，简要描述你的译码器架构，并思考该架构的优势以及不足。</p>
-</blockquote>
-<p>我采用的是分布式译码。我感觉分布式译码器确实从实际运用上讲会造成器件的浪费，但是单从code上来讲，确实会方便很多，其中把每个instr传进去也感觉十分方便。</p>
-<p>但是可能不足在于修改了CU相应的部分，mips.v和HU.v都需要进行比较大的改动。</p>
-<h3><span id="流水线冒险">流水线冒险</span></h3>
-<ol>
-<li>
-<p><strong>在采用本节所述的控制冒险处理方式下，PC 的值应当如何被更新？请从数据通路和控制信号两方面进行说明。</strong></p>
-<p><strong>A</strong>：当需要进行暂停时，IFU 的使能信号失效，PC 值不变。当不需要进行分支转移和跳转时，NPC 中将 F_pc 信号加 4 处理返回 IFU，下一时钟沿来临时更新为 F_pc+4。当执行分支指令时，NPC 将 D_pc +4 和符号扩展后的 imm16 相加，返回 IFU，下一时钟沿上升时更新。当执行 j/jal 指令时，NPC 将 imm26 进行扩展（前四位补 D_pc 的前四位，后两位补 0），返回 IFU，下一时钟沿上升时更新。当执行 jr 指令时，NPC 将从 GRF 的 RD1 端口（考虑转发）输出的值输出，返回 IFU 下一时钟沿上升时更新。</p>
-</li>
-<li>
-<p><strong>对于 jal 等需要将指令地址写入寄存器的指令，为什么需要回写 PC+8 ？</strong></p>
-<p><strong>A</strong>：因为需要考虑编译优化，jal 的下一条指令是延迟槽中的指令，在 jal 执行前会被执行。如果回写 PC+4 的话，当出现 “jr $ra” 时，将会回到延迟槽，重复执行延迟槽中的指令。因此需要回写 PC+8。</p>
-</li>
-</ol>
-<h3><span id="数据冒险的分析">数据冒险的分析</span></h3>
-<ol>
-<li>
-<p><strong>为什么所有的供给者都是存储了上一级传来的各种数据的流水级寄存器，而不是由 ALU 或者 DM 等部件来提供数据？</strong></p>
-<p><strong>A</strong>：因为流水寄存器中的储存的数据时前一级已经计算出来的数据，在当前周期内时稳定输出的。而功能部件的输出是有延迟的，如果让这些部件提供数据，有可能再其在回写数据生成前就写入了错误的数据，导致数据波动。</p>
-</li>
-</ol>
-<h3><span id="at-法处理流水线数据冒险">AT 法处理流水线数据冒险</span></h3>
-<ol>
-<li>
-<p><strong>“转发（旁路）机制的构造” 中的 Thinking 1-4；</strong></p>
-<p><strong>Thinking 1</strong>：如果不采用已经转发过的数据，而采用上一级中的原始数据，会出现怎样的问题？试列举指令序列说明这个问题。</p>
-<p><strong>A</strong>：例如：</p>
-<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">addi    $s0, $0, 4
-andi	$s1, $s0, 5
-sw      $s1, 4($s0)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p><strong>Thinking 2</strong>：我们为什么要对 GPR 采用内部转发机制？如果不采用内部转发机制，我们要怎样才能解决这种情况下的转发需求呢？</p>
-<p><strong>A</strong>：因为需要使得 W 级保存的将要写入得数据及时反馈到 GRF 的输出端口，从而规避数据冒险。如果不采用内部转发，我们可以在 GRF 的输出端口加入多路选择器，将 W 级的数据进行转发。</p>
-<p><strong>Thinking 3</strong>：为什么 0 号寄存器需要特殊处理？</p>
-<p><strong>A</strong>：因为对 0 号寄存器的写入是无效的，如果不特殊处理，则会使得向 0 号寄存器写入的数据（无效输入）被错误转发，从而造成 BUG。</p>
-<p><strong>Thinking 4</strong>：什么是 “最新产生的数据”？</p>
-<p><strong>A</strong>: 距离当前需求者最近的流水寄存器中储存的数据。</p>
-</li>
-<li>
-<p><strong>在 AT 方法讨论转发条件的时候，只提到了 “供给者需求者的 A 相同，且不为 0”，但在 CPU 写入 GRF 的时候，是有一个 we 信号来控制是否要写入的。为何在 AT 方法中不需要特判 we 呢？为了用且仅用 A 和 T 完成转发，在翻译出 A 的时候，要结合 we 做什么操作呢？</strong></p>
-<p><strong>A</strong>： 因为当 we 信号为 0 时我们就把 RF 写入地址置为 0，因此如果 “供给者的 A 不为 0”，就已经排除了 “写入信号为 0” 的情况。</p>
-</li>
-</ol>
-<h3><span id="在线测试相关说明">在线测试相关说明</span></h3>
-<p>在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？</p>
-<p>如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证<strong>覆盖</strong>了所有需要测试的情况；如果你是<strong>完全随机</strong>生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了<strong>特殊的策略，<strong>比如构造连续数据冒险序列，请你描述一下你使用的策略如何</strong>结合了随机性</strong>达到强测的效果。</p>
-<p>此思考题请同学们结合自己测试 CPU 使用的具体手段，按照自己的实际情况进行回答。</p>
-<p><strong>A</strong>：我是采用半随机生成半手动构造的方法。对于功能型指令，完全通过 python 脚本自动生成。并且为了提高数据冲突的概率，我们仅仅使用 0~7 号寄存器进行测试。对于跳转指令，我们先使用一定模板进行构建，然后为了增加数据冒险和控制冒险，我们又手动进行一定修改，使得测试样例尽可能更多的覆盖所有可能的情况</p>
-<h3><span id="参考">参考</span></h3>
-<p><a href="https://thysrael.github.io/posts/59164957">一篇写的非常好的博客</a></p>
-]]></content>
-      <categories>
-        <category>计算机 组成</category>
-      </categories>
-      <tags>
-        <tag>p6</tag>
       </tags>
   </entry>
   <entry>
