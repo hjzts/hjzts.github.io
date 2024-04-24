@@ -6,7 +6,7 @@
   <link href="https://hugohealthy.top/atom.xml" rel="self"/>
   
   <link href="https://hugohealthy.top/"/>
-  <updated>2024-02-21T09:00:32.585Z</updated>
+  <updated>2024-04-24T08:58:38.829Z</updated>
   <id>https://hugohealthy.top/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://hugohealthy.top/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/"/>
     <id>https://hugohealthy.top/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/</id>
     <published>2024-02-21T08:46:15.000Z</published>
-    <updated>2024-02-21T09:00:32.585Z</updated>
+    <updated>2024-04-24T08:58:38.829Z</updated>
     
     
       
@@ -34,7 +34,7 @@
     
     
     
-    <category term="计算机组成原理" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
+    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
     
     
     <category term="p7" scheme="https://hugohealthy.top/tags/p7/"/>
@@ -46,7 +46,7 @@
     <link href="https://hugohealthy.top/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"/>
     <id>https://hugohealthy.top/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</id>
     <published>2024-02-21T08:46:00.000Z</published>
-    <updated>2024-02-21T08:57:16.309Z</updated>
+    <updated>2024-04-24T08:58:42.713Z</updated>
     
     
       
@@ -61,7 +61,7 @@
     
     
     
-    <category term="计算机组成原理" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
+    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
     
     
     <category term="p7" scheme="https://hugohealthy.top/tags/p7/"/>
@@ -73,7 +73,7 @@
     <link href="https://hugohealthy.top/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/"/>
     <id>https://hugohealthy.top/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/</id>
     <published>2024-02-21T08:45:26.000Z</published>
-    <updated>2024-02-21T09:01:13.711Z</updated>
+    <updated>2024-04-24T08:58:35.920Z</updated>
     
     
     <summary type="html">&lt;h1&gt;$\mathscr {Hugo}$ $\mathbb{CPU}$ 五级流水线$\mathscr{Design}$&lt;/h1&gt;
@@ -81,7 +81,7 @@
     
     
     
-    <category term="计算机" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/"/>
+    <category term="计算机 组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA-%E7%BB%84%E6%88%90/"/>
     
     
     <category term="p6" scheme="https://hugohealthy.top/tags/p6/"/>
@@ -93,7 +93,7 @@
     <link href="https://hugohealthy.top/2024/02/21/p5-%E6%B5%81%E6%B0%B4%E7%BA%BF/"/>
     <id>https://hugohealthy.top/2024/02/21/p5-%E6%B5%81%E6%B0%B4%E7%BA%BF/</id>
     <published>2024-02-21T08:45:05.000Z</published>
-    <updated>2024-02-21T09:00:53.273Z</updated>
+    <updated>2024-04-24T08:58:31.871Z</updated>
     
     
     <summary type="html">&lt;h1&gt;$\mathscr {Hugo}$ $\mathbb{CPU}$五级流水线$\mathscr{Design}$&lt;/h1&gt;
@@ -101,7 +101,7 @@
     
     
     
-    <category term="计算机组成原理" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
+    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
     
     
     <category term="p5" scheme="https://hugohealthy.top/tags/p5/"/>
@@ -113,7 +113,7 @@
     <link href="https://hugohealthy.top/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/"/>
     <id>https://hugohealthy.top/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/</id>
     <published>2024-02-21T08:44:35.000Z</published>
-    <updated>2024-02-21T08:54:07.536Z</updated>
+    <updated>2024-04-24T08:58:28.336Z</updated>
     
     
       
@@ -126,7 +126,7 @@
     
     
     
-    <category term="计算机" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/"/>
+    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
     
     
     <category term="p4" scheme="https://hugohealthy.top/tags/p4/"/>
@@ -138,7 +138,7 @@
     <link href="https://hugohealthy.top/2024/02/21/p3-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/"/>
     <id>https://hugohealthy.top/2024/02/21/p3-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/</id>
     <published>2024-02-21T08:44:19.000Z</published>
-    <updated>2024-02-21T08:53:18.931Z</updated>
+    <updated>2024-04-24T08:58:22.201Z</updated>
     
     
     <summary type="html">&lt;h1&gt;单周期mips架构CPU的logisim实现&lt;/h1&gt;
@@ -146,7 +146,7 @@
     
     
     
-    <category term="计算机组成原理" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/"/>
+    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
     
     
     <category term="p3" scheme="https://hugohealthy.top/tags/p3/"/>
@@ -158,7 +158,7 @@
     <link href="https://hugohealthy.top/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/"/>
     <id>https://hugohealthy.top/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/</id>
     <published>2023-12-30T18:22:21.000Z</published>
-    <updated>2023-12-30T18:49:01.681Z</updated>
+    <updated>2024-04-24T08:57:36.527Z</updated>
     
     
     <summary type="html">&lt;h1&gt;线代期末串讲&lt;/h1&gt;
@@ -171,6 +171,8 @@
     
     
     
+    <category term="高等代数" scheme="https://hugohealthy.top/categories/%E9%AB%98%E7%AD%89%E4%BB%A3%E6%95%B0/"/>
+    
     
     <category term="高代" scheme="https://hugohealthy.top/tags/%E9%AB%98%E4%BB%A3/"/>
     
@@ -181,13 +183,15 @@
     <link href="https://hugohealthy.top/2023/11/24/%E7%A6%BB%E6%95%A32/"/>
     <id>https://hugohealthy.top/2023/11/24/%E7%A6%BB%E6%95%A32/</id>
     <published>2023-11-24T09:09:30.000Z</published>
-    <updated>2024-02-21T09:00:21.309Z</updated>
+    <updated>2024-04-24T08:57:18.658Z</updated>
     
     
     <summary type="html">&lt;h1&gt;离散2&lt;/h1&gt;
 &lt;p&gt;这里会放上我的一些作业&lt;/p&gt;</summary>
     
     
+    
+    <category term="离散数学" scheme="https://hugohealthy.top/categories/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/"/>
     
     
     <category term="离散2" scheme="https://hugohealthy.top/tags/%E7%A6%BB%E6%95%A32/"/>
@@ -199,7 +203,7 @@
     <link href="https://hugohealthy.top/2023/11/10/OOpre/"/>
     <id>https://hugohealthy.top/2023/11/10/OOpre/</id>
     <published>2023-11-09T17:11:34.000Z</published>
-    <updated>2023-12-30T18:50:07.441Z</updated>
+    <updated>2024-04-24T08:58:19.118Z</updated>
     
     
     <summary type="html">&lt;h1&gt;BUAA-OOpre总结&lt;/h1&gt;
@@ -209,6 +213,8 @@
 &lt;p&gt;所有的代码均可以前往我的&lt;a href=&quot;https://github.com/hjzts/BUAA_OO&quot;&gt;github&lt;/a&gt;中获取&lt;/p&gt;</summary>
     
     
+    
+    <category term="面向对象" scheme="https://hugohealthy.top/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
     
     
     <category term="OOpre" scheme="https://hugohealthy.top/tags/OOpre/"/>
@@ -220,7 +226,7 @@
     <link href="https://hugohealthy.top/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/"/>
     <id>https://hugohealthy.top/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/</id>
     <published>2023-10-09T16:24:33.000Z</published>
-    <updated>2023-12-30T18:49:34.036Z</updated>
+    <updated>2024-04-24T08:58:06.850Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -229,7 +235,7 @@
     
     
     
-    <category term="CO" scheme="https://hugohealthy.top/categories/CO/"/>
+    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
     
     
     <category term="CO" scheme="https://hugohealthy.top/tags/CO/"/>
@@ -260,7 +266,7 @@
     <link href="https://hugohealthy.top/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/"/>
     <id>https://hugohealthy.top/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/</id>
     <published>2023-05-25T12:08:17.000Z</published>
-    <updated>2023-10-09T16:12:09.337Z</updated>
+    <updated>2024-04-24T08:57:58.848Z</updated>
     
     
       
@@ -276,6 +282,10 @@
     
     
     
+    <category term="数据结构" scheme="https://hugohealthy.top/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    
+    
+    <category term="字典序" scheme="https://hugohealthy.top/tags/%E5%AD%97%E5%85%B8%E5%BA%8F/"/>
     
   </entry>
   
@@ -284,7 +294,7 @@
     <link href="https://hugohealthy.top/2023/05/25/Trie/"/>
     <id>https://hugohealthy.top/2023/05/25/Trie/</id>
     <published>2023-05-25T11:57:38.000Z</published>
-    <updated>2023-12-30T18:50:10.841Z</updated>
+    <updated>2024-04-24T08:58:50.899Z</updated>
     
     
     <summary type="html">&lt;blockquote&gt;
@@ -292,6 +302,8 @@
 &lt;/blockquote&gt;</summary>
     
     
+    
+    <category term="数据结构" scheme="https://hugohealthy.top/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
     
     
     <category term="数据结构" scheme="https://hugohealthy.top/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
@@ -350,15 +362,17 @@
     <link href="https://hugohealthy.top/2023/05/04/%E7%A6%BB%E6%95%A31/"/>
     <id>https://hugohealthy.top/2023/05/04/%E7%A6%BB%E6%95%A31/</id>
     <published>2023-05-04T10:52:30.000Z</published>
-    <updated>2023-10-09T16:11:52.869Z</updated>
+    <updated>2024-04-24T08:57:25.955Z</updated>
     
     
     <summary type="html">&lt;p&gt;这里记录了大一下学期的离散作业与答案，我会在每次作业截止后马上把我的答案放上来&lt;span class=&quot;github-emoji&quot;&gt;&lt;span&gt;🐶&lt;/span&gt;&lt;img src=&quot;https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8&quot; aria-hidden=&quot;true&quot; onerror=&quot;this.parent.classList.add(&#39;github-emoji-fallback&#39;)&quot;&gt;&lt;/span&gt;&lt;span class=&quot;github-emoji&quot;&gt;&lt;span&gt;🐶&lt;/span&gt;&lt;img src=&quot;https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8&quot; aria-hidden=&quot;true&quot; onerror=&quot;this.parent.classList.add(&#39;github-emoji-fallback&#39;)&quot;&gt;&lt;/span&gt;&lt;span class=&quot;github-emoji&quot;&gt;&lt;span&gt;🐶&lt;/span&gt;&lt;img src=&quot;https://github.githubassets.com/images/icons/emoji/unicode/1f436.png?v8&quot; aria-hidden=&quot;true&quot; onerror=&quot;this.parent.classList.add(&#39;github-emoji-fallback&#39;)&quot;&gt;&lt;/span&gt;&lt;/p&gt;</summary>
     
     
     
+    <category term="离散数学" scheme="https://hugohealthy.top/categories/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/"/>
     
-    <category term="离散" scheme="https://hugohealthy.top/tags/%E7%A6%BB%E6%95%A3/"/>
+    
+    <category term="离散1" scheme="https://hugohealthy.top/tags/%E7%A6%BB%E6%95%A31/"/>
     
   </entry>
   
