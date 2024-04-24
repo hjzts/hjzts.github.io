@@ -6,7 +6,7 @@
   <link href="https://hugohealthy.top/atom.xml" rel="self"/>
   
   <link href="https://hugohealthy.top/"/>
-  <updated>2024-04-24T09:09:55.522Z</updated>
+  <updated>2024-04-24T09:27:36.551Z</updated>
   <id>https://hugohealthy.top/</id>
   
   <author>
@@ -15,6 +15,393 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>spack</title>
+    <link href="https://hugohealthy.top/2024/04/24/spack/"/>
+    <id>https://hugohealthy.top/2024/04/24/spack/</id>
+    <published>2024-04-24T09:26:17.000Z</published>
+    <updated>2024-04-24T09:27:36.551Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;spack超算最好用的包管理器&quot;&gt;spack：超算最好用的包管理器&lt;/span&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="包管理器" scheme="https://hugohealthy.top/categories/%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8/"/>
+    
+    
+    <category term="spack" scheme="https://hugohealthy.top/tags/spack/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MPI</title>
+    <link href="https://hugohealthy.top/2024/04/24/MPI/"/>
+    <id>https://hugohealthy.top/2024/04/24/MPI/</id>
+    <published>2024-04-24T09:25:59.000Z</published>
+    <updated>2024-04-24T09:26:39.102Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;mpi分布式内存编程技术&quot;&gt;MPI分布式内存编程技术&lt;/span&gt;&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Fortran 77</summary>
+        
+      
+    
+    
+    
+    <category term="并行计算" scheme="https://hugohealthy.top/categories/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/"/>
+    
+    
+    <category term="mpi" scheme="https://hugohealthy.top/tags/mpi/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mariadb</title>
+    <link href="https://hugohealthy.top/2024/04/24/mariadb/"/>
+    <id>https://hugohealthy.top/2024/04/24/mariadb/</id>
+    <published>2024-04-24T09:24:44.000Z</published>
+    <updated>2024-04-24T09:26:14.102Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2&gt;&lt;span id=&quot;mariadb升级&quot;&gt;mariadb升级&lt;/span&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;官网&lt;/p&gt;
+&lt;p&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="数据库" scheme="https://hugohealthy.top/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+    <category term="mariadb升级" scheme="https://hugohealthy.top/tags/mariadb%E5%8D%87%E7%BA%A7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>bash</title>
+    <link href="https://hugohealthy.top/2024/04/24/bash/"/>
+    <id>https://hugohealthy.top/2024/04/24/bash/</id>
+    <published>2024-04-24T09:23:33.000Z</published>
+    <updated>2024-04-24T09:24:31.925Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;shell-script&quot;&gt;shell script&lt;/span&gt;&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;时刻记住这是 一个脚本语言，一个更加彻底的解释型语言&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="Shell" scheme="https://hugohealthy.top/categories/Shell/"/>
+    
+    
+    <category term="bash" scheme="https://hugohealthy.top/tags/bash/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>debian12</title>
+    <link href="https://hugohealthy.top/2024/04/24/debian12/"/>
+    <id>https://hugohealthy.top/2024/04/24/debian12/</id>
+    <published>2024-04-24T09:22:19.000Z</published>
+    <updated>2024-04-24T09:22:41.921Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;debian12&quot;&gt;debian12&lt;/span&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;span id=&quot;查看linux内核&quot;&gt;查看linux内核&lt;/span&gt;&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;pre&gt;&lt;code</summary>
+        
+      
+    
+    
+    
+    <category term="Linux" scheme="https://hugohealthy.top/categories/Linux/"/>
+    
+    
+    <category term="debian12" scheme="https://hugohealthy.top/tags/debian12/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java多版本管理</title>
+    <link href="https://hugohealthy.top/2024/04/24/java%E5%A4%9A%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86/"/>
+    <id>https://hugohealthy.top/2024/04/24/java%E5%A4%9A%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86/</id>
+    <published>2024-04-24T09:21:51.000Z</published>
+    <updated>2024-04-24T09:23:04.231Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;java多版本管理&quot;&gt;java多版本管理&lt;/span&gt;&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;适用于ubuntu&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;检查可用的apt中的openjdk源&lt;/p&gt;
+&lt;pre</summary>
+        
+      
+    
+    
+    
+    <category term="Java" scheme="https://hugohealthy.top/categories/Java/"/>
+    
+    
+    <category term="java" scheme="https://hugohealthy.top/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>zsh</title>
+    <link href="https://hugohealthy.top/2024/04/24/zsh/"/>
+    <id>https://hugohealthy.top/2024/04/24/zsh/</id>
+    <published>2024-04-24T09:21:32.000Z</published>
+    <updated>2024-04-24T09:22:04.077Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;zsh&quot;&gt;zsh&lt;/span&gt;&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;linux安装配置zsh&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;安装&lt;/p&gt;
+&lt;pre class=&quot;line-numbers language-bash&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Shell" scheme="https://hugohealthy.top/categories/Shell/"/>
+    
+    
+    <category term="zsh" scheme="https://hugohealthy.top/tags/zsh/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>overleaf</title>
+    <link href="https://hugohealthy.top/2024/04/24/overleaf/"/>
+    <id>https://hugohealthy.top/2024/04/24/overleaf/</id>
+    <published>2024-04-24T09:20:17.000Z</published>
+    <updated>2024-04-24T09:23:38.574Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;hugo-overleaf&quot;&gt;hugo-overleaf&lt;/span&gt;&lt;/h1&gt;
+&lt;p&gt;overleaf本地挂载&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;确保已经安装docker</summary>
+        
+      
+    
+    
+    
+    <category term="Latex" scheme="https://hugohealthy.top/categories/Latex/"/>
+    
+    
+    <category term="overleaf" scheme="https://hugohealthy.top/tags/overleaf/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>wsl</title>
+    <link href="https://hugohealthy.top/2024/04/24/wsl/"/>
+    <id>https://hugohealthy.top/2024/04/24/wsl/</id>
+    <published>2024-04-24T09:19:23.000Z</published>
+    <updated>2024-04-24T09:19:51.288Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;wsl&quot;&gt;wsl&lt;/span&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;span id=&quot;安装&quot;&gt;安装&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;安装wsl&lt;/p&gt;
+&lt;p&gt;在管理员模式下打开 PowerShell 或 Windows</summary>
+        
+      
+    
+    
+    
+    <category term="虚拟机" scheme="https://hugohealthy.top/categories/%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+    
+    
+    <category term="wsl" scheme="https://hugohealthy.top/tags/wsl/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>jupyter</title>
+    <link href="https://hugohealthy.top/2024/04/24/jupyter/"/>
+    <id>https://hugohealthy.top/2024/04/24/jupyter/</id>
+    <published>2024-04-24T09:18:17.000Z</published>
+    <updated>2024-04-24T09:21:47.417Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;jupyter&quot;&gt;jupyter&lt;/span&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;span id=&quot;安装配置&quot;&gt;安装配置&lt;/span&gt;&lt;/h2&gt;
+&lt;h3&gt;&lt;span id=&quot;ipython-安装&quot;&gt;ipython 安装&lt;/span&gt;&lt;/h3&gt;
+&lt;pre</summary>
+        
+      
+    
+    
+    
+    <category term="python" scheme="https://hugohealthy.top/categories/python/"/>
+    
+    
+    <category term="jupyter" scheme="https://hugohealthy.top/tags/jupyter/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>docker</title>
+    <link href="https://hugohealthy.top/2024/04/24/docker/"/>
+    <id>https://hugohealthy.top/2024/04/24/docker/</id>
+    <published>2024-04-24T09:18:03.000Z</published>
+    <updated>2024-04-24T09:18:54.934Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;linux上面docke安装：&lt;/p&gt;
+&lt;pre class=&quot;line-numbers language-bash&quot; data-language=&quot;bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token</summary>
+        
+      
+    
+    
+    
+    <category term="虚拟机" scheme="https://hugohealthy.top/categories/%E8%99%9A%E6%8B%9F%E6%9C%BA/"/>
+    
+    
+    <category term="docker" scheme="https://hugohealthy.top/tags/docker/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>conda和pip</title>
+    <link href="https://hugohealthy.top/2024/04/24/conda%E5%92%8Cpip/"/>
+    <id>https://hugohealthy.top/2024/04/24/conda%E5%92%8Cpip/</id>
+    <published>2024-04-24T09:17:00.000Z</published>
+    <updated>2024-04-24T09:17:48.303Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="python" scheme="https://hugohealthy.top/categories/python/"/>
+    
+    
+    <category term="conda 和 pip" scheme="https://hugohealthy.top/tags/conda-%E5%92%8C-pip/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OO-U2</title>
+    <link href="https://hugohealthy.top/2024/04/24/OO-U2/"/>
+    <id>https://hugohealthy.top/2024/04/24/OO-U2/</id>
+    <published>2024-04-24T09:15:23.000Z</published>
+    <updated>2024-04-24T09:16:32.124Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;oo第二单元电梯调度&quot;&gt;OO第二单元电梯调度&lt;/span&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;span id=&quot;0-前言&quot;&gt;0</summary>
+        
+      
+    
+    
+    
+    <category term="面向对象" scheme="https://hugohealthy.top/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+    
+    
+    <category term="OO 第二单元" scheme="https://hugohealthy.top/tags/OO-%E7%AC%AC%E4%BA%8C%E5%8D%95%E5%85%83/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OO-U1</title>
+    <link href="https://hugohealthy.top/2024/04/24/OO-U1/"/>
+    <id>https://hugohealthy.top/2024/04/24/OO-U1/</id>
+    <published>2024-04-24T09:15:10.000Z</published>
+    <updated>2024-04-24T09:16:00.996Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;oo第一单元-表达式化简总结&quot;&gt;OO第一单元-表达式化简总结&lt;/span&gt;&lt;/h1&gt;
+&lt;h2&gt;&lt;span id=&quot;0-前言&quot;&gt;0 前言&lt;/span&gt;&lt;/h2&gt;
+&lt;h3&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="面向对象" scheme="https://hugohealthy.top/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
+    
+    
+    <category term="OO 第一单元" scheme="https://hugohealthy.top/tags/OO-%E7%AC%AC%E4%B8%80%E5%8D%95%E5%85%83/"/>
+    
+  </entry>
   
   <entry>
     <title>os-lab1实验报告</title>
@@ -161,333 +548,6 @@
     
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>os_lab0笔记</title>
-    <link href="https://hugohealthy.top/2024/04/24/os-lab0%E7%AC%94%E8%AE%B0/"/>
-    <id>https://hugohealthy.top/2024/04/24/os-lab0%E7%AC%94%E8%AE%B0/</id>
-    <published>2024-04-24T09:01:56.000Z</published>
-    <updated>2024-04-24T09:05:10.673Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1&gt;&lt;span id=&quot;操作系统lab0&quot;&gt;操作系统lab0&lt;/span&gt;&lt;/h1&gt;
-&lt;h2&gt;&lt;span id=&quot;1linux操作&quot;&gt;1.Linux操作&lt;/span&gt;&lt;/h2&gt;
-&lt;h3&gt;&lt;span id=&quot;11-查看文件&quot;&gt;1.1</summary>
-        
-      
-    
-    
-    
-    <category term="操作系统" scheme="https://hugohealthy.top/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="os-lab0" scheme="https://hugohealthy.top/tags/os-lab0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>lab0实验报告</title>
-    <link href="https://hugohealthy.top/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/"/>
-    <id>https://hugohealthy.top/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/</id>
-    <published>2024-04-24T09:01:29.000Z</published>
-    <updated>2024-04-24T09:09:08.358Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1&gt;&lt;span id=&quot;lab0&quot;&gt;lab0&lt;/span&gt;&lt;/h1&gt;
-&lt;h2&gt;&lt;span id=&quot;思考题&quot;&gt;思考题&lt;/span&gt;&lt;/h2&gt;
-&lt;h3&gt;&lt;span id=&quot;thinking-01&quot;&gt;Thinking</summary>
-        
-      
-    
-    
-    
-    <category term="操作系统" scheme="https://hugohealthy.top/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="os-lab0" scheme="https://hugohealthy.top/tags/os-lab0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>p7-流水线</title>
-    <link href="https://hugohealthy.top/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/"/>
-    <id>https://hugohealthy.top/2024/02/21/p7-%E6%B5%81%E6%B0%B4%E7%BA%BF/</id>
-    <published>2024-02-21T08:46:15.000Z</published>
-    <updated>2024-04-24T08:58:38.829Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1&gt;&lt;span id=&quot;mathscr-hugo-mathbbcpu-五级流水线mathscrdesign&quot;&gt;$\mathscr {Hugo}$ $\mathbb{CPU}$</summary>
-        
-      
-    
-    
-    
-    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
-    
-    
-    <category term="p7" scheme="https://hugohealthy.top/tags/p7/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>p7-知识点整理</title>
-    <link href="https://hugohealthy.top/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/"/>
-    <id>https://hugohealthy.top/2024/02/21/p7-%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</id>
-    <published>2024-02-21T08:46:00.000Z</published>
-    <updated>2024-04-24T08:58:42.713Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1&gt;&lt;span id=&quot;mips-微系统&quot;&gt;mips 微系统&lt;/span&gt;&lt;/h1&gt;
-&lt;h2&gt;&lt;span id=&quot;cp0协处理器&quot;&gt;CP0协处理器&lt;/span&gt;&lt;/h2&gt;
-&lt;h3&gt;&lt;span id=&quot;cpu-控制寄存器&quot;&gt;&lt;strong&gt;CPU</summary>
-        
-      
-    
-    
-    
-    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
-    
-    
-    <category term="p7" scheme="https://hugohealthy.top/tags/p7/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>p5p6-流水线</title>
-    <link href="https://hugohealthy.top/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/"/>
-    <id>https://hugohealthy.top/2024/02/21/p5p6-%E6%B5%81%E6%B0%B4%E7%BA%BF/</id>
-    <published>2024-02-21T08:45:26.000Z</published>
-    <updated>2024-04-24T09:00:47.461Z</updated>
-    
-    
-    <summary type="html">&lt;h1&gt;$\mathscr {Hugo}$ $\mathbb{CPU}$ 五级流水线$\mathscr{Design}$&lt;/h1&gt;
-&lt;p&gt;实现五级流水线CPU&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
-    
-    
-    <category term="p6" scheme="https://hugohealthy.top/tags/p6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>p5-流水线</title>
-    <link href="https://hugohealthy.top/2024/02/21/p5-%E6%B5%81%E6%B0%B4%E7%BA%BF/"/>
-    <id>https://hugohealthy.top/2024/02/21/p5-%E6%B5%81%E6%B0%B4%E7%BA%BF/</id>
-    <published>2024-02-21T08:45:05.000Z</published>
-    <updated>2024-04-24T08:58:31.871Z</updated>
-    
-    
-    <summary type="html">&lt;h1&gt;$\mathscr {Hugo}$ $\mathbb{CPU}$五级流水线$\mathscr{Design}$&lt;/h1&gt;
-&lt;p&gt;实现五级流水线CPU&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
-    
-    
-    <category term="p5" scheme="https://hugohealthy.top/tags/p5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>p4-CPU-设计文档</title>
-    <link href="https://hugohealthy.top/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/"/>
-    <id>https://hugohealthy.top/2024/02/21/p4-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/</id>
-    <published>2024-02-21T08:44:35.000Z</published>
-    <updated>2024-04-24T08:58:28.336Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1&gt;&lt;span</summary>
-        
-      
-    
-    
-    
-    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
-    
-    
-    <category term="p4" scheme="https://hugohealthy.top/tags/p4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>p3-CPU-设计文档</title>
-    <link href="https://hugohealthy.top/2024/02/21/p3-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/"/>
-    <id>https://hugohealthy.top/2024/02/21/p3-CPU-%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/</id>
-    <published>2024-02-21T08:44:19.000Z</published>
-    <updated>2024-04-24T08:58:22.201Z</updated>
-    
-    
-    <summary type="html">&lt;h1&gt;单周期mips架构CPU的logisim实现&lt;/h1&gt;
-&lt;p&gt;通过抽象的方式我们从两个方面来构建单周期CPU，也就是数据路径（DataPath）和控制器（Controller）&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
-    
-    
-    <category term="p3" scheme="https://hugohealthy.top/tags/p3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>高代期末</title>
-    <link href="https://hugohealthy.top/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/"/>
-    <id>https://hugohealthy.top/2023/12/31/%E9%AB%98%E4%BB%A3%E6%9C%9F%E6%9C%AB/</id>
-    <published>2023-12-30T18:22:21.000Z</published>
-    <updated>2024-04-24T08:57:36.527Z</updated>
-    
-    
-    <summary type="html">&lt;h1&gt;线代期末串讲&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&quot;https://bhpan.buaa.edu.cn/link/AA8158DA29E46E4B62A400D7DA65647D7C&quot;&gt;https://bhpan.buaa.edu.cn/link/AA8158DA29E46E4B62A400D7DA65647D7C&lt;/a&gt;&lt;br&gt;
-文件夹名：高代期末串讲&lt;br&gt;
-有效期限：永久有效&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;资料如上&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="高等代数" scheme="https://hugohealthy.top/categories/%E9%AB%98%E7%AD%89%E4%BB%A3%E6%95%B0/"/>
-    
-    
-    <category term="高代" scheme="https://hugohealthy.top/tags/%E9%AB%98%E4%BB%A3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>离散2</title>
-    <link href="https://hugohealthy.top/2023/11/24/%E7%A6%BB%E6%95%A32/"/>
-    <id>https://hugohealthy.top/2023/11/24/%E7%A6%BB%E6%95%A32/</id>
-    <published>2023-11-24T09:09:30.000Z</published>
-    <updated>2024-04-24T08:57:18.658Z</updated>
-    
-    
-    <summary type="html">&lt;h1&gt;离散2&lt;/h1&gt;
-&lt;p&gt;这里会放上我的一些作业&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="离散数学" scheme="https://hugohealthy.top/categories/%E7%A6%BB%E6%95%A3%E6%95%B0%E5%AD%A6/"/>
-    
-    
-    <category term="离散2" scheme="https://hugohealthy.top/tags/%E7%A6%BB%E6%95%A32/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OOpre</title>
-    <link href="https://hugohealthy.top/2023/11/10/OOpre/"/>
-    <id>https://hugohealthy.top/2023/11/10/OOpre/</id>
-    <published>2023-11-09T17:11:34.000Z</published>
-    <updated>2024-04-24T08:58:19.118Z</updated>
-    
-    
-    <summary type="html">&lt;h1&gt;BUAA-OOpre总结&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;即面向对象先导课程，&lt;strong&gt;绝世好课！！&lt;/strong&gt;！&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;所有的代码均可以前往我的&lt;a href=&quot;https://github.com/hjzts/BUAA_OO&quot;&gt;github&lt;/a&gt;中获取&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="面向对象" scheme="https://hugohealthy.top/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
-    
-    
-    <category term="OOpre" scheme="https://hugohealthy.top/tags/OOpre/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CO-P0-logisim相关</title>
-    <link href="https://hugohealthy.top/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/"/>
-    <id>https://hugohealthy.top/2023/10/10/CO-P0-logisim%E7%9B%B8%E5%85%B3/</id>
-    <published>2023-10-09T16:24:33.000Z</published>
-    <updated>2024-04-24T08:58:06.850Z</updated>
-    
-    
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;关于本次P0,提供我个人的一点拙见&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    
-    
-    
-    <category term="计算机组成" scheme="https://hugohealthy.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/"/>
-    
-    
-    <category term="CO" scheme="https://hugohealthy.top/tags/CO/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>hammingDistance</title>
-    <link href="https://hugohealthy.top/2023/05/25/hammingDistance/"/>
-    <id>https://hugohealthy.top/2023/05/25/hammingDistance/</id>
-    <published>2023-05-25T12:10:08.000Z</published>
-    <updated>2023-12-30T18:50:03.266Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;分享一下大作业优化的技巧&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="数据结构" scheme="https://hugohealthy.top/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    
-    
-    <category term="大作业优化" scheme="https://hugohealthy.top/tags/%E5%A4%A7%E4%BD%9C%E4%B8%9A%E4%BC%98%E5%8C%96/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>字典序</title>
-    <link href="https://hugohealthy.top/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/"/>
-    <id>https://hugohealthy.top/2023/05/25/%E5%AD%97%E5%85%B8%E5%BA%8F/</id>
-    <published>2023-05-25T12:08:17.000Z</published>
-    <updated>2024-04-24T08:57:58.848Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h1&gt;&lt;span id=&quot;字典序&quot;&gt;字典序&lt;/span&gt;&lt;/h1&gt;
-&lt;h2&gt;&lt;span id=&quot;说在前面&quot;&gt;说在前面&lt;/span&gt;&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;字典序(dictionary order)，又称字母序(alphabetical</summary>
-        
-      
-    
-    
-    
-    <category term="数据结构" scheme="https://hugohealthy.top/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
-    
-    
-    <category term="字典序" scheme="https://hugohealthy.top/tags/%E5%AD%97%E5%85%B8%E5%BA%8F/"/>
     
   </entry>
   

@@ -1,0 +1,1741 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="OO-U1, C,Python,数分，高代，离散等">
+    <meta name="description" content="OO第一单元-表达式化简总结
+0 前言
+作业简介
+本次作业要求对表达式进行恒等变形，要求只保留必要的括号并使得表达式的长度尽量的短
+
+本次作业用到了递归下降法进行表达式解析和层次化程序设计的思想。
+
+首先说明自己用到的一些名词的特定含义
+
+">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>OO-U1 | hugo</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="hugo" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">hugo</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">hugo</div>
+        <div class="logo-desc">
+            
+            今天阳光正好
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hjzts/hjzts.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hjzts/hjzts.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/010.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">OO-U1</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/OO-%E7%AC%AC%E4%B8%80%E5%8D%95%E5%85%83/">
+                                <span class="chip bg-color">OO 第一单元</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" class="post-category">
+                                面向对象
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2024-04-24
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    7.2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    27 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1><span id="oo第一单元-表达式化简总结">OO第一单元-表达式化简总结</span></h1>
+<h2><span id="0-前言">0 前言</span></h2>
+<h3><span id="作业简介">作业简介</span></h3>
+<p>本次作业要求对表达式进行恒等变形，要求只保留必要的括号并使得表达式的长度尽量的短</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323021402.png" alt></p>
+<p>本次作业用到了递归下降法进行表达式解析和层次化程序设计的思想。</p>
+<blockquote>
+<p>首先说明自己用到的一些名词的特定含义</p>
+<ul>
+<li>表达式Expr：特指只经过解析后得到的式子</li>
+<li>多项式Poly：指解析并去括号后得到的式子</li>
+<li>单项式Mono：指构成多项式的基本单元，多项式为一个或多个单项式相加</li>
+</ul>
+</blockquote>
+<p>下面对自己的架构和整体作业设计进行分享</p>
+<h2><span id="1-架构设计体验心得">1 架构设计体验心得</span></h2>
+<p>最终架构如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323164353.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323182259.png" alt></p>
+<p>本单元主要是为了进行层次化进行架构设计的学习和应用。</p>
+<p>首先是整体的层次化处理方法，Lexer-Parser-Optimizer的结构，Lexer为Parser提供词法单元，Parser为Optimizer提供解析后的表达式Expr，Optimizer最后将结果字符串输出。</p>
+<p>还有Parser内部的层次化结构，从parseExpr调用parseTerm，再在parseTerm中调用parseFactor，而parseFactor中又包含多种因子，其中还包括对parseExpr的递归调用。</p>
+<p>从数据结构和功能结构的角度进行分析：</p>
+<ul>
+<li>
+<p>数据结构层次</p>
+<p>数据结构主要是解析得到的抽象语法树结构，设计了Expr表达式类作为解析得到的结果，Expr中存储多个Term，与Term形成聚合关系；Term中存储多个Factor，与Factor形成聚合关系</p>
+</li>
+<li>
+<p>功能结构层次</p>
+<p>功能层次主要是进行运算，进行括号化简，设计了Poly多项式进行运算，Poly中存储多个Mono，与Mono形成聚合关系。在进行调用Poly的multiplyPoly的方法时，调用multiplyMono方法，层次化清楚，每个方法的功能作用也更加明确。</p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323182447.png" alt></p>
+<h3><span id="11-第一次作业">1.1 第一次作业</span></h3>
+<p>本次作业要求完成简单的表达式化简问题，表达式中仅含有加、减、乘、乘方等基本操作，一方面是结合自己的踩坑经历，另一方面是考虑到递归下降法良好的可拓展性，我果断选择使用递归下降法作为表达式解析的主要方法。</p>
+<p>以下是代码架构的主体部分：</p>
+<ul>
+<li>Processer将输入的表达式字符串进行化简处理后得到新的表达式字符串</li>
+<li>Lexer得到当前词法单元，将词法单元传递给Parser进行解析</li>
+<li>Parser 对表达式进行解析，得到expr</li>
+<li>expr调用toPoly后，得到多项式poly</li>
+<li>Optimizer对poly进行优化输出，得到结果的字符串</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323021635.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323021804.png" alt></p>
+<p>语法分析：</p>
+<p>首先我们看一下设定的形式化表述</p>
+<blockquote>
+<ul>
+<li>表达式 →→ 空白项 [加减 空白项] 项 空白项 | 表达式 加减 空白项 项 空白项</li>
+<li>项 →→ [加减 空白项] 因子 | 项 空白项 ‘*’ 空白项 因子</li>
+<li>因子 →→ 变量因子 | 常数因子 | 表达式因子</li>
+<li>变量因子 →→ 幂函数</li>
+<li>常数因子 →→ 带符号的整数</li>
+<li>表达式因子 →→ ‘(’ 表达式 ‘)’ [空白项 指数]</li>
+<li>幂函数 →→ ‘x’ [空白项 指数]</li>
+</ul>
+</blockquote>
+<p>简单来看，我们可以大体上设计这么几个部分：</p>
+<ul>
+<li>
+<p><code>Factor</code>:因子，包括变量因子（包括幂函数），常数因子，表达式因子</p>
+</li>
+<li>
+<p><code>Term</code>:项，由乘法运算符连接的因子组成</p>
+</li>
+<li>
+<p><code>Expr</code>:表达式，由<code>+-</code>连接的项组成</p>
+</li>
+<li>
+<p><code>空白字符</code>：<code>space-ascii=32</code>,<code>tab-ascii=9</code></p>
+</li>
+</ul>
+<p>可以简单分析得到<strong>空白字符可以直接去掉</strong>，一个是考虑到有效字符的部分不计算空白字符，同时不会产生什么影响，于是可以直接不处理空白字符。同时空白字符在词法单元时并不会在区分特定的词法之间起到任何的作用，不会影响运行的优先级以及每个词法单元的特定含义。</p>
+<blockquote>
+<p>这里举个不能去掉空白字符的例子，比如<code>shell</code>中<code>echo=1</code>与<code>echo = 1</code>的区别，前者是作为赋值符号，后者是作为参数传递，如果去掉空格，二者无法区分。</p>
+</blockquote>
+<h3><span id="processer"><code>Processer</code></span></h3>
+<p>预处理器，对输入的字符串进行预处理，使得后面的递归下降法的使用更加便于进行。</p>
+<p>预处理部分包括：</p>
+<ul>
+<li>去除所有空白字符</li>
+<li>化简合并连续的<code>+-</code>符号</li>
+<li>除去前导0，这个我也没有处理，直接使用<code>BigInteger</code>处理就行</li>
+<li>同时可以化简<code>^+</code>为<code>^</code></li>
+<li><code>(+)</code>为<code>()</code>，也就是除去括号后的正号，这个我并没有进行了</li>
+</ul>
+<p>这里讲一下我的预处理的方法，主要是第二个化简合并连续的<code>+-</code>符号，通过互测中的代码观察，$\frac78$的同学进行了除去空白字符，$\frac38$的同学合并了连续的<code>+-</code>号，合并的方法基本上都是遍历一遍字符串然后进行判断，这里我的方法是使用六次字符串的<code>replaceAll</code>方法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">input <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token function">replaceAll</span><span class="token punctuation">(</span><span class="token string">"--"</span><span class="token punctuation">,</span> <span class="token string">"+"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>		<span class="token comment">// 将连续的两个- 化为一个 +，那么之后在生成-前不会有连续的-号</span>
+input <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token function">replaceAll</span><span class="token punctuation">(</span><span class="token string">"\\+\\+"</span><span class="token punctuation">,</span> <span class="token string">"+"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>	<span class="token comment">// 将连续的两个- 化为一个 +，那么之后在生成+前不会有连续的+号</span>
+input <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token function">replaceAll</span><span class="token punctuation">(</span><span class="token string">"-\\+"</span><span class="token punctuation">,</span> <span class="token string">"-"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>		<span class="token comment">// </span>
+input <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token function">replaceAll</span><span class="token punctuation">(</span><span class="token string">"\\+-"</span><span class="token punctuation">,</span> <span class="token string">"-"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>		<span class="token comment">// 将正负交替的 +- 化为一个 -</span>
+input <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token function">replaceAll</span><span class="token punctuation">(</span><span class="token string">"--"</span><span class="token punctuation">,</span><span class="token string">"+"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>			<span class="token comment">// 由于生成了- ，可能会有两个--连续的情况</span>
+input <span class="token operator">=</span> input<span class="token punctuation">.</span><span class="token function">replaceAll</span><span class="token punctuation">(</span><span class="token string">"\\+\\+"</span><span class="token punctuation">,</span> <span class="token string">"+"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>	<span class="token comment">// 即可处理完毕</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这么处理可能写起来方便的一点，但是时间上可能会是直接遍历的几倍(\流泪)</p>
+<p>这里想分析一下<strong>为什么说会便于进行</strong>，我认为主要在于对设定的形式化表述可以进行优化。</p>
+<p>在预处理完之后我们的形式化表述变为：</p>
+<blockquote>
+<ul>
+<li>表达式 →→ 项 | 表达式 加 项</li>
+<li>项 →→ [加减 ] 因子 | 项  ‘*’  因子</li>
+<li>因子 →→ 变量因子 | 常数因子 | 表达式因子</li>
+<li>变量因子 →→ 幂函数 x | x^b</li>
+<li>常数因子 →→ 带符号的整数</li>
+<li>表达式因子 →→ ‘(’ 表达式 ‘)’ [ 指数]</li>
+<li>幂函数 →→ ‘x’ [ 指数]</li>
+</ul>
+</blockquote>
+<p>采取向前靠的策略，可以发现现在已经变成了，表达式就是多个项相加（已经没有减这种情况了），项就是多个因子相乘，那么这时我们对于<code>Expr</code>表达式的构造就可以不需要记录符号了(这也就是我第一次的错误思路的来由)，具体来说，<code>Expr</code>里面只需要存<code>Term</code>就行，不需要存<code>BinOp</code>，因为每个运算都是加法。</p>
+<p>这个时候我们可以想到的数据结构就可以是<code>HashSet</code>来实现了。</p>
+<blockquote>
+<p>在后续的作业中发现HashSet由于访问顺序的不确定，可能会出现一些奇怪的bug，因此后来采用的是ArrayList作为容器。至于HashSet的bug的具体原因，打算之后再进行具体研究分析。</p>
+</blockquote>
+<h3><span id="lexer"><code>Lexer</code></span></h3>
+<p>词法分析器，功能是解析出表达式的每个token，那么分析词法单元的思路主要有两种，一个是只保存当前的<code>token</code>，另一个是先将所有<code>token</code>全部存放在一个容器中，然后每次去取即可。当时处理的时候考虑的是先一次性将所有token解析好，有更好的空间连续性，更加优雅<s>也没有具体分析，二者都可以</s></p>
+<blockquote>
+<p>idea1:根据前一个是什么，判断下一个的区间，得到当前token<code>curToken</code></p>
+<p>idea2:直接先全部解析出来，放到一个数据结构里面，然后只需要get_next</p>
+</blockquote>
+<blockquote>
+<p>简单分析一下：</p>
+<p>在这里我们其实每次都只需要用到<code>curToken</code>就行，如果要全部存起来，使用的数据结构可以直接使用一个<code>ArrayList</code>即可。因此我便采用了这种处理。</p>
+</blockquote>
+<p>这里我们在使用<code>lexer</code>的时候主要包括<code>getCurToken</code>或者<code>getNextToken</code>，<a target="_blank" rel="noopener" href="https://volcaxiao.top/2023/02/28/BUAA-OO-Expr-expansion-1-0/">xcgg</a>在博客也提到了要注意这个，但是具体怎么处理了。</p>
+<p>我是这么处理的，我使用了两个方法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Token</span> <span class="token function">curToken</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> tokens<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>position<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    position<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>由于我是先将所有的<code>Token</code>解析出来，然后再依次取每一个<code>curToken</code>，这么处理的一个理由是我想着这样先把字符串一次性处理或许会有更好的数据连续性，然后会有需要判<code>curToken</code>的类型的部分，每次判断成功后，调用<code>next</code>方法，这样就可以确保我的每一次判断都是在我进入了下一个层次后再修改的<code>position</code>。或许更容易理解一些~~</p>
+<h3><span id="parser"><code>Parser</code></span></h3>
+<p>解析器，采用递归下降法进行解析。</p>
+<p>首先我们容易建立这三个层级的解析方法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Expr</span> <span class="token function">parseExpr</span><span class="token punctuation">(</span><span class="token keyword">int</span> signal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token class-name">Term</span> <span class="token function">parseTerm</span><span class="token punctuation">(</span><span class="token keyword">int</span> signal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token class-name">Factor</span> <span class="token function">parseFactor</span><span class="token punctuation">(</span><span class="token keyword">int</span> signal<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>这里加入了<code>signal</code>这个元素，是为了方便的将符号一步步进到底层进行处理</p>
+<p>同时在解析式我并没有处理表达式的幂的运算，于是在<code>Expr</code>中添加了<code>exp</code>这个属性。</p>
+<blockquote>
+<p>于是这里就递归的将表达式解析好了，现在我们看<code>Expr</code>，他就是一个<code>Term</code>的<code>HashSet</code>，只需要处理好了这些<code>Term</code>那么这个<code>Expr</code>就处理好了～<code>Term</code>同理</p>
+</blockquote>
+<p>最关键的部分，同时也是相对比较难处理的一部分就是消括号，我在这里使用到了<code>Poly</code>和<code>Mono</code>两个类来处理。</p>
+<p><code>Poly</code>是多项式类，<code>Mono</code>是单项式类，其实从功能上讲只有一个<code>Poly</code>就够了，新添一个<code>Mono</code>方便实现<code>Poly</code>的相加和相乘～</p>
+<p>在<code>Expr</code>和<code>Term</code>中实现了<code>toPoly</code>的方法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Poly</span> <span class="token function">toPoly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在<code>Factor</code>中实现了<code>toMono</code>方法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Mono</span> <span class="token function">toMono</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在转化是处理<code>Expr</code>的幂次实际上就是调用<code>Poly</code>的<code>pow</code>方法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">Poly</span> <span class="token function">powPoly</span><span class="token punctuation">(</span><span class="token class-name">BigInteger</span> exp<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3><span id="optimizer"><code>Optimizer</code></span></h3>
+<blockquote>
+<p>优化，目前主要包括两个点</p>
+</blockquote>
+<ul>
+<li>重写Mono的toString方法，化简每一个单项式，通过特判系数为0,1,-1的情况，以及x的指数为0,1的情况即可。</li>
+<li>在Optimizer中得到Poly的字符串时，调整顺序，尽量使得正项在第一个。可以通过将每一个Mono的string存在一个ArrayList中，然后判断是否存在正项，然后将该项放在前面，其余项顺序输出即可。</li>
+</ul>
+<h3><span id="12-第二次作业">1.2 第二次作业</span></h3>
+<p>在仔细分析下，第二次作业的两大难点是：</p>
+<ol>
+<li>自定义函数的处理</li>
+<li>exp的化简与合并同类项</li>
+</ol>
+<p>对此的处理策略是：</p>
+<ol>
+<li>结合C语言中对于自定义函数的处理策略中的一个是进行值传递，我们将实参解析后直接进行字符串层级的替换，然后将最后得到的因子作为一个表达式因子进行解析。首先将自定义函数作为一个因子进行处理，将里面的每一个实参作为一个表达式进行解析，使用词法分析器，可以自然的处理对于逗号和括号的判断，得到表达式后转化为字符串，在函数中进行字符串层级的替换后，再次生成一个词法分析器和解析器得到一个表达式，作为表达式因子并完成解析</li>
+</ol>
+  <img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323172922.png" style="zoom: 33%;">
+<ol start="2">
+<li>为了合并同类项，需要判断指数函数的两个表达式是否是<strong>同类项</strong>，需要添加两个判断Poly相等的办法，我使用的是<strong>将两个Poly相减</strong>，如果得到的结果为空，那么两个表达式就是相等。而我们在第一次作业就已经实现了Poly的add和multiply方法，我们只需要增加一个toNegate取相反数的方法然后再次调用已有的add方法即可。这种策略符合我们的对拓展开放，对修改封闭的开闭原则。</li>
+</ol>
+<p>下面对两种处理策略进行详细论述。</p>
+<p>首先是在definer中对于函数的实参和形参的转化采取如下的方法，这里主要是为了解决几个问题：</p>
+<ul>
+<li>x，y，z这几个形参在函数定义式中的顺序不固定，不便于传入实参后的实际处理</li>
+<li>将函数形式更加规范化</li>
+</ul>
+<p>于是采取一下策略对函数进行预处理：</p>
+<p><img src="https://gitee.com/hhhugo/imgs/raw/master/img/image-20240314103520812.png" alt="expr"></p>
+<p>对于判断两个单项式Mono是否为同类项来进行合并同类项的方法：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">isSameKind</span><span class="token punctuation">(</span><span class="token class-name">Mono</span> mono1<span class="token punctuation">,</span> <span class="token class-name">Mono</span> mono2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>mono1<span class="token punctuation">.</span><span class="token function">getExp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>mono2<span class="token punctuation">.</span><span class="token function">getExp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token class-name">Poly</span> expPoly1 <span class="token operator">=</span> mono1<span class="token punctuation">.</span><span class="token function">getExpPoly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Poly</span> expPoly2 <span class="token operator">=</span> mono2<span class="token punctuation">.</span><span class="token function">getExpPoly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Poly</span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Poly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result <span class="token operator">=</span> expPoly2<span class="token punctuation">.</span><span class="token function">toNegate</span><span class="token punctuation">(</span>expPoly2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result <span class="token operator">=</span> result<span class="token punctuation">.</span><span class="token function">addPoly</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> expPoly1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里用到静态方法，提高了函数的调用效率。</p>
+<h3><span id="13-第三次作业">1.3 第三次作业</span></h3>
+<p>本次作业在我的架构下的实现相对比较简单。仅修改了约70行即完成任务。</p>
+<p>首先是关于自定义函数的嵌套，根据1.2中关于我对自定义函数处理的论述可以看出，我对于自定义函数的处理<strong>可以自然的处理函数定义式的嵌套</strong>。</p>
+<p>关于求导，我只做了两件事情。</p>
+<ol>
+<li>
+<p>新添了继承于<code>Factor</code>的<code>Derive</code>导数类进行解析</p>
+<ul>
+<li>
+<pre><code class="language-java">public class Derive implements Factor {
+    private Expr expr;
+    public Derive(Expr expr) {
+        this.expr = expr;
+    }
+}
+<pre class="line-numbers language-none"><code class="language-none">
+     `Derive`中只需要有一个expr的属性即可
+
+2. 给`Poly Mono`增加了一个求导的方法
+
+   - `Poly`中只需要递归解析`Mono`即可
+
+   - `Mono`中模拟即可
+     $$
+     \begin{align}
+     &amp;b\ne 0 ;dx(a*x^b*exp(Poly))=a*b*x^{b-1}*exp(Poly)+a*x^b*exp(Poly)*dx(Poly)\\
+     \\
+     &amp;b =0;d(a*exp(Poly)) = a*exp(Poly)*dx(Poly)
+     \end{align}
+     $$
+
+   然后递归调用poly的求导方法即可
+
+那么就可以完成本次作业。
+
+以下是本次作业之后的架构：
+
+
+![](https://gitee.com/hhhugo/imgs/raw/master/img/20240315151459.png)
+
+![](https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323170510.png)
+
+## 2 基于度量的程序架构分析
+
+### 2.1 代码量
+
+![](https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323183656.png)
+
+### 2.2 方法复杂度
+
+&gt;  使用IDEA的MetrcisReloaded插件进行分析
+
+- ev(G) 基本复杂度是用来衡量程序非结构化程度的，非结构成分降低了程序的质量，增加了代码的维护难度，使程序难于理解。因此，基本复杂度高意味着非结构化程度高，难以模块化和维护。实际上，消除了一个错误有时会引起其他的错误。
+
+- iv(G) 模块设计复杂度是用来衡量模块判定结构，即模块和其他模块的调用关系。软件模块设计复杂度高意味模块耦合度高，这将导致模块难于隔离、维护和复用。模块设计复杂度是从模块流程图中移去那些不包含调用子模块的判定和循环结构后得出的圈复杂度，因此模块设计复杂度不能大于圈复杂度，通常是远小于圈复杂度。
+
+- v(G) 是用来衡量一个模块判定结构的复杂程度，数量上表现为独立路径的条数，即合理的预防错误所需测试的最少路径条数，圈复杂度大说明程序代码可能质量低且难于测试和维护，经验表明，程序的可能错误和高的圈复杂度有着很大关系。
+
+**项目复杂度/模块复杂度**
+
+| project/module | v(G)avg | v(G)tot |
+| -------------- | ------- | ------- |
+| Expression     | 2.86    | 352     |
+
+**包复杂度**
+
+| package | v(G)avg | v(G)tot |
+| ------- | ------- | ------- |
+| .       | 3.71    | 104     |
+| expr    | 1.86    | 82      |
+| poly    | 3.40    | 163     |
+| token   | 1.00    | 3       |
+
+**类复杂度**
+
+| class           | OCavg | OCmax | WMC  |
+| --------------- | ----- | ----- | ---- |
+| Definer         | 2.0   | 4.0   | 6.0  |
+| expr.Derive     | 1.0   | 1.0   | 4.0  |
+| expr.Expon      | 1.75  | 4.0   | 7.0  |
+| expr.Expr       | 2.0   | 11.0  | 30.0 |
+| expr.Func       | 1.4   | 3.0   | 7.0  |
+| expr.Pow        | 2.125 | 10.0  | 17.0 |
+| expr.Term       | 2.125 | 7.0   | 17.0 |
+| Lexer           | 3.83  | 16.0  | 23.0 |
+| Main            | 1.0   | 1.0   | 1.0  |
+| Optimizer       | 6.33  | 9.0   | 19.0 |
+| Parser          | 3.54  | 9.0   | 39.0 |
+| poly.Mono       | 2.75  | 14.0  | 77.0 |
+| poly.Poly       | 3.4   | 10.0  | 68.0 |
+| Processer       | 1.5   | 2.0   | 6.0  |
+| token.Token     | 1.0   | 1.0   | 3.0  |
+| token.TokenType |       |       | 0.0  |
+
+**方法复杂度**
+
+| method                                 | CogC | ev(G)   | iv(G) | v(G) |
+| -------------------------------------- | ---- | ------- | ----- | ---- |
+| Processer.funcMap()                    | 1.0  | 1.0     | 2.0   | 2.0  |
+|                                        |      |         |       |      |
+| Definer.define()                       | 5.0  | 1.0     | 4.0   | 4.0  |
+|                                        |      |         |       |      |
+| Lexer.tokenize()                       | 22.0 | **5.0** | 15.0  | 18.0 |
+| Lexer.curToken()                       | 1.0  | 2.0     | 1.0   | 2.0  |
+|                                        |      |         |       |      |
+| Parser.parseExpr(int)                  | 9.0  | 5.0     | 6.0   | 7.0  |
+| Parser.parseTerm(int)                  | 9.0  | 3.0     | 7.0   | 7.0  |
+| Parser.parseFactor(int, Term)          | 10.0 | 7.0     | 11.0  | 11.0 |
+|                                        |      |         |       |      |
+| expr.Expr.toString()                   | 30.0 | 10.0    | 10.0  | 11.0 |
+| expr.Term.toString()                   | 7.0  | 2.0     | 4.0   | 4.0  |
+| expr.Expon.toString()                  | 6.0  | 1.0     | 4.0   | 4.0  |
+| expr.Pow.toString()                    | 16.0 | 10.0    | 8.0   | 10.0 |
+| expr.Term.toPoly()                     | 10.0 | 1.0     | 7.0   | 7.0  |
+| expr.Expr.toPoly()                     | 3.0  | 1.0     | 3.0   | 3.0  |
+|                                        |      |         |       |      |
+| poly.Mono.equals(Mono)                 | 4.0  | 5.0     | 4.0   | 5.0  |
+| poly.Mono.isSameKind(Mono, Mono)       | 2.0  | 3.0     | 1.0   | 3.0  |
+| poly.Mono.derive()                     | 2.0  | 2.0     | 2.0   | 2.0  |
+| poly.Mono.processExpPoly(Poly, String) | 25.0 | 3.0     | 15.0  | 16.0 |
+| poly.Mono.toString()                   | 30.0 | **8.0** | 17.0  | 18.0 |
+| poly.Poly.addMono(Mono)                | 6.0  | 4.0     | 4.0   | 4.0  |
+|                                        |      |         |       |      |
+| poly.Poly.equals(Poly)                 | 17.0 | 7.0     | 8.0   | 9.0  |
+| poly.Poly.addMono(Poly, Mono)          | 8.0  | 4.0     | 6.0   | 6.0  |
+| poly.Poly.addPoly(Poly)                | 1.0  | 1.0     | 2.0   | 2.0  |
+| poly.Poly.multiplyMono(Mono)           | 1.0  | 1.0     | 2.0   | 2.0  |
+| poly.Poly.multiplyPoly(Poly)           | 3.0  | 1.0     | 3.0   | 3.0  |
+| poly.Poly.powPoly(BigInteger)          | 2.0  | 2.0     | 3.0   | 3.0  |
+| poly.Poly.derive()                     | 1.0  | 1.0     | 2.0   | 2.0  |
+| poly.Poly.toString()                   | 21.0 | 5.0     | 8.0   | 11.0 |
+|                                        |      |         |       |      |
+| Optimizer.optimize()                   | 21.0 | 8.0     | 9.0   | 9.0  |
+| Optimizer.toString()                   | 18.0 | 5.0     | 8.0   | 10.0 |
+
+这里主要分析ev(G)指标，基本圈复杂度。下面对几个基本圈复杂度较高的方法提出解决办法：
+
+- Lexer.tokenize()，ev(G)=5
+
+  这里主要是采用了多个if分支判断是什么词法类型，这里可以对于除数字外的其他类型添加一个Char向Token的一个映射，然后直接取对应key的value即可
+
+- Lexer.tokenize()，ev(G)=7
+
+  这里同样也是用到了多个if分支判断是什么因子类型，同样可以建立TokenType向方法的一个映射
+
+- poly.Mono.toString()，ev(G)=8
+
+  这里方法复杂度高的一个重要原因是在其中调用了提取公因式的方法，加上本身的多个对于系数和指数的判断，方法复杂度较高，对此可以采取将toString方法中的几个处理提取方法出来，将功能进行进一步的划分。
+
+这一些方法的复杂度较高，容易导致出现：
+
+1. 使用大量if分支判断，包括可能用到instanceof，不符合开闭原则，没有好的拓展性
+2. 容易导致bug难找
+
+## 3 个人bug分析与踩坑经历
+
+### 3.1 个人架构调整
+
+在最开始，我希望通过自己独立的思考来解决表达式解析的过程，于是考虑到不同因子之间可能使用加号或者减号连接起来，如果使用一个ArrayList来将这些因子之间的符号连接起来就很麻烦，于是我想到可以建立一棵表达式树，用运算符作为中间结点讲不同的因子连接起来。也就是下面这种结构
+
+![](https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323191539.png)
+
+&gt; 首先分析自己一下之前的架构的不好的地方，或者说应该是麻烦的地方，有很多地方我没有处理好导致问题不断复杂化
+
+这里两种架构我认为一个重要的区别就是
+
+- 第一种使用表达式树的方法是没有对最外层的`+-`号进行进一步处理，放到下一层去处理，于是需要像个办法把符号存下来，于是自然的想到了树的结构
+- 第二种架构实际上是直接将`Expr`看成多个`Term`相加，`Term`里面带有正负号
+
+其实单纯只是说解析时使用表达式树的方法也不是不行，也就是数据结构是能够将我所需要的这个层次结构表达出来，但是麻烦的点在于实现功能结构
+
+&gt; 功能结构包括展开与合并
+
+运算部分我认为最难处理的在于求一个表达式的幂。
+
+在一个树与树的相乘中，需要判断每一个节点的`ExprNodeType`，进行计算时，首先需要`clone`深拷贝一个`result`出来，然后进行相乘时需要递归的处理。
+
+- 由于是树的结构，会得到一个非常巨大的树，更容易爆内存，而且需要合适的内存回收
+- 递归是还需要考虑中间的`BinOpNode`是加号还是减号
+
+复杂度++
+
+&gt; 但是总归是可以实现的，只是我确实没能够在这五六天里面完成出来（哭！），多给我几个月肯定可以完成！(bushi)
+
+### 3.2 bug分析
+
+#### 第一次作业
+
+我在第一次作业的过程中本来没有合并同类项，导致我再进行表达式之间的相加和相乘时容易导致内存爆炸。
+
+关于这个炸内存的原因其实还可以仔细分析一下，我在`Expr`和`Term`中来存取`Term`和`Factor`的数据结构都是用到的`HashSet`，我们来看看`HashSet`的扩容机制。
+
+通过查看`HashSet.add()`方法，发现直接调用的是`HashMap.put()`方法
+
+```java
+newCap = DEFAULT_INITIAL_CAPACITY;		// 16
+newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY); 		// 0.75 * 16<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<p>这里是初始化长度，也就是new一个HashSet开始使用时会先拓展一个含有16个元素的空间</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">if</span> <span class="token punctuation">(</span>oldCap <span class="token operator">&gt;=</span> <span class="token constant">MAXIMUM_CAPACITY</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>		<span class="token comment">// 1 &lt;&lt; 30</span>
+    threshold <span class="token operator">=</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token constant">MAX_VALUE</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> oldTab<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>newCap <span class="token operator">=</span> oldCap <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token constant">MAXIMUM_CAPACITY</span> <span class="token operator">&amp;&amp;</span>
+         oldCap <span class="token operator">&gt;=</span> <span class="token constant">DEFAULT_INITIAL_CAPACITY</span><span class="token punctuation">)</span>
+    newThr <span class="token operator">=</span> oldThr <span class="token operator">&lt;&lt;</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token comment">// double threshold</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以发现扩容时，会判断如果原容量超过了设定的最大值，那么就不会再进行扩容，也就是说理论上（空间足够大），HashSet的容量也只是<code>1&lt;&lt;30</code>个；而没有超过时，是进行翻倍增长。</p>
+<p>也就是可能在扩容时会有大量的空间请求，在这个时候是最有可能爆空间的！</p>
+<h4><span id="第二次作业">第二次作业</span></h4>
+<p>这次作业主要是自己对于Poly的powPoly的实现过程中想要实现快速幂的计算，其中需要出现result.multiplyPoly(result)这种形式，但是我再multiplyPoly的实现里面是认为this和newPoly不一样，也就是本身和需要相乘的数不一样的，但是当相同时，我的处理就会导致在遍历Poly的monos(单项式的HashSet)的时候，会改变自身的值，导致最后的结果不正确。</p>
+<p>后来的解决措施就是直接放弃使用快速幂，直接一个个相乘。</p>
+<p>同时发现二者速度相差不大，分析认为复杂度主要在于多个多项式相乘时项数过多时候的判断是否为同类项这里消耗了比较多的时间。</p>
+<p><strong>优化需谨慎！</strong></p>
+<p>在这次作业优化的时候会错误的将<code>exp((-x^2))</code>变为<code>exp(-x^2)</code>这种形式，这要是对于是否去掉括号的判断不够合理。</p>
+<p>修改策略为使用正则表达式进行更进一步的判断：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> numRegex <span class="token operator">=</span> <span class="token string">"[-]?\\d+$"</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> powRegex <span class="token operator">=</span> <span class="token string">"x(\\^\\d+)?$"</span><span class="token punctuation">;</span>
+<span class="token class-name">String</span> expRegex <span class="token operator">=</span> <span class="token string">"^exp\\(.*\\)$"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span>expPolyString<span class="token punctuation">.</span><span class="token function">matches</span><span class="token punctuation">(</span>numRegex<span class="token punctuation">)</span>
+    <span class="token operator">||</span> expPolyString<span class="token punctuation">.</span><span class="token function">matches</span><span class="token punctuation">(</span>powRegex<span class="token punctuation">)</span>
+    <span class="token operator">||</span> <span class="token punctuation">(</span>expPolyString<span class="token punctuation">.</span><span class="token function">matches</span><span class="token punctuation">(</span>expRegex<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> expPoly<span class="token punctuation">.</span><span class="token function">getSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token comment">// do something</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4><span id="第三次作业">第三次作业</span></h4>
+<blockquote>
+<p>我这多灾多难的表达式化简哇</p>
+</blockquote>
+<p>这里时因为我在Expr中存取Term，在Term中存取Factor，在Poly中存取Mono时都是使用到的HashSet，但是由于HashSet访问顺序不固定的原因，导致在不同平台的运行结果不一样，而且有一些特殊的情况出现了问题。</p>
+<ul>
+<li>
+<p>解决措施：</p>
+<p>将HashSet修改为ArrayList即可</p>
+</li>
+</ul>
+<h2><span id="4-发现别人bug所采用的策略">4 发现别人bug所采用的策略</span></h2>
+<ol>
+<li>
+<p>最常用的方法还是使用评测机来疯狂评测，发现bug后对评测数据进行层层化简，定位到具体的问题所在的地方</p>
+<blockquote>
+<p>当然这也是我们自己debug的一个重要方法</p>
+</blockquote>
+</li>
+<li>
+<p>通过构造一些极端的数据</p>
+<p>比如说魔鬼的<code>exp(exp(exp(exp(exp(x)^8)^8)^8)^8)^8</code>这种</p>
+<p>还有包括输入一个0是否正确处理，同时还有之后的自定义函数嵌套时，手动构造一些能够满足复杂度，同时会报TLE错误的数据，如</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token number">3</span>
+<span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span>
+<span class="token function">g</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span>
+<span class="token function">h</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">exp</span><span class="token punctuation">(</span><span class="token function">g</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">8</span>
+<span class="token function">h</span><span class="token punctuation">(</span><span class="token function">h</span><span class="token punctuation">(</span><span class="token function">h</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p>最有用的手段应该还是自己跑几组覆盖率较高的数据，对代码逐行用debug模式进行阅读，判断哪里的处理是不完善的。</p>
+<p>同时这种手段还可以学习到对方的代码的架构和处理细节上的好的地方</p>
+</li>
+</ol>
+<h2><span id="5-分析自己的优化">5 分析自己的优化</span></h2>
+<ol>
+<li>
+<p>对于<code>a*x^b*exp()</code>中的a和b进行特判</p>
+</li>
+<li>
+<p>对于<code>exp()</code>括号内能否去掉一层括号进行分析，使用正则表达式进行匹配(上文已经提到)</p>
+</li>
+<li>
+<p>对于Mono的输出顺序进行调整，尽量保证正项在最前面，比如<code>-x+1</code>是比<code>1-x</code>要多一个字符的</p>
+</li>
+<li>
+<p>提取公因式处理</p>
+<p>在<code>exp((2*x+2*x^2+2*x^3))</code>中提取最大公因式出来得到<code>exp((x+x^2+x^3))^2</code></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">processExpPoly</span><span class="token punctuation">(</span><span class="token class-name">Poly</span> expPoly<span class="token punctuation">,</span> <span class="token class-name">String</span> expPolyString<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">BigInteger</span> <span class="token function">getGcd</span><span class="token punctuation">(</span><span class="token class-name">String</span> polyString<span class="token punctuation">,</span>
+                                <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Pair</span><span class="token punctuation">&lt;</span><span class="token class-name">BigInteger</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> monoStringList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Pair</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">BigInteger</span><span class="token punctuation">&gt;</span></span> <span class="token function">getBigInteger</span><span class="token punctuation">(</span><span class="token class-name">String</span> polyString<span class="token punctuation">,</span> <span class="token keyword">int</span> oleIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Pair</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BigInteger</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> <span class="token function">extractGcd</span><span class="token punctuation">(</span><span class="token class-name">String</span> expPolyString<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>将处理细节提取函数出来，可以有效简化处理，同时将各部分功能分得更加清晰，同时提高可拓展性，比如<code>extracGcd</code>中，可以不止提取最大公因式，还可以将最大公因式的其他因子进行提出。</p>
+</li>
+</ol>
+<h2><span id="6-心得体会">6 心得体会</span></h2>
+<p>首先是学习到了很多关于git的使用技巧，收益匪浅。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240323021905.png" alt></p>
+<p>具体使用上：</p>
+<ul>
+<li>在master分支上是主要部分的commit</li>
+<li>在dev上可以commit很多零散的，阶段性完成后，在master段进行merge</li>
+<li>当dev分支有问题时，在debug分支进行处理，解决后merge到dev分支</li>
+<li>在debug时可以在print分支添加一些print的方法，然后debug修改了需要看结果是否符合是，merge到print分支即可</li>
+</ul>
+<p>第一次写这么大一个项目，让我在知识层面上学到了很多关于层次化程序设计和递归下降法。学到更多的是自己对于架构的设计以及自己面对一个大工程是debug的一些方法。</p>
+<p>同时，我也意识到自己的思考还是非常重要的，自己思考的架构能够有更加清楚的理解，也会有更多的收获！！</p>
+<p>整体体验非常好，同时也意识到了自己的部分能力的不足，以后会进一步提升的！！</p>
+<h2><span id="7-未来方向">7 未来方向</span></h2>
+<p>第一单元整体质量很高！nrjj和lqgg yyds!，让人感受到OO很大的快乐哈哈哈，提升了个人的代码能力。</p>
+<p>以下是几点简单的建议</p>
+<ol>
+<li>可以在博客周将一些架构很好的代码进行分享</li>
+<li>第三单元感觉难度骤降有点明显，可以稍微提高一点</li>
+<li>感觉还是不太会写评测机，希望可以多多教教</li>
+</ol>
+<h2><span id="8-reference">8 reference</span></h2>
+<p>首先关于如何找到这些优秀的博客，相信大家通过<code>co</code>的学习已经积累了几位优秀的<code>博主</code>(暂且这么称呼罢)，这几位学长的<code>oo</code>博客也非常的好。同时，通过在博客的主页中的<code>友链</code>中可以去发现一些其他友链，这大体上可以把这个往届六系成员组成的图的一个最大的生成子图(<s>离散乱入</s>)</p>
+<p><a target="_blank" rel="noopener" href="https://volcaxiao.top/2023/02/28/BUAA-OO-Expr-expansion-1-0/">https://volcaxiao.top/2023/02/28/BUAA-OO-Expr-expansion-1-0/</a></p>
+<ul>
+<li>虽然这个网址不安全，但是也只有这个不安全啊！精品！</li>
+<li>学长比较喜欢画<code>uml</code>类图，可以仔细查看类图基本上可以知道整体的架构</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://hyggge.github.io/2022/03/24/oo/oo-di-yi-dan-yuan-zong-jie/">https://hyggge.github.io/2022/03/24/oo/oo-di-yi-dan-yuan-zong-jie/</a></p>
+<ul>
+<li>内容非常简洁，可以直接看出实现</li>
+<li>同时对于一些大家可能都会遇到的细节处理上的难题也会提到，即使架构与学长不相同也可以参考阅读</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://thysrael.github.io/posts/8da51baf/">https://thysrael.github.io/posts/8da51baf/</a></p>
+<ul>
+<li><s>按照六系的某些奇奇怪怪的祖辈关系，这位学长都得算我的祖宗辈了</s></li>
+<li>文字非常详细的分析的自己的架构以及思路来源</li>
+<li>而且能够看出来学长在写之前是没有参考太多的资料的，所以大部分都是学长自己的思考，根据和理由也非常充分</li>
+</ul>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">hugo</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hugohealthy.top/2024/04/24/OO-U1/">https://hugohealthy.top/2024/04/24/OO-U1/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">hugo</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/OO-%E7%AC%AC%E4%B8%80%E5%8D%95%E5%85%83/">
+                                    <span class="chip bg-color">OO 第一单元</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+        <div class="disqus-card card" data-aos="fade-up">
+    <div id="disqus_thread" class="card-content">
+        <noscript>Please enable JavaScript to view the
+            <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+    </div>
+</div>
+
+<script type="text/javascript">
+    disqus_config = function () {
+        this.page.url = 'https://hugohealthy.top/2024/04/24/OO-U1/';
+        this.page.identifier = '/2024/04/24/OO-U1/';
+        this.page.title = 'OO-U1';
+    };
+    let disqus_shortname = '';
+
+    (function () { // DON'T EDIT BELOW THIS LINE
+        let d = document, s = d.createElement('script');
+        // 如：s.src = 'https://blinkfox.disqus.com/embed.js';
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2024/04/24/OO-U2/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/011.jpg" class="responsive-img" alt="OO-U2">
+                        
+                        <span class="card-title">OO-U2</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-04-24
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" class="post-category">
+                                    面向对象
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/OO-%E7%AC%AC%E4%BA%8C%E5%8D%95%E5%85%83/">
+                        <span class="chip bg-color">OO 第二单元</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/04/24/os-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/001.jpg" class="responsive-img" alt="os-lab1实验报告">
+                        
+                        <span class="card-title">os-lab1实验报告</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-04-24
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab1/">
+                        <span class="chip bg-color">os-lab1</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: hugo<br />'
+            + '文章作者: hugo<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '这里是hugo。本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="tencent"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='true'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2023-2024</span>
+            
+            <a href="/about" target="_blank">hugo</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">83.9k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:3376467972@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=3376467972" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 3376467972" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+    <a href="https://i.328888.xyz/2023/04/10/imVT4z.jpeg" class="tooltipped" target="_blank" data-tooltip="微信联系我: https://i.328888.xyz/2023/04/10/imVT4z.jpeg" data-position="top" data-delay="50">
+        <i class="fab fa-weixin"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+        <!-- <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script> -->
+        <script src='/libs/mermaid/mermaid.min.js'></script>
+        <script>
+          if (window.mermaid) {
+            mermaid.initialize({theme: 'forest'});
+          }
+        </script>
+    
+
+    
+    
+    
+        
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/sakura.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/star.js"><\/script>');
+            }
+        </script>
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+    <script type="text/javascript" color="0,20,255"
+        pointColor="40,50,255" opacity='0.7'
+        zIndex="-1" count="99"
+        src="/libs/background/canvas-nest.js"></script>
+    
+
+    
+    
+    <script type="text/javascript" size="90" alpha='0.9'
+        zIndex="-1" src="/libs/background/ribbon.min.js" async="async"></script>
+    
+
+    
+
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+
+</html>
