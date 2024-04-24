@@ -444,19 +444,19 @@ Thinking 0.1
 <ul>
 <li>
 <p>在前述已初始化的 <code>~/learnGit </code>目录下，创建一个名为 <code>README.txt</code> 的文件。执 行命令 <code>git status &gt; Untracked.txt</code>（其中的 &gt; 为输出重定向，我们将在 0.6.3 中 详细介绍）。</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313183854380.png" alt="image-20240313183854380"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313183854380.png" alt="image-20240313183854380"></p>
 </li>
 <li>
 <p>在<code>README.txt</code>文件中添加任意文件内容，然后使用 <code>add</code> 命令，再执行命令<code> git status &gt; Stage.txt</code>。</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313184010190.png" alt="image-20240313184010190"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313184010190.png" alt="image-20240313184010190"></p>
 </li>
 <li>
 <p>提交 <code>README.txt</code>，并在提交说明里写入自己的学号</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313184040344.png" alt="image-20240313184040344"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313184040344.png" alt="image-20240313184040344"></p>
 </li>
 <li>
 <p>执行命令 <code>cat Untracked.txt</code> 和 <code>cat Stage.txt</code>，对比两次运行的结果，体会 <code>README.txt</code> 两次所处位置的不同。</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313184130590.png" alt="image-20240313184130590"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240313184130590.png" alt="image-20240313184130590"></p>
 <p>不一样。第一次是在工作区添加了文件，没有提交的暂存区。而第二次提交到了暂存区，只是没有commit到HEAD。而由于都没有进行commit ，因此都没有跟踪，于是提示是为跟踪的文件。</p>
 </li>
 </ul>
@@ -464,7 +464,7 @@ Thinking 0.1
 <ul>
 <li>
 <p>仔细看看0.10，思考一下箭头中的 add the file 、 stage the file 和commit 分别对应的是 Git 里的哪些命令呢？</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314115041772.png" alt="image-20240314115041772"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314115041772.png" alt="image-20240314115041772"></p>
 <p>add the file : 对应<code>git add</code></p>
 <p>stage the file : 对应<code>git commit</code></p>
 <p>commit : 对应<code>git checkout</code></p>
@@ -474,14 +474,14 @@ Thinking 0.1
 <ul>
 <li>
 <p>代码文件 print.c 被错误删除时，应当使用什么命令将其恢复？</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314121507355.png" alt="image-20240314121507355"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314121507355.png" alt="image-20240314121507355"></p>
 <blockquote>
 <p>使用 <code>git restore print.c</code>即可</p>
 </blockquote>
 </li>
 <li>
 <p>代码文件 print.c 被错误删除后，执行了 git rm print.c 命令，此时应当使用什么命令将其恢复？</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314142825497.png" alt="image-20240314142825497"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314142825497.png" alt="image-20240314142825497"></p>
 <blockquote>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> restore <span class="token parameter variable">--staged</span> print.c
 <span class="token function">git</span> restore print.c<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
@@ -489,7 +489,7 @@ Thinking 0.1
 </li>
 <li>
 <p>无关文件 hello.txt 已经被添加到暂存区时，如何在不删除此文件的前提下将其移出暂存区？</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314143326431.png" alt="image-20240314143326431"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314143326431.png" alt="image-20240314143326431"></p>
 <blockquote>
 <p>使用<code>git restore --staged hello.txt</code>即可</p>
 </blockquote>
@@ -505,32 +505,32 @@ Thinking 0.1
 </li>
 <li>
 <p>模仿上述做法，把 1 分别改为 2 和 3，再提交两次。</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160243954.png" alt="image-20240314160243954"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160243954.png" alt="image-20240314160243954"></p>
 </li>
 <li>
 <p>使用 git log 命令查看提交日志，看是否已经有三次提交，记下提交说明为3 的哈希值</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160309950.png" alt="image-20240314160309950"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160309950.png" alt="image-20240314160309950"></p>
 <blockquote>
 <p>进行操作后可以看到确实有了三次提交的记录</p>
 </blockquote>
 </li>
 <li>
 <p>进行版本回退。执行命令 git reset --hard HEAD^ 后，再执行 git log，观察其变化</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160417333.png" alt="image-20240314160417333"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160417333.png" alt="image-20240314160417333"></p>
 <blockquote>
 <p>此时git log的第一项是2，相当于撤销了第三次提交</p>
 </blockquote>
 </li>
 <li>
 <p>找到提交说明为 1 的哈希值，执行命令 git reset --hard <hash> 后，再执行 git log，观察其变化。</hash></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160510381.png" alt="image-20240314160510381"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314160510381.png" alt="image-20240314160510381"></p>
 <blockquote>
 <p>强制撤销到1时候的版本，因此git log只能看到1的提交记录</p>
 </blockquote>
 </li>
 <li>
 <p>现在已经回到了旧版本，为了再次回到新版本，执行 git reset --hard <hash>，再执行 git log，观察其变化。</hash></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314161613264.png" alt="image-20240314161613264"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314161613264.png" alt="image-20240314161613264"></p>
 <blockquote>
 <p>可以看到又恢复了原样，也就是回到了新版</p>
 </blockquote>
@@ -546,7 +546,7 @@ Thinking 0.1
 <li>echo third &gt; output.txt</li>
 <li>echo forth &gt;&gt; output.txt</li>
 </ul>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314161945989.png" alt="image-20240314161945989"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314161945989.png" alt="image-20240314161945989"></p>
 <blockquote>
 <p><code>&gt;</code>是覆盖写入</p>
 <p><code>&gt;&gt;</code>是追加指令</p>
@@ -557,8 +557,8 @@ Thinking 0.1
 <ul>
 <li>
 <p>使用你知道的方法（包括重定向）创建下图内容的文件（文件命名为 test），将创建该文件的命令序列保存在 command 文件中，并将 test 文件作为批处理文件运行，将运行结果输出至 result 文件中。给出 command 文件和 result 文件的内容，并对最后的结果进行解释说明（可以从 test 文件的内容入手） . 具体实现的过程中思考下列问题: echo echo Shell Start 与 echo <code>echo Shell Start</code> 效果是否有区别; echo echo $c&gt;file1与 echo <code>echo $c&gt;file1</code> 效果是否有区别</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314162443513.png" alt="image-20240314162443513"></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314162939850.png" alt="image-20240314162939850"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314162443513.png" alt="image-20240314162443513"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314162939850.png" alt="image-20240314162939850"></p>
 <blockquote>
 <p>前两条指令的效果是有区别的，而后两条指令的效果是没有区别</p>
 <p>加上反引号相当于将反引号的内容重定向作为参数</p>
@@ -604,13 +604,13 @@ Thinking 0.1
 <blockquote>
 <p>对此我强烈推荐跟着<code>vimtutor</code>走一遍，基本上可以熟悉大多数的操作，以及基本的几个vim模式</p>
 </blockquote>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174337175.png" alt="image-20240314174337175"></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174412381.png" alt="image-20240314174412381"></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174441142.png" alt="image-20240314174441142"></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174505883.png" alt="image-20240314174505883"></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174529894.png" alt="image-20240314174529894"></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174700133.png" alt="image-20240314174700133"></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174717116.png" alt="image-20240314174717116"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174337175.png" alt="image-20240314174337175"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174412381.png" alt="image-20240314174412381"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174441142.png" alt="image-20240314174441142"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174505883.png" alt="image-20240314174505883"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174529894.png" alt="image-20240314174529894"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174700133.png" alt="image-20240314174700133"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314174717116.png" alt="image-20240314174717116"></p>
 <p>其实简单的用法也只有</p>
 <ul>
 <li>输入<code>i</code>进入编辑模式</li>
@@ -623,7 +623,7 @@ Thinking 0.1
 <blockquote>
 <p><code>tldr</code>是个非常好用的命令用法查询工具，狠狠种草</p>
 </blockquote>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314175039544.png" alt="image-20240314175039544"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314175039544.png" alt="image-20240314175039544"></p>
 <p>可以看到<code>gcc</code>的基本用法</p>
 <ul>
 <li><code>gcc</code>是一个C语言编译器</li>
@@ -831,11 +831,11 @@ gcc <span class="token parameter variable">-c</span> hello_world.c hello_world2.
 </li>
 </ul>
 <p><strong>grep</strong></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314180342701.png" alt="image-20240314180342701"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314180342701.png" alt="image-20240314180342701"></p>
 <p><strong>awk</strong></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314180412634.png" alt="image-20240314180412634"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314180412634.png" alt="image-20240314180412634"></p>
 <p><strong>sed</strong></p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314180442171.png" alt="image-20240314180442171"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240314180442171.png" alt="image-20240314180442171"></p>
 <h2><span id="实验体会">实验体会</span></h2>
 <p>我觉得通过本次实验自己对于一些工具包括<code>vim tmux</code>更加熟悉了，同时对于<code>shell</code>脚本的撰写也更加熟悉了。学到了很多东西！！！</p>
 <p>当然还有一点体会就是对于命令的细节还是要更加了解一点，比如<code>echo</code>会自动加入换行符，真的被狠狠背刺了啊啊啊啊！！</p>
@@ -849,16 +849,16 @@ gcc <span class="token parameter variable">-c</span> hello_world.c hello_world2.
 <p>创建会话 <code>creating tmux sessions</code></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">tmux<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这样会打开一个新的页面也该窗口</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308144341753.png" alt="image-20240308144341753"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308144341753.png" alt="image-20240308144341753"></p>
 <p>退出</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">exit</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>增加一个命名：</p>
 <pre class="line-numbers language-none"><code class="language-none">tmux new -s test<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308144443438.png" alt="image-20240308144443438"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308144443438.png" alt="image-20240308144443438"></p>
 <p>创建新的tmux窗口<code>creating new tmux windows</code></p>
 <pre class="line-numbers language-none"><code class="language-none">Ctrl-b c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><code>Ctrl-b</code>在tmux里面相当于是一个命令前缀</p>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308144816204.png" alt="image-20240308144816204"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308144816204.png" alt="image-20240308144816204"></p>
 <p>在两个tmux窗口之间切换 s<code>witching between tmux windows</code></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b n<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这样会顺序遍历已经创建的窗口</p>
@@ -866,7 +866,7 @@ gcc <span class="token parameter variable">-c</span> hello_world.c hello_world2.
 <p>你可以注意到这个窗口的名字叫做bash，是因为目前是正在运行进程，如果你某一个窗口运行<code>htop</code>，那么那个窗口的名字就是<code>htop</code></p>
 <p>如果你想要设置一个不会改变的窗口命名</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b ,<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150121933.png" alt="image-20240308150121933"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150121933.png" alt="image-20240308150121933"></p>
 <p>离开一个会话<code>detaching from a tmux session</code></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>连接一个会话<code>attaching to a tmus session</code></p>
@@ -874,15 +874,15 @@ gcc <span class="token parameter variable">-c</span> hello_world.c hello_world2.
 <p>如果需要重新新建一个任务可以</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b new <span class="token parameter variable">-s</span> coding
 // 也就是前面的新建一个session的操作<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150456377.png" alt="image-20240308150456377"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150456377.png" alt="image-20240308150456377"></p>
 <p>列举所有tmux会话<code>listing tmux sessions</code></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">tmux <span class="token function">ls</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>如果想要连接某一个<code>session</code>，可以</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">tmux a <span class="token parameter variable">-t</span> <span class="token builtin class-name">test</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150641122.png" alt="image-20240308150641122"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150641122.png" alt="image-20240308150641122"></p>
 <p>可以再几个<code>session</code>之间切换</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b s<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150751219.png" alt="image-20240308150751219"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150751219.png" alt="image-20240308150751219"></p>
 <p>窗格操作</p>
 <p>划分窗格</p>
 <p><code>tmux split-window</code>命令用来划分窗格。</p>
@@ -941,7 +941,7 @@ $ tmux swap-pane <span class="token parameter variable">-D</span><span aria-hidd
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Ctrl-b ?<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>或者使用</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">man</span> tmux<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cpictures%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150851773.png" alt="image-20240308150851773"></p>
+<p><img src="/2024/04/24/os-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab0%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240308150851773.png" alt="image-20240308150851773"></p>
 <p><strong>reference</strong></p>
 <p><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2019/10/tmux.html">https://www.ruanyifeng.com/blog/2019/10/tmux.html</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.linuxtrainingacademy.com/tmux-tutorial/">https://www.linuxtrainingacademy.com/tmux-tutorial/</a></p>
@@ -1405,7 +1405,7 @@ $ tmux swap-pane <span class="token parameter variable">-D</span><span aria-hidd
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">51.1k</span>
+                        class="white-color">62.7k</span>
             
             
             

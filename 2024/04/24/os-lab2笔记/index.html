@@ -5,7 +5,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="os-lab2笔记, C,Python,数分，高代，离散等">
-    <meta name="description" content="">
+    <meta name="description" content="#　lab2
+首先我们需要关注include中的一些头文件以及其中定义的一些宏函数和静态内联函数。这些东西是真的难啊，让我觉得自己程设里面学的C语言和这里的不是一个东西。
+
+
+首先要知道这些宏定义对应的英文全称和中文释义。
+
+
+NASID：">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -362,12 +369,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/os-lab2/">
+                                <span class="chip bg-color">os-lab2</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                操作系统
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -385,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    4 分
                 </div>
                 
 
@@ -420,7 +440,93 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <p>#　lab2</p>
+<p>首先我们需要关注<code>include</code>中的一些头文件以及其中定义的一些宏函数和静态内联函数。这些东西是真的难啊，让我觉得自己程设里面学的C语言和这里的不是一个东西。</p>
+<ul>
+<li>
+<p>首先要知道这些宏定义对应的英文全称和中文释义。</p>
+<blockquote>
+<ol>
+<li><code>NASID</code>：Node Abstract System Identifier，节点抽象系统标识符。</li>
+<li><code>PAGE_SIZE</code>：Page Size，页面大小。</li>
+<li><code>PTMAP</code>：Page Table Mapping，页表映射。</li>
+<li><code>PDMAP</code>：Page Directory Mapping，页目录映射。</li>
+<li><code>PGSHIFT</code>：Page Shift，页偏移。</li>
+<li><code>PDSHIFT</code>：Page Directory Shift，页目录偏移。</li>
+<li><code>PDX</code>：Page Directory Index，页目录索引。</li>
+<li><code>PTX</code>：Page Table Index，页表索引。</li>
+<li><code>PTE_ADDR</code>：Page Table Entry Address，页表条目地址。</li>
+<li><code>PTE_FLAGS</code>：Page Table Entry Flags，页表条目标志。</li>
+</ol>
+</blockquote>
+</li>
+<li>
+<p>从整体上来理解，首先要知道几个基本的东西是啥。</p>
+</li>
+</ul>
+<p>其中包括Page_list和Page。<code>LIST_HEAD(Page_list, Page);</code>可以知道这几个对应在LIST中的几个基本要素。</p>
+<p><code>typedef LIST_ENTRY(Page) Page_LIST_entry_t;</code>虽然感觉这个类型宏替换意义不大。</p>
+<ul>
+<li>LIST又是啥呢？这也好难，让我感觉自己的数据结构又是白学的<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></li>
+</ul>
+<p>首先要坚信这个List就是我们学的那个链表，是一个双向链表。</p>
+<p>这里的链表是有一个专门的头指针的，在ds中也有地方会这么用。(有一些好像还会有一些头发指针，头指针的前一个元素)这几个都是让链表的处理更加方便，也可以认为是大家认为链表的比较优雅的实现方式。</p>
+<p>头指针：</p>
+<p><code>LIST_HEAD(name, type)</code></p>
+<p>也就是</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">name</span> <span class="token punctuation">{</span>
+    <span class="token keyword">struct</span> <span class="token class-name">type</span> <span class="token operator">*</span>lh_first<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>实际上是定义了一个结构体，给这个结构提一个名字比如head，实际上就是<code>LIST_HEAD(name, int) head;</code></p>
+<p>宏替换后实际上就是</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">name</span> <span class="token punctuation">{</span>
+    <span class="token keyword">struct</span> <span class="token class-name">int</span> <span class="token operator">*</span>lh_first<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> head<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>那么相应的一些与链表头指针的一些操作：</p>
+<p><code>LIST_HEAD_INITIALIZER(head)</code></p>
+<p>具体用法：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">LIST_HRAD</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">)</span> <span class="token operator">*</span>head<span class="token punctuation">;</span>
+head <span class="token operator">=</span> LIST<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>对于每个结点的指针部分实际上就是</p>
+<p><code>LIST_ENTRY(type)</code></p>
+<p>也就是</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    <span class="token keyword">struct</span> <span class="token class-name">type</span> <span class="token operator">*</span>le_next<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">type</span> <span class="token operator">*</span><span class="token operator">*</span>le_prev<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里le_next可以理解，但是这个le_prev呢，这个给的注释也很奇怪，<code>address of previous next element</code>。这么来看，实际上就是将每个next指针作为一个element，那么prev就是前一个元素的这个指针。这样并不是双向链表那种，双向链表是多了一个指向前一个结点的大结点的地址的指针，也就是说可以通过这个指针直接访问前一个结点。而这个le_prev仅仅只是前一个元素的next这个元素的地址。</p>
+<p>那么到这里其实就懂了，一个结点分为data和field。filed实际上就是优化版的next，包括next和prev两个元素。data的数据格式为struct type, next是struct type*，prev是struct type**;</p>
+<p>那么我们简单总结一下这个链表的结构。首先是head，head是个头指针，里面包含有第一个元素的指针。每个结点包含data和field两个部分。</p>
+<p>就可以很好理解<code>LIST_NEXT(elm, field)</code> 这个宏函数了。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token punctuation">(</span>elm<span class="token punctuation">)</span> <span class="token operator">-&gt;</span> field<span class="token punctuation">.</span>le_next<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>看一下<code>LIST_FOREACH(var, head, field)</code>这个宏定义，这里给出了一种遍历链表的方式。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>var<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">LIST_FIRST</span><span class="token punctuation">(</span><span class="token punctuation">(</span>head<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">(</span>var<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">(</span>var<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>var<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>接下来实现<code>LIST_INSERT_BEFORE(listelm, elm, field)</code>，也即是在listelm前面添加elm。</p>
+<p>一般的双向链表有下面这个就够了</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>elm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span> <span class="token operator">=</span> listelm<span class="token punctuation">;</span>
+<span class="token comment">// listelm-&gt;prev = elm; 类似这种的操作</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>但是由于添加了prev，需要更新elm和listelm的值。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token punctuation">(</span>elm<span class="token punctuation">)</span><span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev <span class="token operator">=</span> <span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev<span class="token punctuation">;</span>
+<span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>elm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">*</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev <span class="token operator">=</span> elm<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>这里*的运算级是高于-&gt;的。</p>
+<p>于是完成<code>LIST_INSERT_AFTER(listelm, elm, field)</code>就很简单了。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>elm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>elm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span> <span class="token operator">=</span> elm<span class="token punctuation">;</span>
+elm<span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2><span id="4kc访存流程">4Kc访存流程</span></h2>
+<h3><span id="cpu发出地址">CPU发出地址</span></h3>
+<h3><span id="虚拟地址映射到物理地址">虚拟地址映射到物理地址</span></h3>
+<ul>
+<li>虚拟地址0x80000000-0x9fffffff，kseg0，将最高位置0得到物理地址，通过cache访问。这一部分<strong>用于存放内核代码与数据</strong>。</li>
+<li>虚拟地址0xa0000000-0xbfffffff，kseg1，将最高3位置0得到物理地址，不通过cache访问。这一部分可以<strong>用于访问外设</strong>。</li>
+<li>虚拟地址0x00000000-0x7fffffff，kuseg，通过TLB转换为物理地址，然后通过cache访存。这一部分用于<strong>存放用户程序代码与数据</strong></li>
+</ul>
+<p><img src="/2024/04/24/os-lab2%E7%AC%94%E8%AE%B0/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab2%E7%AC%94%E8%AE%B0%5Cimage-20240406230222403.png" alt="image-20240406230222403"></p>
+<h3><span id="内核程序启动">内核程序启动</span></h3>
+
                 
             </div>
             <hr/>
@@ -483,7 +589,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/os-lab2/">
+                                    <span class="chip bg-color">os-lab2</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -578,11 +688,23 @@
                         </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            hugo
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab3/">
+                        <span class="chip bg-color">os-lab3</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -852,7 +974,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">51.1k</span>
+                        class="white-color">62.7k</span>
             
             
             

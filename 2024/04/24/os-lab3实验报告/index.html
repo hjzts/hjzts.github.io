@@ -5,7 +5,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="os-lab3实验报告, C,Python,数分，高代，离散等">
-    <meta name="description" content="">
+    <meta name="description" content="Lab3实验报告
+思考题
+Thinking 3.1
+
+请结合 MOS 中的页目录自映射应用解释代码中 e-&amp;gt;env_pgdir[PDX(UVPT)]= PADDR(e-&amp;gt;env_pgdir) | PTE_V 的含义。
+
+0x7f">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -362,12 +368,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/os-lab3/">
+                                <span class="chip bg-color">os-lab3</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                操作系统
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -385,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    1.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    6 分
                 </div>
                 
 
@@ -420,7 +439,95 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1><span id="lab3实验报告">Lab3实验报告</span></h1>
+<h2><span id="思考题">思考题</span></h2>
+<h3><span id="thinking-31">Thinking 3.1</span></h3>
+<blockquote>
+<p>请结合 MOS 中的页目录自映射应用解释代码中 <code>e-&gt;env_pgdir[PDX(UVPT)]= PADDR(e-&gt;env_pgdir) | PTE_V </code>的含义。</p>
+</blockquote>
+<p>0x7fc00000-0x80000000 这 4MB 空间的起始位置（也就是第一个二级页表的基地址）对应着页目录的第一个页目录项。同时由于 1M 个页表项和 4GB 地址空间是线性映射的，不难算出 0x7fc00000 这一个地址对应的应该是第 0x7fc00000 &gt;&gt; 12 个页表项。</p>
+<p>每个页表项是<code>4B</code>，一共有<code>1M</code>个页表项，占据<code>4MB</code>的空间，正好是<code>UVPT</code>到<code>ULIM</code>这个<code>User VPT</code>这4MB的空间。页表自映射使得页目录的某一项正好映射到这个页表。由于线性性质，那么正好就是<code>UVPT &gt;&gt; 22</code>这个页目录中的一项就是页目录所在页表的物理地址。</p>
+<p>后面就是页表的标志位了。</p>
+<h3><span id="thinking-32">Thinking 3.2</span></h3>
+<blockquote>
+<p>elf_load_seg 以函数指针的形式，接受外部自定义的回调函数 map_page。请你找到与之相关的 data 这一参数在此处的来源，并思考它的作用。没有这个参数可不可以？为什么？</p>
+</blockquote>
+<p>在<code>map_page()</code>中的参数<code>data</code>就是传入<code>elf_load_seg()</code>中传入的参数<code>data</code>，也就是在<code>load_icode()</code>中传入的参数<code>struct Env *e</code>，一个进程控制块。</p>
+<p>在<code>map_page()</code>中<code>data</code>的作用为最后的<code>env</code></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">return</span> <span class="token function">page_insert</span><span class="token punctuation">(</span>env<span class="token operator">-&gt;</span>env_pgdir<span class="token punctuation">,</span> env<span class="token operator">-&gt;</span>env_asid<span class="token punctuation">,</span> p<span class="token punctuation">,</span> va<span class="token punctuation">,</span> perm<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>也就是指定当前进程的页目录的内核虚拟地址，和该进程的<code>asid</code></p>
+<p>不可以去掉这个参数，这是因为每个进程有自己的<code>tlb</code>，这个<code>tlb</code>是由<code>asid</code>确定的。</p>
+<h3><span id="thinking-33">Thinking 3.3</span></h3>
+<blockquote>
+<p>结合 elf_load_seg 的参数和实现，考虑该函数需要处理哪些页面加载的情况。</p>
+</blockquote>
+<ol>
+<li>当前页面不可写的情况：调整传入map_page()中断权限位</li>
+<li>段头和页面不对齐的情况：注意开始的位置</li>
+<li>创建页面不成功的情况：return</li>
+<li>二进制文件大小小于段在内存的大小的情况：继续创建填充0的页面</li>
+</ol>
+<h3><span id="thinking-34">Thinking 3.4</span></h3>
+<blockquote>
+<p>思考上面这一段话，并根据自己在 Lab2 中的理解，回答：</p>
+<ul>
+<li>你认为这里的 env_tf.cp0_epc 存储的是物理地址还是虚拟地址?</li>
+</ul>
+</blockquote>
+<p>虚拟地址。</p>
+<p>（lab2啥理解呀）应该是说在CPU看来都是虚拟地址，MIPS是有一个MMU的作为地址变换的。</p>
+<h3><span id="thinking-35">Thinking 3.5</span></h3>
+<blockquote>
+<p>试找出 0、 1、 2、 3 号异常处理函数的具体实现位置。 8 号异常（系统调用）涉及的 do_syscall() 函数将在 Lab4 中实现</p>
+</blockquote>
+<p>在<code>kern/genex.S</code>中。</p>
+<p>0号异常处理<code>handle_int</code>是处理时钟中断，其中主要是调用了<code>schedule</code>这个函数，但是这里还特判一下<code>$t1</code>是否为0这个我不太理解，理论上前面刚和<code>STATUS_IM7</code>这个做完与运算应该就不会是0才对。</p>
+<p>1号异常，存储异常会执行<code>do_tlb_mod</code>，这个在<code>kern/tlbex.c</code>中实现</p>
+<p>2、3号异常，<code>tlb</code>异常会执行<code>do_tlb_refill</code>，也就是tlb重填，这个在<code>kern/tlb_asm.S</code>中实现</p>
+<h3><span id="thinking-36">Thinking 3.6</span></h3>
+<blockquote>
+<p>阅读 entry.S、 genex.S 和 env_asm.S 这几个文件，并尝试说出时钟中断在哪些时候开启，在哪些时候关闭。</p>
+</blockquote>
+<p>在<code>entry.S</code>中的<code>handle_int</code>里面开启，时钟中断过程进入<code>schedule</code>函数，然后其中调用<code>env_run</code>，再调用<code>env_pop_tf</code>，，<code>env_pop_tf</code>的具体实现在<code>env_asm.S</code>中，其中调用<code>RESET_KCLOCK</code>，也就是在<code>include/kclock.h</code>中的实现。</p>
+<h3><span id="thinking-37">Thinking 3.7</span></h3>
+<blockquote>
+<p>阅读相关代码，思考操作系统是怎么根据时钟中断切换进程的。</p>
+</blockquote>
+<p>根据3.6的分析，时钟中断后会调用<code>schedule</code>在这里面切换进程，具体而言包括保存上下文和进入新的进程的上下文环境，同时时钟初始化。</p>
+<h2><span id="难点分析">难点分析</span></h2>
+<p>本次lab其实主要包括两个部分，一个是进程方面，包括进程的创建和调度；一个是时钟中断方面。</p>
+<p>实际上进程的创建和调度应该分开说，但是我认为这两个其实都是在软件层面上的实现(似乎这么说也不准确)，反正就这么说了罢。</p>
+<p>本次lab的难点我认为主要在于对这几个的流程的理解。</p>
+<h3><span id="进程创建与调度">进程创建与调度</span></h3>
+<p>进程的创建是在内核态中执行的。</p>
+<p>创建进程包括</p>
+<ol>
+<li>初始化Env 这个进程控制块，包括其中的一些变量的取值</li>
+<li>在<code>struct Env</code>中还有一个关键的<code>env_pgdir</code>，这个就是确定虚拟地址</li>
+<li>进程是运行中的程序，那这个程序从哪里来呢？这个在<code>load_icode</code>中加以实现，由于一个程序可以有多个进程，所以肯定不能用程序的那块内存空间直接操作，同时还有一些动态的空间需要进程创建，那么这块地址空间在哪呢，对于进程来说，他看到的都是自己的虚拟地址，就是这个了~</li>
+</ol>
+<p>进程调度实际上就是去掉这个进程然后把那个进程拉过来</p>
+<ul>
+<li>去掉这个进程：这一步需要保存CPU上下文信息，同时需要在两个队列中进行处理，包括空闲env区，和调度队列区</li>
+<li>把新的进程拉过来：从调度队列拿一个过来，然后恢复他的上下文信息</li>
+</ul>
+<h3><span id="时钟中断">时钟中断</span></h3>
+<p>我觉得这里主要是函数之间的调用挺复杂的，其实工作流程还是很好理解的</p>
+<ul>
+<li>handle_int</li>
+<li>schedule</li>
+<li>env_run</li>
+<li>env_pop_tf</li>
+</ul>
+<p>害，真是中中又断断啊~</p>
+<p>其中对于<code>kern/genex.S</code>中的<code>timer_irq</code>不甚了解，但是当我看到<code>guide_book</code>中的描述时(顺便吐槽一下，咋这还不相同的)，我好像懂了，或许是更加不同情况会进入不同的异常处理，只需要将<code>bnez</code>稍微调整为<code>beq</code>为某个特定的数就可以了，由于目前只实现了是时钟中断，因此一律调用这个就好啦~</p>
+<p><img src="/2024/04/24/os-lab3%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab3%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240424011924754.png" alt="image-20240424011924754"></p>
+<h2><span id="实验体会">实验体会</span></h2>
+<p>在Lab2的时候说这个lab好难啊，在Lab3的时候也还是这么说。Lab2对于List的使用确实是我遇到的很大的一个障碍，这次使用起来更加得手了。</p>
+<p>同时自己实现了一次进程后，对于比如“每个结构都有一个数据结构”、“linux一切皆文件”，这些有了更深的认识。</p>
+<p>当需要实现某个具有特定功能的结构时，首要就是分析其数据结构，课程组似乎没有特别强调<code>env</code>的数据结构，其实处处都是优雅。基于上面这一点，进程其实就是一段地址空间，与“一切皆文件”的观点不谋而合。当然需要清楚到底是哪一段内存，是什么样子的内存。</p>
+<p>这次还用到了更多<code>debug</code>的功能，下次可以多多研究<code>objdump</code>。</p>
+
                 
             </div>
             <hr/>
@@ -483,7 +590,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/os-lab3/">
+                                    <span class="chip bg-color">os-lab3</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -578,11 +689,23 @@
                         </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            hugo
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab2/">
+                        <span class="chip bg-color">os-lab2</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -615,11 +738,23 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            hugo
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab3/">
+                        <span class="chip bg-color">os-lab3</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -852,7 +987,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">51.1k</span>
+                        class="white-color">62.7k</span>
             
             
             

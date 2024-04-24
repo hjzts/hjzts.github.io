@@ -5,7 +5,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="os-lab3笔记, C,Python,数分，高代，离散等">
-    <meta name="description" content="">
+    <meta name="description" content="lab3
+实验目的：
+
+创建一个进程，并成功运行
+实现时钟中断，通过时钟中断内核获得执行权
+实现进程调度，创建两个进程，通过时钟中断切换进程执行
+
+使用进程控制卡Env来跟踪用户进程，并建立一个简单的用户进程，加载一个程序镜像到指定的内存空">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -362,12 +369,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/os-lab3/">
+                                <span class="chip bg-color">os-lab3</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                操作系统
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -385,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    1.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    6 分
                 </div>
                 
 
@@ -420,7 +440,153 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1><span id="lab3">lab3</span></h1>
+<p>实验目的：</p>
+<ul>
+<li>创建一个进程，并成功运行</li>
+<li>实现时钟中断，通过时钟中断内核获得执行权</li>
+<li>实现进程调度，创建两个进程，通过时钟中断切换进程执行</li>
+</ul>
+<p>使用进程控制卡Env来跟踪用户进程，并建立一个简单的用户进程，加载一个程序镜像到指定的内存空间，并让它运行起来。</p>
+<p>进程</p>
+<ul>
+<li>由于没有实现线程，进程既是基本的分配单元，也是基本的执行单元。</li>
+<li>每个进程都是一个实体，有自己的地址空间，通常包括代码段、数据段和堆栈。</li>
+<li>程序是一个没有声明的实体，只有被操作系统执行时才能称为一个活动的实体，而执行中的程序，就是进程</li>
+</ul>
+<p>PCB进程控制块</p>
+<blockquote>
+<p>本质就是一个数据结构</p>
+</blockquote>
+<p><code>env_init</code></p>
+<blockquote>
+<p>traverse 是遍历的意思</p>
+</blockquote>
+<p>段地址映射</p>
+<p>为<code>base_pgdir</code>分配了一页物理内存，将其转换为内核虚拟地址，并使用<code>map_segment</code>来进行映射。</p>
+<ul>
+<li><code>pages</code>映射到<code>UPAGES</code></li>
+<li><code>envs</code>映射到<code>UENVS</code></li>
+</ul>
+<p>其中补全的部分我是这么写的</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">Page</span><span class="token operator">*</span> pp <span class="token operator">=</span> <span class="token function">pa2page</span><span class="token punctuation">(</span>pa <span class="token operator">+</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">page_insert</span><span class="token punctuation">(</span>pgdir<span class="token punctuation">,</span> asid<span class="token punctuation">,</span> pp<span class="token punctuation">,</span> va <span class="token operator">+</span> i<span class="token punctuation">,</span> perm<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>其实可以把pp直接替换为中间那一部分。</p>
+<p>注意是<code>va+i</code>和<code>pa+i</code></p>
+<p>进程的标识</p>
+<blockquote>
+<p>就是<code>env_id</code></p>
+</blockquote>
+<p>这里用自己的话解释一下为什么还需要一个<code>asid</code></p>
+<p>实际上是为了让每一个进程有一个自己的<code>tlb</code>，这样当这个进程结束时(或者进程切换的时候)只需要把这个进程的<code>tlb</code>刷新掉即可。</p>
+<p>既然需要有一个自己的<code>tlb</code>那就得有一个标识符，那为什么不直接用<code>env_id</code>呢，我认为主要是为了让<code>tlb</code>只有有限个，太多了就炸内存了，这波属于是宁愿少点，不能多了。</p>
+<p>创建进程</p>
+<blockquote>
+<p>终于开始创建进程了</p>
+</blockquote>
+<p>实际上创建进程在不考虑进程的交互性(也就是说这是个活的实体)，实际上就是个数据结构，那么相应的数据结构就是<code>PCB</code>进程控制块。</p>
+<p>因此也可以理解为设置一个进程控制块。</p>
+<ul>
+<li>设置进程控制块实际上是告诉了我们这个进程是什么</li>
+<li>那么进程还要有自己的地址空间，包括代码段、数据段和堆栈</li>
+</ul>
+<p>OK，这里开始解释后面的进程调度和中断的开启。</p>
+<p>在MIPS处理器中，中断是由硬件控制的，也就是<code>CP0</code>寄存器中保存着我们需要的信息。</p>
+<p>那么具体是如何设置的呢？</p>
+<p>这里我们考虑的相对简单，还只开启了时钟中断。</p>
+<blockquote>
+<p>这里就是需要将<code>IM7</code>设置为1，表示时钟中断可以被响应，同时还有<code>IE</code>位，也就是<code>Interupt Enable</code>中断使能位要打开才能正确的中断</p>
+</blockquote>
+<p>还有第二个问题，中断需要调度进程，同时需要进入内核态。</p>
+<blockquote>
+<p>害，理论是真的很重要！！！</p>
+</blockquote>
+<p>用户态的标志：<code>EXL=0, UM=1</code></p>
+<p>其他都是内核态</p>
+<p>那么如果我们刚开始在内核态接受到了时钟中断，中断结束后我们还应当是在内核态，但是由于</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">eret<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这个命令在所有进程调度的最后都会被执行，同时<code>eret</code>会进<code>EXL</code>设置为0(也就是希望返回到用户态)，因此我们还需要手动维护一下<code>EXL</code>使得保持在内核态。</p>
+<p>elf简单复习一下</p>
+<p>ELF文件结构为：</p>
+<ul>
+<li>ELF头，包括程序的基本信息，比如体系结构和操作系统，同时也把包括了节头表和段头表相对文件的偏移量offset</li>
+<li>段头表，program header table ，主要包含程序中各个段segment的信息，段的信息需要在运行时刻使用</li>
+<li>节头表，section header table，主要包括程序中各个节section的信息，节的信息需要在程序编译和链接的时候使用</li>
+</ul>
+<p>加载二进制文件</p>
+<p>ELF文件的类型有三种：可重定位文件，可执行文件，可被共享的对象文件。</p>
+<p>这里指可执行文件</p>
+<p>要加载一个ELF文件到内存，只需要将其中所有需要加载的program segment程序段到对应的虚拟地址上即可。(这里我认为主要是因为这里是可执行文件，所以只需要将各个需要在运行时刻使用的信息存放过去即可)</p>
+<p>目前还是在内核态，<code>alloc</code>的一个页面是一个物理页面。</p>
+<p>要得到其物理地址，由于是内核态，因此需要调用<code>page2kva</code>来得到物理地址。</p>
+<p>这一点从<code>page_alloc()</code>中的<code>memset((void*)page2kva(pp),0,PAGE_SIZE);</code>可以初见端倪。</p>
+<p>而且本身也非常合理。</p>
+<p>给进程分配地址空间，实际上是将可执行文件的信息进行复制。</p>
+<p>这里用到了一个回调函数，还算比较好理解。</p>
+<p><code>load_icode</code>函数最后需要将<code>env_tf.cp0_epc</code>设置为<code>e_entry</code>，这个是说当执行进程时还是需要从最开始这个可执行文件的开始位置开始执行。</p>
+<p>创建进程</p>
+<p>进程控制块也设置好了，地址空间也安排好了，终于可以创建进程了。</p>
+<p>这里的创建进程是在内核初始化时直接创建进程。</p>
+<ol>
+<li>分配一个新的Env结构体</li>
+<li>设置进程控制块</li>
+<li>将程序载入到进程的地址空间</li>
+</ol>
+<p><img src="/2024/04/24/os-lab3%E7%AC%94%E8%AE%B0/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab3%E7%AC%94%E8%AE%B0%5Cimage-20240422043001149.png" alt="image-20240422043001149"></p>
+<p>这里可以修改为</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">env_alloc</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>e<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>进程运行与切换</p>
+<p>要运行一个进程：</p>
+<ul>
+<li>需要保存当前进程的上下文(如果当前没有进程就pass)</li>
+<li>恢复要启动的进程的上下文，然后运行该进程</li>
+</ul>
+<p>进程的上下文朴素的理解就是当时运行这个进程时硬件的情况，也就是各个寄存器的状态，也就是<code>Trapframe</code>的内容</p>
+<p>包括</p>
+<ul>
+<li>通用寄存器</li>
+<li><code>HI</code>、<code>LO</code></li>
+<li>CP0的<code>Status</code>、<code>EPC</code>、<code>Cause</code>和<code>BadVAddr</code>寄存器</li>
+</ul>
+<p>在这里寄存器状态保存的地方是<code>KSTACKTOP</code>以下的大小为<code>TrapFrame</code>的区域</p>
+<p><img src="/2024/04/24/os-lab3%E7%AC%94%E8%AE%B0/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab3%E7%AC%94%E8%AE%B0%5Cimage-20240422044027836.png" alt="image-20240422044027836"></p>
+<p>运行一个进程：</p>
+<ol>
+<li>保存当前进程的上下文信息(没有就开摆)</li>
+<li>切换<code>curenv</code>为即将运行的进程(这里还没有切换)</li>
+<li>设置全局变量<code>cur_pgdir</code>为当前进程的页目录地址，在<code>TLB</code>重填是将用到这个全局变量</li>
+<li>调用<code>env_top_tf</code>函数，恢复现场(就是即将运行的进程的现场/上下文信息)、异常返回</li>
+</ol>
+<p>中断与异常</p>
+<p>CP0寄存器</p>
+<ul>
+<li>Status 状态寄存器，包括中断引脚使能，其他CPU模式等位域</li>
+<li>Cause 记录导致异常的原因</li>
+<li>EPC 异常结束后程序恢复执行的位置</li>
+</ul>
+<p>处理异常是由硬件完成的，MIPS CPU处理一个异常的步骤包括</p>
+<ol>
+<li>设置EPC指向从异常返回的地址</li>
+<li>设置EXL位，强制CPU进入内核态，并禁止中断</li>
+<li>设置Cause寄存器，记录异常发生的原因</li>
+<li>CPU从异常入口位置取指，此后交给软件处理，也即是我们的操作系统来处理</li>
+</ol>
+<h2><span id="梳理">梳理</span></h2>
+<p>这里再把整个流程进行梳理</p>
+<p><img src="/2024/04/24/os-lab3%E7%AC%94%E8%AE%B0/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab3%E7%AC%94%E8%AE%B0%5Cimage-20240424160053472.png" alt></p>
+<p><img src="/2024/04/24/os-lab3%E7%AC%94%E8%AE%B0/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab3%E7%AC%94%E8%AE%B0%5Cimage-20240424160152458.png" alt="image-20240424160152458"></p>
+<h3><span id="进程创建">进程创建</span></h3>
+<h2><span id="几个问题">几个问题</span></h2>
+<ol>
+<li>
+<p><code>tests/lab3_*</code>这几个里面的<code>pre_env_run.c</code>是干嘛用的，<code>tests/lab3_4</code>还有个<code>quick_sort.c</code>是干嘛的</p>
+<blockquote>
+<p>第一直觉感觉是创建一个进程，但是仔细一看还是不太清楚</p>
+</blockquote>
+</li>
+<li></li>
+</ol>
+
                 
             </div>
             <hr/>
@@ -483,7 +649,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/os-lab3/">
+                                    <span class="chip bg-color">os-lab3</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -578,11 +748,23 @@
                         </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            hugo
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab3/">
+                        <span class="chip bg-color">os-lab3</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -615,11 +797,23 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            hugo
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab2/">
+                        <span class="chip bg-color">os-lab2</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -852,7 +1046,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">51.1k</span>
+                        class="white-color">62.7k</span>
             
             
             

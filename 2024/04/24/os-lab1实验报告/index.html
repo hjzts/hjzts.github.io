@@ -5,7 +5,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="os-lab1实验报告, C,Python,数分，高代，离散等">
-    <meta name="description" content="">
+    <meta name="description" content="Lab1实验报告
+思考题
+Thinking 1.1
+
+请阅读 附录中的编译链接详解，尝试分别使用实验环境中的原生 x86 工具 链（gcc、ld、readelf、objdump 等）和 MIPS 交叉编译工具链（带有 mips-linux-">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -362,12 +366,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/os-lab1/">
+                                <span class="chip bg-color">os-lab1</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                操作系统
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -385,14 +402,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    3.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    12 分
                 </div>
                 
 
@@ -420,7 +437,222 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1><span id="lab1实验报告">Lab1实验报告</span></h1>
+<h2><span id="思考题">思考题</span></h2>
+<h3><span id="thinking-11">Thinking 1.1</span></h3>
+<blockquote>
+<p>请阅读 附录中的编译链接详解，尝试分别使用实验环境中的原生 x86 工具 链（gcc、ld、readelf、objdump 等）和 MIPS 交叉编译工具链（带有 mips-linux-gnu前缀），重复其中的编译和解析过程，观察相应的结果，并解释其中向 objdump 传入的参数 的含义</p>
+</blockquote>
+<p>首先是gcc的几个重要的选项</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token parameter variable">-E</span>                       Preprocess only<span class="token punctuation">;</span> <span class="token keyword">do</span> not compile, assemble or link.      
+<span class="token parameter variable">-S</span>                       Compile only<span class="token punctuation">;</span> <span class="token keyword">do</span> not assemble or link.                   
+<span class="token parameter variable">-c</span>                       Compile and assemble, but <span class="token keyword">do</span> not link.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>objdump的几个重要的选项</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">-D, --disassemble-all    Display assembler contents of all sections
+	 <span class="token parameter variable">--disassemble</span><span class="token operator">=</span><span class="token operator">&lt;</span>sym<span class="token operator">&gt;</span>  Display assembler contents from <span class="token operator">&lt;</span>sym<span class="token operator">&gt;</span>
+-S,  <span class="token parameter variable">--source</span>             Intermix <span class="token builtin class-name">source</span> code with disassembly
+	 --source-comment<span class="token punctuation">[</span><span class="token operator">=</span><span class="token operator">&lt;</span>txt<span class="token operator">&gt;</span><span class="token punctuation">]</span> Prefix lines of <span class="token builtin class-name">source</span> code with <span class="token operator">&lt;</span>txt<span class="token operator">&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2024/04/24/os-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240327155605072.png" alt="image-20240327155605072"></p>
+<p>使用不同的gcc，如使用MIPS交叉编译工具链的gcc，得到的文件类型是不一样的</p>
+<p><img src="/2024/04/24/os-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240327161230861.png" alt="image-20240327161230861"></p>
+<p>那么对比具体内容呢，我们分别使用只进行预处理后的文本进行比较</p>
+<p><img src="/2024/04/24/os-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240327161546394-1711527348582-1.png" alt="image-20240327161546394"></p>
+<p>发现不相同的地方还是很多的。</p>
+<p>在进行编译后发现得到的文本类型也不相同</p>
+<p><img src="/2024/04/24/os-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240327161721152.png" alt="image-20240327161721152"></p>
+<p>那么显然使用diff后区别会非常大，毕竟一个x86，一个mips</p>
+<p>这里有意思的一点是</p>
+<p><img src="/2024/04/24/os-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240327162651923.png" alt="image-20240327162651923"></p>
+<p>如果我使用x86的objdump去反汇编用交叉编译器得到的文件会报错。</p>
+<blockquote>
+<p>这里我也有点不懂，objdump不是支持多个架构吗，难道说在什么架构确定了objdump对硬件的接口，只是说objdump有不同硬件架构的的接口吗.</p>
+<blockquote>
+<p>因为不支持mips，樂</p>
+</blockquote>
+</blockquote>
+<h3><span id="thinking-12">Thinking 1.2</span></h3>
+<blockquote>
+<p>思考下述问题：</p>
+<ul>
+<li>
+<p>尝试使用我们编写的 readelf 程序，解析之前在 target 目录下生成的内核 ELF 文 件。</p>
+</li>
+<li>
+<p>也许你会发现我们编写的 readelf 程序是不能解析 readelf 文件本身的，而我们刚 才介绍的系统工具 readelf 则可以解析，这是为什么呢？（提示：尝试使用 readelf -h，并阅读 tools/readelf 目录下的 Makefile，观察 readelf 与 hello 的不同）</p>
+</li>
+</ul>
+</blockquote>
+<p><img src="/2024/04/24/os-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240327163822161.png" alt="image-20240327163822161"></p>
+<p>关于为什么不能够解析自己，首先我们查看一下<code>readel</code>f和<code>hello</code>的文件头</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">git@22373058 ~/2/t/readelf <span class="token punctuation">(</span>lab2<span class="token punctuation">)</span><span class="token operator">&gt;</span> readelf <span class="token parameter variable">-h</span> readelf
+ELF 头：
+  Magic：   7f <span class="token number">45</span> 4c <span class="token number">46</span> 02 01 01 00 00 00 00 00 00 00 00 00
+  类别:                              ELF64
+  数据:                              <span class="token number">2</span> 补码，小端序 <span class="token punctuation">(</span>little endian<span class="token punctuation">)</span>
+  Version:                           <span class="token number">1</span> <span class="token punctuation">(</span>current<span class="token punctuation">)</span>
+  OS/ABI:                            UNIX - System V
+  ABI 版本:                          <span class="token number">0</span>
+  类型:                              DYN <span class="token punctuation">(</span>Position-Independent Executable <span class="token function">file</span><span class="token punctuation">)</span>
+  系统架构:                          Advanced Micro Devices X86-64
+  版本:                              0x1
+  入口点地址：               0x1180
+  程序头起点：          <span class="token number">64</span> <span class="token punctuation">(</span>bytes into <span class="token function">file</span><span class="token punctuation">)</span>
+  Start of section headers:          <span class="token number">14488</span> <span class="token punctuation">(</span>bytes into <span class="token function">file</span><span class="token punctuation">)</span>
+  标志：             0x0
+  Size of this header:               <span class="token number">64</span> <span class="token punctuation">(</span>bytes<span class="token punctuation">)</span>
+  Size of program headers:           <span class="token number">56</span> <span class="token punctuation">(</span>bytes<span class="token punctuation">)</span>
+  Number of program headers:         <span class="token number">13</span>
+  Size of section headers:           <span class="token number">64</span> <span class="token punctuation">(</span>bytes<span class="token punctuation">)</span>
+  Number of section headers:         <span class="token number">31</span>
+  Section header string table index: <span class="token number">30</span>
+git@22373058 ~/2/t/readelf <span class="token punctuation">(</span>lab2<span class="token punctuation">)</span><span class="token operator">&gt;</span> readelf <span class="token parameter variable">-h</span> hello
+ELF 头：
+  Magic：   7f <span class="token number">45</span> 4c <span class="token number">46</span> 01 01 01 03 00 00 00 00 00 00 00 00
+  类别:                              ELF32
+  数据:                              <span class="token number">2</span> 补码，小端序 <span class="token punctuation">(</span>little endian<span class="token punctuation">)</span>
+  Version:                           <span class="token number">1</span> <span class="token punctuation">(</span>current<span class="token punctuation">)</span>
+  OS/ABI:                            UNIX - GNU
+  ABI 版本:                          <span class="token number">0</span>
+  类型:                              EXEC <span class="token punctuation">(</span>可执行文件<span class="token punctuation">)</span>
+  系统架构:                          Intel <span class="token number">80386</span>
+  版本:                              0x1
+  入口点地址：               0x8049600
+  程序头起点：          <span class="token number">52</span> <span class="token punctuation">(</span>bytes into <span class="token function">file</span><span class="token punctuation">)</span>
+  Start of section headers:          <span class="token number">746280</span> <span class="token punctuation">(</span>bytes into <span class="token function">file</span><span class="token punctuation">)</span>
+  标志：             0x0
+  Size of this header:               <span class="token number">52</span> <span class="token punctuation">(</span>bytes<span class="token punctuation">)</span>
+  Size of program headers:           <span class="token number">32</span> <span class="token punctuation">(</span>bytes<span class="token punctuation">)</span>
+  Number of program headers:         <span class="token number">8</span>
+  Size of section headers:           <span class="token number">40</span> <span class="token punctuation">(</span>bytes<span class="token punctuation">)</span>
+  Number of section headers:         <span class="token number">35</span>
+  Section header string table index: <span class="token number">34</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到<code>readelf</code>的ELF类别是ELF64，而<code>hello</code>的ELF的类别是ELF32。可以知道我们的<code>readelf</code>只能解析ELF32类别的ELF文件，我们可以自己手动得到一个ELF32的<code>myReadelf</code>使得可以解析自身</p>
+<p>在Makefile中做如下修改</p>
+<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile"><span class="token target symbol">myReadelf</span><span class="token punctuation">:</span>
+	<span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span> -c main.c -m32
+	<span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span> -c readelf.c -m32
+	<span class="token variable">$</span><span class="token punctuation">(</span>CC<span class="token punctuation">)</span> main.o readelf.o -o <span class="token variable">$@</span> -m32 -static -g<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>发现可以解析自身了~</p>
+<p><img src="/2024/04/24/os-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab1%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240327173712186.png" alt="image-20240327173712186"></p>
+<h3><span id="thinking-13">Thinking 1.3</span></h3>
+<blockquote>
+<p>在理论课上我们了解到，MIPS 体系结构上电时，启动入口地址为 0xBFC00000 （其实启动入口地址是根据具体型号而定的，由硬件逻辑确定，也有可能不是这个地址，但 一定是一个确定的地址），但实验操作系统的内核入口并没有放在上电启动地址，而是按照 内存布局图放置。思考为什么这样放置内核还能保证内核入口被正确跳转到？ （提示：思考实验中启动过程的两阶段分别由谁执行。）</p>
+</blockquote>
+<p>操作系统设计人员一般会将硬件初始化的相关工作作为“bootloader”程序放在非易失存储器中，而将操作系统内核放在磁盘中。从操作系统的角度来看，bootloader是为了正确找到内核并加载执行。同时这个启动过程分为两个阶段。</p>
+<p>在stage1中，进行初始化硬件设备，同时加载stage2到RAM空间，并且设置堆栈最后跳转到stage2的入口函数。</p>
+<p>在stage2中，初始化这一阶段需要用到的硬件设备以及其他功能，然后将内核镜像从存储器读到RAM中，并为内核设置启动参数，最后将CPU指令寄存器的内容设置为内核入口函数的地址，并将控制权转交给系统内核，这时就已经保证了内核地址被正确跳转到。</p>
+<p>在我们的qemu中，在stage2阶段：</p>
+<p>由 Linker Script (控制加载地址)完成。Linker Script 可以控制各节的加载地址。我们在 kernel.lds 中设置了程序各个生成地址：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">SECTIONS <span class="token punctuation">{</span>
+	<span class="token builtin class-name">.</span> <span class="token operator">=</span> 0x80010000<span class="token punctuation">;</span>
+	.text <span class="token builtin class-name">:</span> <span class="token punctuation">{</span> *<span class="token punctuation">(</span>.text<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+	.data <span class="token builtin class-name">:</span> <span class="token punctuation">{</span> *<span class="token punctuation">(</span>.data<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+	.bss <span class="token builtin class-name">:</span> <span class="token punctuation">{</span> *<span class="token punctuation">(</span>.bss<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+	bss_end <span class="token operator">=</span> <span class="token builtin class-name">.</span><span class="token punctuation">;</span>
+	<span class="token builtin class-name">.</span> <span class="token operator">=</span> 0x80400000<span class="token punctuation">;</span>
+	end <span class="token operator">=</span> <span class="token builtin class-name">.</span> <span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通过这个控制，生成的程序各个 section 的位置就被调整到了我们所指定的地址上。 segment 是由 section组合而成的，section 的地址被调整了，那么最终 segment 的地址也会相应地被调整。 至此，我们通过 lds 文件控制各段(包括内核)被加载到我们预期的位置。与此同时kernel.lds规定了 ENTRY(_start) ，即把内核入口定为 _start 这个函数。</p>
+<p>我们通过对 /init/start.S 中 _start 函数的设置，就可以正确的跳转至 mips_init 函数:</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">EXPORT(_start)
+.set at
+.set reorder
+	mtc0    zero, CP0_STATUS
+	li	sp, 0x80400000
+	jal mips_init<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2><span id="难点分析">难点分析</span></h2>
+<h3><span id="qemu模拟器">QEMU模拟器</span></h3>
+<p>qemu（Quick Emulator）是一个硬件模拟器，刚开始接触的话我感觉还是会不太懂得这个的运行流程。</p>
+<p>通过观察Makefile文件可以看到一些QUME的功劳</p>
+<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile">QEMU_FLAGS              <span class="token operator">+=</span> -cpu 4Kc -m 64 -nographic -M malta \<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>可以看到QUME为我们指定了使用的使用的CPU模型为<code>MIPS 4Kc</code>，同时<code>-m 64</code>指定了虚拟机内存为64MB，<code>-nographic</code>指定QEMU以无图形界面模式运行，<code>-M malta</code>指定QEMU使用"MIPS Malta"模拟器模型，这是一种MIPS架构的开发板。</p>
+<p>同时与QEMU一起出现的交叉编译也很有意思</p>
+<p>比如<code>mips-kubyx-gnu-gcc</code>与<code>gcc</code>的区别，不同架构的编译器的使用还是很有意思的。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/qemu/qemu">QUME源代码</a></p>
+<h3><span id="操作系统内核启动流程">操作系统内核启动流程</span></h3>
+<p>这里主要是指操作系统引导内核启动的过程。</p>
+<p>首先计算机的存储部分主要包括ROM和RAM，RAM是易失存储器，刚开始RAM应该是空的，而ROM的内存又是有限的，因此操作系统需要在ROM中找到将内核部分的</p>
+<p>这个过程的主要目的是将内核定位并加载到主存中，那么操作系统适配在不同的架构中启动的过程主要包括以下几个流程。</p>
+<ol>
+<li>打开电源，加载BIOS</li>
+<li>BIOS进行开机自检，其中启动程序会对计算机的硬件进行初始化，同时会对计算机的主存、磁盘、I/O设备进行检查。</li>
+<li>加载引导程序。BIOS或这UEFI会根据Boot Sequence的内容，同时将控制权交给启动顺序第一位的存储设备(这个如果本机装了多个操作系统比较明显，在我们进入BIOS后可以选择进入哪个操作系统，实际上就是CPU知道有哪几个操作系统，然后选择操作系统并将相应位置的扇区内容进行加载，根据 老师上课说的一切管理都需要数据结构可以推断出，CPU中有某个数据结构专门存储了操作系统类型、扇区地址和扇区大小等数据)，然后CPU将存储设备中的引导扇区的内容加载到内存中。</li>
+<li>加载MBR，CPU可以知道在哪个主分区寻找操作系统。</li>
+<li>扫描硬盘分区表，并加载硬盘活动分区。MBR包含活动分区和非活动分区，找到活动分区后，加载活动分区并将控制权交给活动分区。</li>
+<li>加载PBR，读取活动分区的第一个分区（分区引导记录PBR），寻找并激活分区根目录下用于引导操作系统的程序（启动管理器）</li>
+<li>加载启动管理器</li>
+<li>加载操作系统。将操作系统的初始化程序加载到内存中执行。</li>
+</ol>
+<blockquote>
+<p>之前装debian的时候经常会遇到找不到系统的问题，推断是第3步出现了问题，BIOS找不到磁盘中debian的启动分区在哪里。</p>
+</blockquote>
+<h3><span id="linker-script">Linker Script</span></h3>
+<blockquote>
+<p>这里是因为感觉对于Linker Script的语法不够理解</p>
+</blockquote>
+<p>链接器脚本实际上就是是一个文本文件，使用链接器脚本编写一系列的命令，每个命令要么是一个关键字，后面可能跟有参数，要么是对符号的赋值。</p>
+<ul>
+<li>
+<p>一个简单的Linker Script脚本</p>
+<p>实际上大多数的链接器脚本都是相对比较简单的，最简单脚本通常为</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">SECTIONS
+<span class="token punctuation">{</span>
+<span class="token builtin class-name">.</span> <span class="token operator">=</span> 0x10000<span class="token punctuation">;</span>
+.text <span class="token builtin class-name">:</span> <span class="token punctuation">{</span>*<span class="token punctuation">(</span>.text<span class="token punctuation">)</span><span class="token punctuation">}</span>
+<span class="token builtin class-name">.</span> <span class="token operator">=</span> 0x80000000<span class="token punctuation">;</span>
+.data <span class="token builtin class-name">:</span> <span class="token punctuation">{</span>*<span class="token punctuation">(</span>.data<span class="token punctuation">)</span><span class="token punctuation">}</span>
+.bss :<span class="token punctuation">{</span>*<span class="token punctuation">(</span>.bss<span class="token punctuation">)</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而其他复杂的语法包括<br>
+一些简单的赋值符号</p>
+</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">symbol <span class="token operator">=</span> expression <span class="token punctuation">;</span>
+symbol <span class="token operator">+=</span> expression <span class="token punctuation">;</span>
+symbol -<span class="token operator">=</span> expression <span class="token punctuation">;</span>
+symbol *<span class="token operator">=</span> expression <span class="token punctuation">;</span>
+symbol /<span class="token operator">=</span> expression <span class="token punctuation">;</span>
+symbol <span class="token operator">&lt;&lt;</span><span class="token operator">=</span> expression <span class="token punctuation">;</span>
+symbol <span class="token operator">&gt;&gt;</span><span class="token operator">=</span> expression <span class="token punctuation">;</span>
+symbol <span class="token operator">&amp;</span><span class="token operator">=</span> expression <span class="token punctuation">;</span>
+symbol <span class="token operator">|</span><span class="token operator">=</span> expression <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>给出另外一个例子</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">floating_point <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+SECTIONS
+<span class="token punctuation">{</span>
+  .text:
+    <span class="token punctuation">{</span>
+      *<span class="token punctuation">(</span>.text<span class="token punctuation">)</span>
+      .etext <span class="token operator">=</span> <span class="token builtin class-name">.</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    _bdata <span class="token operator">=</span> <span class="token punctuation">(</span>. + <span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> ~ <span class="token number">4</span><span class="token punctuation">;</span>
+    .data <span class="token builtin class-name">:</span> <span class="token punctuation">{</span> *<span class="token punctuation">(</span>.data<span class="token punctuation">)</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里的<code>_bdata</code>是一个符号，它的值是当前位置加3，然后向下取整4的结果。</p>
+<h3><span id="printk">printk</span></h3>
+<p>在本次实验中我们实现了一个简单的<code>printk</code>函数，其中很多关于C语言的一些用法还是很有难度的。</p>
+<p>首先是梳理一下代码架构</p>
+<ul>
+<li>最外层是printk()函数，其用法与我们通常使用的printf()函数有很大的相似性，可能没有那么智能的正则匹配等功能</li>
+<li>printk()函数中的主要功能由vprintfmt(outputk, NULL, fmt, ap)函数实现，其中outputk是一个函数指针，fmt是一个字符串，ap是一个va_list类型的变量，这个函数的主要功能是将fmt中的内容输出到串口</li>
+<li>vprintfmt()中主要部分在解析fmt这个字符串，解析到%后判断其后面的内容，然后直接调用如num = va_arg(ap, int)来得到参数，然后根据读取到的%后的内容将相应的结果进行格式化输出，这里调用了三个主要的函数，分别是print_char(),print_str(),print_num()，这里print_char和print_str实质上就是直接调用out(data,&amp;c,1)或者out(data, s, len)，但是由于考虑到左对齐右对齐等需要补充一些空格的情况，因此这里的print_char和print_str函数还是有一些复杂的。而print_num()可以看到是直接将数字转化为字符串，然后调用out(data,buf,len)函数输出。</li>
+</ul>
+<p>其中va_list和va_start,va_end这几个的含义也是很难理解的一部分，这里简单的说一下，va_list是一个指向参数的指针，va_start是将这个指针指向第一个参数，va_end是将这个指针指向最后一个参数。</p>
+<ul>
+<li>va_list 变长参数表的变量类型</li>
+<li>va_start(va_list, ap ,lastarg)用于初始化边长参数表的宏</li>
+<li>va_arg(va_list, type)用于获取变长参数表中的参数。这里的类型有很多种，比如int，double，char等</li>
+<li>va_end(va_list,ap) 结束使用边长参数表的宏</li>
+</ul>
+<blockquote>
+<p>但是由于这个不太了解，还是太难啦！</p>
+</blockquote>
+<h2><span id="实验体会">实验体会</span></h2>
+<p>主要是关于<code>printf</code>中的几个细节有了更多的了解。但是我觉得对于其中的va_*那几个函数还是不太能够理解，就是一个变长参数表到底是个什么东西还是不太清楚，这也导致我extra没做出来，哭！</p>
+<p>其中对于启动引导的学习让自己对于操作系统有了更深的认识，完成了从计算机组成原理中学习到的底层计算机硬件架构到操作系统的过渡，同时也对于活动分区等这些有了更深的认识，起码对于自己电脑上的多系统的了解更深了一分。</p>
+<p>同时还有readelf也让自己对于文件的结构更加了解了，包括认识学习到了之前一直苦恼的一些有关.so文件缺失的报错，对于文件头这个数据结构也懂了很多！</p>
+<p>总体而言还是觉得自己需要加强对于操作系统的学习啊！！C语言真是博大精深啊！</p>
+
                 
             </div>
             <hr/>
@@ -483,7 +715,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/os-lab1/">
+                                    <span class="chip bg-color">os-lab1</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -579,13 +815,25 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            hugo
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab1/">
+                        <span class="chip bg-color">os-lab1</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -617,11 +865,23 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            hugo
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab2/">
+                        <span class="chip bg-color">os-lab2</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -854,7 +1114,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">51.1k</span>
+                        class="white-color">62.7k</span>
             
             
             

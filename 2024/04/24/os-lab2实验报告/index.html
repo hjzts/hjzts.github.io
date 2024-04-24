@@ -5,7 +5,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="os-lab2实验报告, C,Python,数分，高代，离散等">
-    <meta name="description" content="">
+    <meta name="description" content="Lab2实验报告
+思考题
+Thinking 2.1
+
+请根据上述说明，回答问题：在编写的 C 程序中，指针变量中存储的地址被视为虚拟地址，还是物理地址？ MIPS 汇编程序中 lw 和 sw 指令使用的地址被视为虚拟地址，还是物理地址？
+
+">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -362,12 +368,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/os-lab2/">
+                                <span class="chip bg-color">os-lab2</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                操作系统
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -385,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    3.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    14 分
                 </div>
                 
 
@@ -420,7 +439,341 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1><span id="lab2实验报告">Lab2实验报告</span></h1>
+<h2><span id="思考题">思考题</span></h2>
+<h3><span id="thinking-21">Thinking 2.1</span></h3>
+<blockquote>
+<p>请根据上述说明，回答问题：在编写的 C 程序中，指针变量中存储的地址被视为虚拟地址，还是物理地址？ MIPS 汇编程序中 lw 和 sw 指令使用的地址被视为虚拟地址，还是物理地址？</p>
+</blockquote>
+<p>都是<strong>虚拟地址</strong>。c程序是虚拟地址比较显然，一方面是因为需要链接许多文件，在地址空间重新排列。而mips中的地址也是虚拟地址主要是因为，我们在计算机组成原理中自己搭的cpu其实是没有mmu这个内存管理单元的，也就没有虚拟内存与物理内存的转换，实际上这里我们的<strong>4Kc CPU是有MMU的</strong>，因此也是虚拟地址。</p>
+<h3><span id="thinking-22">Thinking 2.2</span></h3>
+<blockquote>
+<p>请思考下述两个问题：</p>
+<ul>
+<li>从可重用性的角度，阐述用宏来实现链表的好处。</li>
+<li>查看实验环境中的 /usr/include/sys/queue.h，了解其中单向链表与循环链表的实现，比较它们与本实验中使用的双向链表，分析三者在插入与删除操作上的性能差异。</li>
+</ul>
+</blockquote>
+<p>c语言没有模板这一语法功能，于是使用宏可以使得链表可以实现不同的类型的链表，只需要将相应的类型结构作为参数传入宏函数即可。</p>
+<p>比如从定义一个链表的角度说，使用宏是这样的</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">LIST_HEAD</span><span class="token expression"><span class="token punctuation">(</span>name<span class="token punctuation">,</span> type<span class="token punctuation">)</span>                      </span><span class="token punctuation">\</span>
+    <span class="token expression"><span class="token keyword">struct</span> <span class="token class-name">name</span> <span class="token punctuation">{</span>                                  </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token keyword">struct</span> <span class="token class-name">type</span><span class="token operator">*</span> lh_first<span class="token punctuation">;</span> </span><span class="token comment">/* first element */</span> <span class="token punctuation">\</span>
+    <span class="token expression"><span class="token punctuation">}</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">LIST_ENTRY</span><span class="token expression"><span class="token punctuation">(</span>type<span class="token punctuation">)</span>                                              </span><span class="token punctuation">\</span>
+    <span class="token expression"><span class="token keyword">struct</span> <span class="token punctuation">{</span>                                                          </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token keyword">struct</span> <span class="token class-name">type</span><span class="token operator">*</span> le_next<span class="token punctuation">;</span> </span><span class="token comment">/* next element */</span>                      <span class="token punctuation">\</span>
+        <span class="token expression"><span class="token keyword">struct</span> <span class="token class-name">type</span><span class="token operator">*</span><span class="token operator">*</span> le_prev<span class="token punctuation">;</span> </span><span class="token comment">/* address of previous next element */</span> <span class="token punctuation">\</span>
+    <span class="token expression"><span class="token punctuation">}</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>直接可以选择相应的name和type，当定义另一个链表时修改其中的name和type即可。同时，这样我们还能够实现后面的可复用性高的宏函数，比如链表的遍历，插入等。</p>
+<ul>
+<li>
+<p>甚至让我在想会不会c++的模板用的也是类似的方法了。</p>
+<ul>
+<li>
+<blockquote>
+<p>简单查了一下：总的来说，C++ 模板的底层实现是通过编译器进行的，包括模板的实例化和代码的生成。这个过程是在编译期完成的，可以提高程序的性能。</p>
+</blockquote>
+</li>
+<li>
+<p>虽然这个说法像是啥也没说（</p>
+</li>
+</ul>
+</li>
+<li>
+<p>单向链表：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">SLLIST_ENTRY</span><span class="token expression"><span class="token punctuation">(</span>type<span class="token punctuation">)</span> 		  </span><span class="token punctuation">\</span>
+<span class="token expression"><span class="token keyword">struct</span> <span class="token punctuation">{</span>						</span><span class="token punctuation">\</span>
+	<span class="token expression"><span class="token keyword">struct</span> <span class="token class-name">type</span> <span class="token operator">*</span>sle_next<span class="token punctuation">;</span>		  </span><span class="token punctuation">\</span>
+<span class="token expression"><span class="token punctuation">}</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>对于插入，只能够方便的实现在某一元素之后插入，删除操作和在某一项之前插入都需要从头开始遍历列表。</p>
+</li>
+<li>
+<p>循环链表：</p>
+<p>这里的循环链表的定义和单向链表基本一致，只是多了一个将链表最后的元素指向了头指针。因此对于删除操作，在某一项之前插入，在某一项之后插入这几种操作都和单向链表相同，不过对于在尾部插入可以直接进行，是o(1)的复杂度</p>
+</li>
+<li>
+<p>双向链表：</p>
+<p>双向链表的删除操作、在某一项之前插入、在某一项之后插入都可以通过o(1)的时间开销搞定。但是比起循环链表在尾部插入还是需要进行遍历。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>链表类型</th>
+<th>在某个位置操作（删除，插入）</th>
+<th>删除某个元素</th>
+<th>在某个元素前插入</th>
+<th>在某个元素后插入</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单向链表</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>循环链表</td>
+<td>O(n)，当在尾部插入时为O(1)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>双向链表</td>
+<td>O(n)</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="thinking-23">Thinking 2.3</span></h3>
+<blockquote>
+<p>请阅读 include/queue.h 以及 include/pmap.h, 将 Page_list 的结构梳理清楚，选择正确的展开结构</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">A<span class="token operator">:</span>
+<span class="token keyword">struct</span> <span class="token class-name">Page_list</span><span class="token punctuation">{</span>
+<span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	<span class="token keyword">struct</span> <span class="token punctuation">{</span>
+		<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span>le_next<span class="token punctuation">;</span>
+		<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span>le_prev<span class="token punctuation">;</span>
+		<span class="token punctuation">}</span> pp_link<span class="token punctuation">;</span>
+		u_short pp_ref<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token operator">*</span> lh_first<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">B<span class="token operator">:</span>
+<span class="token keyword">struct</span> <span class="token class-name">Page_list</span><span class="token punctuation">{</span>
+<span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	<span class="token keyword">struct</span> <span class="token punctuation">{</span>
+		<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span>le_next<span class="token punctuation">;</span>
+		<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span><span class="token operator">*</span>le_prev<span class="token punctuation">;</span>
+		<span class="token punctuation">}</span> pp_link<span class="token punctuation">;</span>
+		u_short pp_ref<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span> lh_first<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">C<span class="token operator">:</span>
+<span class="token keyword">struct</span> <span class="token class-name">Page_list</span><span class="token punctuation">{</span>
+<span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	<span class="token keyword">struct</span> <span class="token punctuation">{</span>
+		<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span>le_next<span class="token punctuation">;</span>
+		<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span><span class="token operator">*</span>le_prev<span class="token punctuation">;</span>
+		<span class="token punctuation">}</span> pp_link<span class="token punctuation">;</span>
+		u_short pp_ref<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token operator">*</span> lh_first<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</blockquote>
+<p>结合</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">LIST_HEAD</span><span class="token expression"><span class="token punctuation">(</span>name<span class="token punctuation">,</span> type<span class="token punctuation">)</span>                      </span><span class="token punctuation">\</span>
+    <span class="token expression"><span class="token keyword">struct</span> <span class="token class-name">name</span> <span class="token punctuation">{</span>                                  </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token keyword">struct</span> <span class="token class-name">type</span><span class="token operator">*</span> lh_first<span class="token punctuation">;</span> </span><span class="token comment">/* first element */</span> <span class="token punctuation">\</span>
+    <span class="token expression"><span class="token punctuation">}</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>和</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">LIST_ENTRY</span><span class="token expression"><span class="token punctuation">(</span>type<span class="token punctuation">)</span>                                              </span><span class="token punctuation">\</span>
+    <span class="token expression"><span class="token keyword">struct</span> <span class="token punctuation">{</span>                                                          </span><span class="token punctuation">\</span>
+        <span class="token expression"><span class="token keyword">struct</span> <span class="token class-name">type</span><span class="token operator">*</span> le_next<span class="token punctuation">;</span> </span><span class="token comment">/* next element */</span>                      <span class="token punctuation">\</span>
+        <span class="token expression"><span class="token keyword">struct</span> <span class="token class-name">type</span><span class="token operator">*</span><span class="token operator">*</span> le_prev<span class="token punctuation">;</span> </span><span class="token comment">/* address of previous next element */</span> <span class="token punctuation">\</span>
+    <span class="token expression"><span class="token punctuation">}</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>显然可得。</p>
+<h3><span id="thinking-24">Thinking 2.4</span></h3>
+<blockquote>
+<p>请思考下面两个问题：</p>
+<ul>
+<li>
+<p>请阅读上面有关 TLB 的描述，从虚拟内存和多进程操作系统的实现角度，阐述 ASID的必要性。</p>
+</li>
+<li>
+<p>请阅读 MIPS 4Kc 文档《MIPS32® 4K™ Processor Core Family Software User’sManual》的 Section 3.3.1 与 Section 3.4，结合 ASID 段的位数，说明 4Kc</p>
+<p>中可容纳不同的地址空间的最大数量。</p>
+</li>
+</ul>
+</blockquote>
+<p>TLB事实上构建了一个映射$&lt;VPN, ASID&gt; \stackrel{TLB}{\longrightarrow}&lt;PFN,N,D,V,G&gt;$</p>
+<p>其中的ASID是用于区分不同的地址空间，，同一虚拟地址在不同地址空间中通常映射到不同的物理地址。</p>
+<p>操作系统给每一个进程分配一个页表，每个页表都有自己的虚拟地址空间，而同一地址空间通常映射到不同的物理地址，如果没有ASID来区分当前虚拟地址是在哪个进程中使用，则可能将该虚拟地址映射到错误的物理地址。</p>
+<p><img src="/2024/04/24/os-lab2%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab2%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240411195402243.png" alt="image-20240411195402243"></p>
+<p><img src="/2024/04/24/os-lab2%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab2%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240411195351085.png" alt="image-20240411195351085"></p>
+<p>ASID有八位，因此可以容纳不同地址空间的数量为256个。</p>
+<h3><span id="thinking-25">Thinking 2.5</span></h3>
+<blockquote>
+<p>请回答下述三个问题：</p>
+<ul>
+<li>tlb_invalidate 和 tlb_out 的调用关系？</li>
+<li>请用一句话概括 tlb_invalidate 的作用。</li>
+<li>逐行解释 tlb_out 中的汇编代码。</li>
+</ul>
+</blockquote>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> <span class="token function">tlb_invalidate</span><span class="token punctuation">(</span>u_int asid<span class="token punctuation">,</span> u_long va<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token function">tlb_out</span><span class="token punctuation">(</span><span class="token punctuation">(</span>va <span class="token operator">&amp;</span> <span class="token operator">~</span><span class="token function">GENMASK</span><span class="token punctuation">(</span>PGSHIFT<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span>asid <span class="token operator">&amp;</span> <span class="token punctuation">(</span>NASID <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>课件<code>tlb_invalidate</code>在调用<code>tlb_out</code></p>
+<ul>
+<li><code>tlb_invalidate</code>作用：
+<ul>
+<li>实现删除特定虚拟地址在 TLB中的旧表项</li>
+</ul>
+</li>
+</ul>
+<p>​</p>
+<pre class="line-numbers language-ass" data-language="ass"><code class="language-ass">LEAF(tlb_out)								# 叶子函数
+.set noreorder								# 不雅重新排列指令顺序
+	mfc0    t0, CP0_ENTRYHI					# 从CP0寄存器CP0_ENTRYHI中的值读取到t0种
+	mtc0    a0, CP0_ENTRYHI					# 将a0的值保存到CP0寄存器CP0_ENTRYHI中
+	nop
+	/* Step 1: Use 'tlbp' to probe TLB entry */
+	/* Exercise 2.8: Your code here. (1/2) */
+	tlbp									# 查询虚拟地址的物理地址映射
+	nop
+	/* Step 2: Fetch the probe result from CP0.Index */
+	mfc0    t1, CP0_INDEX					# 将CP0寄存器CP0_INDEX寄存器中的值读取到t1中
+.set reorder								# 指示汇编器重新排列指令顺序
+	bltz    t1, NO_SUCH_ENTRY				# 跳转，如果t1小于0,则跳转到NO_SUCH_ENTRY处
+.set noreorder
+	mtc0    zero, CP0_ENTRYHI				# 将CP0寄存器CP0_ENTRYHI清空
+	mtc0    zero, CP0_ENTRYLO0				# 将CP0寄存器CP0_ENTRYLO0清空
+	mtc0    zero, CP0_ENTRYLO1				# 将CP0寄存器CP0_ENTRYLO1清空
+	nop
+	/* Step 3: Use 'tlbwi' to write CP0.EntryHi/Lo into TLB at CP0.Index  */
+	/* Exercise 2.8: Your code here. (2/2) */
+	tlbwi									# 将CP0.ENTRYHI/LO 写入tlb的CP0。INDEX处
+.set reorder
+
+NO_SUCH_ENTRY:
+	mtc0    t0, CP0_ENTRYHI					# 将t0重新赋值到CP0寄存器CP0_ENTRYHI中
+	j       ra
+END(tlb_out)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3><span id="thinking-26">Thinking 2.6</span></h3>
+<blockquote>
+<p>从下述三个问题中任选其一回答：</p>
+<ul>
+<li>简单了解并叙述 X86 体系结构中的内存管理机制，比较 X86 和 MIPS 在内存管理上的区别。</li>
+<li>简单了解并叙述 RISC-V 中的内存管理机制，比较 RISC-V 与 MIPS 在内存管理上的区别。</li>
+<li>简单了解并叙述 LoongArch 中的内存管理机制，比较 LoongArch 与 MIPS 在内存管理上的区别</li>
+</ul>
+</blockquote>
+<p>Q1:</p>
+<p>两者主要有以下三点区别：</p>
+<ul>
+<li>
+<p>内存管理机制上，MIPS为页式管理系统，x86位段页式</p>
+</li>
+<li>
+<p>TLB不命中的处理时，MIPS会触发TLB Refill异常，内核的<code>tlb_refiil_handler</code>会以<code>pgd_current</code>为当前进程的<code>PG0</code>基址，索引获得转换失败的虚拟地址对应的<code>PTE</code>，并将其填入TLB，然后CPU用刚刚转换失败的虚拟地址重新访问TLB</p>
+<p>x86在TLB不命中时，有硬件MMU以<code>CR3</code>为当前进程的<code>PG0</code>基址，索引获得PFN后，直接输出PA。同时MMU填充TLB以加快下次转换的速度。</p>
+</li>
+<li>
+<p>转换失败的虚拟地址，MIPS使用<code>BadVAddr</code>寄存器存放，x86使用<code>CR2</code>存放</p>
+</li>
+</ul>
+<p>Q2：</p>
+<ul>
+<li>TLB 条目格式上，MIPS 的 TLB 条目格式可能会有所不同，具体取决于 MIPS 处理器的架构。而 RISC-V 则有一种统一的页表格式，称为 Sv39，用于支持 39 位的虚拟地址空间。</li>
+<li>异常处理机制上，MIPS 和 RISC-V 在异常处理机制上有一些差异。MIPS 使用异常号来区分不同类型的异常，而 RISC-V 使用不同的异常代码来区分异常类型。</li>
+<li>特权模式上，RISC-V 的特权模式相对于 MIPS 更加灵活，支持更多的特权级别，例如 U 模式（用户模式）、S 模式（监管者模式）、M 模式（机器模式）等。这使得 RISC-V 能够更好地支持多任务操作系统和虚拟化环境。</li>
+</ul>
+<p>Q3：</p>
+<ul>
+<li><strong>页表结构</strong>：LoongArch 使用了三级页表结构，而 MIPS 在某些情况下可能使用两级页表结构。这使得 LoongArch 能够更灵活地管理大内存空间。</li>
+<li><strong>TLB 缓存</strong>：LoongArch 的 TLB 结构可能与 MIPS 略有不同，具体取决于 LoongArch 处理器的架构。不过，两者都利用 TLB 来加速地址转换。</li>
+<li><strong>特权模式</strong>：LoongArch 可能支持更多的特权模式，例如用户模式、管理模式、超级模式等。这使得 LoongArch 能够更好地支持不同级别的特权操作。</li>
+<li><strong>异常处理</strong>：LoongArch 和 MIPS 在异常处理机制上可能有一些差异，例如异常号的定义和异常处理程序的调用方式。</li>
+</ul>
+<h2><span id="难点分析">难点分析</span></h2>
+<p>我觉得本次作业的难点主要在于<code>List</code>数据结构的理解和<code>Page</code>存储结构的理解。</p>
+<h3><span id="数据结构与存储结构">数据结构与存储结构</span></h3>
+<p>前面已经提到Page_list的结构为：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">Page_list</span><span class="token punctuation">{</span>
+<span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	<span class="token keyword">struct</span> <span class="token punctuation">{</span>
+		<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span>le_next<span class="token punctuation">;</span>
+		<span class="token keyword">struct</span> <span class="token class-name">Page</span> <span class="token operator">*</span><span class="token operator">*</span>le_prev<span class="token punctuation">;</span>
+		<span class="token punctuation">}</span> pp_link<span class="token punctuation">;</span>
+		u_short pp_ref<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token operator">*</span> lh_first<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个给我带来了比较大的困扰，这到底是个什么结构。</p>
+<ul>
+<li>LIST又是啥呢？这也好难，让我感觉自己的数据结构又是白学的<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></li>
+</ul>
+<p>首先要坚信这个List就是我们学的那个链表，是一个双向链表。</p>
+<p><img src="/2024/04/24/os-lab2%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab2%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240411203312741.png" alt="image-20240411203312741"></p>
+<p>这里的链表是有一个专门的头指针的，在ds中也有地方会这么用。(有一些好像还会有一些头发指针，头指针的前一个元素)这几个都是让链表的处理更加方便，也可以认为是大家认为链表的比较优雅的实现方式。</p>
+<p>头指针：</p>
+<p><code>LIST_HEAD(name, type)</code></p>
+<p>也就是</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">name</span> <span class="token punctuation">{</span>
+    <span class="token keyword">struct</span> <span class="token class-name">type</span> <span class="token operator">*</span>lh_first<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>实际上是定义了一个结构体，给这个结构提一个名字比如head，实际上就是<code>LIST_HEAD(name, int) head;</code></p>
+<p>宏替换后实际上就是</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">name</span> <span class="token punctuation">{</span>
+    <span class="token keyword">struct</span> <span class="token class-name">int</span> <span class="token operator">*</span>lh_first<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> head<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>那么相应的一些与链表头指针的一些操作：</p>
+<p><code>LIST_HEAD_INITIALIZER(head)</code></p>
+<p>具体用法：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">LIST_HRAD</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">)</span> <span class="token operator">*</span>head<span class="token punctuation">;</span>
+head <span class="token operator">=</span> LIST<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>对于每个结点的指针部分实际上就是</p>
+<p><code>LIST_ENTRY(type)</code></p>
+<p>也就是</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    <span class="token keyword">struct</span> <span class="token class-name">type</span> <span class="token operator">*</span>le_next<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> <span class="token class-name">type</span> <span class="token operator">*</span><span class="token operator">*</span>le_prev<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里le_next可以理解，但是这个le_prev呢，这个给的注释也很奇怪，<code>address of previous next element</code>。这么来看，实际上就是将每个next指针作为一个element，那么prev就是前一个元素的这个指针。也就是一个<strong>指向指向自己的指针的指针</strong>。</p>
+<p>这样并不是双向链表那种，双向链表是多了一个指向前一个结点的大结点的地址的指针，也就是说可以通过这个指针直接访问前一个结点。而这个le_prev仅仅只是前一个元素的next这个元素的地址。</p>
+<blockquote>
+<p>那么这里为什么要这么样呢，我们应该从功能的角度来理解，我们遍历页表是不需要从后往前的，因此理论上使用单向链表即可，但是我们又有很多对于某个元素的删除和前后插入元素的操作，使用这种类似的双向链表的结构，可以更加方便的进行删除和插入的操作。</p>
+</blockquote>
+<p>那么到这里其实就懂了，一个结点分为data和field。filed实际上就是优化版的next，包括next和prev两个元素。data的数据格式为struct type, next是struct type*，prev是struct type**;</p>
+<p>那么我们简单总结一下这个链表的结构。首先是head，head是个头指针，里面包含有第一个元素的指针。每个结点包含data和field两个部分。</p>
+<p>就可以很好理解<code>LIST_NEXT(elm, field)</code> 这个宏函数了。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token punctuation">(</span>elm<span class="token punctuation">)</span> <span class="token operator">-&gt;</span> field<span class="token punctuation">.</span>le_next<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>看一下<code>LIST_FOREACH(var, head, field)</code>这个宏定义，这里给出了一种遍历链表的方式。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>var<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">LIST_FIRST</span><span class="token punctuation">(</span><span class="token punctuation">(</span>head<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">(</span>var<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">(</span>var<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>var<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>接下来实现<code>LIST_INSERT_BEFORE(listelm, elm, field)</code>，也即是在listelm前面添加elm。</p>
+<p>一般的双向链表有下面这个就够了</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>elm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span> <span class="token operator">=</span> listelm<span class="token punctuation">;</span>
+<span class="token comment">// listelm-&gt;prev = elm; 类似这种的操作</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>但是由于添加了prev，需要更新elm和listelm的值。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token punctuation">(</span>elm<span class="token punctuation">)</span><span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev <span class="token operator">=</span> <span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev<span class="token punctuation">;</span>
+<span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>elm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">*</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev <span class="token operator">=</span> elm<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>这里*的运算级是高于-&gt;的。</p>
+<p>于是完成<code>LIST_INSERT_AFTER(listelm, elm, field)</code>就很简单了。</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>elm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>elm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span> <span class="token operator">=</span> elm<span class="token punctuation">;</span>
+elm<span class="token operator">-&gt;</span>field<span class="token punctuation">.</span>le_prev <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token function">LIST_NEXT</span><span class="token punctuation">(</span><span class="token punctuation">(</span>listelm<span class="token punctuation">)</span><span class="token punctuation">,</span> field<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3><span id="tlb原理与重填策略">TLB原理与重填策略</span></h3>
+<p>首先要分清这里是包括物理内存管理和虚拟内存管理两个东西的。</p>
+<p>物理内存就是一个内核链表，地址空间也是连续的。</p>
+<p>虚拟内存则是需要通过转化到物理内存来访问的。</p>
+<p><strong>虚拟地址映射到物理地址</strong></p>
+<ul>
+<li>虚拟地址0x80000000-0x9fffffff，kseg0，将最高位置0得到物理地址，通过cache访问。这一部分<strong>用于存放内核代码与数据</strong>。</li>
+<li>虚拟地址0xa0000000-0xbfffffff，kseg1，将最高3位置0得到物理地址，不通过cache访问。这一部分可以<strong>用于访问外设</strong>。</li>
+<li>虚拟地址0x00000000-0x7fffffff，kuseg，通过TLB转换为物理地址，然后通过cache访存。这一部分用于<strong>存放用户程序代码与数据</strong></li>
+</ul>
+<p><img src="/2024/04/24/os-lab2%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/D:%5Cblog%5Chexo%5Csource_posts%5Cos-lab2%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%5Cimage-20240406230222403.png" alt="image-20240406230222403"></p>
+<p>其中只有kuseg部分需要用到TLB。</p>
+<p>那么TLB本身是一个两级页表结构(MIPS中是的)。第一级是页目录Page Directory，第二级是页表Page Table。</p>
+<p>这么看不容易理解。</p>
+<p>一级页表项是31-22位，二级页表项是21-12位。11-0位则是页内偏移量。我们在TLB转化过程中只是为了确定是哪个物理页，因此我们不关注页内偏移量，照搬即可。</p>
+<ul>
+<li>首先通过查一级页表，得到二级页表中的首地址</li>
+<li>然后通过二级页表得到虚拟地址对应的物理地址</li>
+</ul>
+<p>具体的实现还用到了很多的权限位。但这是代码上的实现了，和原理解耦开来。</p>
+<h2><span id="实验体会">实验体会</span></h2>
+<p>lab2真的是很难的一节，首先的List这个数据结构让我感到十分困惑，一度不能理解le_prev这个结构，我刚开始甚至认为这个无法直接访问前一个结点而认为这是一个单向页表，但是其后的页表插入删除操作却又不太合理了，后来一步步看一步步记录才看懂qaq。</p>
+<p>确实是收获满满！<span class="github-emoji"><span>😄</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+
                 
             </div>
             <hr/>
@@ -483,7 +836,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/os-lab2/">
+                                    <span class="chip bg-color">os-lab2</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -578,11 +935,23 @@
                         </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            hugo
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab1/">
+                        <span class="chip bg-color">os-lab1</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -615,11 +984,23 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            hugo
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab3/">
+                        <span class="chip bg-color">os-lab3</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -852,7 +1233,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">51.1k</span>
+                        class="white-color">62.7k</span>
             
             
             
