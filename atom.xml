@@ -6,7 +6,7 @@
   <link href="https://hugohealthy.top/atom.xml" rel="self"/>
   
   <link href="https://hugohealthy.top/"/>
-  <updated>2024-04-24T09:27:36.551Z</updated>
+  <updated>2024-05-11T01:48:08.231Z</updated>
   <id>https://hugohealthy.top/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>llama.cpp</title>
+    <link href="https://hugohealthy.top/2024/05/11/llama-cpp/"/>
+    <id>https://hugohealthy.top/2024/05/11/llama-cpp/</id>
+    <published>2024-05-11T01:44:32.000Z</published>
+    <updated>2024-05-11T01:48:08.231Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1&gt;&lt;span id=&quot;llamacpp&quot;&gt;llama.cpp&lt;/span&gt;&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;详见 &lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="AI" scheme="https://hugohealthy.top/categories/AI/"/>
+    
+    
+    <category term="LLM" scheme="https://hugohealthy.top/tags/LLM/"/>
+    
+  </entry>
   
   <entry>
     <title>spack</title>
@@ -535,19 +562,6 @@
     
     
     <category term="os-lab2" scheme="https://hugohealthy.top/tags/os-lab2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>os-lab1笔记</title>
-    <link href="https://hugohealthy.top/2024/04/24/os-lab1%E7%AC%94%E8%AE%B0/"/>
-    <id>https://hugohealthy.top/2024/04/24/os-lab1%E7%AC%94%E8%AE%B0/</id>
-    <published>2024-04-24T09:02:57.000Z</published>
-    <updated>2024-04-24T09:02:57.972Z</updated>
-    
-    
-    
-    
     
   </entry>
   
