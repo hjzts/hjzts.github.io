@@ -1,0 +1,1525 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="os-lab4笔记, C,Python,数分，高代，离散等">
+    <meta name="description" content="lab4
+实验目的：
+
+掌握系统调用的概念及流程
+实现进程间通信机制
+实现fork函数
+掌握页写入异常的处理流程
+
+系统调用：
+这个东西早有耳闻。在用户态下，用户进程不能访问系统的内核空间，也不能调用内核函数，这一点是由体系结构保证的。然后">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>os-lab4笔记 | hugo</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="hugo" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">hugo</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">hugo</div>
+        <div class="logo-desc">
+            
+            今天阳光正好
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hjzts/hjzts.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hjzts/hjzts.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/015.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">os-lab4笔记</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/os-lab4/">
+                                <span class="chip bg-color">os-lab4</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                操作系统
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2024-06-17
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.7k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    20 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1><span id="lab4">lab4</span></h1>
+<h2><span id="实验目的">实验目的：</span></h2>
+<ol>
+<li>掌握系统调用的概念及流程</li>
+<li>实现进程间通信机制</li>
+<li>实现fork函数</li>
+<li>掌握页写入异常的处理流程</li>
+</ol>
+<h2><span id="系统调用">系统调用：</span></h2>
+<p>这个东西早有耳闻。在用户态下，用户进程不能访问系统的内核空间，也不能调用内核函数，这一点是由体系结构保证的。然后用户进程在特定的场景下往往需要执行一些只能由内核完成的操作，如硬件操作、动态分配内存，以及与其他进程进行通信等。</p>
+<p>而允许内核态执行用户程序提供的代码显然是不安全的，因此操作系统设计了一系列内核空间中的函数，当用户进程需要进行这些操作是，会引发特定的异常以陷入内核态，有内核调用对应的函数，从而安全地为用户进程提供受限的系统级操作，这种机制就是叫做<strong>系统调用</strong>。</p>
+<p>这里解释一下，用户程序代码的不安全应该不是指会进行一些<code>rm -rf /*</code>这种操作，这个是无法避免的，应该指的是用户的程序被内核态执行，相当于一个普通用户的代码给sudo用户执行，可能会把其他用户给删了这种危险的操作，而提供几个接口也限制了用户调用系统内核的能力。</p>
+<p>用户态和内核态：CP0 SR寄存器中的UM位和EXL位决定。是cpu硬件决定的</p>
+<p>用户空间和内核空间：kuseg kseg0&amp;kseg1</p>
+<p>用户进程和内核：二者并不是对立的存在，可以认为内核是村子啊与所有进程地址空间的一段代码，内核负责管理系统资源和调度进程，是进程能够并发执行。</p>
+<p>系统调用：比如syscall就是一种系统调用指令，是的进程陷入到内核的异常处理程序中。</p>
+<p>这里讲道了应用程序编程接口API，比如c里面的printf就是其中一种，实际上是包装了系统调用的底层实现比如write(write的实现又是调用了syscall这种,在mips里面)等。</p>
+<h3><span id="系统调用机制的实现">系统调用机制的实现</span></h3>
+<p>系统调用的本质就是进入内核态执行相应的操作，只是说内核态提供的接口让你只能做这几种操作。</p>
+<blockquote>
+<p>有一个有意思的例子就是，你家长只是给你钱让你去买棒棒糖等，但是不是完全把钱给你，随你处置。类似这个吧（</p>
+</blockquote>
+<p>lab3中的中断异常处理：</p>
+<ol>
+<li>处理器跳转到异常分发代码处。</li>
+<li>进入异常分发程序，根据cause寄存器的值判断异常类型并跳转到对应的处理程序</li>
+<li>处理异常，返回</li>
+</ol>
+<blockquote>
+<p>坏了，都不记得了</p>
+</blockquote>
+<p>原来lab3的重点是这个，我倒是没意识到哈~</p>
+<p>tlb异常倒是看到了，时钟中断在哪里哇。？？</p>
+<p>debugf.c</p>
+<ol>
+<li>将参数解析为字符串 &amp; 将字符串输出(<code>debug_output</code>)</li>
+<li><code>debug_output</code> 中的<code>debug_flush</code>调用<code>syscall_print_cons</code>函数，又调用<code>msyscall</code>函数，当我们继续找<code>msyscall</code>又调用了哪个函数的时候，在<code>usr/lib/syscall_wrap.S</code>中找到了<code>Exercise 4.1</code>，樂</li>
+<li><code>msyscall</code>的调用，使得系统陷入了内核态</li>
+<li>内核态中将异常分发到<code>handle_sys</code>函数，将系统调用所需要的信息(相当于传参，但是我感觉更像进程通信，这里是需要输出的字符串s)传入内核</li>
+<li>内核取得信息，执行相应的内核空间的系统调用函数<code>sys_*</code>，这一些函数在<code>kern/syscall_call.c</code>中</li>
+<li>系统调用完成，并返回内核态，同时将返回值传递会用户态</li>
+<li>从系统调用函数返回，回到用户程序的debugf调用处。</li>
+</ol>
+<p>我觉得这个确实把系统调用讲得很清楚了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240617195330.png" alt></p>
+<p>从这个来看，最接近内核的函数是<code>sysycall_*</code>，在内核中 的<code>sys_*</code>则是对应的实现，但是已经进入了内核态。</p>
+<p><code>syscall_*</code>都调用了<code>msyscall</code>这个函数，第一个都是与调用名相似的宏<code>SYS_print_cons</code>，这个是系统调用号。至于这个是干嘛用的呢，相当于是用来区分不同的调用类型的，从进程间通信的角度(我觉得这里还是更像传参x)，如果不把这个信息传递给内核，内核是不知道具体是哪一种系统调用的。因为毕竟<code>syscall_*</code>都是调用的<code>msyscall</code>这同一个函数，因此需要多一个参数进行区分。</p>
+<p>调用了之后就进入到了汇编语言部分。</p>
+<p>那么在汇编语言部分如何获取传入的参数呢，理论上只要存到了内存里，你告诉我怎么去拿都是可以的，所以这里就是mips的调用规范，mips用到的是通过压栈和出栈来进行函数调用！</p>
+<p>4.1就是直接用<code>syscall</code>就行了，因为参数那些有mips规范已经帮你存好了，你只需要用的时候知道在哪就行了，<code>msyscall</code>作为一个中间者，不需要知道这个。</p>
+<p><code>syscall</code>是一个mips的一个指令，是通过硬件实现进入内核态的。详情参见计组！</p>
+<p>在计组里面我们知道，调用中断指令后，cpu的pc会在保存现场后跳转到指定位置。</p>
+<p>虽然不知道怎么就到了<code>do_syscall</code>这个函数。</p>
+<blockquote>
+<p>现在知道了！还是得靠<code>objdump</code>啊</p>
+</blockquote>
+<h3><span id="基础系统调用函数">基础系统调用函数</span></h3>
+<p>接下来需要实现几个系统调用</p>
+<p><code>sys_mem_alloc</code>，这个函数的功能主要是分配内存，用户程序可以通过这个系统调用给该程序所运行的虚拟内存空间显式地分配实际的物理内存。</p>
+<p>从程序员的视角而言，是程序在内存中申请了一片空间。</p>
+<p>对于操作系统内核而言，实际上是一个进程请求将其虚拟空间中的某一段地址和实际的物理地址进行 一个映射，从而可以通过虚拟页面对这个物理页面进行访问。</p>
+<blockquote>
+<p>这里并没有提高后续访问的操作，后续访问中应该还需要处理如果有写入等时，关于写时复制等操作。</p>
+</blockquote>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">e <span class="token operator">=</span> <span class="token operator">&amp;</span>envs<span class="token punctuation">[</span><span class="token function">ENVX</span><span class="token punctuation">(</span>envid<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token comment">// e = envs + ENVS(envid);</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>上面是我写的，下面是学长写的，众所周知，这两个是一样的，但是明显学长的更简洁，为什么，因为<code>a[i]=*(a+i)</code></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> re <span class="token operator">=</span> <span class="token function">envid2env</span><span class="token punctuation">(</span>envid<span class="token punctuation">,</span> <span class="token operator">&amp;</span>env<span class="token punctuation">,</span> perm<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>re <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span>E_BAD_ENV<span class="token punctuation">;</span> 
+
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">envid2env</span><span class="token punctuation">(</span>envid<span class="token punctuation">,</span><span class="token operator">&amp;</span>env<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span>E_BAD_ENV<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面是我的，下面是学长的，一样的！</p>
+<p><code>sys_mem_map</code>：将源地址空间中的相应内存映射到目标进程的虚拟空间的内存中。这里相当于是有两个或者多个进程共享同一块物理内存。但是这一块物理内存被分配到了不同进程的虚拟内存中。</p>
+<p>这里传入的参数是src和dst的envid。那么大致的操作流程就是</p>
+<ol>
+<li>首先找到两个进程</li>
+<li>从src的虚拟页面找到对应的物理页面</li>
+<li>将物理页面与dst的虚拟页面进行映射</li>
+</ol>
+<p>这里的<code>page_lookup</code>我纠结了很久这里的<code>ppte</code>应该是什么，甚至写出了这种鬼东西<code>Pte* p = (Pte*)KADDR(PTE_ADDR(pgdir));</code></p>
+<p>查看了<code>page_lookup</code>的代码发现。</p>
+<p>这个代码主要还是找到哪一个在哪一个页目录中，对是哪一个页表其实没那么关心。</p>
+<p>这都要怪lab2啥都没搞懂，现在还是不太懂。</p>
+<p>那么这里就分析一下这个吧：</p>
+<p>这个的目的是通过Pde和va、ppte找到相应的页面。按照多级页表，首先需要在页目录中找到是在哪一个页表项(这个可以直接根据va得到)。</p>
+<p>那么<code>page_lookup</code>里面首先调用了<code>page_walk</code></p>
+<p>看<code>page_walk</code>的描述可以知道，这个函数的作用是，通过给定的一个页目录的入口，找到这个虚拟地址<code>va</code>对应的页表入口。</p>
+<p>看看<code>page_walk</code>的具体实现。首先是得到这个虚拟地址相应的页目录的地址。是从<code>pgdir</code>的基础上，增加<code>PDX(va)</code>得到的。</p>
+<blockquote>
+<p>这个是为什么呢</p>
+</blockquote>
+<p>如果这个页面不合法，那么根据是否<code>create</code>来决定是<code>page_alloc</code>一个页面，然后将返回的页面的物理地址赋值给<code>pgdir_entryp</code>，也就是得到一个新的页面对应的实际物理页目录的地址。</p>
+<blockquote>
+<p>可以看到我们这里是没有create的。</p>
+<p>那么在哪里需要create呢，在<code>page_insert</code>那里需要。</p>
+</blockquote>
+<p>然后通过这个页目录入口可以得到<code>ppte</code>的基地址(其实也就是将后面12位赋0后对应到内核地址)，然后加上<code>va</code>的页表项偏移。</p>
+<p>就得到了pte。</p>
+<p>现在得到了页表项，实际上就可以马上得到页面了。访问一下这个页表的值就可以了。</p>
+<p>根据页表自映射，这个页表项对应的页在所有页面中的地址为<code>pa&gt;&gt;12</code>，也就是<code>pages</code>的第这个项。</p>
+<p>至于最后<code>ppte</code>的作用会发现就是一个赋值的作用。如果这个东西不是<code>NULL</code>，那就给它赋值为在<code>pgdir_walk</code>中得到的pte。</p>
+<p>关键作用还是得到<code>Page* pp</code>。</p>
+<p>好难啊！</p>
+<p>所以根据分析，这里的pte直接用<code>NULL</code>就行了。</p>
+<p><code>sys_mem_unmap</code>，这个调用的功能是解除某个进程地址空间虚拟地址和物理地址的映射关系。相当于在那个进程的虚拟空间中删去这个页面。</p>
+<p>这里还是很简单的。</p>
+<p>但是要考虑一点。这里没有提供<code>perm</code>，那么我们就来分析一下在<code>envid2env</code>中<code>perm</code>的作用来决定具体取什么值。</p>
+<p>这个在<code>struct Env</code>这个结构体中可以知道这个指的是权限位。也就是设置了权限后需要进行额外的检查。那么这里不需要进行检查，那就直接设置为0就好了。</p>
+<p>这个其实牵涉到后面的fork中的父子进程的关系。<s>由于我是一边写思考一边写作业，后面还没写，具体情况稍后再看</s></p>
+<p><code>sys_yield</code>：这个函数调用的功能是实现用户进程对CPU的放弃，从而调度其他进程。这个直接调用<code>schedule</code>，但是还需要传一个参数，看一下全局的调用，发现要么填0，要么填1。可以直接根据这个参数的名称<code>yield</code>来判断，直接上去一个1，搞定。</p>
+<p>咱再来具体分析一下。</p>
+<p>进入到<code>schedule</code>可以发现，如果是<code>yield</code>，会直接吧这个进程ban掉(remove)，然后再调度一个。所以显然<code>schedule(1)</code></p>
+<h2><span id="ipc">IPC</span></h2>
+<blockquote>
+<p>进程间通信</p>
+</blockquote>
+<p>进程间通信机制是微内核最重要的机制之一。微内核设计主张将操作系统中的设备驱动、文件系统等可在用户空间实现的功能，移出内核，作为普通的用户程序来实现。</p>
+<p>这样，即使他们崩溃也不会影响整个系统的稳定。</p>
+<p>其他应用程序之间通过进程间通信来请求文件系统等相关服务。</p>
+<ul>
+<li>IPC的目的是使两个进程可以通信</li>
+<li>IPC需要通过系统调用来实现</li>
+<li>IPC还与进程的数据、页面等信息有关</li>
+</ul>
+<blockquote>
+<p>这里可能会好奇把相关功能移出内核了，为什么IPC还会用到系统调用呢？</p>
+<p>这里其实是相当于操作系统启动后，会自动开启几个用户进程，用于设备驱动和文件系统等(似乎叫做守护进程daemon)，其他用户进程需要与这几个进程进行通信。</p>
+</blockquote>
+<p>通信，<code>MPI_send,MPI_receive</code>这些，可以知道，通信其实就是数据的传递。</p>
+<p>由于每个进程的地址空间是连续的，要想传递数据，我们就需要想办法<strong>把一个地址空间的东西传递给另一个地址空间</strong>。</p>
+<p>这里就需要用到所有进程共享的内核空间<code>主要是kseg0</code>。因此交换数据可以通过内核空间来进行交换。send进程将数据以系统调用的形式<strong>存放在进程控制块</strong>中，接收方以系统调用的方式在<strong>进程控制块中找到对应的数据</strong>(在<code>struct Env</code>可以看到)，读取并返回。</p>
+<p>这里需要注意是从<code>env_sched_list</code>中移除。</p>
+<p><code>env_sched_list</code>是一个<code>TAILQ</code>，尾插队列，<code>env_free_list</code>是一个<code>List</code>双向链表。</p>
+<p>需要注意。</p>
+<p>recv进程的话简单，直接阻塞就行了，设置为<code>not_runnable</code>，移出调度队列。</p>
+<p>send的话也不难，看对方有没有在准备接收，然后通过envid找到进程e，然后把信息传过去，并把e回复<code>runnale</code>，插入调度队列尾部。</p>
+<p>但是最后的srcva对应的页映射到dstva。</p>
+<p>这里我的处理是直接调用<code>sys_mem_map()</code></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">try</span><span class="token punctuation">(</span><span class="token function">sys_mem_map</span><span class="token punctuation">(</span>curenv<span class="token operator">-&gt;</span>env_id<span class="token punctuation">,</span> srcva<span class="token punctuation">,</span> e<span class="token operator">-&gt;</span>env_id<span class="token punctuation">,</span> e<span class="token operator">-&gt;</span>env_ipc_dstva<span class="token punctuation">,</span> perm<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>但是我看学长们的处理是：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">p <span class="token operator">=</span> <span class="token function">page_lookup</span><span class="token punctuation">(</span>curenv<span class="token operator">-&gt;</span>env_pgdir<span class="token punctuation">,</span> srcva<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> E_INVAL<span class="token punctuation">;</span>
+<span class="token function">try</span><span class="token punctuation">(</span><span class="token function">page_insert</span><span class="token punctuation">(</span>e<span class="token operator">-&gt;</span>env_pgdir<span class="token punctuation">,</span> e<span class="token operator">-&gt;</span>env_asid<span class="token punctuation">,</span> p<span class="token punctuation">,</span> e<span class="token operator">-&gt;</span>env_ipc_dstva<span class="token punctuation">,</span> perm<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我觉得是一样的。。。</p>
+<blockquote>
+<p>TODO:晚点测一下</p>
+</blockquote>
+<p>倒是我这个确实多了一步，还从id到env，这里直接有env了。</p>
+<h2><span id="fork">Fork</span></h2>
+<p>内核通过<code>env_create</code>创建一个进程，进程创建一个进程就需要用到<code>fork</code>了，也相当于是内核提供给用户进程的一个接口，肯定也是要通过系统调用来得到的。</p>
+<p>fork()在这个mos 里面的实现的流程：</p>
+<ul>
+<li>kern/syscall_all.c系统调用中需要用到</li>
+<li>kern/tlbex.c 完成写时复制前的相关设置</li>
+<li>user/lib/fork.c 重点函数。需要处理写时复制</li>
+<li>user/lib/entry.S 用户进程的入口</li>
+<li>user/lib/libos.c 用户进程入口的C语言部分</li>
+<li>kern/genex.S MOS的异常处理流程</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240617195313.png" alt></p>
+<ul>
+<li>写时复制</li>
+</ul>
+<p>Copy On Write <strong>COW</strong></p>
+<p>写时复制的目的：减少物理内存的使用，比如代码段的内存是不需要复制的</p>
+<p>写时复制的概述：在fork时，只需要将<strong>所有可写页面</strong>标记为写时复制页面，如果父子进程对这个有<strong>写入</strong>的操作时，会产生一种异常。</p>
+<p>操作系统在异常处理的时候会为当前进程师徒写入的虚拟地址分配新的物理页面，并复制原页面的内容(注意这里与地址映射的区别)，最后再返回用户程序，对新分配的物理页面进行写入。</p>
+<p>这样从用户进程的角度就是我在写入指令发出后，还是得到了一块新的内存。</p>
+<blockquote>
+<p>但是这里的地址都是虚拟地址，所以用户其实甚至不知道有了一块新的物理页面。</p>
+<p>不得不说，虚拟空间真是一个好东西</p>
+</blockquote>
+<p>这里需要用到硬件异常来实现。</p>
+<p>进程通过tlb访问页面。如果tlb项没有设置<code>PTE_D</code>也就是dirty位，那么说明这个是只写的。如果需要写入，会触发<code>TLB Mod</code>(modification)修改异常。</p>
+<p>可以在内核中设置相应的异常处理函数，来实现写时复制。</p>
+<p>为了区分<strong>只读</strong>和<strong>写时复制</strong>，从tlb的角度来说，只有一个<code>PTE_D</code>位是不够的。所以需要添加一个<code>PTE_COW</code>位，来进行标志。</p>
+<p>具体的异常处理函数就是，分配一页新的物理页，然后将写时复制页面的内容拷贝的只有个物理页，然后将这个物理页映射给正在写入这个写时复制页的进程。</p>
+<p>当然，这里需要修改<code>tlb</code>的对应项的值。</p>
+<p>所以，在fork的时候，需要先将所有的可写入的内存页面设置页表项标志位<code>PTE_COW</code>并取消可写位<code>PTE_D</code>。</p>
+<p>从进程的角度来看，就是老老实实的操作内存，爽👍:happy:</p>
+<p>fork函数的实现中，主要的系统调用是<code>syscall_exofork</code>，执行fork指令。</p>
+<p>fork后得到了两个进程，两个几乎处于相同的运行状态的父子进程。可以认为在返回用户态的时候，父子进程都经历了同样的回复现场的过程。</p>
+<p>父进程是从系统调用中返回时恢复现场，而子进程是进程被调度时会恢复现场，在现场恢复后，父子进程都会从内核返回到<code>msyscall</code>函数中，而它们在现场中存储的返回值是不同的，以作区分。</p>
+<blockquote>
+<p>再次印证了我调用一个会返回的函数，第一步肯定是检查返回值，而不是去用里面的值。</p>
+</blockquote>
+<p><code>sys_exofork</code>：</p>
+<ul>
+<li>运行现场：复制一份当前的运行线程tf到子进程的env中</li>
+<li>返回值：应该在系统调用的envid只传递给父进程，将自己称线程中的<code>$v0</code>修改为0</li>
+<li>进程状态：在<code>syscall_exofork</code>后，子进程不能马上被调度。</li>
+<li>其他信息，对相应字段进行初始化</li>
+</ul>
+<p>这里的复制现场这里</p>
+<p>我是这么写的：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">e<span class="token operator">-&gt;</span>env_tf <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Trapframe</span><span class="token operator">*</span><span class="token punctuation">)</span>KSTACKTOP <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>由于应该是复制，那这么写肯定是有失妥当的，但是我看到<code>yyt</code>学长也是这么写的</p>
+<p>？？？纳闷</p>
+<p>正确的应该使用memcpy进行复制</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">memcpy</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span><span class="token punctuation">(</span>e<span class="token operator">-&gt;</span>env_tf<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>KSTACKTOP <span class="token operator">-</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Trapframe</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Trapframe</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<blockquote>
+<p>结构体的赋值，是直接结构体的内存的拷贝</p>
+<p>神奇的C语言，所以两种都可以</p>
+</blockquote>
+<p>在用户进程的入口<code>usr/lib/entry.S</code>中会跳转到<code>limain</code>中，这里面刚开始就是一个系统调用<code>syscall_genenvid</code>。也即是说，每一个用户进程在运行时的入口这里将一个用户空间的<code>struct Env *env</code>指向当前进程的控制块。</p>
+<p>对于fork后的子进程，它具有了一个随机分配的与父进程不同的<code>struct Env</code>，因此需要在子进程第一次被调度的时候，对这个<code>env</code>进行值的更新，同时它仍然指向当前进程。</p>
+<p>？？</p>
+<p>更新env：</p>
+<ol>
+<li>通过一个系统调用取得自己的envid</li>
+<li>根据envid，计算对应进程控制块的下标，将对应的进程控制块的指针赋给env</li>
+</ol>
+<p>父进程还需要将地址空间中需要与子进程共享的页面映射给子进程，需要遍历父进程的大部分用户空间页。</p>
+<p>这里的大部分有点意思，也就是说不是所有的都需要复制。比如代码段就不需要复制。</p>
+<p>这里是通过<code>duppage</code>来实现的。在父进程和子进程中都需要加入<code>PTE_COW</code>标志位，同时取消<code>PTE_D</code>标志位，实现写时复制保护。</p>
+<p>这里<code>tlb</code>是有<code>asid</code>这个来区分不同的进程的，所以说是父子进程都需要！</p>
+<ul>
+<li><code>duppage</code></li>
+</ul>
+<p>这个暂时先不考虑某些页面可以不用遍历。</p>
+<p>需要对不同页面的情况进行区分</p>
+<ul>
+<li>只读页面：按照相同的权限映射给子进程</li>
+<li>写时复制页面：是<code>fork</code>时<code>duppage</code>的结果，且在本次<code>fork</code>之前必然未被写入过</li>
+<li>共享页面：<code>PTE_LIBRARY</code>，保持共享可写的状态，，在父子进程中映射到相同的物理页，双方对其的修改双方都可见。</li>
+<li>可写页面：在父进程和子进程的页表项中都使用<code>PTE_COW</code>进行保护</li>
+</ul>
+<blockquote>
+<p>感觉页表还是不太懂<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+</blockquote>
+<p>这里我是这么写的</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 这些页面应该是用户空间，也就是父进程的页面</span>
+<span class="token comment">// 在用户空间，他的id就是0</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>perm <span class="token operator">|</span> PTE_D<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token punctuation">(</span>perm <span class="token operator">|</span> PTE_LIBRARY<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token punctuation">(</span>perm <span class="token operator">|</span> PTE_COW<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 可写入	不是共享页面	不是写时复制页面</span>
+    perm <span class="token operator">=</span> <span class="token punctuation">(</span>perm <span class="token operator">&amp;</span> <span class="token operator">~</span>PTE_D<span class="token punctuation">)</span> <span class="token operator">|</span> PTE_COW<span class="token punctuation">;</span> <span class="token comment">// 	加入写时复制保护</span>
+    <span class="token function">syscall_mem_map</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> addr<span class="token punctuation">,</span> envid<span class="token punctuation">,</span> addr<span class="token punctuation">,</span> perm<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 	先复制给子进程</span>
+    <span class="token function">syscall_mem_map</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> addr<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> addr<span class="token punctuation">,</span> perm<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 	然后复制给父进程</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 不可写页面	共享页面</span>
+    <span class="token function">syscall_mem_map</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> addr<span class="token punctuation">,</span> envid<span class="token punctuation">,</span> addr<span class="token punctuation">,</span> perm<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//	其他的该是什么权限就是什么权限</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>有学长是这么写的</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span><span class="token punctuation">(</span><span class="token punctuation">(</span>perm<span class="token operator">&amp;</span>PTE_D<span class="token punctuation">)</span><span class="token operator">&amp;&amp;</span><span class="token operator">!</span><span class="token punctuation">(</span>perm<span class="token operator">&amp;</span>PTE_LIBRARY<span class="token punctuation">)</span><span class="token operator">&amp;&amp;</span><span class="token operator">!</span><span class="token punctuation">(</span>perm<span class="token operator">&amp;</span>PTE_COW<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token function">syscall_mem_map</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span>addr<span class="token punctuation">,</span>envid<span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span>addr<span class="token punctuation">,</span><span class="token punctuation">(</span>perm<span class="token operator">|</span>PTE_COW<span class="token punctuation">)</span><span class="token operator">&amp;</span><span class="token punctuation">(</span><span class="token operator">~</span>PTE_D<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">syscall_mem_map</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span>addr<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span>addr<span class="token punctuation">,</span><span class="token punctuation">(</span>perm<span class="token operator">|</span>PTE_COW<span class="token punctuation">)</span><span class="token operator">&amp;</span><span class="token punctuation">(</span><span class="token operator">~</span>PTE_D<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">else</span><span class="token punctuation">{</span>
+    <span class="token function">syscall_mem_map</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span>addr<span class="token punctuation">,</span>envid<span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token operator">*</span><span class="token punctuation">)</span>addr<span class="token punctuation">,</span>perm<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其实主要区别就是有没有在用户空间修改perm的值，这里当然可以修改啦。因为就是在父进程这里。需要保护自然会设置保护位。</p>
+<ul>
+<li>页写入异常</li>
+</ul>
+<p><code>TLB_Mod</code></p>
+<p>如果出现对写时复制的页有写入的情况，那么就会触发这个异常。</p>
+<p>然后这里很有意思，说在<code>do_tlb_mod</code>中没有进行页面复制等操作，然后说这个是为了按照微内核的设计理念，所以把页写入异常的处理放在用户态处理了。</p>
+<p>感觉这个从设计上来说有点搞笑，但是从学习的角度还是合理的。为了让我们看看微内核下用户态如何处理一些本在内核中处理的操作。</p>
+<ul>
+<li>异常处理栈</li>
+</ul>
+<p>任何处理肯定都需要一个栈来处理参数这些。但是又不能使用用户原本的用户栈</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240617195242.png" alt></p>
+<p>所以就用了额外的一段空间用来作为<strong>异常处理栈</strong>。</p>
+<p>处理页写入异常：</p>
+<ol>
+<li>用户触发页写入异常，陷入内核的<code>handle_mod</code>，然后跳转到<code>do_tlb_mod</code>函数</li>
+<li><code>do_tlb_mod</code>将当前现场保存在异常处理栈中，并设置好<code>$a0 EPC</code>的值，使得异常恢复后能够回到用户异常处理函数的地址</li>
+<li>从异常恢复到用户态</li>
+</ol>
+<p><code>do_tlb_mod</code></p>
+<p>一行的工作量，樂</p>
+<h2><span id="往年题分析">往年题分析</span></h2>
+<h3><span id="2021-lab4-1-exam">2021-lab4-1-exam</span></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240617195231.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240617195223.png" alt></p>
+<p>这里task1是写写汇编，写写循环，压压栈。</p>
+<p>task2主体部分抄抄正常的send，用好task1的东西</p>
+<h3><span id="2021-lab4-1-extra">2021-lab4-1-extra</span></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240617195213.png" alt></p>
+<p>两次信息传递</p>
+<p>在第一个进程结束后调度第二个进程</p>
+<h3><span id="2021-lab4-2-exam">2021-lab4-2-exam</span></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240617195203.png" alt></p>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240617195153.png" alt></p>
+<p>获取寄存器的内容需要通过汇编实现</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">// user/entry.S
+.glbal uget_up
+uget_up:
+	li 	v0, 0xffff_f000
+	and v0, v0, sp
+	jr 	ra
+	nop<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>设置返回值使用v0即可</p>
+<p>会发现与fork只有共享空间不同，修改<code>duppage</code>即可</p>
+<h3><span id="2021-lab4-2-extra">2021-lab4-2-extra</span></h3>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240617195142.png" alt></p>
+<h3><span id="2022-lab4-1-exam">2022-lab4-1-exam</span></h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/rfhits/Operating-System-BUAA-2021/blob/main/4-lab4/%E4%B8%8A%E6%9C%BA.md">https://github.com/rfhits/Operating-System-BUAA-2021/blob/main/4-lab4/上机.md</a></p>
+<h3><span id="2022-lab4-1-extra">2022-lab4-1-extra</span></h3>
+<h3><span id="2022-lab4-2-exam">2022-lab4-2-exam</span></h3>
+<h3><span id="2022-lab4-2-extra">2022-lab4-2-extra</span></h3>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">hugo</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hugohealthy.top/2024/06/17/os-lab4%E7%AC%94%E8%AE%B0/">https://hugohealthy.top/2024/06/17/os-lab4%E7%AC%94%E8%AE%B0/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">hugo</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/os-lab4/">
+                                    <span class="chip bg-color">os-lab4</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+        <div class="disqus-card card" data-aos="fade-up">
+    <div id="disqus_thread" class="card-content">
+        <noscript>Please enable JavaScript to view the
+            <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+    </div>
+</div>
+
+<script type="text/javascript">
+    disqus_config = function () {
+        this.page.url = 'https://hugohealthy.top/2024/06/17/os-lab4%E7%AC%94%E8%AE%B0/';
+        this.page.identifier = '/2024/06/17/os-lab4%E7%AC%94%E8%AE%B0/';
+        this.page.title = 'os-lab4笔记';
+    };
+    let disqus_shortname = '';
+
+    (function () { // DON'T EDIT BELOW THIS LINE
+        let d = document, s = d.createElement('script');
+        // 如：s.src = 'https://blinkfox.disqus.com/embed.js';
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2024/06/17/os-lab6%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/004.jpg" class="responsive-img" alt="os-lab6实验报告">
+                        
+                        <span class="card-title">os-lab6实验报告</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-06-17
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/os-lab6/">
+                        <span class="chip bg-color">os-lab6</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/06/17/OO-U4/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/013.jpg" class="responsive-img" alt="OO-U4">
+                        
+                        <span class="card-title">OO-U4</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-06-17
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" class="post-category">
+                                    面向对象
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/OO-%E7%AC%AC%E5%9B%9B%E5%8D%95%E5%85%83/">
+                        <span class="chip bg-color">OO 第四单元</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: hugo<br />'
+            + '文章作者: hugo<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '这里是hugo。本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="tencent"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='true'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2023-2024</span>
+            
+            <a href="/about" target="_blank">hugo</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">121.4k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:3376467972@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=3376467972" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 3376467972" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+    <a href="https://i.328888.xyz/2023/04/10/imVT4z.jpeg" class="tooltipped" target="_blank" data-tooltip="微信联系我: https://i.328888.xyz/2023/04/10/imVT4z.jpeg" data-position="top" data-delay="50">
+        <i class="fab fa-weixin"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+        <!-- <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script> -->
+        <script src='/libs/mermaid/mermaid.min.js'></script>
+        <script>
+          if (window.mermaid) {
+            mermaid.initialize({theme: 'forest'});
+          }
+        </script>
+    
+
+    
+    
+    
+        
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/sakura.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/star.js"><\/script>');
+            }
+        </script>
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+    <script type="text/javascript" color="0,20,255"
+        pointColor="40,50,255" opacity='0.7'
+        zIndex="-1" count="99"
+        src="/libs/background/canvas-nest.js"></script>
+    
+
+    
+    
+    <script type="text/javascript" size="90" alpha='0.9'
+        zIndex="-1" src="/libs/background/ribbon.min.js" async="async"></script>
+    
+
+    
+
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+
+</html>
