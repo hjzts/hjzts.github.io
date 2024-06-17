@@ -1,0 +1,1581 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="OO-U3, C,Python,数分，高代，离散等">
+    <meta name="description" content="OO第三单元JML
+0 前言
+本单元的重点或者说想要实现的基础点应该是，学会阅读、理解和简单的写一写JML这种契约式编程，做类似工业上的从设计到正确性验证(助教替我们完成了)到写代码到写测试的全流程分析。
+对于JML这种语言本身我一向是不喜">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>OO-U3 | hugo</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="hugo" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">hugo</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">hugo</div>
+        <div class="logo-desc">
+            
+            今天阳光正好
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/hjzts/hjzts.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/hjzts/hjzts.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/012.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">OO-U3</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/OO-%E7%AC%AC%E4%B8%89%E5%8D%95%E5%85%83/">
+                                <span class="chip bg-color">OO 第三单元</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" class="post-category">
+                                面向对象
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2024-06-17
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    6.9k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    25 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+        <!-- 代码块折行 -->
+        <style type="text/css">
+            code[class*="language-"], pre[class*="language-"] { white-space: pre-wrap !important; }
+        </style>
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1><span id="oo第三单元jml">OO第三单元JML</span></h1>
+<h2><span id="0-前言">0 前言</span></h2>
+<p>本单元的重点或者说想要实现的基础点应该是，学会阅读、理解和简单的写一写JML这种契约式编程，做类似工业上的从设计到正确性验证(助教替我们完成了)到写代码到写测试的全流程分析。</p>
+<p>对于JML这种语言本身我一向是不喜欢做太多评价的，不喜欢用就不用，未必是它本身的好坏。但是这种从自然语言到JML(认为是一类契约式语言)再到写测试这一个流程，却反倒让我期待以后自然语言编程了（x</p>
+<p>另外一点是，除了需要实现的基础点外，我们为了保证性能还会考虑很多的算法设计来减少时间复杂度。</p>
+<h2><span id="1-测试过程分析">1 测试过程分析</span></h2>
+<h3><span id="11-黑箱白箱测试">1.1 黑箱白箱测试</span></h3>
+<p><strong>黑箱测试</strong>又被称为功能测试，是一种不考虑内部结构和实现的软件测试方法，只关注软件的输入和输出，验证软件功能是否符合预期。黑箱测试的主要目是验证软件的功能需求，检查程序是否能正确运行。</p>
+<p>黑箱测试是确保软件质量的重要方法，能发现很多设计或需求不明确导致的问题。但同时，由于黑箱测试并不关注代码的具体实现和内部结构，因此有一些问题（例如资源泄漏，难以复现的错误）可能不能通过黑箱测试发现。因此，黑箱测试通常和其他测试方法（例如白箱测试）结合使用。</p>
+<p>在本次作业中，我们搭建的评测机，从生成数据到相互比对输出结果，实际上就是一种典型的黑箱测试。但是由于输入的局限性，导致还是有一些bug没有测出来，哭<span class="github-emoji"><span>😢</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f622.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span></p>
+<p><strong>白箱测试</strong>，又被称为结构测试、透明箱测试或者玻璃盒测试，是一种软件测试方法，它要求测试者理解被测软件的内部工作机制，了解程序的内部结构，包括主要的代码，逻辑判断和程序路径，然后基于这个理解来设计和实施测试用例。</p>
+<p>白箱测试可以让你发现一些隐藏的问题，例如死代码（不会被执行到的代码），逻辑错误，漏洞等等。</p>
+<p>在本次作用中，每个人在完成互相阅读代码实际上就是一种白箱测试。互测中，如果相互是通过检查代码然后构造特定数据的实际上也是一种白箱测试。</p>
+<h3><span id="12-多种测试思路分析">1.2 多种测试思路分析</span></h3>
+<p>在软件测试的流程中，需要不同的测试类型相互协同，共同确保软件的质量。在早期阶段，<strong>单元测试和功能测试</strong>帮助我们发现并修复问题；在代码全部整合起来后，我们需要进行<strong>集成测试和系统测试</strong>来确保各个模块可以正确协同工作；在发布前，我们可能需要进行<strong>压力测试</strong>以确保软件在高负荷下依然可靠；在软件的维护阶段，<strong>回归测试</strong>将帮助我们保证修改后的代码不会影响到已有功能。</p>
+<h4><span id="121-单元测试">1.2.1 单元测试</span></h4>
+<p>单元测试是指对软件中的最小可测试单元进行检查和验证。对于面向对象编程，这个单元就是方法，但也可以是过程或函数。单元测试主要用于开发阶段，确保每个部分都正常工作。它可以帮助检查和修复程序中的早期错误，将大大减少调试的时间。</p>
+<p>对于每个小的单元，我们可以再去选择使用黑箱测试和白箱测试的办法来进行测试。比如Junit基本上就是使用的黑箱测试的办法进行测试，通过多次数据生成和结果比对进行测试。假设我们有一个Java程序，其中有一个类<code>MathUtils</code>，它有一个<code>add</code>方法，用来进行两个数的加法运算：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MathUtils</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">,</span> <span class="token keyword">int</span> b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> a <span class="token operator">+</span> b<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>为了进行单元测试，我们可以创建一个测试类，使用JUnit等测试框架来编写测试方法：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token keyword">static</span> <span class="token import static"><span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span></span><span class="token class-name">Assert</span><span class="token punctuation">.</span><span class="token static">assertEquals</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span></span><span class="token class-name">Test</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MathUtilsTest</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testAdd</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> result <span class="token operator">=</span> <span class="token class-name">MathUtils</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在<code>testAdd</code>方法中，我们测试了<code>MathUtils.add</code>方法，参数是1和2，预期的结果是3。<code>assertEquals</code>是一个断言方法，如果<code>MathUtils.add(1, 2)</code>的结果不等于3，那么这个单元测试就会失败。</p>
+<p>这样的单元测试可以大大提高代码质量，因为它允许开发者在早期阶段就发现和修复错误，也可以作为文档来说明代码的预期行为，还可以促进开发者写出更加模块化、可测试的代码。</p>
+<h4><span id="122-功能测试">1.2.2 功能测试</span></h4>
+<p>功能测试又称为黑盒测试，主要是从用户的角度进行的，关注的是最终结果是否符合预期的功能。它不关心软件内部逻辑和结构，仅通过操作用户界面，验证软件功能是否正常。</p>
+<p>在功能测试中，我们要做的往往在于构造数据。构造数据的强度则决定了这个测试的好坏，因此也是后续会提到的如何更好的构造数据来对相应工程或者每个单元(类和方法等)进行测试。</p>
+<h4><span id="123-集成测试">1.2.3 集成测试</span></h4>
+<p>集成测试是在所有模块逐个测试的基础上，进行联合测试，以便发现模块间的错误和问题。它主要目的是确保各个模块能够正确地协同工作。</p>
+<p>在进行集成测试时，我们通常采取增量的方式，每次将一个新的模块添加到一个已经进行过测试的模块组中，并进行测试。</p>
+<p>例如：你在开发一个电商网站，网站的主要功能包括用户注册、登录、浏览商品、添加购物车、提交订单等模块。每个模块单独开发完成后，你都会进行单元测试，确保它们的功能实现是正确的。然后，你需要进行集成测试，一步一步的将这些模块组装在一起。</p>
+<p>首先，你可能会集成用户注册和登录模块，测试用户注册后能否成功登录；然后再集成商品浏览模块，测试登录后的用户能否正常浏览商品；然后再集成添加购物车模块，测试用户能否将商品添加到购物车中；最后，集成提交订单模块，测试用户从浏览商品到提交订单的整个购物流程是否都能正常进行。</p>
+<p>集成测试是软件开发中非常重要的一个步骤，它能帮助你发现各个模块间交互时可能存在的问题，然后针对这些问题进行修复，确保整个系统的稳定性和可靠性。</p>
+<p>比如在这次hw11中出现了 <code>qtvs</code>的bug，或许就是因为没做好集成测试，导致后续新加的方法对原先的动态维护产生了影响。</p>
+<h4><span id="124-压力测试">1.2.4 压力测试</span></h4>
+<p>压力测试是通过模拟大量、超出软件规定的负荷或者测试环境进行测试，以确定其性能的稳定性和可靠性。目的是调整优化系统的性能，以便在高负载环境下正常工作。</p>
+<p>在U2的时候或许体会更加深刻，当某一时刻到达多个进行时如何处理。这一单元主要是对于内存和cpu运行时间的挑战，如何应对一些极端数据以及针对极端数据的优化。</p>
+<h4><span id="125-回归测试">1.2.5 回归测试</span></h4>
+<p>在修改了旧代码或者添加了新代码后，回归测试可以确保软件的原有功能仍然可以正常工作。回归测试的目的是发现在修改和介入新模块后引入的错误或方案中遗漏的错误。</p>
+<p>回归测试可以是手动执行，也可以是自动执行。在大型和快速迭代的项目中，自动化的回归测试能大大提高效率。这通常需要一个稳定的，自动化的测试套件和持续集成（Continuous Integration）环境。</p>
+<p>比如我们在作业迭代过程中，不能因为迭代影响到了之前的程序，这也和程序设计的方法相关。</p>
+<h4><span id="13-数据构造">1.3 数据构造</span></h4>
+<p>我们构造数据主要是围绕上面提到的方法进行构造。</p>
+<p>针对<strong>黑箱测试</strong>，可以使用数据生成器，随机生成各种数据，来保证能够实现基本的功能。</p>
+<p>针对<strong>单元测试</strong>，在本单元不同指令间的关系不是很紧密，我们可以构造以某一类数据为主的数据来进行测试。</p>
+<p>针对<strong>压力测试</strong>，可以设计更加极端的数据进行构造。包括数据范围是int，构造接近<code>Integer_MAX、Integer_MIN</code>的数据来进行测试。构造一些很大的数据，确保能够在给定的时间空间内完成要求。</p>
+<h2><span id="2-架构设计">2 架构设计</span></h2>
+<p>本单元由于已经设计好了JML规格化的描述，我们对于架构的设计也不是重点。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/hjzts/imgs/img20240518173348.png" alt></p>
+<p>除了一些大家都有的，讲一下我自己特色的两个设计，一个是使用了一个<code>MyNetwork</code>里面的一个内置类<code>Edge</code>来存储边，同时改写了<code>hashCode</code>和<code>equals</code>方法，优化了边的存储结构。</p>
+<p>同时使用了一个<code>Checker</code>类，它本身也是自己的工厂，这里用到了单例模式的饿汉式加载。专门来处理某些异常的情况。</p>
+<h3><span id="21-层次化设计">2.1 层次化设计</span></h3>
+<p>本次用到了<code>Network</code>中有很多<code>Person</code>，<code>Person</code>中很多有<code>Tag</code>，每个<code>Tag</code>中又有<code>Person</code>，同时<code>Network</code>中有很多<code>Message</code>，每个人有很多<code>Message</code>这个层次化的结构。</p>
+<p>我们在设计时，尽量不要逆层次来进行操作，可能出现奇怪的bug。</p>
+<h3><span id="22-图的存储与维护">2.2 图的存储与维护</span></h3>
+<p>这里的核心是<code>MyNetwork</code>中的</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> persons <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>和<code>MyPerson</code>中的</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> persons <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>也就是这里是一个邻接表的结构。</p>
+<p>这里也能够想办法使用邻接矩阵的办法，但是考虑到空间等因素，似乎都不是最优解。</p>
+<p>人与人之间的关系通过在某个<code>Person</code>的<code>persons</code>里面<code>put / remove</code>即可。</p>
+<p>然后这里还有需要维护的是<code>Edge</code>，其实本不必存储<code>Edge</code>，但是由于后续我用到了并查集，需要在重建并查集时使用。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">   <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Edge</span><span class="token punctuation">&gt;</span></span> edges <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">Edge</span> <span class="token punctuation">{</span>
+       <span class="token keyword">private</span> <span class="token keyword">int</span> id1<span class="token punctuation">;</span>
+       <span class="token keyword">private</span> <span class="token keyword">int</span> id2<span class="token punctuation">;</span>
+       <span class="token keyword">public</span> <span class="token class-name">Edge</span><span class="token punctuation">(</span><span class="token keyword">int</span> id1<span class="token punctuation">,</span> <span class="token keyword">int</span> id2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token keyword">this</span><span class="token punctuation">.</span>id1 <span class="token operator">=</span> id1<span class="token punctuation">;</span>
+           <span class="token keyword">this</span><span class="token punctuation">.</span>id2 <span class="token operator">=</span> id2<span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token annotation punctuation">@Override</span>
+       <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token class-name">Edge</span> edge <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Edge</span><span class="token punctuation">)</span> obj<span class="token punctuation">;</span>
+           <span class="token keyword">return</span> <span class="token punctuation">(</span>edge<span class="token punctuation">.</span>id1 <span class="token operator">==</span> id1 <span class="token operator">&amp;&amp;</span> edge<span class="token punctuation">.</span>id2 <span class="token operator">==</span> id2<span class="token punctuation">)</span> <span class="token operator">||</span>
+                   <span class="token punctuation">(</span>edge<span class="token punctuation">.</span>id1 <span class="token operator">==</span> id2 <span class="token operator">&amp;&amp;</span> edge<span class="token punctuation">.</span>id2 <span class="token operator">==</span> id1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token annotation punctuation">@Override</span>
+       <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token function">min</span><span class="token punctuation">(</span>id1<span class="token punctuation">,</span> id2<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">31</span> <span class="token operator">+</span> <span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>id1<span class="token punctuation">,</span> id2<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">1000000007</span><span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getId1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token keyword">return</span> id1<span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+       <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getId2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token keyword">return</span> id2<span class="token punctuation">;</span>
+       <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里和<code>Pair</code>这个数据结构不同，使得这里的边是实实在在的<strong>无向边</strong>。</p>
+<p>这里相关的系数也是调试了几次后选的相对比较好的。（或许能够有更好的。。。</p>
+<h3><span id="23-规格与设计分离">2.3 规格与设计分离</span></h3>
+<p>规格与设计分离的原则是指在软件开发过程中，我们可以分别独立地描述软件的“什么”和“如何”。即，我们将软件的功能需求或业务逻辑（即规格）与软件的实现细节或内部结构（即设计）显示地分离开。</p>
+<p>它的主要思想是：</p>
+<ol>
+<li>规格（或需求）描述了软件应该做什么，也就是它需要提供哪些功能，如何满足用户的需求。规格通常包括数据校验，业务规则，数据转换和处理，用户界面逻辑等。</li>
+<li>设计描述了如何实现这些功能，包括软件的结构，类或函数的设计，选择何种算法等实现细节。</li>
+</ol>
+<p>在面向对象的设计中，这种原则尤为重要，为了体现这种原则，我们通常把规格抽象出接口，而将设计和实现写在具体的类中。即，接口定义了规格，类提供了设计和实现。这使得我们可以在不改变接口的情况下改变内部实现，也能在不改变内部实现的情况下增加新的接口。</p>
+<p>这种分离的好处是：</p>
+<ul>
+<li>提高了软件的可维护性和可读性，因为更改需求或设计时，只需要关注一部分代码，减少了复杂性。</li>
+<li>提高了软件的可扩展性和灵活性，因为可以在不改变已有设计的前提下添加新功能，或者在不改变已有功能的前提下改变内部实现。</li>
+<li>增强了模块化，可以更好地实现高内聚低耦合的原则。</li>
+<li>方便进行单元测试和集成测试，因为可以分别对规格和设计进行测试。</li>
+</ul>
+<h2><span id="3-性能与算法">3 性能与算法</span></h2>
+<h3><span id="31-数据结构">3.1 数据结构</span></h3>
+<ol>
+<li>
+<p>这里大多数使用的是<code>HashMap</code>这个数据结构，可以快速查找。</p>
+<p>这里有个小细节</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+     * Constructs an empty &lt;tt&gt;HashMap&lt;/tt&gt; with the specified initial
+     * capacity and load factor.
+     *
+     * @param  initialCapacity the initial capacity
+     * @param  loadFactor      the load factor
+     * @throws IllegalArgumentException if the initial capacity is negative
+     *         or the load factor is nonpositive
+     */</span>
+    <span class="token keyword">public</span> <span class="token class-name">HashMap</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialCapacity<span class="token punctuation">,</span> <span class="token keyword">float</span> loadFactor<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也就是在新建<code>HashMap</code>的时候可以设置开始的容量和负载因子。负载因子说的是当使用的元素超过这个比例后会重新分配一次。可以尝试调参&amp;炼丹</p>
+</li>
+<li>
+<p>在后续添加的<code>message</code>那里，由于涉及头插法，因此建议使用<code>LinkedList</code>这个数据结构，会比<code>ArrayList</code>的效果更好。</p>
+<p>在<code>ArrayList</code>中<code>add(0, message1)</code>是会把后面的元素重新复制一遍，复杂度较高。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">int</span> index<span class="token punctuation">,</span> <span class="token class-name">E</span> element<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">rangeCheckForAdd</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">ensureCapacityInternal</span><span class="token punctuation">(</span>size <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// Increments modCount!!</span>
+    <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">arraycopy</span><span class="token punctuation">(</span>elementData<span class="token punctuation">,</span> index<span class="token punctuation">,</span> elementData<span class="token punctuation">,</span> index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span>
+                     size <span class="token operator">-</span> index<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    elementData<span class="token punctuation">[</span>index<span class="token punctuation">]</span> <span class="token operator">=</span> element<span class="token punctuation">;</span>
+    size<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而在<code>LinkedList</code>中只需要处理一下类似指针的操作，复杂度为O(1)。</p>
+</li>
+</ol>
+<h3><span id="32-公式优化">3.2 公式优化</span></h3>
+<p><code>queryTagAgeVar</code>指令中，我们需要计算年龄的方差，但是没必要根据JML中的循环来计算，而是可以维护<code>agePowSum</code>和<code>ageSum</code>替换成下面的代码：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getAgeVar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>persons<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">int</span> ageMean <span class="token operator">=</span> ageSum <span class="token operator">/</span> persons<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 考虑到java向下的负数取整是-1.25 -&gt; -1 (不完全是向下取整),不能将ageMean * ageMean * persons.size()提出去</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>agePowSum <span class="token operator">-</span> <span class="token number">2</span> <span class="token operator">*</span> ageMean <span class="token operator">*</span> ageSum <span class="token operator">+</span> ageMean <span class="token operator">*</span> ageMean <span class="token operator">*</span> persons<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> persons<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这样就可以降低时间复杂度。同时这里还需要注意一些细节，比如在注释中提到了不能将<code>ageMean * ageMean * persons.size()</code>提出去。</p>
+<h3><span id="33-动态维护">3.3 动态维护</span></h3>
+<p>本次作业中，很重要的一个优化方法就是动态维护。动态维护实际上是将一些中间变量进行保存。</p>
+<blockquote>
+<p>这里还想进一步分析一下。</p>
+<p>实际上这种动态维护会发现，比如说我在<code>addRelation</code>的时候，本来只需要添加到对应的<code>HashMap</code>里面就可以了，但是这样我还得要么加到一个缓冲区<code>buffer</code>里面，要么进行多余的计算。单对这一个指令来说无疑是</p>
+</blockquote>
+<p>在<code>queryBlockSum</code>、<code>queryTripleSum</code>、<code>queryTagValueSum</code>、<code>queryCoupleSum</code>等指令中，如果我们每次查询都是将图遍历一遍，那么时间复杂度大大提高，具体问题可能超过$O(n^3)$，这是我们不能接受的。</p>
+<p><strong>对于<code>BlockSum</code>是用到了并查集进行优化。</strong></p>
+<p>并查集，也称为不相交集合（Disjoint-Set），是计算机科学中处理一些不交集类问题的一种主要数据结构，它管理一系列不相交的集合，并支持将两个集合合并为一个集合，以及查询元素属于哪个集合的功能。并查集的主要操作包括：</p>
+<blockquote>
+<p>大体理解就是，每个集合找一个代表，每个人都只认识那个代表，比较的时候只需要进一步比较那两个代表是不是同一个集合或者同一个人即可。</p>
+</blockquote>
+<ol>
+<li><strong>创建并查集</strong>：开始时，每个元素都在只包含自己的集合中，这些集合可以通过一个一维数组来表示，数组的索引表示元素，数组的值表示各个集合的代表元素。</li>
+<li><strong>查询操作</strong>（Find）：这个操作可以查找给定元素属于哪个集合，通常通过查找其“代表元素”（或“集合的根”）来完成。在一个集合内的所有元素都链接到该集合的代表元素。</li>
+<li><strong>合并操作</strong>（Merge）：这个操作可以将两个集合合并为一个集合，通常通过将一个集合的代表元素链接到另一个集合的代表元素下实现。</li>
+</ol>
+<p>由于并查集支持非常高效的合并和查询操作，因此在很多含有大量查询和合并操作的问题中，首选使用并查集。</p>
+<p>在<code>MyNetwork</code>中维护一个</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">&gt;</span></span> roots <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>在<code>addPerson</code>的时候把自己添加进去。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">roots<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>person<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> person<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>同时在添加关系的时候进行<code>merge</code>操作。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**********************并查集*************************/</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> <span class="token function">find</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>roots<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span> <span class="token operator">==</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    roots<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>id<span class="token punctuation">,</span> <span class="token function">find</span><span class="token punctuation">(</span>roots<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> roots<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">merge</span><span class="token punctuation">(</span><span class="token keyword">int</span> id1<span class="token punctuation">,</span> <span class="token keyword">int</span> id2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> root1 <span class="token operator">=</span> <span class="token function">find</span><span class="token punctuation">(</span>id1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> root2 <span class="token operator">=</span> <span class="token function">find</span><span class="token punctuation">(</span>id2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>root1 <span class="token operator">==</span> root2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    roots<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>root2<span class="token punctuation">,</span> root1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    blockSum<span class="token operator">--</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">reBuild</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    blockSum <span class="token operator">=</span> roots<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    roots<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span> <span class="token operator">-&gt;</span> roots<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    edges<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>edge <span class="token operator">-&gt;</span> <span class="token function">merge</span><span class="token punctuation">(</span>edge<span class="token punctuation">.</span><span class="token function">getId1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> edge<span class="token punctuation">.</span><span class="token function">getId2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里有<code>rebuild</code>是因为涉及到并查集的重建。</p>
+<blockquote>
+<p>这里也正是因为需要重建的关系，可能不如dfs。</p>
+<p>也是我在这一小节最开始提到的，不同的算法实际上实际时间分配到了不同的地方，因此都有可行的地方。</p>
+</blockquote>
+<p>那么有了并查集之后，每次添加一个人，也就是进行<code>addPerson</code>，那就增加一个<code>block</code>。</p>
+<p>然后再查询的时候设置了一个是否需要重建的因子，如果涉及到了删除边，那么就需要重建并查集，此时我们可以等到需要查询的时候在重建，实现<strong>懒重建</strong>。</p>
+<p>同时在<code>merge</code>的时候如果两个人本来不在一个集合中，那么就需要减少一个<code>block</code>。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addPerson</span><span class="token punctuation">(</span><span class="token class-name">Person</span> person<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">EqualPersonIdException</span> <span class="token punctuation">{</span>
+	<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    blockSum<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">queryBlockSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>needReBuild<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">reBuild</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        needReBuild <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> blockSum<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>对于<code>TripleSum</code>是每次增加一个关系或者删去关系，进行遍历，检查是否需要修改。</strong></p>
+<p><code>addRelation</code>和<code>modifyRelation</code>的时候分别重新修改一下<code>tripleSum</code></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">addRelation</span><span class="token punctuation">(</span><span class="token keyword">int</span> id1<span class="token punctuation">,</span> <span class="token keyword">int</span> id2<span class="token punctuation">,</span> <span class="token keyword">int</span> value<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+	tripleSum <span class="token operator">+=</span> <span class="token function">queryThree</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">MyPerson</span><span class="token punctuation">)</span> persons<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id1<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">MyPerson</span><span class="token punctuation">)</span> persons<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">modifyRelation</span><span class="token punctuation">(</span><span class="token keyword">int</span> id1<span class="token punctuation">,</span> <span class="token keyword">int</span> id2<span class="token punctuation">,</span> <span class="token keyword">int</span> value<span class="token punctuation">)</span>
+    <span class="token keyword">throws</span> <span class="token class-name">PersonIdNotFoundException</span><span class="token punctuation">,</span> <span class="token class-name">EqualPersonIdException</span><span class="token punctuation">,</span> <span class="token class-name">RelationNotFoundException</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>persons<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id1<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">queryValue</span><span class="token punctuation">(</span>persons<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id2<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> value <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        tripleSum <span class="token operator">-=</span> <span class="token function">queryThree</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">MyPerson</span><span class="token punctuation">)</span> persons<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id1<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">MyPerson</span><span class="token punctuation">)</span> persons<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment">/**********************检查三角形*************************/</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> <span class="token function">queryThree</span><span class="token punctuation">(</span><span class="token class-name">MyPerson</span> person1<span class="token punctuation">,</span> <span class="token class-name">MyPerson</span> person2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>person1<span class="token punctuation">.</span><span class="token function">getPersonSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> person2<span class="token punctuation">.</span><span class="token function">getPersonSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> person1<span class="token punctuation">.</span><span class="token function">queryThree</span><span class="token punctuation">(</span>person2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> person2<span class="token punctuation">.</span><span class="token function">queryThree</span><span class="token punctuation">(</span>person1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>对于<code>TagValueSum</code>也是在每次添加关系、修改关系和删去关系时都需要进行调整。</strong></p>
+<blockquote>
+<p>这里我自己有一个优化(似乎没什么用)，就是添加了一个<code>buffer</code>，每次在tag里面添加一个人，我先不计算新的<code>tagValue</code>，先放到<code>buffer</code>里面。</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+     * 用于为valueSum的求解进行缓冲。
+     * 等到需要用到value sum的时候在进行添加。
+     */</span>
+<span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> personBuffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getValueSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Person</span> person <span class="token operator">:</span> personBuffer<span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 前一部分与后一部分</span>
+        persons<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span> <span class="token operator">-&gt;</span>
+                        valueSum <span class="token operator">+=</span> personBuffer<span class="token punctuation">.</span><span class="token function">containsKey</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token operator">:</span> value<span class="token punctuation">.</span><span class="token function">queryValue</span><span class="token punctuation">(</span>person<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 后一部分之间</span>
+        personBuffer<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span> <span class="token operator">-&gt;</span>
+                             valueSum <span class="token operator">+=</span> value<span class="token punctuation">.</span><span class="token function">queryValue</span><span class="token punctuation">(</span>person<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    personBuffer<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> valueSum<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同时删除的时候进行一下判断。</p>
+<blockquote>
+<p>其实也就这里会是唯一比不加<code>buffer</code>有优势的地方了！！！</p>
+</blockquote>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">delPerson</span><span class="token punctuation">(</span><span class="token class-name">Person</span> person<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>personBuffer<span class="token punctuation">.</span><span class="token function">containsKey</span><span class="token punctuation">(</span>person<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        personBuffer<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>person<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        persons<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span> <span class="token operator">-&gt;</span> valueSum <span class="token operator">-=</span>
+                        personBuffer<span class="token punctuation">.</span><span class="token function">containsKey</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token operator">:</span> value<span class="token punctuation">.</span><span class="token function">queryValue</span><span class="token punctuation">(</span>person<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong>对于<code>CoupleSum</code>这个，可以给每个人维护一个<code>bestId</code>。</strong></p>
+<p>这样的话最佳情况就是O(n)，是可以接受的。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">queryCoupleSum</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    coupleSum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Person</span> person <span class="token operator">:</span> persons<span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">MyPerson</span><span class="token punctuation">)</span> person<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getPersonSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">continue</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">MyPerson</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>persons<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">MyPerson</span><span class="token punctuation">)</span> person<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getBestAcquaintance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">getBestAcquaintance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> person<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            coupleSum<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> coupleSum <span class="token operator">/</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里注意在维护的时候要注意数据范围。</p>
+<blockquote>
+<p>如果明年我当助教肯定要在这里埋个坑。樂（x</p>
+</blockquote>
+<h3><span id="34-算法优化">3.4 算法优化</span></h3>
+<p>包括前面的并查集其实也可以认为是算法优化。</p>
+<p>这里主要是指在维护每个人的<code>bestId</code>的时候可以使用优先队列或者堆的思想，可以将$O(n)$变为$O(log(n))$。但是这里的话，从我打超算的角度认为是很好的一个优化，但是从一个做算法题的角度，能过就行。那么从$O(n)$变为$O(log(n))$在这里时间能够运行的情况下是完全没有必要的。</p>
+<h2><span id="4-junit测试">4 Junit测试</span></h2>
+<h3><span id="利用jml设计junit">利用JML设计Junit</span></h3>
+<p>JML，是一种行为界面规范语言，用于详细的说明 Java 中类和接口应该如何表现。它可以用于为 Java 方法和类编写规格。然后，这些规格可以与测试工具（如 JUnit）配合使用，来验证代码是否满足 JML 规格。</p>
+<p>在 JML 中，我们可以针对方法的行为进行描述，例如方法的前提条件（requires）、后置条件（ensures）、不变性（invariant）等等。</p>
+<p>使用 JML，我们可以根据这些描述生成适合于 JUnit 的测试用例，然后使用 JUnit 来运行这些测试。</p>
+<p>关于具体编写，我的Junit测试可以分为这么几步：</p>
+<ol>
+<li>
+<p>首先设计数据规格和对象初始化</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token class-name">Network</span> network <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyNetwork</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Person</span><span class="token punctuation">&gt;</span></span> persons <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">,</span> <span class="token class-name">Tag</span><span class="token punctuation">&gt;</span></span> tags <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token class-name">Random</span> random <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Random</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> personNum <span class="token operator">=</span> <span class="token number">50</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> tagNum <span class="token operator">=</span> <span class="token number">50</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> relationNum <span class="token operator">=</span> <span class="token number">1000</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> emojiNum <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> personPerTag <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> messageNum <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> emojiMessageNum <span class="token operator">=</span> <span class="token number">50</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">int</span> emojiMessageSendNum <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> testNum <span class="token operator">=</span> <span class="token number">50</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里的<code>network</code>实际上就是主要测试对象，而其他的是我们自己存储的拷贝对象。</p>
+</li>
+<li>
+<p>搭建数据生成器，用最开始设计的数据的规模生成大量随机数据；</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token function">genAddPerson</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">genAddRelation</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">genAddTag</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">genStoreEmoji</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>由于我们这里其实不需要生成所有类型的指令，只需要其中几个即可。</p>
+</li>
+<li>
+<p>将翻译JML得到的标准答案与执行指令得到的答案进行比较；</p>
+</li>
+<li>
+<p>检查执行指令前后是否符合JML中的ensures等要求。</p>
+</li>
+<li>
+<p>注意需要检查<code>pure</code>这种，包括还有那些<code>not_assigned</code>的值。</p>
+</li>
+</ol>
+<h3><span id="junit与jml的一致性">Junit与JML的一致性</span></h3>
+<p>JML（Java Modeling Language）和JUnit都是用于Java程序的工具，但它们解决的问题并保证代码质量的方法是不同的。</p>
+<p>JML是一种行为界面规范语言，可以通过注释的形式为Java程序提供规格说明。JML提供了稳定、详细的规格，用于描述程序各部分预期的行为。例如，你可以使用JML为Java类或方法注解一个先决条件（pre-condition）、后置条件（post-condition）或者类不变性（class invariant）。JML规范可以通过静态检查或者运行时断言来进行验证。</p>
+<p>再来看JUnit，JUnit是Java的一种单元测试框架，它通过编写测试用例，然后运行这些测试用例，验证程序的实际行为是否符合预期行为。JUnit完全依赖于程序员编写的测试用例，其准确性和覆盖率取决于测试用例的质量。</p>
+<p>那么JML和JUnit之间的关系是什么呢？简单来说，一致性来自于它们都是在描述软件应该如何运行。JUnit测试实际行为，而JML描述预期行为。一致性的证明过程则相当于是在比较预期行为与实际行为。例如，当你有一个JML规格的后置条件为@ensures \result &gt;=0，并且你有一个JUnit测试用例没有符合该后置条件（得到的结果为负数），这时一致性就被破坏了。</p>
+<p>更深入一步，我们可以利用JML规格自动生成JUnit测试用例，然后通过运行这些用例来验证程序符合JML规格的要求。这使得JML和JUnit可以无缝配合，有效地提高了代码质量的保证和验证效率。</p>
+<h2><span id="5-学习体会">5 学习体会</span></h2>
+<p>这一单元，对于一个在计院待了差不多一年，经历了大一的磨练的来说应该是不难的。</p>
+<p>我在最前面也提到了，本单元的重点应该是学会阅读、理解和简单的写一写JML这种契约式编程。但是不知道是基于什么考量，本单元我们需要关注更多的是怎么去优化，怎么去考虑更好的算法。</p>
+<p>这让我联想到了大一上的程序设计的课程，那时我啥都不会，那个课程也是目的是为了让我们学习C语言的基础语法，但是涉及到很多算法层面的内容。</p>
+<p>这两者都有一个共同点，就是似乎总是想要通过某种手段分出一个孰优孰劣出来，但是忽略了我们只是需要完成基本的需求即可。</p>
+<p>我这里并不是对OO这个课程有任何看法，我始终觉得这个是一个绝世好课。</p>
+<p>我只是觉得大学真的有必要通过这个超出基本需求的要求来对学生进行评判吗。</p>
+<blockquote>
+<p>害，不说了，终究是我太菜了，菜就多练吧</p>
+</blockquote>
+<p>对于JML本身，我觉得它是一个非常有效的工具，可以大大提高Java程序的质量和可维护性。首先，通过在代码中添加JML注释，我们可以明确规定方法的预期行为，包括前置条件、后置条件、不变性等。这为我们提供了一种非常明确的方式来表达我们的意图，并定义代码应当如何执行。其次，JML可以帮助我们发现代码中的错误，而且能够在非常早的阶段就发现这些错误。当我们编写了JML注释后，可以使用JML的工具来静态检查我们的代码，看看代码是否满足我们的预期。这可以在实际运行代码之前就找出很多潜在的问题。再者，JML也支持运行时检查。通过JML，我们可以生成可以在运行时检查的断言。这对于找出一些难以复现的bug，或者是一些只有在特定情况下才会出现的问题非常有帮助。同时，JML还可以帮助我们自动生成测试用例。只要我们为代码编写了详细的JML注释，就可以通过工具自动产生JUnit的测试用例。这对于保证代码质量，提高测试效率都非常有帮助。综上所述，我认为JML是一个非常强大且有用的工具。它可以帮助我们更好地理解我们的代码，提高代码质量，以及提高我们的开发效率。</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">hugo</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://hugohealthy.top/2024/06/17/OO-U3/">https://hugohealthy.top/2024/06/17/OO-U3/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">hugo</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/OO-%E7%AC%AC%E4%B8%89%E5%8D%95%E5%85%83/">
+                                    <span class="chip bg-color">OO 第三单元</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+        <div class="disqus-card card" data-aos="fade-up">
+    <div id="disqus_thread" class="card-content">
+        <noscript>Please enable JavaScript to view the
+            <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+    </div>
+</div>
+
+<script type="text/javascript">
+    disqus_config = function () {
+        this.page.url = 'https://hugohealthy.top/2024/06/17/OO-U3/';
+        this.page.identifier = '/2024/06/17/OO-U3/';
+        this.page.title = 'OO-U3';
+    };
+    let disqus_shortname = '';
+
+    (function () { // DON'T EDIT BELOW THIS LINE
+        let d = document, s = d.createElement('script');
+        // 如：s.src = 'https://blinkfox.disqus.com/embed.js';
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2024/06/17/OO-U3/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/012.jpg" class="responsive-img" alt="OO-U3">
+                        
+                        <span class="card-title">OO-U3</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-06-17
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" class="post-category">
+                                    面向对象
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/OO-%E7%AC%AC%E4%B8%89%E5%8D%95%E5%85%83/">
+                        <span class="chip bg-color">OO 第三单元</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/05/11/llama-cpp/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/019.jpg" class="responsive-img" alt="llama.cpp">
+                        
+                        <span class="card-title">llama.cpp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-05-11
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/AI/" class="post-category">
+                                    AI
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/LLM/">
+                        <span class="chip bg-color">LLM</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: hugo<br />'
+            + '文章作者: hugo<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '这里是hugo。本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="tencent"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='true'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2023-2024</span>
+            
+            <a href="/about" target="_blank">hugo</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">92.1k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:3376467972@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=3376467972" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 3376467972" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+    <a href="https://i.328888.xyz/2023/04/10/imVT4z.jpeg" class="tooltipped" target="_blank" data-tooltip="微信联系我: https://i.328888.xyz/2023/04/10/imVT4z.jpeg" data-position="top" data-delay="50">
+        <i class="fab fa-weixin"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+        <!-- <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script> -->
+        <script src='/libs/mermaid/mermaid.min.js'></script>
+        <script>
+          if (window.mermaid) {
+            mermaid.initialize({theme: 'forest'});
+          }
+        </script>
+    
+
+    
+    
+    
+        
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/sakura.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/star.js"><\/script>');
+            }
+        </script>
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+    <script type="text/javascript" color="0,20,255"
+        pointColor="40,50,255" opacity='0.7'
+        zIndex="-1" count="99"
+        src="/libs/background/canvas-nest.js"></script>
+    
+
+    
+    
+    <script type="text/javascript" size="90" alpha='0.9'
+        zIndex="-1" src="/libs/background/ribbon.min.js" async="async"></script>
+    
+
+    
+
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body>
+
+</html>
